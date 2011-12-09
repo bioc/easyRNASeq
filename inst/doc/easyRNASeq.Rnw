@@ -1,0 +1,1094 @@
+%\VignetteIndexEntry{RNA-Seq}
+%\VignetteKeywords{RNA-Seq}
+%\VignettePackage{easyRNASeq}
+\documentclass[11pt]{article}
+\usepackage{verbatim}
+\usepackage{natbib}
+\newcommand{\Rfunction}[1]{{\texttt{#1}}}
+\newcommand{\Robject}[1]{{\texttt{#1}}}
+\newcommand{\Rpackage}[1]{{\textit{#1}}}
+\newcommand{\Rclass}[1]{{\textit{#1}}}
+
+\title{easyRNASeq, an overview}
+\author{Nicolas Delhomme, Isma\"{e}l Padioleau}
+
+\SweaveOpts{keep.source=TRUE}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\begin{comment}
+For a faster vignette generation, many R section that do not need to
+be run are set to eval=FALSE. For testing purpose, change them all to
+TRUE.
+\end{comment}
+
+\begin{comment}
+  TODO explain how to get a unique exon set
+  TODO think of using the ShortRead to read the BAM files, if we want
+  strand specificity or read extension
+\end{comment}
+
+\newpage
+
+\section{Before you start}
+
+If you are completely new to the R/Bioconductor
+\citep{Gentleman:2004p2013} packages dealing with Next-Generation
+Sequencing, you might want to start by doing the tutorial available in
+the \Robject{RnaSeqTutorial} vignette in the data package
+\Rpackage{RnaSeqTutorial}. The same holds true if you're interested in
+understanding the details behind the content of the present
+vignette. If neither nor, just go ahead.
+
+\newpage
+
+\section{Introduction}
+
+This file describes the use of the \Rpackage{easyRNASeq} package to ease
+the processing of RNA-seq data in R/Bioconductor. RNA-seq
+\citep{Mortazavi:2008p740} was introduced as a new method to perform
+Gene Expression Analysis, using the advantages of the high
+throughput of \emph{Next-Generation Sequencing} (NGS)
+machines. 
+\newline
+
+The goal of this vignette is, first, to show an example of the
+\Rfunction{easyRNASeq} function that generates a count table for the
+selected genic features of interest, \emph{i.e.} exons, transcripts,
+gene models, \emph{etc.} using the read data and the genic and genomic
+annotations. This overall process is described in figure
+\ref{fig:fig1}, page \pageref{fig:fig1}. Shortly, the genomic and
+genic annotation will be retrieved from the selected/preferred source
+and converted into an appropriate \Robject{object}. In parallel, the
+sequenced reads' information (\textit{e.g.} chromosome, position,
+strand, \textit{etc.}) will be retrieved from the alignment file and,
+similarly, converted to an appropriate \Robject{object}. Then, the
+reads contained in the \Robject{reads} object are summarized per genic
+annotation contained in the \Robject{annotation} object, which give
+raise to a count table that, finally, can be normalized using
+additional R packages.
+\newline
+
+Then, the \Rfunction{easyRNASeq} function arguments will be detailed
+and additional information given on how to generate normalized data,
+such as creating \emph{RPKM (Reads Per Kilobase of feature per Million
+  reads in the library)} counts or by using more advanced statistical
+models implemented in the \Rpackage{DESeq} or \Rpackage{edgeR}
+packages. 
+\newline
+
+In the second part, we will see how more advanced pre-processing can
+be performed, such as \emph{de-multiplexing}.
+\begin{comment}
+  TODO something Ismael should do:
+  how to identify \emph{de-novo} expressed regions.
+\end{comment}
+\newline 
+
+Additional post-processing such as exporting the count table as bed
+and wig formatted file, to be visualized into the UCSC genome browser
+or a stand alone genome browser are described in the vignette of the
+companion data package \Rpackage{RnaSeqTutorial}. 
+
+\begin{figure}[htpb]
+\centerline{\includegraphics[width=0.80\textwidth]{easyRNASeq.png}}
+\caption{easyRNAseq Overview. The R packages used for the
+  different steps are emphasized in bold face.}
+\label{fig:fig1}
+\end{figure}
+
+\newpage
+
+\section{easyRNASeq}
+
+We will use the data present in the \Rpackage{RnaSeqTutorial} data
+package to perform the examples. Refer to its documentation for more
+details. Shortly, it contains different \emph{Drosophila melanogaster}
+RNA-Seq dataset saved in different format as well as the related
+annotation retrieved from  FlyBase \citep{Tweedie:2009p2014}. 
+\newline
+
+The main function of the \Rpackage{easyRNASeq} package is
+\Rfunction{easyRNASeq}. That should be the only processing method you
+need to know about when using the package. It is essentially a wrapper
+around other function performing the different tasks described in the
+following, functions which are all exported too, if you feel you need
+to have a look at them. The \Rpackage{easyRNASeq} package defines an
+\Robject{RNAseq} class for holding the necessary information used
+during the processing. The \Rfunction{easyRNASeq} function instantiates
+an object of that class and although most arguments of the
+\Rfunction{easyRNASeq} function are optional (as are the corresponding
+\Rclass{RNAseq} object slots ),it is advised to set them, especially
+the \emph{readLength} and the \emph{organismName}; to help having a
+proper documentation of your analysis. The organismName slot is
+actually mandatory if you want to get genomic annotation using
+\Rpackage{biomaRt}. In that case, you need to provide the name as
+specified in the corresponding \Rpackage{BSgenome} package,
+\emph{i.e.} ``Dmelanogaster'' for the
+\Rpackage{BSgenome.Dmelanogaster.UCSC.dm3} package. 
+
+\newpage
+
+\subsection{usage}
+
+\paragraph{Initial example}
+In the following, the \Rfunction{easyRNASeq} function is called with
+an almost minimal set of parameters (some optional ones too...). The
+sequencing reads' excerpts were obtained from a fruit-fly sample that
+was subjected to a 36 cycles sequencing on an Illumina GAIIX
+machine. The annotation were retrieved from FlyBase and
+converted into an ``Rdata'' object. We're interested to retrieve the
+count table of 4 samples for every exon in the genome.
+
+<<Load the library and create the object>>=
+library("easyRNASeq")
+library("RnaSeqTutorial")
+library(BSgenome.Dmelanogaster.UCSC.dm3)
+
+count.table <- easyRNASeq(filesDirectory=system.file(
+                            "extdata",
+                            package="RnaSeqTutorial"),
+                          pattern="[A,C,T,G]{6}\\.bam$",
+                          format="bam",
+                          readLength=36L,
+                          organism="Dmelanogaster",
+                          chr.sizes=as.list(seqlengths(Dmelanogaster)),
+                          annotationMethod="rda",
+                          annotationFile=system.file(
+                            "data",
+                            "gAnnot.rda",
+                            package="RnaSeqTutorial"),
+                          count="exons"
+                          )
+@ 
+
+<<Show the results>>=
+head(count.table)
+dim(count.table)
+@ 
+
+In this command, we're reading bam files (\Robject{format}), present
+in the first argument to the function (\Robject{filesDirectory}) using
+a regular expression to match the file names (\Robject{pattern}). The
+\Rfunction{system.file} retrieve the actual path on your file system
+where the ``RnaSeqTutorial'' package was installed and in that
+particular case of its ``extdata'' sub-directory. The pattern used to
+retrieve the files is similar to that of the \Rclass{base} commands
+\Rfunction{dir} and \Rfunction{grep}. Here we look up files, which name
+contains 6 times one of the ``A'', ``C'', ``G'' or ``T'' letter,
+followed by the ``.bam'' extension. 
+We additionally define the number of sequencing cycles
+(\Robject{readLength}), and the \Robject{organism} that sample
+originates from. We then provide genomic and genic information. The
+size of the chromosomes (\Robject{chr.sizes}) and the exons' annotation
+(\Robject{annotationFile}) that were already processed in an ``RData''
+file (\Robject{annotationMethod}). Finally, we precise that we want
+the sequenced reads to be summarized by ``exons''; \emph{i.e.} we want
+to get a read count value per exon and per sample.
+\newline
+
+And that is all. In that one command, you got the exon count table for
+your 4 samples!
+
+\paragraph{Warnings}
+
+As you could see when running the previous example, a warning is
+emitted and quite rightly so. The annotation we are using here is
+redundant and this at two levels. First, some exons overlap. These are
+alternative exons from different transcript isoforms. Second, the
+annotation contains the information about all the possible different
+transcript isoforms. This means that some exons are
+duplicated. Therefore counting by exons or transcripts using these
+annotation will result in counting some of the reads several
+times. There might be reasons one might want to do that, but as it is
+probably not what you want when performing an RNA-Seq analysis, the
+warning is emitted. As this can be a very significant source of error,
+all the examples here will emit this warning, at the exception of the
+summarization by ``GeneModels'' that address that problem (\emph{c.f.}
+\ref{subsec:diffNorm}, page \pageref{subsec:diffNorm}). The ideal
+solution is to provide an annotation object that contains no
+overlapping features. The \Rfunction{disjoin} function from the
+\Rpackage{IRanges} package offers a way to achieve this.
+
+\paragraph{Arguments}
+
+Going back to the \Rfunction{easyRNASeq} function, more arguments can
+be set to fine tune it, depending on the input at hand, the desired
+output, etc. Most will be detailed in the following, but not all, so check
+``?easyRNASeq'' out for more. One such argument is: ``filenames'',
+that offers the possibility to give actual filenames rather than using
+a pattern matching approach to find them. For example, if you're only
+interested in two samples out of the four available ones in the
+provided directory, do: 
+
+<< Create the object with only 2 files, eval=FALSE>>=
+count.table <- easyRNASeq(system.file(
+                                      "extdata",
+                                      package="RnaSeqTutorial"),
+                          organism="Dmelanogaster",
+                          chr.sizes=as.list(seqlengths(Dmelanogaster)),
+                          readLength=36L,
+                          annotationMethod="rda",
+                          annotationFile=system.file(
+                            "data",
+                            "gAnnot.rda",
+                            package="RnaSeqTutorial"),
+                          format="bam",
+                          count="exons",
+                          filenames=c("ACACTG.bam", "ACTAGC.bam"))
+@
+
+<<Show, eval=FALSE>>=
+head(count.table)
+dim(count.table)
+@ 
+
+\newpage
+
+\subsection{description}
+
+There are several arguments that influence how the
+\Rfunction{easyRNASeq} is going to be executed. They concern:
+\begin{itemize}
+  \item the input at hand
+  \item how to retrieve the annotations
+  \item how to summarize the counts
+  \item the desired output
+  \item whether normalization should be performed
+\end{itemize}
+
+\paragraph{Input}
+Using the \Robject{format} arguments, reads can be loaded from BAM
+files or any format supported by the \Rpackage{ShortRead} 
+\citep{Morgan:2009p739} package. The SAM/BAM format
+\citep{Li:2009p1662} is becoming a \emph{de-facto} standard for
+storing NGS aligned data. Gapped alignment can be read from BAM files,
+set the \Robject{gapped} argument to ``TRUE'' for that.
+
+\paragraph{Annotation}
+
+The \Rfunction{easyRNASeq} function currently accepts the following \Robject{annotationMethods}:
+\begin{itemize}
+  \item ``biomaRt'' use the \Rpackage{biomaRt}
+    \citep{Durinck:2005p1990} package to retrieve the annotation 
+  \item ``env'' use a \Rclass{RangedData} class object present in the
+    environment 
+  \item ``gff'' reads in a gff version 3 file
+  \item ``gtf'' reads in a gtf file as provided by Ensembl \citep{Flicek:2011p2042}
+  \item ``rda'' load an RData object. The object needs to be named
+    \Robject{gAnnot} and of class \Rclass{RangedData}.
+  \item ``GRangesList'' that can be constructed from the
+    \Rpackage{GenomicFeature} package for example are not yet
+    supported but will be in the future.
+\end{itemize}
+The structure of the \Rclass{RangedData} object that has to be
+provided when using the ``rda'' or ``env'' \Robject{annotationMethods}
+will be described in the section \ref{subsec:diffAnn}, page
+\pageref{subsec:diffAnn}.
+
+\paragraph{Summarization}
+
+The reads can be counted/summarized by:
+\begin{itemize}
+  \item exons 
+  \item features (any features such as introns, enhancers, \emph{etc.})
+  \item transcripts
+  \item geneModels: they consists of the set of disjoint ``synthetic''
+    exons that fully overlap every known exons and UTRs of a
+    gene; \emph{I.e.} every alternate exon will be split into
+    separate ``synthetic'' exons and these exons will be grouped into
+    a set that correspond to a single gene.
+\end{itemize}
+
+When you use a the ``geneModels'' summarization, no reads will be
+counted twice at the exception of those mapping overlapping exons of
+different genes, whether on the same strand or not. The
+\Rfunction{easyRNASeq} does not deal with these situation, but as
+previously a warning will be emitted if this occurs.
+
+\paragraph{Output}
+
+The results can be exported in four different formats:
+\begin{itemize}
+\item count table (the default, a n (features) x  m (samples) \Robject{matrix}).
+\item a \Rpackage{DESeq} \citep{Anders:2010p1659}
+  \Rclass{CountDataSet} class object. Useful to perform further
+  analyses using the \Rpackage{DESeq} package.
+\item an \Rpackage{edgeR} \citep{Robinson:2010p775} \Rclass{DGEList}
+  class object. Useful to perform further analyses using the 
+  \Rpackage{edgeR} package.
+\item an \Rclass{RNAseq} class object. Useful for performing
+  additional pre-processing without re-loading the reads and
+  annotations.
+\end{itemize}
+
+\paragraph{Normalization}
+
+The results can optionally be ``normalized'' as \emph{Reads per Kilobase
+  of feature per Million reads in the library} (RPKM,
+\cite{Mortazavi:2008p740}). In addition, the normalization step is
+available when the results are exported in the \Rpackage{DESeq} or
+\Rpackage{edgeR} formats. This will as well generate plots to assess
+
+the validity of the normalization and help decide how to proceed with
+any downstream analysis.
+\newline
+\newline
+In the following paragraphs, the usage of these different arguments
+will be presented. 
+
+\newpage
+
+\subsection{different input}
+
+The following show how to load an 'export' file. This was the default
+Illumina output before Illumina released CASAVA v1.8 in spring
+2011. The alignment are done with ELAND. The \Robject{format} argument
+has to be set to the ``aln'' value and an additional arguments:
+\Robject{type} has to be provided to precise the input file
+format. See the \Rpackage{ShortRead} \Rfunction{readAligned} help page
+for all the available formats. Note as well the \Robject{filter}
+argument that is essential to filter the usable reads from the export
+file. Indeed, the export file does contain every read, including those
+not aligning and those not passing the original quality filter
+performed during the Illumina Base Calling (Bustard) a.k.a. the
+chastity filter. For more details, see the section ``Filtering the
+Data'' in the \Rpackage{RnaSeqTutorial} vignette.
+
+<<read an export, eval=FALSE>>=
+count.table <- easyRNASeq(system.file(
+                                      "extdata",
+                                      package="RnaSeqTutorial"),
+                          organism="Dmelanogaster",
+                          chr.sizes=as.list(seqlengths(Dmelanogaster)),
+                          readLength=36L,
+                          annotationMethod="rda",
+                          annotationFile=system.file(
+                            "data",
+                            "gAnnot.rda",
+                            package="RnaSeqTutorial"),
+                          format="aln",
+                          type="SolexaExport",
+                          count="exons",
+                          pattern="subset_export",
+                          filter=compose(
+                            chromosomeFilter(regex="chr"),
+                            chastityFilter()))
+@ 
+
+In the next example, we read a BAM file containing gapped
+alignments. In that particular case, TopHat \citep{Trapnell:2009p156}
+was used to look for splicing events. Note the use of the
+\Robject{gapped} boolean argument. 
+
+<<read a gapped  bam file, eval=FALSE>>=
+count.table <- easyRNASeq(system.file(
+                                      "extdata",
+                                      package="RnaSeqTutorial"),
+                          organism="Dmelanogaster",
+                          chr.sizes=as.list(seqlengths(Dmelanogaster)),
+                          readLength=36L,
+                          annotationMethod="rda",
+                          annotationFile=system.file(
+                            "data",
+                            "gAnnot.rda",
+                            package="RnaSeqTutorial"),
+                          format="bam",
+                          gapped=TRUE,
+                          count="exons",
+                          filenames="gapped.bam")
+@ 
+
+\newpage
+
+\subsection{different annotation}
+\label{subsec:diffAnn}
+
+The following paragraphs present how to use different annotation
+sources to retrieve the genic information. It describes as the well
+the expected format of these annotations.
+
+\paragraph{biomaRt}
+
+The following show how to use biomaRt to retrieve the annotations.
+<<load annotation from biomaRt, eval=FALSE>>=
+count.table <- easyRNASeq(system.file(
+                                      "extdata",
+                                      package="RnaSeqTutorial"),
+                          organism="Dmelanogaster",
+                          chr.sizes=as.list(seqlengths(Dmelanogaster)),
+                          readLength=36L,
+                          annotationMethod="biomaRt",
+                          format="bam",
+                          gapped=TRUE,
+                          count="exons",
+                          filenames="gapped.bam")
+@ 
+
+Once the annotation has been fetched, one can retrieve them from an
+\Robject{RNAseq} object. This implies that the ``outputFormat'' argument
+will have been set to ``RNAseq'', so that the complete object is
+returned and not only the count table (\textit{c.f.}
+\ref{subsec:diffOut}, page \pageref{subsec:diffOut}). Using the
+``genomicAnnotation'' accessor on that object, one can get the
+annotation as an \Rclass{RangedData} object. This object can be saved
+in an ``rda'' file under the name ``gAnnot'' for a faster processing
+using the \Rfunction{easyRNASeq} function with the
+arguments``annotationMethod'' and ``annotationFile'' set to ``rda''
+and the path where you would have saved the rda file.
+
+\paragraph{genomeIntervals}
+
+In the next example is shown how to use a gff file for the same
+purpose. Clearly, every gff formatted file will have different gff
+attributes (its last column). This column contains ``key=value'' pairs
+separated by semi-colons. We depend on specific key to be present as
+we have been using Flybase gff files to develop that functionality;
+hence we expect attributes as defined by Flybase. First, we're only
+considering feature of type 'exon'  in the third column. Then we
+expect the following keys: \textit{ID}, \textit{Parent}, and
+\textit{Name} in the attributes. The \textit{ID} key should have the
+format: \textit{geneID:exonNumber}; both the exon and gene are derived
+from it. The \textit{Parent} key should contain the transcript ID. If
+one exon is part of several transcripts, these can be concatenated
+using commas without space. Finally, the \textit{Name} key should
+contain the gene name, but is actually optional. As we are using the
+\Rfunction{readGff3} function from the \Rpackage{genomeIntervals}
+package, it is as well essential that the pairs key=value are
+separated by semi-colons \textbf{whitout} space. See the ``annot.gff''
+file used in the next example.
+
+<<load the annotation from a gff, eval=FALSE>>=
+count.table <- easyRNASeq(system.file(
+                                      "extdata",
+                                      package="RnaSeqTutorial"),
+                          organism="Dmelanogaster",
+                          chr.sizes=as.list(seqlengths(Dmelanogaster)),
+                          readLength=36L,
+                          annotationMethod="gff",
+                          annotationFile=system.file(
+                            "extdata",
+                            "annot.gff",
+                            package="RnaSeqTutorial"),
+                          format="bam",
+                          gapped=TRUE,
+                          count="exons",
+                          filenames="gapped.bam")
+@ 
+
+\paragraph{RangedData}
+
+Internally, an \Rfunction{easyRNAseq} function call with the
+\Robject{annotationMethod} ``gff'', ``gtf'', or ``biomaRt'' will
+convert the annotation into an object of the \Rclass{RangedData}
+class. Using the \Robject{annotationMethod} ``env'' or ``rda''
+requires that you provide such an object. The following example shows
+the expected structure of such an object.
+
+<<RangedData structure>>=
+gAnnot <- RangedData(
+                     IRanges(
+                             start=c(10,30,100),
+                             end=c(21,53,123)),
+                          space=c("chr01","chr01","chr02"),
+                          strand=c("+","+","-"),
+                          transcript=c("trA1","trA2","trB"),
+                          gene=c("gA","gA","gB"),
+                          exon=c("e1","e2","e3"),
+                          universe = "Hs19"
+                          )
+gAnnot
+@ 
+
+Here we are describing the genomic location of three exons
+(chromosome, position and strand) as well as their transcript and gene
+membership. Nothing else is actually required. Note that the names'
+spelling is \textbf{essential} for the \Rfunction{easyRNAseq} function
+to work properly. Indeed, the \Robject{count} argument will be used to
+lookup the proper values into the annotation, \emph{e.g.} for summarizing by
+``exons'', an ``exon'' column in the \Rclass{RangedData} object is
+mandatory;  a ``feature'' one for counting ``features'', a
+``transcript'' one for ``transcripts'', \emph{etc.}
+To have a look at the \Rclass{RangedData} class \Robject{gAnnot}
+object used in this tutorial, you can do the following:
+
+<<look at the gAnnot, eval=FALSE>>=
+data(gAnnot)
+gAnnot
+@ 
+
+The \Rpackage{easyRNASeq} package support as well annotation provided
+as a \Rclass{GRangesList} class object (from the
+\Rpackage{GenomicRanges} package). Converting a \Rclass{RangedData}
+class object into a \Rclass{GRangesList} class object is pretty straightforward.
+
+<<GRangesList coercion>>=
+grngs <- as(gAnnot,"GRanges")
+grngsList<-split(grngs,seqnames(grngs))
+grngsList
+@ 
+
+The advantage of doing so is that the \Rclass{RangedData} class might
+get deprecated in the future. The next advantage is that the
+\Rclass{GRangesList}  class is strand-aware. Therefore, support for
+strand-specific data is going to be supported as soon as I put my hand
+on such a dataset. Any suggestion, or data excerpt is welcome.
+
+\paragraph{Remember}
+
+Generating the proper annotation is probably the most important step
+in processing your RNA-Seq sample. Mind the warnings produced by the
+\Rfunction{easyRNASeq} function, they might be annoying, but there are
+there for a good reason: to help.
+
+\newpage
+
+\subsection{different output}
+\label{subsec:diffOut}
+
+For example, to generate from the same input files and annotation an object of
+class \Rclass{RNAseq} , use the \Rfunction{outputFormat} argument as follow:
+
+<<easyRNASeq output>>=
+rnaSeq <- easyRNASeq(system.file(
+                                 "extdata",
+                                 package="RnaSeqTutorial"),
+                     organism="Dmelanogaster",
+                     chr.sizes=as.list(seqlengths(Dmelanogaster)),
+                     readLength=36L,
+                     annotationMethod="rda",
+                     annotationFile=system.file(
+                       "data",
+                       "gAnnot.rda",
+                       package="RnaSeqTutorial"),
+                     format="bam",
+                     count="exons",
+                     pattern="[A,C,T,G]{6}\\.bam$",
+                     outputFormat="RNAseq")
+@
+
+More details on how to generate \Rclass{CountDataSet}
+(\Rpackage{DESeq}) or \Rclass{DGEList} (\Rpackage{edgeR}) will be
+presented further down, see section \ref{subsec:optNorm},
+page \pageref{subsec:optNorm}.
+
+\newpage
+
+\subsection{different summarization}
+\label{subsec:diffNorm}
+
+\Rpackage{easyRNASeq} offers two possibilities to apply different
+reads' summarization. First, as we have seen previously, by using one
+of the four possible \Robject{count} argument: ``exons'',
+``features'', ``transcripts'' or ``genes''. However, if you want to
+perform different summarization on the same data, \emph{e.g.} by
+``exons'' and ``transcripts'', calling the \Rfunction{easyRNASeq}
+twice is inefficient as you will be processing the read files and
+fetching the annotation twice. To prevent this, one can provide the
+``RNAseq'' value to the \Robject{outputFormat} argument, in which
+case, the entire object is returned. Using specific functions on that
+object is the second way to apply different summarization on the same
+data. These functions are:
+\begin{itemize}
+  \item \Rfunction{exonCounts} function to calculate the exon counts
+  \item \Rfunction{featureCounts} function to calculate the exon counts
+  \item \Rfunction{transcriptCounts} function to calculate the
+    transcript counts
+  \item \Rfunction{geneCounts} function to calculate the gene
+    counts. It takes an additional parameter defining the kind of gene
+    summarization, either \Robject{bestExons} or
+    \Robject{geneModels}. The \Robject{bestExons}
+    summarization will return per gene, the highest exon count. The
+    \Robject{geneModels} summarization first calculate a gene
+    model and then return the read count for it.
+  \item \Rfunction{readCounts} function to access the different count
+    tables stored in the \Robject{RNAseq} object.
+\end{itemize}
+  
+For example, to summarize the reads per transcripts, we will use the
+\Rfunction{transcriptCounts} function on the previously generated
+\Robject{rnaSeq} object and then use the \Rfunction{readCounts}
+function to access the transcript count table.
+
+<<Transcript counts>>=
+rnaSeq <- transcriptCounts(rnaSeq)
+head(readCounts(rnaSeq,'transcripts'))
+@ 
+
+Summarizing by transcript introduces some complexity in the data
+analysis, \emph{i.e.} exons part of different isoforms introduce a
+bias in the counts. For that reason, it might be better to have a
+first look at the data, summarized by genes. This, however, requires to
+combine all the alternative exons and UTRs present for every gene into
+a ``gene model''; \emph{i.e.} overlapping exons are merged into
+``synthetic'' ones. This is what is performed when the arguments
+``count'' and ``summarization'' are set to ``genes'' and
+``geneModels'', respectively. A caveat not addressed by this procedure
+are genes overlapping on the same or opposite strands. If this occurs
+a warning will be emitted. If the reads were summarized by
+``geneModels'' and the ``outputFormat'' argument was set to
+``RNAseq'', one can use the ``geneModel'' accessor on the obtained
+object to access the computed gene models. They are stored in an
+\Rclass{RangedData} object and can be modified to address the caveat
+previously mentioned. To be strict, one would remove every overlapping
+loci and conserve only the other ones. Such a modified annotation can
+then be saved and used for the next \Rfunction{easyRNASeq} run.
+\newline
+It is not possible yet to summarize by ``geneModels'' using
+the \Rfunction{geneCounts}  function. A meaningful error
+message is thrown if the \Rfunction{geneCounts}  is used for that
+purpose.
+
+<<geneCounts fails, eval=FALSE>>=
+try(geneCounts(rnaSeq,summarization='geneModels'))
+@ 
+
+This behavior will be corrected in the next release. At the moment,
+this has to be done using the \Rfunction{easyRNASeq} function
+directly. 
+
+<<current access to geneCounts, eval=FALSE>>=
+rnaSeq2 <- easyRNASeq(system.file(
+                                  "extdata",
+                                  package="RnaSeqTutorial"),
+                      organism="Dmelanogaster",
+                      chr.sizes=as.list(seqlengths(Dmelanogaster)),
+                      readLength=36L,
+                      annotationMethod="rda",
+                      annotationFile=system.file(
+                        "data",
+                        "gAnnot.rda",
+                        package="RnaSeqTutorial"),
+                      format="bam",
+                      count="genes",
+                      summarization="geneModels",
+                      pattern="[A,C,T,G]{6}\\.bam$",
+                      outputFormat="RNAseq")
+head(readCounts(rnaSeq2,'genes','geneModels'))
+@
+
+\newpage
+
+\subsection{optional normalization}
+\label{subsec:optNorm}
+
+In this section, the different ``normalization'' available will be
+described. First the RPKM, even though this cannot be considered as a
+proper normalization based on sound statistical models, but is rather
+a kind of common sense ``correction'' that one can apply to the
+data. This implies normalizing the read counts depending on the genic
+feature size (exon, transcript, gene model,...) and on the total
+number of reads sequenced for that library. I would not recommend to
+use it for doing any kind of differential expression analysis, but
+it's definitely sufficient to create tracks to be displayed in a
+genome browser in order to get a feel when comparing different
+sample visually.
+
+<<RPKM normalization, eval=FALSE>>=
+count.table <- easyRNASeq(system.file(
+                                      "extdata",
+                                      package="RnaSeqTutorial"),
+                          organism="Dmelanogaster",
+                          chr.sizes=as.list(seqlengths(Dmelanogaster)),
+                          readLength=36L,
+                          annotationMethod="rda",
+                          annotationFile=system.file(
+                            "data",
+                            "gAnnot.rda",
+                            package="RnaSeqTutorial"),
+                          format="bam",
+                          count="exons",
+                          filenames=c("ACACTG.bam", "ACTAGC.bam", 
+                            "ATGGCT.bam", "TTGCGA.bam"),
+                          normalize=TRUE
+                          )
+@ 
+
+In addition, \Rfunction{easyRNASeq} count tables can be easily
+transformed into RPKM, by using the \Rfunction{RPKM} method:
+
+<<RPKM counts>>=
+feature.size = width(genomicAnnotation(rnaSeq))
+names(feature.size) = genomicAnnotation(rnaSeq)$exon
+lib.size=c(
+  "ACACTG.bam"=56643,
+  "ACTAGC.bam"=42698,
+  "ATGGCT.bam"=55414,
+  "TTGCGA.bam"=60740)
+head(RPKM(readCounts(rnaSeq,summarization="exons")$exons,
+          NULL,
+          lib.size=lib.size,
+          feature.size=feature.size))
+@ 
+
+The same can be directly done on object of the \Rclass{RNAseq} class.
+
+<<RPKM on RNAseq>>=
+head(RPKM(rnaSeq,from="transcripts"))
+@ 
+
+<<RPKM on RNAseq,eval=FALSE>>=
+head(RPKM(rnaSeq2,from="geneModels"))
+@ 
+
+A better way of normalizing the data is to use either the
+\Rpackage{edgeR} or \Rpackage{DESeq} packages, provided you have got
+enough replicates.
+
+\paragraph{DESeq}
+\label{par:DESeq}
+To be able to normalize the data using \Rpackage{DESeq} (or
+\Rpackage{edgeR} for that matter), one needs to define the
+samples' ``conditions'', \textit{e.g.} ``disease'' vs. ``healthy''. To
+ensure traceability, the \Rpackage{easyRNASeq} package require the
+conditions to be a \emph{named vector} where the names are the raw
+data filenames. 
+
+<<define the conditions>>=
+conditions=c("A","A","B","B")
+names(conditions) <- c("ACACTG.bam", "ACTAGC.bam", 
+                       "ATGGCT.bam", "TTGCGA.bam")
+@ 
+
+Once the conditions have been defined, one can  call the
+\Rfunction{easyRNASeq} function with the \Robject{outputFormat}
+argument set to DESeq. The \Robject{normalize} argument precise
+whether or not to perform the normalization implemented in
+\Rpackage{DESeq}. If either case, a \Robject{CountDataSet} object is
+returned containing or not normalized values. Here, in addition, we
+precise the kind of fit that needs to be performed by the
+\Rfunction{estimateDispersion} function of the \Rpackage{DESeq}
+package. Since we have so few data, the default fit would fail and we
+would get an error telling us to change the \Robject{fitType}
+argument. As a consequence, we set that argument to \textit{local}.
+
+<<DESeq normalization, eval=FALSE>>=
+countDataSet <- easyRNASeq(system.file(
+                                      "extdata",
+                                      package="RnaSeqTutorial"),
+                          organism="Dmelanogaster",
+                          chr.sizes=as.list(seqlengths(Dmelanogaster)),
+                          readLength=36L,
+                          annotationMethod="rda",
+                          annotationFile=system.file(
+                            "data",
+                            "gAnnot.rda",
+                            package="RnaSeqTutorial"),
+                          format="bam",
+                          count="exons",
+                          filenames=c("ACACTG.bam", "ACTAGC.bam", 
+                            "ATGGCT.bam", "TTGCGA.bam"),
+                          normalize=TRUE,
+                          outputFormat="DESeq",
+                          conditions=conditions,
+                          fitType="local"
+                          )
+@ 
+
+Note that the plot produced here are irrelevant since the dataset is
+too small. You can turn the plotting off by setting the \Robject{plot}
+argument to \textit{FALSE}. Have a look at the \Rpackage{DESeq}
+vignette (essential if you plan to use \Rpackage{DESeq} anyway!) for
+proper explanation about these.
+
+\paragraph{edgeR}
+
+Here we perform the same procedure as that described for the
+\Rpackage{DESeq} in the paragraph above, using the \Rpackage{edgeR}
+instead. We simply use ``edgeR'' as the value to the ``outputFormat''
+argument.
+
+<<edgeR normalization, eval=FALSE>>=
+dgeList <- easyRNASeq(system.file(
+                                  "extdata",
+                                  package="RnaSeqTutorial"),
+                      organism="Dmelanogaster",
+                      chr.sizes=as.list(seqlengths(Dmelanogaster)),
+                      readLength=36L,
+                      annotationMethod="rda",
+                      annotationFile=system.file(
+                        "data",
+                        "gAnnot.rda",
+                        package="RnaSeqTutorial"),
+                      format="bam",
+                      count="exons",
+                      filenames=c("ACACTG.bam", "ACTAGC.bam",
+                        "ATGGCT.bam", "TTGCGA.bam"),
+                      normalize=TRUE,
+                      outputFormat="edgeR",
+                      conditions=conditions
+                      )
+@ 
+
+As mentioned in the former paragraph about \Rpackage{DESeq}
+(\ref{par:DESeq}, page \pageref{par:DESeq}, the plots generated here
+are only semi-relevant. Check out the \Rpackage{edgeR} package
+vignette for more details about these plots. See in particular chapter 10
+(\Rpackage{edgeR} v2.3.24, \Robject{R} v2.14.0). Note that producing
+the plots is rather slow.
+
+\paragraph{Next steps}
+
+At this stage you are done with the normalization and what's ahead of
+you: calling differential expression, exporting track files for
+visualization, etc. is not the scope of the \Rpackage{easyRNASeq}
+package. This one has a few more functionalities, the most important
+of which will be described in the next section. To proceed with your
+data analysis, check the relevant package vignettes (\Rpackage{DESeq},
+\Rpackage{edgeR}) for differential expression calling and the
+\Rpackage{RnaSeqTutorial} for examples of track files generation using
+the \Rpackage{rtracklayer} package.
+
+\newpage
+
+\section{Advanced usage}
+
+In this section we will discuss about more advanced RNA-Seq
+pre-processing, such as de-multiplexing, or the \emph{de novo}
+identification of expressed regions. 
+The same can be directly done on object of the \Rclass{RNAseq} class.
+
+\subsection{De-multiplexing samples}
+
+Nowadays, NGS machines produces such huge quantity of``raw'' reads
+(40M, 100M and 160M per Illumina GAIIx, ABI SOLiD4 or Illumina HiSeq
+lanes (or equivalent), respectively ), that the coverage obtained per
+lane for the transcriptome of ``small'' genome-sized organisms, is for
+a single sample essentially a waste of resource. \textit{E.g.} one
+lane of HiSeq results in an approximate 2,800X coverage if the
+\textit{Saccharomyces cerevisiae} genome which is 12Mb large.
+Therefore, techniques to have several samples running as a
+\emph{single} library have been
+created \citep{Lefrancois:2009p778,Smith:2010p777}, using 4-6bp
+barcodes to uniquely identify the sample. This is called
+\textbf{multiplexing} and one can today with an average Illumina
+GenomeAnalyzer GAIIx average run (105bp read, single end), multiplex
+48 yeast samples in a single lane at an almost 30X coverage. This
+approach is very advantageous for researchers, especially in term of
+costs, but it adds an additional layer of pre-processing that is not
+as trivial to process as one would think.  Extracting the barcodes
+would be fairly straightforward, but for the average 0.1 percent
+sequencing error rate that introduces a lot of multiplicity in the
+actual barcodes present in the samples. A proper design of the
+barcodes, maximizing the Hamming
+distance\citep{Hamming:1950p825,Pilcher:2008p824} is an essential step
+for a proper de-multiplexing.
+\newline
+There are two kinds of barcoding, the one described in
+\cite{Lefrancois:2009p778} where the barcode is part of the read
+sequence and the one developed by Illumina, where the barcode is read
+in a separate sequencing reaction after the first mate sequencing.
+\newline
+The data used in the following example has been sequenced using the
+Illumina protocol. We'll look at the specificities that this introduce.
+
+\begin{comment}
+Are you sure the Hamming distance is the best? There is a lot of
+literature on error-correcting codes and I think there may be better
+and less naive methods, \emph{e.g.} taking into account error rates and correlations.
+\end{comment}
+
+<<cleanup, echo=FALSE>>=
+file2clean=c(
+  "ACACTG.fastq",
+  "ACTAGC.fastq",
+  "ATGGCT.fastq",
+  "TTGCGA.fastq")
+silent <- sapply(
+                 file2clean,
+                 function(f2c){
+                   if(file.exists(f2c)){file.remove(f2c)}
+                 })
+@
+
+<<Demultiplexing sample>>=
+alns <- readAligned(
+                    system.file(
+                                "extdata",
+                                package="RnaSeqTutorial"),
+                    pattern="multiplex_export",
+                    filter=compose(
+                      chastityFilter(),
+                      nFilter(2),
+                      chromosomeFilter(regex="chr")),
+                    type="SolexaExport",
+                    withAll=TRUE)
+@ 
+
+Note the use of the \Robject{withAll} argument. It is essential to get
+the barcode, since this data was multiplexed using the
+Illumina protocol. For the Illumina protocol, the barcode is read in a
+separate sequencing reaction and its sequence is reported as a
+field of the \emph{export} file. This field is not parsed by
+default by the \Rfunction{readAligned} to save time and
+memory. It becomes available when the data is loaded using
+the\Robject{withAll} argument and is afterwards accessible in the
+metadata of the returned object. It can be accessed using the
+following command:
+
+<<Illumina example, eval=FALSE>>=
+alignData(alns)$multiplexIndex
+@
+
+where \Robject{alns} is the object of the \Rpackage{ShortRead} \Rclass{AlignedRead} class.
+\newline
+
+In the following, we will look at the other kind of barcoding, where
+the barcode is part of the sequenced sequence. First, we will create
+some plots to evaluate the barcoding efficiency. 
+
+<<barcodes>>=
+barcodes=c("ACACTG","ACTAGC","ATGGCT","TTGCGA")
+@ 
+<<barcodePlot, fig=TRUE, height=6, eps=FALSE>>=
+barcodePlot(alns,
+            barcodes=barcodes,
+            type="within",
+            barcode.length=6,
+            show.barcode=20,
+            main="All samples",
+            xlim=c(0,0.5))
+@ 
+
+% \begin{figure}[htbp]
+% \begin{center}
+% \includegraphics[width=0.8\textwidth]{easyRNASeq-barcodePlot}
+% \end{center}
+% \caption{Barcode occurencies in the whole dataset}
+% \label{fig:barcodePlot}
+% \end{figure}
+
+All the barcodes seem to be almost equally distributed. Every one has
+a proportion close to 25\%. Just the ``ACTAGG'' seems to have been
+either less amplified during the library preparation or simply had a
+lower concentration than the other or generated less
+clusters. Overall, only a low percentage of them cannot be surely
+assigned. Once this has been verified, the sample can be
+\emph{demultiplexed}.
+
+<<demultiplex>>=
+dem.alns <- demultiplex(alns,
+                        barcodes=barcodes,
+                        edition.dist=2,
+                        barcodes.qty=4,
+                        type="within")
+@ 
+
+<<check the objects, eval=FALSE>>=
+dem.alns$reads[[1]]
+dem.alns$barcodes[[1]]
+@
+
+Remains to write the extracted data to file, or proceed it within
+R. Again performing some validation plot is important to ensure that
+the \emph{de-multiplexing} process succeeded.
+
+<<demPlot, fig=TRUE, height=8, width=8, eps=FALSE>>=
+par(mfrow=c(2,2))
+barcode.frequencies <- lapply(
+                              names(dem.alns$barcodes),
+                              function(barcode,alns){                                
+                                barcodePlot(
+                                            alns$barcodes[[barcode]],
+                                            barcodes=barcode,
+                                            type="within",barcode.length=6,
+                                            show.barcode=20,
+                                            main=paste(
+                                              "Expected barcode:",
+                                              barcode))
+                              },dem.alns)
+@ 
+
+% \begin{figure}[htbp]
+% \begin{center}
+% \includegraphics[width=0.8\textwidth]{easyRNASeq-demPlot}
+% \end{center}
+% \caption{Barcode occurences independantly per sample}
+% \label{fig:demPlot}
+% \end{figure}
+
+Here we see the demultiplexed barcodes. It's important to assess if
+within a given sample, there was a barcode bias. Generally, visually
+assessing the data is important to make sure that the raw data you are
+looking at agrees with the experimental design that was
+performed. This is discussed in the \Robject{RnaSeqTutorial} vignette
+of the \Rpackage{RnaSeqTutorial}.
+\newline
+Finally, we can save the demultiplexed files to disk.
+<<write the file>>=
+status <- lapply(
+                 names(dem.alns$barcodes),
+                 function(barcode,alns){         
+                   writeFastq(
+                              alns$reads[[barcode]],
+                              file=paste(
+                                barcode,
+                                "fastq",sep="."))
+                 },dem.alns)
+@ 
+
+<<cleanup, echo=FALSE>>=
+file2clean=c(
+  "ACACTG.fastq",
+  "ACTAGC.fastq",
+  "ATGGCT.fastq",
+  "TTGCGA.fastq",
+  "Rplots.pdf")
+silent <- sapply(
+                 file2clean,
+                 function(f2c){
+                   if(file.exists(f2c)){file.remove(f2c)}
+                 })
+@ 
+
+The fastq files are now ready to be aligned with your preferred aligner
+and the resulting bam files processed with the \Rfunction{easyRNASeq}
+function as described in the first part of the present vignette! Enjoy.
+
+\newpage
+
+\section{Session Information}
+
+The version number of R\citep{ref:R} and packages loaded for
+generating the vignette were: 
+
+<<SessionInfo, echo=FALSE>>=
+library(easyRNASeq)
+library(BSgenome.Dmelanogaster.UCSC.dm3)
+library(RnaSeqTutorial)
+sessionInfo()
+@
+
+\newpage
+
+\section{Final remarks}
+\label{sec:finalRem}
+RNA-seq is still maturating and a lot of new developments are to be
+expected. If you have any questions, comments, feel free to contact me:
+delhomme \emph{at} embl \emph{dot} de.
+
+\begin{comment}
+  The following code is just to make sure that the functionality of
+  strand and reduce are kept, despite the NAMESPACE clashes between
+  imported packages.
+\end{comment}
+
+<<some test, echo=FALSE>>=
+grngs = GRanges(seqnames=c("chr1", "chr2"),
+  ranges=IRanges(start=1:2, end=2:3), 
+  strand=c("+","-"))
+silent <- strand(grngs)
+silent <- reduce(grngs)
+@ 
+
+\newpage
+
+\bibliographystyle{natbib}
+
+\bibliography{easyRNASeq}
+
+\end{document}

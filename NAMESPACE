@@ -1,0 +1,50 @@
+## bioMart import
+importClassesFrom(biomaRt, Mart)
+importFrom(biomaRt, "getBM", "listDatasets", "useMart")
+
+## genomeIntervals import
+importClassesFrom(genomeIntervals,Genome_intervals_stranded)
+importMethodsFrom(genomeIntervals,"strand","strand<-")
+importFrom(intervals,"reduce")
+
+## We have too many dependencies on these packages
+## import everything
+import(BiocGenerics,IRanges,GenomicRanges,Biostrings)
+
+## ShortRead import
+importClassesFrom(ShortRead,AlignedRead,SRFilter)
+importFrom(ShortRead,srdistance,srFilter)
+
+## Rsamtools import
+importClassesFrom(Rsamtools,ScanBamParam)
+importFrom(Rsamtools,scanBamWhat,scanBamFlag)
+
+## edgeR import
+importClassesFrom(edgeR,DGEList)
+importFrom(edgeR,DGEList,calcNormFactors,estimateCommonDisp,plotMeanVar,plotMDS.DGEList)
+exportMethods("plotNormalizationFactors")
+
+## DESeq import
+importClassesFrom(DESeq,CountDataSet)
+importMethodsFrom(DESeq,estimateSizeFactors,estimateDispersions)
+importFrom(DESeq,newCountDataSet)
+exportMethods("plotDispersionEstimates","fitInfo")
+
+## RNAseq export
+## methods
+exportMethods(
+    "easyRNASeq",
+    "exonCounts",
+    "fetchAnnotation",
+    "geneCounts",
+    "RPKM",
+    "show",
+    "transcriptCounts" 
+)
+## classes
+exportClasses(
+    "RNAseq" 
+)
+## to export the accessors
+exportPattern("^[^\\.]")
+
