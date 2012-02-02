@@ -28,7 +28,7 @@ exportMethods("plotNormalizationFactors")
 importClassesFrom(DESeq,CountDataSet)
 importMethodsFrom(DESeq,estimateSizeFactors,estimateDispersions)
 importFrom(DESeq,newCountDataSet)
-exportMethods("plotDispersionEstimates","fitInfo")
+exportMethods("plotDispersionEstimates")
 
 ## RNAseq export
 ## methods
