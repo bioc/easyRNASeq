@@ -263,11 +263,11 @@ setGeneric(
 
 ## DESeq extension
 ## accessor
-setGeneric(
-           name="fitInfo",
-           def=function(obj){
-             standardGeneric("fitInfo")
-           })
+## setGeneric(
+##            name="fitInfo",
+##            def=function(obj){
+##              standardGeneric("fitInfo")
+##            })
 
 setGeneric(
            name="multivariateConditions",

@@ -21,12 +21,22 @@
 
                   ## plot
                   if(plot){
-                    ## check if we have enough sample per conditions
-                    all.cond <- table(conditions(obj))
-                    valid.cond <- names(all.cond)[all.cond>1]
-                    sapply(valid.cond,function(cond,obj){
-                      plotDispersionEstimates(obj,cond)
-                    },obj)
+
+                    ## this has gotten easy
+                    ## the fData holds as many columns as condition or one
+                    ## if the method is "pooled" or "blind"
+                    ## the dispTable contains the same information
+                    ## per condition
+                    ## the fitInfo function takes a parameter name
+                    ## to return what is needed. This is the name
+                    ## of the fData column trimmed of "disp_"
+                    switch(as.character(ncol(fData(obj))),
+                           "1"=plotDispersionEstimates(obj,cond=sub("disp_","",names(fData(obj)))),
+                           {
+                             sapply(sub("disp_","",names(fData(obj)),function(nam,obj){
+                               plotDispersionEstimates(obj,cond=nam)
+                             },obj)
+                           })
                   }
                   
                   ## if not silent

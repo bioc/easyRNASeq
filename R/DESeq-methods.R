@@ -1,12 +1,12 @@
 ## this code was extracted from the DESeq vignette
 ## Simon Anders et al.
 
-setMethod(
-          f="fitInfo",
-          signature="CountDataSet",
-          definition=function(obj){
-            obj@fitInfo
-          })
+## setMethod(
+##           f="fitInfo",
+##           signature="CountDataSet",
+##           definition=function(obj){
+##             obj@fitInfo
+##           })
 
 setMethod(
           f="multivariateConditions",
@@ -26,28 +26,32 @@ setMethod(
             }
 
             ## check the conditions
-            if(multivariateConditions(obj)){
-              ## TODO other steps are necessary before that to get the proper DESeq object at that point
-              ## make sure we can read a data.frame as conditions, that the rownames are the files and that the estimates are calc with pooled-CR
-              if(cond != "pooled"){
-                stop("The provided condition can only have the value: 'pooled', as your conditions is multivariate")
-              }
-            } else {
-              if(!cond %in% conditions(obj)){
-                stop("The provided condition is not present in the 'conditions' slot of your object.")
-              }
-            }
+            ## check if we are pooled, blind or per-condition
+            stopifnot(length(cond)==1)
+
+            ## should work without now
+            ## if(multivariateConditions(obj)){
+            ##   ## TODO other steps are necessary before that to get the proper DESeq object at that point
+            ##   ## make sure we can read a data.frame as conditions, that the rownames are the files and that the estimates are calc with pooled-CR
+            ##   if(cond != "pooled"){
+            ##     stop("The provided condition can only have the value: 'pooled', as your conditions is multivariate")
+            ##   }
+            ## } else {
+            ##   if(!cond %in% sub("disp_",names(fData(obj)))){
+            ##     stop("The provided condition is not present in the 'conditions' slot of your object.")
+            ##   }
+            ## }
 
             ## plot
             plot(
                  rowMeans( counts( obj, normalized=TRUE ) ),
-                 fitInfo(obj)[[cond]]$perGeneDispEsts,
+                 fitInfo(obj,cond)$perGeneDispEsts,
                  pch = '.', log=log,
                  xlab="gene mean normalized expression",
                  ylab="per gene dispersion estimate",
                  main = paste("Gene dispersion estimate for condition:",cond),
                  ...)
             xg <- 10^seq( -.5, 5, length.out=300 )
-            lines( xg, fitInfo(obj)[[cond]]$dispFun( xg ), col="red" )
+            lines( xg, fitInfo(obj,cond)$dispFun( xg ), col="red" )
           })
 
