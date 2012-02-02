@@ -33,7 +33,7 @@
                     switch(as.character(ncol(fData(obj))),
                            "1"=plotDispersionEstimates(obj,cond=sub("disp_","",names(fData(obj)))),
                            {
-                             sapply(sub("disp_","",names(fData(obj)),function(nam,obj){
+                             sapply(sub("disp_","",names(fData(obj))),function(nam,obj){
                                plotDispersionEstimates(obj,cond=nam)
                              },obj)
                            })
