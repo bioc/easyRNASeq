@@ -14,12 +14,12 @@
 \tabular{ll}{
 Package: \tab easyRNASeq\cr
 Type: \tab Package\cr
-Version: \tab 1.1.1\cr
-Date: \tab 2011-10-14\cr
+Version: \tab 1.1.6\cr
+Date: \tab 2012-02-12\cr
 License: \tab Artistic-2.0\cr
 LazyLoad: \tab yes\cr
-Depends: \tab methods, biomaRt, edgeR, DESeq, genomeIntervals, Rsamtools, ShortRead, RnaSeqTutorial\cr
-Suggests: \tab doMC, BSgenome.Dmelanogaster.UCSC.dm3
+Depends: \tab methods, parallel, biomaRt, edgeR, DESeq, genomeIntervals, Rsamtools, ShortRead, RnaSeqTutorial\cr
+Suggests: \tab BSgenome.Dmelanogaster.UCSC.dm3
 }
 
 The main function \code{\link[easyRNASeq:easyRNASeq]{easyRNASeq}} will summarize the counts per
@@ -60,7 +60,7 @@ For more insider details, and step by step functions, see:
 	\code{\link[ShortRead:readAligned]{ShortRead}}
 
 	The suggested packages:
-	\code{\link[doMC:doMC]{doMC}}
+	\code{\link[parallel:makeCluster]{parallel}}
 	\code{\link[GenomicFeatures:TranscriptDb-class]{GenomicFeatures}}
 }
 

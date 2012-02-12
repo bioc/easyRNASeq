@@ -16,7 +16,7 @@
 
 ## keep only the valid names
 ".convertToUCSC" <- function(chr.names=list(),
-                            organism=character(1),
+                            organism=c("Dmelanogaster","Hsapiens","Mmusculus","Rnorvegicus"),
                             custom.map=data.frame()){
 
   if(organism!="custom"){
@@ -26,20 +26,26 @@
     }
   }
   
-  return(switch(organism,
-                "Dmelanogaster"={
+  return(switch(tolower(organism),
+                "dmelanogaster"={
                   paste(
                         "chr",
                         sub("dmel_mitochondrion_genome","M",chr.names),
                         sep="")
                 },
-                "Hsapiens"={
+                "hsapiens"={
                   paste(
                         "chr",
                         sub("MT","M",chr.names),
                         sep="")
                 },
-                "Rnorvegicus"={
+                "mmusculus"={
+                  paste(
+                        "chr",
+                        sub("MT","M",chr.names),
+                        sep="")
+                },
+                "rnorvegicus"={
                   paste(
                         "chr",
                         sub("MT","M",chr.names),
@@ -69,8 +75,9 @@
                   }
                 },
                 {
-                  warning(paste("No function implemented to convert the names for the organism: ",organism,
-                                ".\nIf you need to provide your own mapping, use the 'custom' argument."))
+                  warning(paste("No function implemented to convert the names for the organism: ",organism,".\n",
+                                "Available ones so far exists for: ",paste(eval(formals(".convertToUCSC")[["organism"]]),collapse=", "),".\n",
+                                "If you need to provide your own mapping, use the 'custom' argument.",sep=""))
                   chr.names
                 }))
 }
@@ -106,7 +113,7 @@
   return(val)
 }
 
-## to avoid reduce and strand errors (both exists in IRanges/intervals and GenomicRanges/genomeIntervals resectively)
+## to avoid reduce and strand errors (both exists in IRanges/intervals and GenomicRanges/genomeIntervals respectively)
 setMethod(
           f="strand",
           signature="RNAseq",

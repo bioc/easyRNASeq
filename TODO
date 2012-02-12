@@ -1,0 +1,27 @@
+1) Deal with stranded RNA-Seq
+2) Deal with GenomicFeatures
+
+## using different annotation (makeTranscriptDB)
+library(GenomicFeatures)
+hg19.tx <- makeTranscriptDbFromUCSC(
+                                    genome="hg19",
+                                    tablename="refGene")
+
+## easyRNASeq can deal with GRangesList object, so no need to modify it much, i.e. no need to convert it to a RangedData
+gAnnot <- exons(hg19.tx)
+
+## REMEMBER we can fetch it this way
+## exons(hg19.tx,columns=c("gene_id","tx_id","exon_id"))
+## we need to adapt the GRanges then; i.e. multiply by gene and transcripts...
+
+## NOTE that exon have integer ID, as well as the tx_id
+
+## change the metadata column name to suit easyRNASeq
+colnames(elementMetadata(gAnnot)) <- "exon"
+
+## finally turn it into a GRangesList
+gAnnot <- split(gAnnot,seqnames(gAnnot))
+
+3) Integrate the DEXSeq object generation
+## create the disjoin exon
+## report both the disjoin exon count and the new annotation

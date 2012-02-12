@@ -31,7 +31,7 @@
 	\item{annotation.type}{describes the kind of annotation to keep the information from in a gtf or gff file. If set to NULL all the annotations are returned.}  
 	\item{organism}{Organism name}
 	\item{gAnnot}{a \code{\linkS4class{RangedData}} object containing exon annotations}
-	\item{nbCore}{number of CPU cores to use if the package doMC is loaded}
+	\item{nbCore}{number of CPU cores to use}
 	\item{filename}{filename that contains the annotations}
 	\item{\dots}{Additional arguments, passed to more internal functions.} 
 }
@@ -42,7 +42,7 @@
 }
 
 \details{
-  To use multicore machines more efficiently, the package doMC (\url{http://cran.r-project.org/web/packages/doMC/index.html}), if loaded will be used to parallelize the processing.
+  To use multicore machines more efficiently, the default parallel package will be used to parallelize the processing.
 }
 
 \author{Nicolas Delhomme}

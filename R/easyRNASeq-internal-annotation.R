@@ -155,38 +155,27 @@
 }
 
 ### TODO we need to adapt the exon numbering depending on the strand!!!
-".geneModelAnnotation" <- function(gAnnot,nbCore=1){ ##Return a RangedData containing all genes model
-	
-	RLbuild<-function(chr,gAnnot){
-		return(coverage(split(IRanges(start=start(gAnnot[chr]),end=end(gAnnot[chr])),gAnnot[chr]$gene)))
-	}
-	
-	##Determines the number of core
-	if(0 != length(grep(paste("^package:", 'doMC',"$", sep=""), search()))){
-		if(nbCore!=getDoParWorkers()){
-			tmpCore <- getDoParWorkers()
-			registerDoMC(cores=nbCore)
-			RL_list<- foreach(chr=names(gAnnot),.combine="c") %dopar% RLbuild(chr,gAnnot)
-			registerDoMC(cores=tmpCore)
-		}
-		else{
-			RL_list<- foreach(chr=names(gAnnot),.combine="c") %dopar% RLbuild(chr,gAnnot)
-		}
-	}
-	else{
-          RL_list<-do.call('c',lapply(names(gAnnot),RLbuild,gAnnot))
-	}
-	##
-	RL<-(IRangesList(RL_list>0))
-	sel<-rep(match(names(RL),gAnnot$gene),sapply(RL,length))
-	geneModel<-RangedData(
-			IRanges(start=unlist(start(RL)),end=unlist(end(RL))),
-			space=gAnnot$space[sel],
-			gene=gAnnot$gene[sel],
-			strand=gAnnot$strand[sel],
-			transcript=paste(gAnnot$gene[sel],"transcript",sep="_"),
-			exon=paste(gAnnot$gene[sel],unlist(sapply(RL,function(gene){c(1:length(gene))})),sep="_")
-	)
-	return(geneModel)
+## TODO we should take advantage of the disjoin function in the future
+".geneModelAnnotation" <- function(gAnnot,nbCore=1){
+  ## Return a RangedData containing all genes model
+  	
+  ## Determines the number of core
+  ## set the number of cores
+  cluster <- makeForkCluster(nnodes=nbCore)
+  
+  ## get the gene ranges
+  RL_list <- do.call("c",parLapply(cluster,names(gAnnot),function(chr,gAnnot){coverage(split(IRanges(start=start(gAnnot[chr]),end=end(gAnnot[chr])),gAnnot[chr]$gene))},gAnnot))
+  
+  ## get the synthetic exons
+  RL<-(IRangesList(RL_list>0))
+  sel<-rep(match(names(RL),gAnnot$gene),sapply(RL,length))
+  return(RangedData(
+                    IRanges(start=unlist(start(RL)),end=unlist(end(RL))),
+                    space=gAnnot$space[sel],
+                    gene=gAnnot$gene[sel],
+                    strand=gAnnot$strand[sel],
+                    transcript=paste(gAnnot$gene[sel],"transcript",sep="_"),
+                    exon=paste(gAnnot$gene[sel],unlist(sapply(RL,function(gene){c(1:length(gene))})),sep="_")
+                    ))
 }
 

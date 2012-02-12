@@ -8,6 +8,7 @@ setMethod(
             ## annotations
             cat("1) Annotations:\n\n")
             
+            
             ## chromosomes
             if(verbose){
               cat("\ta) Chromosome sizes:\n\n")
@@ -52,10 +53,13 @@ setMethod(
                   cat(
                       paste("\thaving an average ",
                             signif(
-                                   median(
-                                          sum(
-                                              readCoverage(x)
-                                              )/unlist(chrSize(x)[sel])
+                                   mean(
+                                          ## this throw an integer overflow
+                                          ##                                          sum(readCoverage(x))/ unlist(chrSize(x)[sel])
+                                          sapply(readCoverage(x),function(rC){sum(as.numeric(runLength(rC) * runValue(rC)))}
+                                                 )/ unlist(chrSize(x)[sel])
+                                          
+                                          
                                           ),
                                    digits=2),
                             "X coverage.\n\n",

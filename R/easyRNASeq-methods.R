@@ -151,11 +151,29 @@ setMethod(
               sum(any(start(aln.ranges[[chr]]) > chrSize(obj)[match(chr,names(chrSize(obj)))]))
             })
             if(any(tmp)>0){
-              stop("Some of your read coordinates are bigger than the chromosome sizes yuo provided. Aborting!")
+              stop("Some of your read coordinates are bigger than the chromosome sizes you provided. Aborting!")
+            }
+
+            ## check and correct the names in the width and in the ranges, keep the common selector
+            valid.names <- sort(intersect(names(aln.ranges),names(chrSize(obj))))
+            if(!ignoreWarnings){
+              warn=FALSE
+              if(!all(names(aln.ranges)%in%valid.names)){
+                warning("Not all the chromosome names present in your bam files exists in your chromosome size list 'chr.sizes'.")                
+                warn=TRUE
+              }
+              if(!all(names(chrSize(obj))%in%valid.names)){
+                warning("Not all the chromosome names in your chromosome size list 'chr.sizes' are present in your bam file.")
+                warn=TRUE
+              }
+              if(warn & !ignoreWarnings){
+                warning(paste("The available chromosomes in both you bam file and 'chr.sizes' list were restricted to their common term.\n",
+                              "These are: ",paste(valid.names,collapse=", "),".",sep=""))
+              }
             }
             
             ## calc the coverage
-            readCoverage(obj) <- coverage(aln.ranges,width=chrSize(obj)[match(names(aln.ranges),names(chrSize(obj)))])
+            readCoverage(obj) <- coverage(aln.ranges[match(valid.names,names(aln.ranges))],width=chrSize(obj)[match(valid.names,names(chrSize(obj)))])
             
             ## return obj
             return(obj)
@@ -379,18 +397,19 @@ setMethod(
               ## check for overlaps
               ## TODO this is a bit fishy as it depends on the order of the summarization argument...
               if(!(count == "genes" & summarization[1] == "geneModels")){
-                ovl.number <- sum(sapply(lapply(findOverlaps(ranges(obj),ignoreSelf=TRUE,ignoreRedundant=TRUE),matchMatrix),function(mat)length(unique(mat[,1]))))
+                ovl.number <- sum(sapply(findOverlaps(ranges(obj),ignoreSelf=TRUE,ignoreRedundant=TRUE),function(hits){length(unique(queryHits(hits)))}))
                 if(ovl.number > 0 & ! ignoreWarnings){
                   warning(paste("There are",ovl.number,"features/exons defined in your annotation that overlap! This implies that some reads will be counted more than once! Is that really what you want?"))
                 }
                 if(count == "transcripts"){
-                  dup.exon <- sum(sapply(lapply(findOverlaps(ranges(obj),ignoreSelf=TRUE,type="equal",ignoreRedundant=TRUE),matchMatrix),function(mat)length(unique(mat[,1]))))
+                  dup.exon <- sum(sapply(findOverlaps(ranges(obj),ignoreSelf=TRUE,type="equal",ignoreRedundant=TRUE),function(hits){length(unique(queryHits(hits)))}))
                   if(dup.exon > 0 & ! ignoreWarnings){
                     warning(paste("There are",dup.exon,"exons defined in your annotation that overlap! This implies that some reads will be counted several time, i.e. once for every transcript! Is that really what you want?"))
                   }
                 }
               }
             }
+            
             ## check if the chromosome names are valid
             if(validity.check){
               chr.grep <- grep("chr",names(genomicAnnotation(obj)))

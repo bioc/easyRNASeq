@@ -7,6 +7,9 @@ importClassesFrom(genomeIntervals,Genome_intervals_stranded)
 importMethodsFrom(genomeIntervals,"strand","strand<-")
 importFrom(intervals,"reduce")
 
+## parallel import
+importFrom(parallel,"makeForkCluster","parLapply")
+
 ## We have too many dependencies on these packages
 ## import everything
 import(BiocGenerics,IRanges,GenomicRanges,Biostrings)
@@ -33,13 +36,14 @@ exportMethods("plotDispersionEstimates")
 ## RNAseq export
 ## methods
 exportMethods(
-    "easyRNASeq",
-    "exonCounts",
-    "fetchAnnotation",
-    "geneCounts",
-    "RPKM",
-    "show",
-    "transcriptCounts" 
+              "easyRNASeq",
+              "exonCounts",
+              "featureCounts",
+              "fetchAnnotation",
+              "geneCounts",
+              "RPKM",
+              "show",
+              "transcriptCounts" 
 )
 ## classes
 exportClasses(

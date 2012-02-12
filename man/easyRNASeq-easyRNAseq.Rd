@@ -57,7 +57,7 @@
 	\item{min.cov}{When computing read islands, the minimal coverage to take into account for calling an island}
 	\item{min.length}{The minimal size an island should have to be kept}
 	\item{max.gap}{When computing read islands, the maximal gap size allowed between two islands to merge them}
-	\item{nbCore}{If the doMC package is installed, defines how many CPU cored to use.}
+	\item{nbCore}{defines how many CPU core to use when computing the geneModels. Use the default parallel library}
 	\item{normalize}{A boolean to convert the returned counts in RPKM. Valid when the \code{outputFormat} is left undefined (i.e. when a matrix is returned) and when it is \code{DESeq} or \code{edgeR}. Note that it is not advised to normalize the data prior DESeq or edgeR usage!}
 	\item{organism}{A character string describing the organism}
 	\item{outputFormat}{By default, easyRNASeq returns a count matrix. If one of \code{DESeq},\code{edgeR},\code{RNAseq} is provided then the respective object will be returned.}
