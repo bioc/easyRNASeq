@@ -2,6 +2,7 @@
 
 \alias{colnames}
 \alias{colnames,GenomicRanges-method}
+\alias{colnames,GRangesList-method}
 
 \title{Extension of the GenomicRanges package}
 \description{

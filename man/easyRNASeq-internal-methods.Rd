@@ -10,9 +10,11 @@
 \alias{.getName}
 \alias{.normalizationDispatcher}
 \alias{reduce}
+\alias{reduce,RNAseq-method}
 \alias{strand}
+\alias{strand,RNAseq-method}
 \alias{strand<-}
-
+\alias{strand<-,RNAseq-method}
 
 \title{Internal methods of RNAseq objects}
 

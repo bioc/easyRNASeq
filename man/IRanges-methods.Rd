@@ -1,7 +1,7 @@
 \name{IRanges methods}
 
 \alias{ranges}
-\alias{range,RNAseq-method}
+\alias{ranges,RNAseq-method}
 
 \title{Extension of the IRanges package}
 \description{

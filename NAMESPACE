@@ -1,54 +1,119 @@
-## bioMart import
+## generated using the writeNamespaceImports("easyRNASeq")
+## function from codetoolsBioC package
+
+## import classes
 importClassesFrom(biomaRt, Mart)
-importFrom(biomaRt, "getBM", "listDatasets", "useMart")
-
-## genomeIntervals import
-importClassesFrom(genomeIntervals,Genome_intervals_stranded)
-importMethodsFrom(genomeIntervals,"strand","strand<-")
-importFrom(intervals,"reduce")
-
-## parallel import
-importFrom(parallel,"makeForkCluster","parLapply")
-
-## We have too many dependencies on these packages
-## import everything
-import(BiocGenerics,IRanges,GenomicRanges,Biostrings)
-
-## ShortRead import
-importClassesFrom(ShortRead,AlignedRead,SRFilter)
-importFrom(ShortRead,srdistance,srFilter)
-
-## Rsamtools import
+importClassesFrom(Biostrings, DNAStringSet)
+importClassesFrom(DESeq, CountDataSet)
+importClassesFrom(edgeR, DGEList)
+importClassesFrom(genomeIntervals, Genome_intervals)
+importClassesFrom(GenomicRanges, GenomicRanges, GRangesList)
+importClassesFrom(IRanges, RangedData, RleList, Vector)
+importClassesFrom(methods, ANY, character, integer, list, matrix,
+                  numeric, vector)
 importClassesFrom(Rsamtools,ScanBamParam)
-importFrom(Rsamtools,scanBamWhat,scanBamFlag)
+importClassesFrom(ShortRead, AlignedRead, ShortReadQ, SRFilter)
 
-## edgeR import
-importClassesFrom(edgeR,DGEList)
-importFrom(edgeR,DGEList,calcNormFactors,estimateCommonDisp,plotMeanVar,plotMDS.DGEList)
-exportMethods("plotNormalizationFactors")
+## import S4 methods
+importMethodsFrom(Biobase, fData)
+importMethodsFrom(BiocGenerics, cbind, colnames, duplicated, eval,
+                  intersect, lapply, order, paste, rbind, rownames,
+                  sapply, table, unique)
+importMethodsFrom(Biostrings, initialize)
+importMethodsFrom(DESeq, counts, estimateDispersions,
+                  estimateSizeFactors)
+importMethodsFrom(genomeIntervals, seq_name)
+importMethodsFrom(GenomicRanges, rname, strand, "strand<-")
+importMethodsFrom(IRanges, "%in%", aggregate, as.list, as.matrix, coerce,
+                  "colnames<-", coverage, elementMetadata,
+                  "elementMetadata<-", end, findOverlaps, gsub, ifelse,
+                  match, matchMatrix, mean, median, na.omit, narrow,
+                  nchar, ncol, nrow, queryHits, ranges, reduce, rev,
+                  "rownames<-", runLength, runsum, runValue, show,
+                  sort, split, start, sub, substr, tolower,
+                  "universe<-", unlist, values, which, width)
+importMethodsFrom(Rsamtools, scanBam, ScanBamParam)
+importMethodsFrom(ShortRead, chromosome, position, readAligned,
+                  srdistance, srFilter)
 
-## DESeq import
-importClassesFrom(DESeq,CountDataSet)
-importMethodsFrom(DESeq,estimateSizeFactors,estimateDispersions)
-importFrom(DESeq,newCountDataSet)
-exportMethods("plotDispersionEstimates")
+## import methods
+importFrom(biomaRt, getBM, listDatasets, useDataset, useMart)
+importFrom(Biostrings, DNAStringSet)
+importFrom(DESeq, fitInfo, newCountDataSet)
+importFrom(edgeR, calcNormFactors, DGEList, estimateCommonDisp,
+           estimateTagwiseDisp, maPlot, plotMDS.DGEList, plotMeanVar)
+importFrom(genomeIntervals, getGffAttribute, readGff3)
+importFrom(GenomicRanges, readGappedAlignments)
+importFrom(graphics, abline, axis, boxplot, grid, hist, legend, lines,
+           mtext, par, plot, rect)
+importFrom(IRanges, IRanges, IRangesList, isSingleString, LogicalList,
+           RangedData, RangesList, SplitDataFrameList)
+importFrom(methods, as, extends, is, new)
+importFrom(parallel, makeForkCluster, parLapply)
+importFrom(Rsamtools, scanBamFlag)
+importFrom(ShortRead, alignData, sread, srdistance, srFilter)
+importFrom(utils, combn, str)
 
-## RNAseq export
-## methods
+## export methods
+export(chastityFilter)
+
+## export S4 methods
+## edgeR
+exportMethods(plotNormalizationFactors)
+## DESeq
+exportMethods(plotDispersionEstimates,multivariateConditions)
+## easyRNASeq
 exportMethods(
-              "easyRNASeq",
-              "exonCounts",
-              "featureCounts",
-              "fetchAnnotation",
-              "geneCounts",
-              "RPKM",
-              "show",
-              "transcriptCounts" 
+              genomicAnnotation,
+	      readCoverage,
+	      readLength,
+	      readCounts,
+	      librarySize,
+	      organismName,
+	      geneModel,
+	      chrSize,
+	      fileName,
+	      "genomicAnnotation<-",
+	      "readLength<-",
+	      "readCoverage<-",
+	      "chrSize<-",
+	      "readCounts<-",
+	      "librarySize<-",
+	      "organismName<-",
+	      "geneModel<-",
+	      "fileName<-",
+	      demultiplex,
+	      barcodePlot,
+	      fetchAnnotation,
+	      exonCounts,
+	      featureCounts,
+	      transcriptCounts,
+	      geneCounts,
+	      RPKM,
+	      fetchCoverage,
+	      easyRNASeq,
+              show,
+              print,
+              ## GenomicRanges
+              reduce,
+              strand,
+              "strand<-",
+              ## IRanges
+              ranges
+              ## ignored for the moment
+	      ##readIslands,
+              ##"readIslands<-",
+	      ##findIslands,
+              ##islandCounts,
 )
-## classes
-exportClasses(
-    "RNAseq" 
-)
-## to export the accessors
-exportPattern("^[^\\.]")
 
+## GenomicRanges
+exportMethods(colnames)
+
+## export classes
+exportClasses(
+              RNAseq
+)
+
+## since we export almost all methods, we could use this
+## exportPattern("^[^\\.]")

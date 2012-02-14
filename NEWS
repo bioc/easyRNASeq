@@ -1,3 +1,6 @@
+## from 1.1.6 to 1.1.7
+1) Fixed the NAMESPACE and the vignette generation
+
 ## from 1.1.5 to 1.1.6
 1) Thanks to Francesco Lescai, a bug was fixed. Namely I was not expecting the chromosome names in the bam files and in the chromosome name lists to be two different set with a common intersect. I always consider that one would be the subset of the other one. Now, when such situation occurs only the common set is kept and used for the calculations.
 2) Herve Pages changed the findOverlaps value. It is now an object of the Hits class that does not support the matchMatrix accessor anymore. The code was adapted to the new accessor queryHits.
