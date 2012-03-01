@@ -28,7 +28,7 @@ setClass(
            readCounts=list(),
            readCoverage=RleList(),           
            readIslands=RangedData(),
-           readLength=36L
+           readLength=integer(1)
            )
 ##         ,
 ##          validity=function(obj){

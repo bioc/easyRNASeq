@@ -15,11 +15,15 @@
 }
 
 ## keep only the valid names
+## TODO offer the possibility for the user to give a function to resolve that
 ".convertToUCSC" <- function(chr.names=list(),
                             organism=c("Dmelanogaster","Hsapiens","Mmusculus","Rnorvegicus"),
                             custom.map=data.frame()){
 
   if(organism!="custom"){
+    ## TODO preprocess the names
+    ## e.g. remove the .fa extension
+
     ## check that we do not already have valid names
     if(length(grep("chr",chr.names))==length(chr.names) & length(grep("MT|dmel_mitochondrion_genome",chr.names))==0){
       return(chr.names)			

@@ -1,4 +1,6 @@
 1) Deal with stranded RNA-Seq
+Have a look at the HistoneChIPseq package for the implementation
+
 2) Deal with GenomicFeatures
 
 ## using different annotation (makeTranscriptDB)
@@ -25,3 +27,9 @@ gAnnot <- split(gAnnot,seqnames(gAnnot))
 3) Integrate the DEXSeq object generation
 ## create the disjoin exon
 ## report both the disjoin exon count and the new annotation
+
+4) use parallel to speed up the process
+
+5) clarify the vignette
+
+6) Add a use case section in the vignette based on Francesco and Wade issues

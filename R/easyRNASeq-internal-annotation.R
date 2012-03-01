@@ -156,15 +156,22 @@
 
 ### TODO we need to adapt the exon numbering depending on the strand!!!
 ## TODO we should take advantage of the disjoin function in the future
+## Return a RangedData containing all genes model
 ".geneModelAnnotation" <- function(gAnnot,nbCore=1){
-  ## Return a RangedData containing all genes model
-  	
-  ## Determines the number of core
-  ## set the number of cores
-  cluster <- makeForkCluster(nnodes=nbCore)
-  
-  ## get the gene ranges
-  RL_list <- do.call("c",parLapply(cluster,names(gAnnot),function(chr,gAnnot){coverage(split(IRanges(start=start(gAnnot[chr]),end=end(gAnnot[chr])),gAnnot[chr]$gene))},gAnnot))
+ 
+  ## can we parallelize
+  if(nbCore>1){  
+    ## set the number of cores
+    cluster <- makePSOCKcluster(nbCore)
+    
+    ## get the gene ranges
+    RL_list <- do.call("c",parLapply(cluster,names(gAnnot),function(chr,gAnnot){coverage(split(IRanges(start=start(gAnnot[chr]),end=end(gAnnot[chr])),gAnnot[chr]$gene))},gAnnot))
+    
+    ## stop the cluster
+    stopCluster(cl=cluster)
+  } else {
+    RL_list <- do.call("c",lapply(names(gAnnot),function(chr,gAnnot){coverage(split(IRanges(start=start(gAnnot[chr]),end=end(gAnnot[chr])),gAnnot[chr]$gene))},gAnnot))
+  }
   
   ## get the synthetic exons
   RL<-(IRangesList(RL_list>0))

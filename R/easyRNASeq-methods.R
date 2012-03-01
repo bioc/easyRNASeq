@@ -445,7 +445,7 @@ setMethod(
                 geneModel(obj) <- .geneModelAnnotation(genomicAnnotation(obj),nbCore)
 
                 ## check the gene model
-                ovl.number <- sum(sapply(lapply(findOverlaps(geneModel(obj),ignoreSelf=TRUE,ignoreRedundant=TRUE),matchMatrix),function(mat)length(unique(mat[,1]))))
+                ovl.number <- sum(sapply(findOverlaps(geneModel(obj),ignoreSelf=TRUE,ignoreRedundant=TRUE),function(hits){length(unique(queryHits(hits)))}))
                 if(ovl.number > 0 & ! ignoreWarnings){
                   warning(paste("There are",ovl.number,"synthetic exons as determined from your annotation that overlap! This implies that some reads will be counted more than once! Is that really what you want?"))
                 }
