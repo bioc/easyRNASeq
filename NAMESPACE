@@ -27,14 +27,14 @@ importMethodsFrom(GenomicRanges, rname, strand, "strand<-")
 importMethodsFrom(IRanges, "%in%", aggregate, as.list, as.matrix, coerce,
                   "colnames<-", coverage, elementMetadata,
                   "elementMetadata<-", end, findOverlaps, gsub, ifelse,
-                  match, matchMatrix, mean, median, na.omit, narrow,
+                  match, mean, median, na.omit, narrow,
                   nchar, ncol, nrow, queryHits, ranges, reduce, rev,
                   "rownames<-", runLength, runsum, runValue, show,
                   sort, split, start, sub, substr, tolower,
                   "universe<-", unlist, values, which, width)
 importMethodsFrom(Rsamtools, scanBam, ScanBamParam)
 importMethodsFrom(ShortRead, chromosome, position, readAligned,
-                  srdistance, srFilter)
+                  srdistance, srFilter, varMetadata)
 
 ## import methods
 importFrom(biomaRt, getBM, listDatasets, useDataset, useMart)
@@ -49,9 +49,9 @@ importFrom(graphics, abline, axis, boxplot, grid, hist, legend, lines,
 importFrom(IRanges, IRanges, IRangesList, isSingleString, LogicalList,
            RangedData, RangesList, SplitDataFrameList)
 importFrom(methods, as, extends, is, new)
-importFrom(parallel, makeForkCluster, parLapply)
+importFrom(parallel, makePSOCKcluster, parLapply, stopCluster)
 importFrom(Rsamtools, scanBamFlag)
-importFrom(ShortRead, alignData, sread, srdistance, srFilter)
+importFrom(ShortRead, alignData, sread)
 importFrom(utils, combn, str)
 
 ## export methods

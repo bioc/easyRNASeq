@@ -2,6 +2,8 @@
 \Rdversion{1.1}
 \docType{class}
 \alias{RNAseq-class}
+% suggested by H.Pages for an easier documentation access
+\alias{RNAseq}
 \alias{chrSize,RNAseq-method}
 \alias{chrSize<-,RNAseq-method}
 \alias{easyRNASeq,RNAseq-method}
