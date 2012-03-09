@@ -6,6 +6,8 @@
 \alias{barcodePlot,ShortReadQ-method}
 \alias{chastityFilter}
 \alias{chastityFilter,SRFilter-method}
+\alias{naPositionFilter}
+\alias{naPositionFilter,SRFilter-method}
 \alias{demultiplex}
 \alias{demultiplex,AlignedRead-method}
 \alias{demultiplex,DNAStringSet-method}
@@ -20,6 +22,7 @@ These are functions extending the ShortRead packages capabilities:
 	\item{\code{barcodePlot}} Creates a plot showing the barcode distribution of a multiplexed sequencing library.
  	\item{\code{chastityFilter}} Creates a \code{\linkS4class{SRFilter}} instance that filters SolexaExport read according to the chastity filtering value. 
 	\item{\code{demultiplex}} Split a single \code{\linkS4class{AlignedRead}} object into a list of \code{\linkS4class{AlignedRead}} objects according to the barcodes provided by the user.
+ 	\item{\code{naPositionFilter}} Creates a \code{\linkS4class{SRFilter}} instance that filters SolexaExport read having an NA position.
 	}
 
 }
@@ -31,6 +34,7 @@ demultiplex(obj,barcodes=c(),barcodes.qty=12,
 		barcode.length=6, edition.dist=2,
 		type = c("independant","within"), 
 		index.only = FALSE)
+naPositionFilter(.name="NA Position Filter")
 }
 
 \arguments{
@@ -56,6 +60,7 @@ demultiplex(obj,barcodes=c(),barcodes.qty=12,
 	\item{\code{barcodePlot}} returns invisibly the barcode frequencies.
  	\item{\code{chastityFilter}} returns a \code{\linkS4class{SRFilter}} instance. 
 	\item{\code{demultiplex}} returns a list of \code{\linkS4class{AlignedRead}} objects.
+ 	\item{\code{naPositionFilter}} returns a \code{\linkS4class{SRFilter}} instance. 
 	}
 }
 

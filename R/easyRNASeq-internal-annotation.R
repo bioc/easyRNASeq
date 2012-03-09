@@ -172,7 +172,11 @@
   } else {
     RL_list <- do.call("c",lapply(names(gAnnot),function(chr,gAnnot){coverage(split(IRanges(start=start(gAnnot[chr]),end=end(gAnnot[chr])),gAnnot[chr]$gene))},gAnnot))
   }
+
+  ## let's help free memory
+  gc()
   
+  ## TODO THIS TAKES TOO LONG
   ## get the synthetic exons
   RL<-(IRangesList(RL_list>0))
   sel<-rep(match(names(RL),gAnnot$gene),sapply(RL,length))

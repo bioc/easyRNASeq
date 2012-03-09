@@ -135,40 +135,68 @@ setMethod(
             
             ## UCSC chr naming convention validity check
             if(validity.check){
-              chr.grep <- grep("chr",names(aln.ranges))
-              if(length(chr.grep)== 0 | !all(1:length(names(aln.ranges)) %in% chr.grep)){
+              ## modified in version 1.1.9 (06.03.2012) as it was unwise to check for chr in the names
+              ## that's dealt with in the .convertToUSCS function
+##              chr.grep <- grep("chr",names(aln.ranges))
+##              if(length(chr.grep)== 0 | !all(1:length(names(aln.ranges)) %in% chr.grep)){
                 if(organismName(obj) != "custom"){
                   if(!ignoreWarnings){
                     warning("You enforce UCSC chromosome conventions, however the provided alignments are not compliant. Correcting it.")
                   }
                 }
                 names(aln.ranges) <- .convertToUCSC(names(aln.ranges),organismName(obj),chr.map)
-              }
+##              }
             }
 
             ## check for the chromosome size and report any problem
             tmp <- sapply(names(aln.ranges),function(chr){
+              if(!chr %in% names(chrSize(obj))){
+                warning(paste("The chromosome:", chr, "is not present in the provided 'chr.sizes' argument"))
+                return(0)
+              }
               sum(any(start(aln.ranges[[chr]]) > chrSize(obj)[match(chr,names(chrSize(obj)))]))
             })
-            if(any(tmp)>0){
+            if(any(tmp>0)){
               stop("Some of your read coordinates are bigger than the chromosome sizes you provided. Aborting!")
             }
 
             ## check and correct the names in the width and in the ranges, keep the common selector
             valid.names <- sort(intersect(names(aln.ranges),names(chrSize(obj))))
-            if(!ignoreWarnings){
-              warn=FALSE
-              if(!all(names(aln.ranges)%in%valid.names)){
-                warning("Not all the chromosome names present in your bam files exists in your chromosome size list 'chr.sizes'.")                
-                warn=TRUE
+            if(length(chr.sel)>0){
+              chrs <- .convertToUCSC(chr.sel,organismName(obj),chr.map)
+              if(!all(chrs %in% valid.names)){
+                valid.names <- valid.names[valid.names %in% chrs]
+                if(!ignoreWarnings){
+                  warn=FALSE
+                  if(!all(names(aln.ranges)[names(aln.ranges) %in% chrs] %in% valid.names)){
+                    warning("Not all the selected ('chr.sel') chromosome names from your read file(s) (aln or bam) exist in your chromosome size list 'chr.sizes'.")   
+                    warn=TRUE
+                  }
+                  if(!all(names(chrSize(obj))[names(chrSize(obj)) %in% chrs] %in% valid.names)){
+                    warning("Not all the selected ('chr.sel') chromosome names from the chromosome size list 'chr.sizes' are present in your read file(s) (aln or bam).")
+                    warn=TRUE
+                  }
+                  if(warn & !ignoreWarnings){
+                    warning(paste("The available chromosomes in both your read file(s) (aln or bam) and 'chr.sizes' list were restricted to their common term.\n",
+                                  "These are: ",paste(valid.names,collapse=", "),".",sep=""))
+                  }
+                }
               }
-              if(!all(names(chrSize(obj))%in%valid.names)){
-                warning("Not all the chromosome names in your chromosome size list 'chr.sizes' are present in your bam file.")
-                warn=TRUE
-              }
-              if(warn & !ignoreWarnings){
-                warning(paste("The available chromosomes in both you bam file and 'chr.sizes' list were restricted to their common term.\n",
-                              "These are: ",paste(valid.names,collapse=", "),".",sep=""))
+            } else {
+              if(!ignoreWarnings){
+                warn=FALSE
+                if(!all(names(aln.ranges) %in% valid.names)){
+                  warning("Not all the chromosome names present in your read file(s) (aln or bam) exist in your chromosome size list 'chr.sizes'.")   
+                  warn=TRUE
+                }
+                if(!all(names(chrSize(obj))%in%valid.names)){
+                  warning("Not all the chromosome names in your chromosome size list 'chr.sizes' are present in your read file(s) (aln or bam).")
+                  warn=TRUE
+                }
+                if(warn & !ignoreWarnings){
+                  warning(paste("The available chromosomes in both your read file(s) (aln or bam) and 'chr.sizes' list were restricted to their common term.\n",
+                                "These are: ",paste(valid.names,collapse=", "),".",sep=""))
+                }
               }
             }
             
@@ -328,15 +356,15 @@ setMethod(
             
             ## check if the chromosome size are valid
             if(validity.check){
-              chr.grep <- grep("chr",names(chrSize(obj)))
-              if(length(chr.grep)== 0 | !all(1:length(names(chrSize(obj))) %in% chr.grep)){
+##              chr.grep <- grep("chr",names(chrSize(obj)))
+##              if(length(chr.grep)== 0 | !all(1:length(names(chrSize(obj))) %in% chr.grep)){
                 if(organismName(obj) != "custom"){
                   if(!ignoreWarnings){
                     warning("You enforce UCSC chromosome conventions, however the provided chromosome size list is not compliant. Correcting it.")
                   }
                 }
                 names(chrSize(obj)) <- .convertToUCSC(names(chrSize(obj)),organismName(obj),chr.map)
-              }
+##              }
             }
             
             ## fetch annotation
@@ -412,15 +440,19 @@ setMethod(
             
             ## check if the chromosome names are valid
             if(validity.check){
-              chr.grep <- grep("chr",names(genomicAnnotation(obj)))
-              if(length(chr.grep)== 0 | !all(1:length(names(genomicAnnotation(obj))) %in% chr.grep)){
+              ## TODO what was that for ???
+              ## modified in version 1.1.9 (06.03.2012) as it was unwise to check for chr in the names
+              ## that's dealt with in the .convertToUSCS function
+##              chr.grep <- grep("chr",names(genomicAnnotation(obj)))
+##              if(length(chr.grep)== 0 | !all(1:length(names(genomicAnnotation(obj))) %in% chr.grep)){
                 if(annotationMethod!="biomaRt" & organismName(obj) != "custom"){
                   if(!ignoreWarnings){
                     warning("You enforce UCSC chromosome conventions, however the provided annotation is not compliant. Correcting it.")
                   }
                 }
+                ## TODO do I need to put the chr.sel here to ensure we only adapt those selected chromosomes?
                 names(genomicAnnotation(obj)) <- .convertToUCSC(names(genomicAnnotation(obj)),organismName(obj),chr.map)
-              }
+##              }
             }
             
             ## Check if the condition list have the same size as the file list
@@ -485,7 +517,8 @@ setMethod(
               obj <- switch(count,
                             "exons"=exonCounts(obj),
                             "features"=featureCounts(obj),
-                            "genes"=geneCounts(obj,summarization,nbCore),
+                            ## no need for the nbCore here, the gene model was already done
+                            "genes"=geneCounts(obj,summarization),
                             "transcripts"=transcriptCounts(obj),
                             "islands"=islandCounts(obj,max.gap=max.gap,min.cov=min.cov,min.length=min.length,plot=plot)
                             )

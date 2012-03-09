@@ -104,7 +104,10 @@ setMethod(
                                     stop("No coverage information available. Use either the 'easyRNASeq' or 'fetchCoverage' methods first.")
                                   }    
                                 }
-                                
+
+                                ## TODO do we need that?
+                                ## it was generated already...
+                                ## and it does not work for multiple files...
                                 ## check if we have the gene model already
                                 if(nrow(geneModel(obj))==0){
                                   geneModel(obj) <- .geneModelAnnotation(genomicAnnotation(obj),...)

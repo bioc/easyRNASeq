@@ -1,6 +1,6 @@
 Package: easyRNASeq
-Version: 1.1.9
-Date: 2011-03-03
+Version: 1.1.10
+Date: 2011-03-06
 Type: Package
 Title: Count summarization and normalization for RNA-Seq data.
 Author: Nicolas Delhomme, Ismael Padioleau
@@ -13,7 +13,7 @@ Depends: graphics, methods, parallel, utils, genomeIntervals (>= 1.11.0),
 	 Biobase (>= 2.15.4), BiocGenerics (>= 0.1.11), biomaRt (>= 2.11.1),
 	 edgeR (>= 2.5.10), Biostrings (>= 2.23.6), BSgenome (>= 1.23.3),
 	 DESeq (>= 1.7.6), GenomicRanges (>= 1.7.30), IRanges (>= 1.13.27),
-	 Rsamtools (>= 1.7.37), ShortRead (>= 1.13.13)
+	 Rsamtools (>= 1.7.37), ShortRead (>= 1.13.16)
 Suggests: BSgenome.Dmelanogaster.UCSC.dm3 (>= 1.3.17),
           RnaSeqTutorial (>= 0.0.7)
 License: Artistic-2.0

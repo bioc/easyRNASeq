@@ -34,7 +34,7 @@ importMethodsFrom(IRanges, "%in%", aggregate, as.list, as.matrix, coerce,
                   "universe<-", unlist, values, which, width)
 importMethodsFrom(Rsamtools, scanBam, ScanBamParam)
 importMethodsFrom(ShortRead, chromosome, position, readAligned,
-                  srdistance, srFilter, varMetadata)
+                  srdistance, srFilter)
 
 ## import methods
 importFrom(biomaRt, getBM, listDatasets, useDataset, useMart)
@@ -55,7 +55,7 @@ importFrom(ShortRead, alignData, sread)
 importFrom(utils, combn, str)
 
 ## export methods
-export(chastityFilter)
+export(chastityFilter,naPositionFilter)
 
 ## export S4 methods
 ## edgeR

@@ -33,3 +33,13 @@ gAnnot <- split(gAnnot,seqnames(gAnnot))
 5) clarify the vignette
 
 6) Add a use case section in the vignette based on Francesco and Wade issues
+
+7) Offer the possibility to define your own organism name conversion, akine to the srFilter
+
+8) rework geneModels to use the disjoin function
+
+9) deprecate the summarization
+
+10) group the parameter a la scanbamWhat
+
+11) lookup all the TODOs in the code

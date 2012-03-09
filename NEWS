@@ -1,3 +1,10 @@
+### from 1.1.9 to 1.1.10
+1) Added a naPositionFilter extending ShortRead srFilters
+2) Worked on Wade Davis case with 3 different sets of chromosome names in the three different input (reads, annotation, chromosome sizes)
+3) Worked on smoother error handling when not using bam files. Again through Wade Davis example.
+4) Ensured that chromosome names conversion occurs whether provided with a factor or a character vector
+5) extended the NAMESPACE
+
 ### from 1.1.8 to 1.1.9
 1) Added an \alias{RNAseq} to ease the class documentation access; an H.Pages suggestion.
 2) Changed the DESCRIPTION file to make sure that the latest ShortRead (1.13.13) and BiocGenerics (0.1.11) package are required.

@@ -1,6 +1,6 @@
 ## Extend ShortRead
 
-## an additional filter
+## additional filters
 chastityFilter <- function(.name="Illumina Chastity Filter") 
 {
   srFilter(function(x){
@@ -11,6 +11,12 @@ chastityFilter <- function(.name="Illumina Chastity Filter")
       keep<-rep(TRUE,length(x))
     }
     return(keep)
+  },name=.name)
+}
+
+naPositionFilter <- function(.name="NA Position Filter"){
+  srFilter(function(x){
+    !is.na(position(x))
   },name=.name)
 }
 

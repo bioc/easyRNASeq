@@ -4,7 +4,13 @@
 ".extractIRangesList" <- function(obj,chr.sel=c()){
   ## the default is bam (easy, it has no class, just a list)
   aln.ranges <- switch(class(obj),
-                       "AlignedRead" = split(IRanges(start=position(obj),width=width(obj)),as.character(chromosome(obj))),
+                       "AlignedRead" = {
+                         if(any(is.na(position(obj)))){
+                           stop("Your read file contains NA position, please filter for them. Check '?naPositionFilter'.")
+                         }
+                         ## no need to do it for the width, reads always have a positive width
+                         split(IRanges(start=position(obj),width=width(obj)),as.character(chromosome(obj)))
+                       },
                        "GappedAlignments" = split(ranges(obj),rname(obj)),
                        split(IRanges(start=obj$pos,width=obj$qwidth),obj$rname)
                        )
@@ -16,10 +22,15 @@
 
 ## keep only the valid names
 ## TODO offer the possibility for the user to give a function to resolve that
+## TODO check why chr.names is a list and not a c()
 ".convertToUCSC" <- function(chr.names=list(),
                             organism=c("Dmelanogaster","Hsapiens","Mmusculus","Rnorvegicus"),
                             custom.map=data.frame()){
 
+  if(is.factor(chr.names)){
+    chr.names <- as.character(chr.names)
+  }
+  
   if(organism!="custom"){
     ## TODO preprocess the names
     ## e.g. remove the .fa extension
@@ -70,13 +81,24 @@
                     stop("Your custom map does not follow the column names convention. They should be named 'from' and 'to'.")
                   }
 
-                  ## in case there are already valid
-                  if(all(chr.names %in% custom.map$to)){
-                    chr.names
-                  } else {
-                    ## if not convert them
-                    custom.map[match(chr.names,custom.map$from),"to"]
+                  ## convert to character
+                  if(is.factor(custom.map$from) | is.factor(custom.map$to)){
+                    custom.map <- data.frame(apply(custom.map,2,as.character),stringsAsFactors=FALSE)
                   }
+                    
+                  ## in case there are already valid
+                  if(length(na.omit(match(chr.names,custom.map$to))) != length(custom.map$to)){
+                    ## if not convert them
+                    sel <- match(chr.names,custom.map$from)
+                    if(all(is.na(sel))){
+                      stop(paste("Your custom map does not match any chromosome names in the list:",paste(chr.names,collapse=", ")))
+                    }
+                    chr.names[!is.na(sel)] <- na.omit(custom.map[sel,"to"])
+                    if(any(is.na(sel))){
+                      warning(paste("Your custom map does not define a mapping for the following chromosome names:",paste(chr.names[is.na(sel)],collapse=", ")))
+                    }
+                  }
+                  chr.names
                 },
                 {
                   warning(paste("No function implemented to convert the names for the organism: ",organism,".\n",
