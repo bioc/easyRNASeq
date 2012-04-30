@@ -30,16 +30,32 @@ gAnnot <- split(gAnnot,seqnames(gAnnot))
 
 4) use parallel to speed up the process
 
-5) clarify the vignette
+5) clarify the vignette (email from Gordon Assaf, paired end, detail more the geneModels)
 
-6) Add a use case section in the vignette based on Francesco and Wade issues
+6) Add a use case section in the vignette based on Francesco and Wade issues. Add Simon's data
 
 7) Offer the possibility to define your own organism name conversion, akine to the srFilter
 
-8) rework geneModels to use the disjoin function
+8) rework geneModels to use the disjoin function / add a geneModel switch to the annotation (add geneModels functionality to return and modify the created gene models)
 
 9) deprecate the summarization
 
 10) group the parameter a la scanbamWhat
 
 11) lookup all the TODOs in the code
+
+12) recursive file finding either filenames or pattern
+
+13) From Simon, to filter reads: "NH:i:n" with n>1. However, not all aligner use the NH tag properly, so this is not a full solution. Another possibility is to discard everything with mapping quality below 10, because non-uniquly mapped reads should have a MAPQ<3.
+
+14) Check the possibility to split BAM files
+
+15) Chek the possibility to stream BAM files
+
+16) Develop fragment counting
+
+17) Check for assymetric reads and variable read length in general.
+
+18) Deprecate the list usage for the chr size.
+
+19) Add a use case to clean up annotations against double counting.

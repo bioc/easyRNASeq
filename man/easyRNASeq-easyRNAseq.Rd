@@ -47,7 +47,7 @@
 	\item{chr.sel}{A vector of chromosome names to subset the final results.}
 	\item{chr.sizes}{A vector or a list containing the chromosomes' size of the selected organism}
 	\item{conditions}{A vector of descriptor, each sample must have a descriptor if you use outputFormat DESeq or edgeR. The size of this list must be equal to the number of sample. In addition the vector should be named with the filename of the corresponding samples.}
-	\item{count}{The feature used to summarize the reads. One of 'exons','genes','islands' or 'transcripts' }
+	\item{count}{The feature used to summarize the reads. One of 'exons','features','genes','islands' or 'transcripts'. See details.}
 	\item{filenames}{The name, not the path, of the files to use}
 	\item{filesDirectory}{The directory where the files to be used are located}
 	\item{filter}{The filter to be applied when loading the data using the "aln" format}
@@ -86,7 +86,9 @@
   \item{the chr.map}
   The chr.map argument for the easyRNASeq function only works for an "organismName" of value 'custom' with the "validity.check" parameter set to 'TRUE'. 
   This data.frame should contain two columns named 'from' and 'to'. The row should represent the chromosome name in your original data and the wished name in the output of the function.
-  }
+  \item{count}
+  The count can be summarized by exons, features, genes, islands or transcripts. While exons, genes and transcripts are obvious, "features" describes any features provided by the user, e.g. enhancer loci. These are processed as the exons are. For "islands", it is for an under development function that identifies de-novo expression loci and count the number of reads overlapping them.
+}
 }
 
 \author{Nicolas Delhomme}
