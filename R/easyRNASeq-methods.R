@@ -146,6 +146,20 @@ setMethod(
                 }
                 names(aln.ranges) <- .convertToUCSC(names(aln.ranges),organismName(obj),chr.map)
 ##              }
+
+                ## ensure that we have the right readLength and only one length
+                rL <- unique(sapply(aln.ranges,function(rng){ifelse(length(rng)>0,unique(width(rng)),0)}))
+                rL <- rL[rL != 0]
+                if(length(rL) > 1 ){
+                  stop(paste("The file", filename, "contains reads of different sizes:",paste(rL,collapse=", "),". We cannot deal with such data at the moment. Please contact the authors to add this functionality." ))
+                }
+                if(rL != readLength(obj)){
+                  warning(paste("The read length stored in the object (probably provided as argument):",
+                                readLength(obj),
+                                "\nis not the same as the one:",rL,"determined from the file:",
+                                filename,"\nUpdating it."))
+                  readLength(obj) <- as.integer(rL)
+                }
             }
 
             ## check for the chromosome size and report any problem

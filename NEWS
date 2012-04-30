@@ -1,3 +1,15 @@
+CHANGES IN VERSION 1.2.1
+-------------------------
+
+NEW FEATURES
+
+    o Added an enhanced read length check
+
+CHANGES IN VERSION 1.2.0
+-------------------------
+
+    o Stable version released as part of Bioconductor 2.10
+
 CHANGES IN VERSION 1.1.10
 -------------------------
 
