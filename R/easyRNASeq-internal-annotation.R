@@ -49,9 +49,12 @@
 }
 
 ## get the Annot from a gff / gtf file
-".readGffGtf" <- function(filename=filename,annotation.type=c("exon"),ignoreWarnings=FALSE,...){
+".readGffGtf" <- function(filename=filename,annotation.type=c("exon"),ignoreWarnings=FALSE,format=c("gtf","gff"),...){
   
   ## check for the annotation type
+  ## TODO this will need some tidyness
+  stopifnot(length(format)==1)
+  
   ## TODO we only accept one, does that make sense?
   annotation.type <- match.arg(annotation.type)
 
@@ -67,8 +70,10 @@
   }
   
   ## gff 3?
-  if(sub("\\D+","",readLines(filename,1))!=3){
-    stop(paste("Your file:",filename,"does not contain a gff header: '##gff-version 3' as first line. Is that really a gff3 file?"))
+  if(format=="gff"){
+    if(sub("\\D+","",readLines(filename,1))!=3){
+      stop(paste("Your file:",filename,"does not contain a gff header: '##gff-version 3' as first line. Is that really a gff3 file?"))
+    }
   }
   
   ## read it (genomeIntervals is the fastest)
@@ -90,7 +95,7 @@
 ".getGffRange" <- function(organism=character(1),filename=filename,ignoreWarnings=FALSE,...){
 	
 	## read the file and do sanity checks
-	all.annotation <- .readGffGtf(filename=filename,ignoreWarnings=ignoreWarnings,...)
+	all.annotation <- .readGffGtf(filename=filename,ignoreWarnings=ignoreWarnings,format="gff",...)
         
 	## save the exon info
 	all.annotation$exon <- getGffAttribute(all.annotation,"ID")
@@ -130,7 +135,7 @@
 ".getGtfRange" <- function(organism=character(1),filename=filename,ignoreWarnings=FALSE,...){
 	
 	## read the file and do sanity checks
-	all.annotation <- .readGffGtf(filename=filename,ignoreWarnings=ignoreWarnings,...)
+	all.annotation <- .readGffGtf(filename=filename,ignoreWarnings=ignoreWarnings,format="gtf",...)
 	
 	## extract the attributes
 	gffAttr <- do.call(rbind,strsplit(all.annotation$gffAttributes," "))

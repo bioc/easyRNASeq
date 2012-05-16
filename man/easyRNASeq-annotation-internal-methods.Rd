@@ -24,11 +24,12 @@
 	.getGffRange(organism=character(1),filename=filename,ignoreWarnings = FALSE,...)
 	.getGtfRange(organism=character(1),filename=filename,ignoreWarnings = FALSE,...)
 	.geneModelAnnotation(gAnnot,nbCore=1)
-	.readGffGtf(filename=filename,annotation.type=c("exon"),ignoreWarnings = FALSE,...)
+	.readGffGtf(filename=filename,annotation.type=c("exon"),ignoreWarnings = FALSE,format=c("gtf","gff"),...)
 }
 
 \arguments{
-	\item{annotation.type}{describes the kind of annotation to keep the information from in a gtf or gff file. If set to NULL all the annotations are returned.}  
+	\item{annotation.type}{describes the kind of annotation to keep the information from in a gtf or gff file. If set to NULL all the annotations are returned.}
+	\item{format}{describes the kind of annotation provided. One of gtf or gff.}
 	\item{organism}{Organism name}
 	\item{gAnnot}{a \code{\linkS4class{RangedData}} object containing exon annotations}
 	\item{nbCore}{number of CPU cores to use}

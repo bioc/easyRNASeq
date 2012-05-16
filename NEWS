@@ -1,3 +1,11 @@
+CHANGES IN VERSION 1.2.2
+-------------------------
+
+BUG FIXES
+
+    o Corrected a bug that was considering a GTF file as a GFF file.
+    Thanks to Simon Anders for spotting this.
+
 CHANGES IN VERSION 1.2.1
 -------------------------
 
