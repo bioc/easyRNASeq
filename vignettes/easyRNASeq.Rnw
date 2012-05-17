@@ -262,7 +262,7 @@ count.table <- easyRNASeq(system.file(
                                       package="RnaSeqTutorial"),
                           organism="Dmelanogaster",
                           chr.sizes=as.list(seqlengths(Dmelanogaster)),
-                          readLength=36L,
+                          readLength=30L,
                           annotationMethod="rda",
                           annotationFile=system.file(
                             "data",
@@ -624,7 +624,7 @@ rnaSeq <- easyRNASeq(system.file(
                                  package="RnaSeqTutorial"),
                      organism="Dmelanogaster",
                      chr.sizes=as.list(seqlengths(Dmelanogaster)),
-                     readLength=36L,
+                     readLength=30L,
                      annotationMethod="rda",
                      annotationFile=system.file(
                        "data",
@@ -722,7 +722,7 @@ rnaSeq2 <- easyRNASeq(system.file(
                                   package="RnaSeqTutorial"),
                       organism="Dmelanogaster",
                       chr.sizes=as.list(seqlengths(Dmelanogaster)),
-                      readLength=36L,
+                      readLength=30L,
                       annotationMethod="rda",
                       annotationFile=system.file(
                         "data",
@@ -759,7 +759,7 @@ count.table <- easyRNASeq(system.file(
                                       package="RnaSeqTutorial"),
                           organism="Dmelanogaster",
                           chr.sizes=as.list(seqlengths(Dmelanogaster)),
-                          readLength=36L,
+                          readLength=30L,
                           annotationMethod="rda",
                           annotationFile=system.file(
                             "data",
@@ -837,7 +837,7 @@ countDataSet <- easyRNASeq(system.file(
                                       package="RnaSeqTutorial"),
                           organism="Dmelanogaster",
                           chr.sizes=as.list(seqlengths(Dmelanogaster)),
-                          readLength=36L,
+                          readLength=30L,
                           annotationMethod="rda",
                           annotationFile=system.file(
                             "data",
@@ -873,7 +873,7 @@ dgeList <- easyRNASeq(system.file(
                                   package="RnaSeqTutorial"),
                       organism="Dmelanogaster",
                       chr.sizes=as.list(seqlengths(Dmelanogaster)),
-                      readLength=36L,
+                      readLength=30L,
                       annotationMethod="rda",
                       annotationFile=system.file(
                         "data",
