@@ -1,35 +1,45 @@
-\name{genomeIntervals methods}
-
+\name{genomeIntervals additional methods}
+\alias{coerce,Genome_intervals,GRangesList-method}
 \alias{coerce,Genome_intervals,RangedData-method}
-
-\title{ Extension for the genomeIntervals package}
-\description{
-	This method extends the genomeIntervals package by offering the functionality to coerce a 
-	\code{\link[genomeIntervals:Genome_intervals_stranded-class]{genomeIntervals object}} into
-	a \code{\link[IRanges:RangedData-class]{RangedData object}} one.
-}
-
+\alias{genomeIntervals additional methods}
+\alias{type,Genome_intervals-method}
+\title{Extension for the genomeIntervals package}
 \arguments{
-  \item{from}{An object of class \code{\linkS4class{Genome_intervals}}}
-}
+  \item{from}{An object of class
+  \code{\linkS4class{Genome_intervals}}}
 
+  \item{x}{An object of class
+  \code{\linkS4class{Genome_intervals}}}
+}
 \value{
-	A \code{\linkS4class{RangedData}} containing the result of the coercion.
+  \describe{ \item{coerce}{ A
+  \code{\linkS4class{RangedData}} or
+  \code{\linkS4class{GRangesList}} containing the result of
+  the coercion.  } \item{type}{ The content of the type
+  column, usually a factor or a character vector } }
 }
-
+\description{
+  \describe{ \item{coerce}{ This method extends the
+  genomeIntervals package by offering the functionality to
+  coerce a
+  \code{\link[genomeIntervals:Genome_intervals_stranded-class]{genomeIntervals
+  object}} into a
+  \code{\link[IRanges:RangedData-class]{RangedData object}}
+  or \code{\linkS4class{GRangesList}} object.} \item{type}{
+  Another way to access the content of the gff type column.
+  } }
+}
 \examples{
-	\dontrun{
-	annot<-readGff3(system.file("extdata","annot.gff",package="RnaSeqTutorial")
-	gAnnot<-as(annot,"RangedData")
-	}
+\dontrun{
+annot<-readGff3(system.file("extdata","annot.gff",package="RnaSeqTutorial")
+gAnnot<-as(annot,"RangedData") type(annot) }
 }
-
-\author{Nicolas Delhomme}
-
+\author{
+  Nicolas Delhomme
+}
 \seealso{
-	\code{\link[genomeIntervals:Genome_intervals_stranded-class]{genomeIntervals object}}
-	\code{\link[genomeIntervals:readGff3]{readGff3 function}}
+  \code{\link[genomeIntervals:Genome_intervals_stranded-class]{genomeIntervals
+  object}} \code{\link[genomeIntervals:readGff3]{readGff3
+  function}}
 }
-
-\keyword{methods}
 

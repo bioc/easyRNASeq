@@ -15,6 +15,59 @@
 ## get the annotation
 ## TODO check the GenomicFeatures package
 
+##' Fetch genic annotation from a gff/gtf file or using biomaRt
+##' 
+##' The annotation can be retrieved in two ways \itemize{
+##' \item{biomaRt}{Use biomaRt and Ensembl to get organism specific annotation.}
+##' \item{gff/gtf}{Use a gff or gtf local annotation file.}}
+##' When using \pkg{biomaRt}, it is
+##' important that the \code{organismName} slot of the
+##' \code{\linkS4class{RNAseq}} object is set the prefix of one of the value
+##' available using the \pkg{biomaRt}
+##' \code{\link[biomaRt:listDatasets]{listDatasets}} function, e.g.
+##' "Dmelanogaster".  When reading from a gff/gtf file, a version 3 formatted
+##' gff (gtf are modified gff3 from Ensembl) is expected. The function
+##' \pkg{genomeIntervals} \code{\link[genomeIntervals:readGff3]{readGff3}} is
+##' used to read the data in.
+##' 
+##' \dots{} are for additional arguments, passed to the \pkg{biomaRt}
+##' \code{\link[biomaRt:getBM]{getBM}} function or to the
+##' \code{\link[easyRNASeq:easyRNASeq-annotation-internal-methods]{readGffGtf}}
+##' internal function that takes an optional arguments: annotation.type that
+##' default to "exon". This is used to select the proper rows of the gff or gtf
+##' file.
+##' 
+##' @aliases fetchAnnotation
+##' @name easyRNASeq annotation methods
+##' @rdname easyRNASeq-annotation-methods
+##' @param obj An object of class \code{RNAseq}
+##' @param method one of biomaRt, gff, gtf
+##' @param filename If the method is gff or gtf, the actual gtf, gff filename
+##' @param ignoreWarnings set to TRUE (bad idea! they have a good reason to be
+##' there) if you do not want warning messages.
+##' @param \dots See details
+##' @return A \code{\linkS4class{RangedData}} containing the fetched
+##' annotations.
+##' @author Nicolas Delhomme
+##' @keywords connection data methods
+##' @examples
+##' 
+##' 	\dontrun{
+##' 	library("RnaSeqTutorial")
+##' 	obj <- new('RNAseq',
+##' 		organismName="Dmelanogaster",
+##' 		readLength=36L,
+##' 		chrSize=as.list(seqlengths(Dmelanogaster))
+##' 		)
+##' 
+##' 	obj <- fetchAnnotation(obj,
+##' 				method="gff",
+##'                                 filename=system.file(
+##' 						"extdata",
+##' 						"annot.gff",
+##' 						package="RnaSeqTutorial"))
+##' 	}
+##' 
 setMethod(
           f="fetchAnnotation",
           signature="RNAseq",
@@ -49,7 +102,65 @@ setMethod(
             return(obj)
           })
 
-## calculate the coverage
+
+##' Compute the coverage from a Short Read Alignment file
+##' 
+##' Computes the genomic reads' coverage from a
+##' read file in bam format or any format supported by \pkg{ShortRead}.
+##' 
+##' \dots{} for fetchCoverage: Can be used for readAligned method from package
+##' \pkg{ShortRead} or for scanBamFlag method from package \pkg{Rsamtools}.
+##' 
+##' @aliases fetchCoverage
+##' @name easyRNASeq coverage methods
+##' @rdname easyRNASeq-coverage-methods
+##' @param obj An \code{\linkS4class{RNAseq}} object
+##' @param chr.map A data.frame describing the mapping of original chromosome
+##' names towards wished chromosome names. See details.
+##' @param chr.sel A vector of chromosome names to subset the final results.
+##' @param filename The full path of the file to use
+##' @param filter The filter to be applied when loading the data using the
+##' "aln" format
+##' @param format The format of the reads, one of "aln","bam". If not "bam",
+##' all the types supported by the ShortRead package are supported too.
+##' @param gapped Is the bam file provided containing gapped alignments?
+##' @param ignoreWarnings set to TRUE (bad idea! they have a good reason to be
+##' there) if you do not want warning messages.
+##' @param isUnmappedQuery additional argument for scanBamFlag \pkg{Rsamtools}
+##' @param type The type of data when using the "aln" format. See the
+##' \pkg{ShortRead} package.
+##' @param validity.check Shall UCSC chromosome name convention be enforced
+##' @param what additional argument for ScanBamParam \pkg{Rsamtools}
+##' @param \dots additional arguments. See details
+##' @return An \code{\linkS4class{RNAseq}} object. The slot readCoverage
+##' contains a SimpleRleList object representing a list of coverage vectors,
+##' one per chromosome.
+##' @author Nicolas Delhomme
+##' @seealso \code{\linkS4class{Rle}}
+##' \code{\link[ShortRead:readAligned]{ShortRead:readAligned}}
+##' @keywords methods
+##' @examples
+##' 
+##' 	\dontrun{
+##' 	library("RnaSeqTutorial")
+##' 	library(BSgenome.Dmelanogaster.UCSC.dm3)
+##' 
+##' 	obj <- new('RNAseq',
+##' 		organismName="Dmelanogaster",
+##' 		readLength=36L,
+##' 		chrSize=as.list(seqlengths(Dmelanogaster))
+##' 		)
+##' 	
+##' 	obj <- fetchCoverage(
+##' 			obj,
+##' 			format="bam",
+##'                         filename=system.file(
+##' 				"extdata",
+##' 				"ACACTG.bam",
+##'                             	package="RnaSeqTutorial")
+##' 			)
+##' 	}
+##' 
 setMethod(
           f="fetchCoverage",
           signature="RNAseq",
@@ -222,6 +333,166 @@ setMethod(
           })
 
 ## easy call
+##' easyRNASeq method
+##' 
+##' This function is a wrapper around the more low level functionalities of the
+##' package.  Is the easiest way to get a count matrix from a set of read
+##' files.  It does the following: \itemize{
+##' \item{\code{\link[easyRNASeq:ShortRead-methods]{use ShortRead/Rsamtools
+##' methods}} for loading/pre-processing the data.}
+##' \item{\code{\link[easyRNASeq:fetchAnnotation]{fetch the annotations}}
+##' depending on the provided arguments}
+##' \item{\code{\link[easyRNASeq:fetchCoverage]{get the reads coverage}} from
+##' the provided file(s)}
+##' \item{\code{\link[easyRNASeq:easyRNASeq-summarization-methods]{summarize the
+##' reads}} according to the selected summarization features}
+##' \item{\code{\link[easyRNASeq:easyRNASeq-correction-methods]{optionally
+##' apply}} a data correction (i.e. generating RPKM).}
+##' \item{\code{\link[easyRNASeq:edgeR-methods]{use edgeR methods}} for
+##' post-processing the data or}
+##' \item{\code{\link[easyRNASeq:DESeq-methods]{use
+##' DESeq methods}} for post-processing the data (either of them being
+##' recommended over RPKM).}  }
+##' 
+##' \itemize{ \item{\dots{} Additional arguments, passed
+##' to the \pkg{biomaRt} \code{\link[biomaRt:getBM]{getBM}} function or to the
+##' \code{\link[easyRNASeq:easyRNASeq-annotation-internal-methods]{readGffGtf}}
+##' internal function that takes an optional arguments: annotation.type that
+##' default to "exon" (used to select the proper rows of the gff or gtf file)
+##' or to the \code{\link[DESeq:estimateDispersions]{DESeq
+##' estimateDispersions}} method.}
+##' \item{the annotationObject When the
+##' \code{annotationMethods} is set to \code{env} or \code{rda}, a properly
+##' formatted \code{RangedData} or \code{GRangesList} object need to be
+##' provided. Check the paragraph RangedData in the vignette or the examples at
+##' the bottom of this page for examples. The data.frame-like structure of
+##' these objects is where \code{easyRNASeq} will look for the exon, feature,
+##' transcript, or gene identifier. Depending on the count method selected, it
+##' is essential that the akin column name is present in the annotationObject.
+##' E.g. when counting "features", the annotationObject has to contain a
+##' "feature" field.}
+##' \item{the chr.map The chr.map argument for the easyRNASeq
+##' function only works for an "organismName" of value 'custom' with the
+##' "validity.check" parameter set to 'TRUE'.  This data.frame should contain
+##' two columns named 'from' and 'to'. The row should represent the chromosome
+##' name in your original data and the wished name in the output of the
+##' function.}
+##' \item{count The count can be summarized by exons, features,
+##' genes, islands or transcripts. While exons, genes and transcripts are
+##' obvious, "features" describes any features provided by the user, e.g.
+##' enhancer loci. These are processed as the exons are. For "islands", it is
+##' for an under development function that identifies de-novo expression loci
+##' and count the number of reads overlapping them. }
+##' }
+##' 
+##' @aliases easyRNASeq easyRNASeq,character-method
+##' @rdname easyRNASeq-easyRNASeq
+##' @param annotationFile The location (full path) of the annotation file
+##' @param annotationObject A \code{\linkS4class{RangedData}} or
+##' \code{\linkS4class{GRangesList}} object containing the annotation.
+##' @param annotationMethod The method to fetch the annotation, one of
+##' "biomaRt","env","gff","gtf" or "rda". All methods but "biomaRt" and "env"
+##' require the annotationFile to be set. The "env" method requires the
+##' annotationObject to be set.
+##' @param chr.map A data.frame describing the mapping of original chromosome
+##' names towards wished chromosome names. See details.
+##' @param chr.sel A vector of chromosome names to subset the final results.
+##' @param chr.sizes A vector or a list containing the chromosomes' size of the
+##' selected organism
+##' @param conditions A vector of descriptor, each sample must have a
+##' descriptor if you use outputFormat DESeq or edgeR. The size of this list
+##' must be equal to the number of sample. In addition the vector should be
+##' named with the filename of the corresponding samples.
+##' @param count The feature used to summarize the reads. One of
+##' 'exons','features','genes','islands' or 'transcripts'. See details.
+##' @param filenames The name, not the path, of the files to use
+##' @param filesDirectory The directory where the files to be used are located
+##' @param filter The filter to be applied when loading the data using the
+##' "aln" format
+##' @param format The format of the reads, one of "aln","bam". If not "bam",
+##' all the types supported by the \pkg{ShortRead} package are supported too.
+##' @param gapped Is the bam file provided containing gapped alignments?
+##' @param ignoreWarnings set to TRUE (bad idea! they have a good reason to be
+##' there) if you do not want warning messages.
+##' @param min.cov When computing read islands, the minimal coverage to take
+##' into account for calling an island
+##' @param min.length The minimal size an island should have to be kept
+##' @param max.gap When computing read islands, the maximal gap size allowed
+##' between two islands to merge them
+##' @param nbCore defines how many CPU core to use when computing the
+##' geneModels. Use the default parallel library
+##' @param normalize A boolean to convert the returned counts in RPKM. Valid
+##' when the \code{outputFormat} is left undefined (i.e. when a matrix is
+##' returned) and when it is \code{DESeq} or \code{edgeR}. Note that it is not
+##' advised to normalize the data prior DESeq or edgeR usage!
+##' @param organism A character string describing the organism
+##' @param outputFormat By default, easyRNASeq returns a count matrix. If one
+##' of \code{DESeq},\code{edgeR},\code{RNAseq} is provided then the respective
+##' object will be returned.
+##' @param pattern For easyRNASeq, the pattern of file to look for, e.g. "bam$"
+##' @param plot Whether or not to plot assessment graphs.
+##' @param readLength The read length in bp
+##' @param silent set to TRUE if you do not want messages to be printed out.
+##' @param summarization A character defining which method to use when
+##' summarizing reads by genes. So far, only "geneModels" is available.
+##' @param type The type of data when using the "aln" format. See the ShortRead
+##' library.
+##' @param validity.check Shall UCSC chromosome name convention be enforced
+##' @param \dots additional arguments. See details
+##' @return Returns a count table (a matrix of m features x n samples) unless
+##' the \code{outputFormat} option has been set, in which case an object of
+##' type \code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}} or
+##' \code{\link[edgeR:DGEList]{edgeR:DGEList}} or \code{\linkS4class{RNAseq}}
+##' is returned
+##' @author Nicolas Delhomme
+##' @seealso \code{\linkS4class{RNAseq}}
+##' \code{\link[edgeR:DGEList]{edgeR:DGEList}}
+##' \code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}}
+##' @keywords methods
+##' @examples
+##' 
+##' 	\dontrun{
+##' 	library("RnaSeqTutorial")
+##' 	library(BSgenome.Dmelanogaster.UCSC.dm3)
+##' 
+##' 	## creating a count table from 4 bam files
+##' 	count.table <- easyRNASeq(filesDirectory=
+##' 		    			system.file(
+##' 					"extdata",
+##' 					package="RnaSeqTutorial"),
+##' 					pattern="[A,C,T,G]{6}\.bam$",
+##' 				format="bam",
+##' 				readLength=36L,
+##' 				organism="Dmelanogaster",
+##' 				chr.sizes=as.list(seqlengths(Dmelanogaster)),
+##' 				annotationMethod="rda",
+##' 				annotationFile=system.file(
+##' 				                            "data",
+##' 							    "gAnnot.rda",
+##' 							    package="RnaSeqTutorial"),
+##' 				count="exons")
+##' 
+##' 	## an example of a chr.map
+##' 	chr.map <- data.frame(from=c("2L","2R","MT"),to=c("chr2L","chr2R","chrMT"))
+##' 
+##' 	## an example of a RangedData annotation
+##' 	gAnnot <- RangedData(
+##'                      IRanges(
+##'                              start=c(10,30,100),
+##'                              end=c(21,53,123)),
+##'                           space=c("chr01","chr01","chr02"),
+##'                           strand=c("+","+","-"),
+##'                           transcript=c("trA1","trA2","trB"),
+##'                           gene=c("gA","gA","gB"),
+##'                           exon=c("e1","e2","e3"),
+##'                           universe = "Hs19"
+##'                           )
+##' 
+##' 	## an example of a GRangesList annotation
+##' 	grngs <- as(gAnnot,"GRanges")
+##' 	grngsList<-split(grngs,seqnames(grngs))
+##' }
+##' 
 ## TODO if the summarization ever get changed, modify the if statement when validating the annotation object for no overlapping features
 setMethod(
           f="easyRNASeq",

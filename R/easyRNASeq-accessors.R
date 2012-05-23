@@ -3,6 +3,42 @@
 ## If we have one, return it
 ## In easyRNASeq, check that the names of the readLength are correct if lenhgth >1
 
+##' Accessors for RNAseq class
+##' 
+##' 
+##' These functions and generics define `accessors` (to get and set values) for
+##' objects in the \pkg{easyRNASeq} package.
+##' 
+##' 
+##' @aliases accessors chrSize<- chrSize fileName<- fileName geneModel<-
+##' geneModel genomicAnnotation<- genomicAnnotation librarySize<- librarySize
+##' organismName<- organismName readCounts<- readCounts readCoverage<-
+##' readCoverage readIslands<- readIslands readLength<- readLength
+##' @name easyRNASeq accessors
+##' @rdname easyRNASeq-accessors
+##' @param obj An object derived from class \code{RNAseq}.
+##' @param count The type of count you want to access,
+##' 'genes','features','exons','transcripts' or 'islands'
+##' @param summarization If count is set to genes, precise the type of
+##' summarization, 'bestExons' or 'geneModels'
+##' @param unique For the 'exons' count only. Should the counts returned be
+##' unique for their identifier (i.e. the matrix row names)?
+##' @param value The replacement value.
+##' @return
+##' 
+##' Usually, the value of the corresponding slot, or other simple content
+##' described on the help page of \code{easyRNASeq}.
+##' @author Nicolas Delhomme
+##' @keywords manip
+##' @examples
+##' 
+##' rnaSeq<-new("RNAseq")
+##' ##set organisme name of an RNAseq object
+##' organismName(rnaSeq) <- "Dmelanogaster"
+##' ##get organisme name of an RNAseq object
+##' orgName<-organismName(rnaSeq)
+##' 
+
 ## getters
 setMethod(
           f="genomicAnnotation",

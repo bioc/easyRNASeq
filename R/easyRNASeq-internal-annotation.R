@@ -1,6 +1,38 @@
+##' Internal easyRNASeq annotation methods
+##' 
+##' These are internal methods used to retrieve annotations tabularll
+##' \code{.getBmRange}Use \code{\link[biomaRt:useMart]{biomaRt}} to get exon
+##' annotations.  \code{.getGffRange}Use
+##' \code{\linkS4class{Genome_intervals_stranded}} to get annotation from a gff
+##' file.  \code{.getGtfRange}Use
+##' \code{\linkS4class{Genome_intervals_stranded}} to get annotation from a gtf
+##' file.  \code{.geneModelAnnotation}Use the provided exon annotation to
+##' define gene models.  \code{.readGffGtf}Use
+##' \code{\linkS4class{Genome_intervals_stranded}} to get annotation from a gff
+##' or gtf file. It is called from \code{getGffRange} and \code{getGtfRange}.
+##' 
+##' To use multicore machines more efficiently, the default parallel package
+##' will be used to parallelize the processing.
+##' 
+##' @aliases .getBmRange .getGffRange .getGtfRange .geneModelAnnotation
+##' .readGffGtf
+##' @name easyRNASeq annotation internal methods
+##' @rdname easyRNASeq-annotation-internal-methods
+##' @param annotation.type describes the kind of annotation to keep the
+##' information from in a gtf or gff file. If set to NULL all the annotations
+##' are returned.
+##' @param format describes the kind of annotation provided. One of gtf or gff.
+##' @param organism Organism name
+##' @param gAnnot a \code{\linkS4class{RangedData}} object containing exon
+##' annotations
+##' @param nbCore number of CPU cores to use
+##' @param filename filename that contains the annotations
+##' @param \dots Additional arguments, passed to more internal functions.
+##' @return A \code{\linkS4class{RangedData}} containing the loaded or
+##' processed annotations.
+##' @author Nicolas Delhomme
+##' @keywords internal
 ## internal functions
-## TODO check GenomicFeatures
-
 ## get the annot from biomaRt
 ".getBmRange" <- function(organism=character(1),...){
   

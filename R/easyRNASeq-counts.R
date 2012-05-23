@@ -1,3 +1,80 @@
+##' Count methods for RNAseq object
+##' 
+##' Summarize the read counts per exon, feature, gene, transcript or island.
+##' \itemize{
+##' \item{\code{exonCounts}: for that summarization, reads are
+##' summarized per exons. An "exon" field is necessary in the annotation object
+##' for this to work. See
+##' \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq annotation
+##' methods}} for more details on the annotation object.}
+##' \item{\code{featureCounts} is similar to the 'exons' one. This is just a
+##' wrapper to summarize count for genomic features that are not exon related.
+##' I.e. one could use it to measure eRNAs. Again, a "feature" field is
+##' necessary in the annotation object for this to work.}
+##' \item{\code{geneCounts} sums the counts per either \code{bestExons} or
+##' \code{geneModels}. In either case, the annotation object needs to contain
+##' both an "exon" and a "gene" field.}
+##' \item{\code{islandCounts} sums the
+##' counts per computed islands.}
+##' \item{\code{transcriptCounts} sums the counts
+##' obtained by exons into their respective transcripts. Note that this often
+##' result in counting some reads several times. For this function to work you
+##' need both an "exon" and a "transcript" field in your annotation object. To
+##' avoid this, one could create transcript specific synthetic exons, i.e.
+##' features that would be unique to a transcript. To offer this possibility,
+##' transcripts count can be summarized from "features", in which case the
+##' annotation object need to have both the "feature" and "transcript" fields
+##' defined.  }
+##' }
+##' 
+##' \dots{} for \itemize{
+##' \item{geneCounts: additional options for the
+##' \code{\link[easyRNASeq:easyRNASeq-summarization-internal-methods]{.geneModelSummarization}}}
+##' \item{islandCounts: additional options for
+##' \code{\link[easyRNASeq:easyRNASeq-island-methods]{findIslands}} }}
+##' 
+##' @aliases exonCounts featureCounts geneCounts islandCounts transcriptCounts
+##' @name easyRNASeq summarization methods
+##' @rdname easyRNASeq-summarization-methods
+##' @param obj An object derived from class \code{\linkS4class{RNAseq}},can be
+##' a \code{matrix} for RPKM, see details
+##' @param force For \code{islandCount}, force RNAseq to redo \code{findIsland}
+##' @param from either "exons" or "features" can be used to summarize per
+##' transcript
+##' @param summarization Method use for summarize genes
+##' @param \dots See details
+##' @return A numeric vector containing count per exon, feature, gene or
+##' transcript.
+##' @author Nicolas Delhomme
+##' @seealso \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq
+##' annotation methods}}
+##' \code{\link[easyRNASeq:easyRNASeq-summarization-internal-methods]{.geneModelSummarization}}
+##' \code{\link[easyRNASeq:easyRNASeq-island-methods]{findIslands}}
+##' @keywords methods
+##' @examples
+##' 
+##' 	\dontrun{
+##' 	## create an RNAseq object
+##' 	## summarizing 4 bam files by exons
+##' 	rnaSeq <- easyRNASeq(system.file(
+##'                                  "extdata",
+##'                                  package="RnaSeqTutorial"),
+##'                      organism="Dmelanogaster",
+##'                      chr.sizes=as.list(seqlengths(Dmelanogaster)),
+##'                      readLength=36L,
+##'                      annotationMethod="rda",
+##'                      annotationFile=system.file(
+##'                        "data",
+##'                        "gAnnot.rda",
+##'                        package="RnaSeqTutorial"),
+##'                      format="bam",
+##'                      count="exons",
+##'                      pattern="[A,C,T,G]{6}\.bam$",
+##'                      outputFormat="RNAseq")
+##' 	## summing up the exons by transcript
+##' 	rnaSeq <- transcriptCounts(rnaSeq)
+##' 	}
+##'
 ### TODO for the exonCounts and other counts, we really need to pay attention to the order of the chromosomes.
 ### We could have that forced (i.e. having them ordered) at the rnaSeq creation time
 ### and have a validity action to re-order them any time the field get changed

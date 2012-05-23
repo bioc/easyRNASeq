@@ -30,7 +30,7 @@ gAnnot <- split(gAnnot,seqnames(gAnnot))
 
 4) use parallel to speed up the process
 
-5) clarify the vignette (email from Gordon Assaf, paired end, detail more the geneModels)
+5) clarify the vignette (email from Gordon Assaf, paired end, detail more the geneModels) and rework the Rd (clean them up, use describe instead of itemize, etc.)
 
 6) Add a use case section in the vignette based on Francesco and Wade issues. Add Simon's data
 

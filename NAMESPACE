@@ -1,119 +1,177 @@
-## generated using the writeNamespaceImports("easyRNASeq")
-## function from codetoolsBioC package
-
-## import classes
-importClassesFrom(biomaRt, Mart)
-importClassesFrom(Biostrings, DNAStringSet)
-importClassesFrom(DESeq, CountDataSet)
-importClassesFrom(edgeR, DGEList)
-importClassesFrom(genomeIntervals, Genome_intervals)
-importClassesFrom(GenomicRanges, GenomicRanges, GRangesList)
-importClassesFrom(IRanges, RangedData, RleList, Vector)
-importClassesFrom(methods, ANY, character, integer, list, matrix,
-                  numeric, vector)
-importClassesFrom(Rsamtools,ScanBamParam)
-importClassesFrom(ShortRead, AlignedRead, ShortReadQ, SRFilter)
-
-## import S4 methods
-importMethodsFrom(Biobase, fData)
-importMethodsFrom(BiocGenerics, cbind, colnames, duplicated, eval,
-                  intersect, lapply, order, paste, rbind, rownames,
-                  sapply, table, unique)
-importMethodsFrom(Biostrings, initialize)
-importMethodsFrom(DESeq, counts, estimateDispersions,
-                  estimateSizeFactors)
-importMethodsFrom(genomeIntervals, seq_name)
-importMethodsFrom(GenomicRanges, rname, strand, "strand<-")
-importMethodsFrom(IRanges, "%in%", aggregate, as.list, as.matrix, coerce,
-                  "colnames<-", coverage, elementMetadata,
-                  "elementMetadata<-", end, findOverlaps, gsub, ifelse,
-                  match, mean, median, na.omit, narrow,
-                  nchar, ncol, nrow, queryHits, ranges, reduce, rev,
-                  "rownames<-", runLength, runsum, runValue, show,
-                  sort, split, start, sub, substr, tolower,
-                  "universe<-", unlist, values, which, width)
-importMethodsFrom(Rsamtools, scanBam, ScanBamParam)
-importMethodsFrom(ShortRead, chromosome, position, readAligned,
-                  srdistance, srFilter)
-
-## import methods
-importFrom(biomaRt, getBM, listDatasets, useDataset, useMart)
-importFrom(Biostrings, DNAStringSet)
-importFrom(DESeq, fitInfo, newCountDataSet)
-importFrom(edgeR, calcNormFactors, DGEList, estimateCommonDisp,
-           estimateTagwiseDisp, maPlot, plotMDS.DGEList, plotMeanVar)
-importFrom(genomeIntervals, getGffAttribute, readGff3)
-importFrom(GenomicRanges, readGappedAlignments)
-importFrom(graphics, abline, axis, boxplot, grid, hist, legend, lines,
-           mtext, par, plot, rect)
-importFrom(IRanges, IRanges, IRangesList, isSingleString, LogicalList,
-           RangedData, RangesList, SplitDataFrameList)
-importFrom(methods, as, extends, is, new)
-importFrom(parallel, makePSOCKcluster, parLapply, stopCluster)
-importFrom(Rsamtools, scanBamFlag)
-importFrom(ShortRead, alignData, sread)
-importFrom(utils, combn, str)
-
-## export methods
-export(chastityFilter,naPositionFilter)
-
-## export S4 methods
-## edgeR
-exportMethods(plotNormalizationFactors)
-## DESeq
-exportMethods(plotDispersionEstimates,multivariateConditions)
-## easyRNASeq
-exportMethods(
-              genomicAnnotation,
-	      readCoverage,
-	      readLength,
-	      readCounts,
-	      librarySize,
-	      organismName,
-	      geneModel,
-	      chrSize,
-	      fileName,
-	      "genomicAnnotation<-",
-	      "readLength<-",
-	      "readCoverage<-",
-	      "chrSize<-",
-	      "readCounts<-",
-	      "librarySize<-",
-	      "organismName<-",
-	      "geneModel<-",
-	      "fileName<-",
-	      demultiplex,
-	      barcodePlot,
-	      fetchAnnotation,
-	      exonCounts,
-	      featureCounts,
-	      transcriptCounts,
-	      geneCounts,
-	      RPKM,
-	      fetchCoverage,
-	      easyRNASeq,
-              show,
-              print,
-              ## GenomicRanges
-              reduce,
-              strand,
-              "strand<-",
-              ## IRanges
-              ranges
-              ## ignored for the moment
-	      ##readIslands,
-              ##"readIslands<-",
-	      ##findIslands,
-              ##islandCounts,
-)
-
-## GenomicRanges
+export(chastityFilter)
+export(naPositionFilter)
+exportClasses(RNAseq)
+exportMethods("chrSize<-")
+exportMethods("fileName<-")
+exportMethods("geneModel<-")
+exportMethods("genomicAnnotation<-")
+exportMethods("librarySize<-")
+exportMethods("organismName<-")
+exportMethods("readCounts<-")
+exportMethods("readCoverage<-")
+exportMethods("readLength<-")
+exportMethods("strand<-")
+exportMethods(barcodePlot)
+exportMethods(chrSize)
 exportMethods(colnames)
-
-## export classes
-exportClasses(
-              RNAseq
-)
-
-## since we export almost all methods, we could use this
-## exportPattern("^[^\\.]")
+exportMethods(demultiplex)
+exportMethods(easyRNASeq)
+exportMethods(exonCounts)
+exportMethods(featureCounts)
+exportMethods(fetchAnnotation)
+exportMethods(fetchCoverage)
+exportMethods(fileName)
+exportMethods(geneCounts)
+exportMethods(geneModel)
+exportMethods(genomicAnnotation)
+exportMethods(librarySize)
+exportMethods(multivariateConditions)
+exportMethods(organismName)
+exportMethods(plotDispersionEstimates)
+exportMethods(plotNormalizationFactors)
+exportMethods(ranges)
+exportMethods(readCounts)
+exportMethods(readCoverage)
+exportMethods(readLength)
+exportMethods(reduce)
+exportMethods(RPKM)
+exportMethods(strand)
+exportMethods(transcriptCounts)
+importClassesFrom(biomaRt,Mart)
+importClassesFrom(Biostrings,DNAStringSet)
+importClassesFrom(DESeq,CountDataSet)
+importClassesFrom(edgeR,DGEList)
+importClassesFrom(genomeIntervals,Genome_intervals)
+importClassesFrom(GenomicRanges,GenomicRanges)
+importClassesFrom(GenomicRanges,GRangesList)
+importClassesFrom(IRanges,RangedData)
+importClassesFrom(IRanges,RleList)
+importClassesFrom(IRanges,Vector)
+importClassesFrom(methods,ANY)
+importClassesFrom(methods,character)
+importClassesFrom(methods,integer)
+importClassesFrom(methods,list)
+importClassesFrom(methods,matrix)
+importClassesFrom(methods,numeric)
+importClassesFrom(methods,vector)
+importClassesFrom(Rsamtools,ScanBamParam)
+importClassesFrom(ShortRead,AlignedRead)
+importClassesFrom(ShortRead,ShortReadQ)
+importClassesFrom(ShortRead,SRFilter)
+importFrom(biomaRt,getBM)
+importFrom(biomaRt,listDatasets)
+importFrom(biomaRt,useDataset)
+importFrom(biomaRt,useMart)
+importFrom(Biostrings,DNAStringSet)
+importFrom(DESeq,fitInfo)
+importFrom(DESeq,newCountDataSet)
+importFrom(edgeR,calcNormFactors)
+importFrom(edgeR,DGEList)
+importFrom(edgeR,estimateCommonDisp)
+importFrom(edgeR,estimateTagwiseDisp)
+importFrom(edgeR,maPlot)
+importFrom(edgeR,plotMDS.DGEList)
+importFrom(edgeR,plotMeanVar)
+importFrom(genomeIntervals,getGffAttribute)
+importFrom(genomeIntervals,readGff3)
+importFrom(GenomicRanges,readGappedAlignments)
+importFrom(graphics,abline)
+importFrom(graphics,axis)
+importFrom(graphics,boxplot)
+importFrom(graphics,grid)
+importFrom(graphics,hist)
+importFrom(graphics,legend)
+importFrom(graphics,lines)
+importFrom(graphics,mtext)
+importFrom(graphics,par)
+importFrom(graphics,plot)
+importFrom(graphics,rect)
+importFrom(IRanges,IRanges)
+importFrom(IRanges,IRangesList)
+importFrom(IRanges,isSingleString)
+importFrom(IRanges,LogicalList)
+importFrom(IRanges,RangedData)
+importFrom(IRanges,RangesList)
+importFrom(IRanges,SplitDataFrameList)
+importFrom(methods,as)
+importFrom(methods,extends)
+importFrom(methods,is)
+importFrom(methods,new)
+importFrom(parallel,makePSOCKcluster)
+importFrom(parallel,parLapply)
+importFrom(parallel,stopCluster)
+importFrom(Rsamtools,scanBamFlag)
+importFrom(ShortRead,alignData)
+importFrom(ShortRead,sread)
+importFrom(utils,combn)
+importFrom(utils,str)
+importMethodsFrom(Biobase,fData)
+importMethodsFrom(BiocGenerics,cbind)
+importMethodsFrom(BiocGenerics,colnames)
+importMethodsFrom(BiocGenerics,duplicated)
+importMethodsFrom(BiocGenerics,eval)
+importMethodsFrom(BiocGenerics,intersect)
+importMethodsFrom(BiocGenerics,lapply)
+importMethodsFrom(BiocGenerics,order)
+importMethodsFrom(BiocGenerics,paste)
+importMethodsFrom(BiocGenerics,rbind)
+importMethodsFrom(BiocGenerics,rownames)
+importMethodsFrom(BiocGenerics,sapply)
+importMethodsFrom(BiocGenerics,table)
+importMethodsFrom(BiocGenerics,unique)
+importMethodsFrom(Biostrings,initialize)
+importMethodsFrom(DESeq,counts)
+importMethodsFrom(DESeq,estimateDispersions)
+importMethodsFrom(DESeq,estimateSizeFactors)
+importMethodsFrom(genomeIntervals,seq_name)
+importMethodsFrom(GenomicRanges,"strand<-")
+importMethodsFrom(GenomicRanges,rname)
+importMethodsFrom(GenomicRanges,strand)
+importMethodsFrom(IRanges,"%in%")
+importMethodsFrom(IRanges,"colnames<-")
+importMethodsFrom(IRanges,"elementMetadata<-")
+importMethodsFrom(IRanges,"rownames<-")
+importMethodsFrom(IRanges,"universe<-")
+importMethodsFrom(IRanges,aggregate)
+importMethodsFrom(IRanges,as.list)
+importMethodsFrom(IRanges,as.matrix)
+importMethodsFrom(IRanges,coerce)
+importMethodsFrom(IRanges,coverage)
+importMethodsFrom(IRanges,elementMetadata)
+importMethodsFrom(IRanges,end)
+importMethodsFrom(IRanges,findOverlaps)
+importMethodsFrom(IRanges,gsub)
+importMethodsFrom(IRanges,ifelse)
+importMethodsFrom(IRanges,match)
+importMethodsFrom(IRanges,mean)
+importMethodsFrom(IRanges,median)
+importMethodsFrom(IRanges,na.omit)
+importMethodsFrom(IRanges,narrow)
+importMethodsFrom(IRanges,nchar)
+importMethodsFrom(IRanges,ncol)
+importMethodsFrom(IRanges,nrow)
+importMethodsFrom(IRanges,queryHits)
+importMethodsFrom(IRanges,ranges)
+importMethodsFrom(IRanges,reduce)
+importMethodsFrom(IRanges,rev)
+importMethodsFrom(IRanges,runLength)
+importMethodsFrom(IRanges,runsum)
+importMethodsFrom(IRanges,runValue)
+importMethodsFrom(IRanges,show)
+importMethodsFrom(IRanges,sort)
+importMethodsFrom(IRanges,split)
+importMethodsFrom(IRanges,start)
+importMethodsFrom(IRanges,sub)
+importMethodsFrom(IRanges,substr)
+importMethodsFrom(IRanges,tolower)
+importMethodsFrom(IRanges,unlist)
+importMethodsFrom(IRanges,values)
+importMethodsFrom(IRanges,which)
+importMethodsFrom(IRanges,width)
+importMethodsFrom(Rsamtools,scanBam)
+importMethodsFrom(Rsamtools,ScanBamParam)
+importMethodsFrom(ShortRead,chromosome)
+importMethodsFrom(ShortRead,position)
+importMethodsFrom(ShortRead,readAligned)
+importMethodsFrom(ShortRead,srdistance)
+importMethodsFrom(ShortRead,srFilter)

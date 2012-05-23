@@ -1,28 +1,30 @@
-\name{GenomicRanges methods}
-
+\name{GenomicRanges additional methods}
 \alias{colnames}
 \alias{colnames,GenomicRanges-method}
 \alias{colnames,GRangesList-method}
-
+\alias{GenomicRanges additional methods}
 \title{Extension of the GenomicRanges package}
-\description{
-	Return the column name of a \code{\linkS4class{GRanges}} or \code{\linkS4class{GRangesList}} object.
-}
-
 \arguments{
-  \item{obj}{An object of the \code{\linkS4class{GRanges}} or \code{\linkS4class{GRangesList}} class}
+  \item{obj}{An object of the \code{\linkS4class{GRanges}}
+  or \code{\linkS4class{GRangesList}} class}
 }
-
 \value{
-	A vector of column names.
+  A vector of column names.
 }
-
+\description{
+  Return the column name of a \code{\linkS4class{GRanges}}
+  or \code{\linkS4class{GRangesList}} object.
+}
 \details{
-	It returns the actual column names of the elementMetadata slot of the \code{\linkS4class{GRanges}} or \code{\linkS4class{GRangesList}} object. The elementMetadata contains a \code{\linkS4class{DataFrame}} object used to store additional information provided by the user, such as exon ID in our case.
+  It returns the actual column names of the elementMetadata
+  slot of the \code{\linkS4class{GRanges}} or
+  \code{\linkS4class{GRangesList}} object. The
+  elementMetadata contains a \code{\linkS4class{DataFrame}}
+  object used to store additional information provided by
+  the user, such as exon ID in our case.
 }
-
 \examples{
-	\dontrun{
+\dontrun{
 	## an example of a RangedData annotation
 	gAnnot <- RangedData(
                      IRanges(
@@ -49,14 +51,13 @@
 	colnames(grngsList)
 	}
 }
-
-\author{Nicolas Delhomme}
-
-\seealso{
-	\code{\linkS4class{DataFrame}}
-	\code{\linkS4class{GRanges}}
-	\code{\linkS4class{GRangesList}}
+\author{
+  Nicolas Delhomme
 }
-
+\seealso{
+  \code{\linkS4class{DataFrame}}
+  \code{\linkS4class{GRanges}}
+  \code{\linkS4class{GRangesList}}
+}
 \keyword{methods}
 

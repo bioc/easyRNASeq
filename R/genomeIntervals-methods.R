@@ -1,7 +1,51 @@
+##' Extension for the genomeIntervals package
+##' 
+##' \describe{
+##' \item{coerce}{ This method extends the genomeIntervals package
+##' by offering the functionality to coerce a
+##' \code{\link[genomeIntervals:Genome_intervals_stranded-class]{genomeIntervals
+##' object}} into a \code{\link[IRanges:RangedData-class]{RangedData object}} or
+##' \code{\linkS4class{GRangesList}} object.}
+##' \item{type}{ Another way to access the content of the gff type
+##' column.  } }
+##' 
+##' @aliases coerce,Genome_intervals,RangedData-method
+##' coerce,Genome_intervals,GRangesList-method
+##' type,Genome_intervals-method
+##' @name genomeIntervals additional methods
+##' @rdname genomeIntervals-methods
+##' @param from An object of class \code{\linkS4class{Genome_intervals}}
+##' @param x An object of class \code{\linkS4class{Genome_intervals}}
+##' @return \describe{
+##' \item{coerce}{ A \code{\linkS4class{RangedData}} or
+##' \code{\linkS4class{GRangesList}}
+##' containing the result of the coercion.  }
+##' \item{type}{ The content of the
+##' type column, usually a factor or a character vector } }
+##'
+##' @examples
+##' \dontrun{
+##' annot<-readGff3(system.file("extdata","annot.gff",package="RnaSeqTutorial")
+##' gAnnot<-as(annot,"RangedData") type(annot) }
+##' 
+##' @author Nicolas Delhomme
+##' 
+##' @seealso
+##' \code{\link[genomeIntervals:Genome_intervals_stranded-class]{genomeIntervals
+##' object}}
+##' \code{\link[genomeIntervals:readGff3]{readGff3 function}}
+##' 
+## define a type accessor
+setMethod(
+          f="type",
+          signature="Genome_intervals",
+          definition=function(x){
+            x$type
+          })
+
 ## convert a genome intervals into a RangedData
 ## TODO find a way to check and keep unexpected slots.
 ## or at least warn they would be ignored
-
 setAs("Genome_intervals","RangedData",function(from){
   universe="intervals"
   
@@ -44,3 +88,33 @@ setAs("Genome_intervals","RangedData",function(from){
       values = values))
 })
 
+## coerce into 
+setAs("Genome_intervals","GRangesList",function(from){
+
+  ## first check
+  if (!is(from, "Genome_intervals")){stop("'from' must be a Genome_intervals object")}
+  
+  ## get all possible gff attributes
+  ## to be quick
+  ## we expect the types to have the same annotation
+  ## so we fetch the first instance of each type and
+  ## get the gff attribute names
+  ## and use these to get the gffAttributes
+  ## and convert that into a df
+  mat <- do.call(cbind,lapply(unique(unlist(lapply(
+                                                   parseGffAttributes(from[match(unique(as.character(type(from))),type(from))]),
+                                                  names))),function(attr,from){
+                                                    getGffAttribute(from,attr)
+                                                  },from))
+  
+  ## create the object
+  return(split(GRanges(ranges=IRanges(
+                         start=from[,1],
+                         end=from[,2]),
+                       seqnames=seq_name(from),
+                       strand=strand(from),
+                       cbind(data.frame(annotation(from)[!colnames(annotation(from)) %in% c("seq_name","strand","gffAttributes")]),
+                             data.frame(mat,stringsAsFactors=FALSE))
+                       ),seq_name(from)))
+         
+})

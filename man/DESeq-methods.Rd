@@ -1,34 +1,24 @@
-\name{DESeq methods}
+\name{DESeq additional methods}
+\alias{DESeq additional methods}
 \alias{multivariateConditions}
 \alias{multivariateConditions,CountDataSet-method}
-
 \title{Extension for the DESeq package}
-\description{
-	\itemize{
-	\item{\code{multivariateConditions}} is simply an accessor for the \code{multivariateConditions} slot of a \code{\linkS4class{CountDataSet}} object.
-	}
-}
-
-\usage{
-multivariateConditions(obj)
-}
-
 \arguments{
-  \item{obj}{An object of class \code{\linkS4class{CountDataSet}}}
+  \item{obj}{An object of class
+  \code{\linkS4class{CountDataSet}}}
 }
-
 \value{
-	\itemize{
-	\item{multivariateConditions} returns a boolean describing whether the data to analyze is multivariate or not
-	}
+  \itemize{ \item{multivariateConditions returns a boolean
+  describing whether the data to analyze is multivariate or
+  not }}
 }
-
-\seealso{
-\code{\linkS4class{CountDataSet}}
+\description{
+  \itemize{ \item{\code{multivariateConditions} is simply
+  an accessor for the \code{multivariateConditions} slot of
+  a \code{\linkS4class{CountDataSet}} object.  }}
 }
-
 \examples{
-	\dontrun{
+\dontrun{
 	## these are helper function for the DESeq package
 	## refer to its vignette first
 	cds <- newCountDataSet(countData,conditions)
@@ -37,8 +27,11 @@ multivariateConditions(obj)
 	mVar <- multivariateConditions(cds)
 	}
 }
-
-\author{Nicolas Delhomme}
-
+\author{
+  Nicolas Delhomme
+}
+\seealso{
+  \code{\linkS4class{CountDataSet}}
+}
 \keyword{methods}
 

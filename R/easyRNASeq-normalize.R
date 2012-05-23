@@ -1,5 +1,79 @@
-### reporting methods
-## rpkm
+##' easyRNASeq count table correction to RPKM
+##' 
+##' Convert a count table obtained from the easyRNASeq function into an RPKM
+##' corrected count table.
+##' 
+##' RPKM accepts two sets of arguments:
+##' \itemize{
+##' \item{RNAseq,character}{ the
+##' \dots{} are additional arguments to be passed to the
+##' \code{\link[easyRNASeq:easyRNASeq-accessors]{readCounts}} method.}
+##' \item{matrix,named vector}{normalize a count matrix by providing the feature
+##' sizes (e.g. gene sizes) as a named vector where the names match the row
+##' names of the count matrix and the lib sizes as a named vector where the
+##' names match the column names of the count matrix.}}
+##' 
+##' @aliases RPKM RPKM,RNAseq,ANY,ANY,ANY-method
+##' RPKM,matrix,ANY,vector,vector-method
+##' @name easyRNASeq correction methods
+##' @rdname easyRNASeq-correction-methods
+##' @param feature.size Precise the feature (e.g. exons, genes) sizes. It
+##' should be a named numeric list, named after the feature names.
+##' @param from Determine the kind of coverage to use, choice limited to:
+##' exons, features, transcripts, bestExons, geneModels or islands.
+##' @param lib.size Precise the library size. It should be a named numeric
+##' list, i.e. named after the sample names.
+##' @param obj An object of class \code{\linkS4class{RNAseq}} or a
+##' \code{matrix}, see details
+##' @param unique If set to TRUE, whenever a feature (exon, feature, ...) is
+##' duplicated in the count table, it is only returned once.
+##' @param \dots additional arguments. See details
+##' @return A \code{matrix} containing RPKM corrected read counts.
+##' @author Nicolas Delhomme
+##' @seealso \code{\link[easyRNASeq:easyRNASeq-accessors]{readCounts}}
+##' @keywords methods
+##' @examples
+##' 
+##' 
+##' 	\dontrun{
+##' 	## get an RNAseq object
+##' 	rnaSeq <- easyRNASeq(filesDirectory=
+##' 		    			system.file(
+##' 					"extdata",
+##' 					package="RnaSeqTutorial"),
+##' 					pattern="[A,C,T,G]{6}\.bam$",
+##' 				format="bam",
+##' 				readLength=36L,
+##' 				organism="Dmelanogaster",
+##' 				chr.sizes=as.list(seqlengths(Dmelanogaster)),
+##' 				annotationMethod="rda",
+##' 				annotationFile=system.file(
+##' 				                            "data",
+##' 							    "gAnnot.rda",
+##' 							    package="RnaSeqTutorial"),
+##' 				count="exons",
+##' 				outputFormat="RNAseq")
+##' 
+##' 	## get the RPKM
+##' 	rpkm <- RPKM(rnaSeq,from="exons")
+##' 	
+##' 	## the same from a count table
+##' 	count.table <- readCounts(rnaSeq,count="exons")
+##' 
+##' 	## get the RPKM
+##' 	## verify that the feature are sorted as the count.table
+##' 	all(.getName(rnaSeq,"exon") == rownames(count.table))
+##' 	feature.size <- unlist(width(ranges(rnaSeq)))
+##' 
+##' 	## verify that the samples are ordered in the same way
+##' 	all(names(librarySize(rnaSeq)) == colnames(count.table))
+##' 
+##' 	## get the RPKM
+##' 	rpkm <- RPKM(count.table,
+##' 			feature.size=feature.size,
+##' 			lib.size=librarySize(rnaSeq))
+##' }
+##' 
 setMethod(
           f="RPKM",
           signature=c("matrix","ANY","vector","vector"),

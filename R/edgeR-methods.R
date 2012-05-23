@@ -1,3 +1,32 @@
+##' Extension for the edgeR package
+##' 
+##' This method extends the edgeR package by offering the functionality to plot
+##' the effect of the normalization factor.
+##' 
+##' 
+##' @aliases plotNormalizationFactors
+##' plotNormalizationFactors,DGEList,character,character-method
+##' @name edgeR additional methods
+##' @rdname edgeR-methods
+##' @param obj An object of class \code{\linkS4class{DGEList}}
+##' @param cond1 A character string describing the first condition
+##' @param cond2 A character string describing the second condition
+##' @return none
+##' @author Nicolas Delhomme
+##' @keywords methods
+##' @examples
+##' 
+##' 	\dontrun{
+##' 	## create the object
+##' 	dgeList <- DGEList(counts,group)
+##' 	## calculate the sie factors
+##' 	dgeList <- calcNormFactors(dgeList)
+##' 	## plot them
+##' 	apply(combn(rownames(dgeList$samples),2),
+##' 		2,
+##' 		function(co,obj){plotNormalizationFactors(obj,co[1],co[2])},dgeList)
+##' 	}
+##' 
 ## This code was extracted from the edgeR vignette
 ## Robinson et al.
 setMethod(

@@ -1,27 +1,27 @@
-\name{IRanges methods}
-
+\name{IRanges additional methods}
+\alias{IRanges additional methods}
 \alias{ranges}
 \alias{ranges,RNAseq-method}
-
 \title{Extension of the IRanges package}
-\description{
-	Return the ranges of the genomic annotation.
-}
-
 \arguments{
-  \item{obj}{An object of the \code{\linkS4class{RNAseq}} class}
+  \item{obj}{An object of the \code{\linkS4class{RNAseq}}
+  class}
 }
-
 \value{
-	An \code{\linkS4class{IRanges}} object.
+  An \code{\linkS4class{IRanges}} object.
 }
-
+\description{
+  Return the ranges of the genomic annotation.
+}
 \details{
-	It retrieves the object stored in the genomicAnnotation slot of the RNAseq object and apply the \code{ranges} function on it. The object retrieved can be of the \code{\linkS4class{RangedData}} or \code{\linkS4class{GRangesList}} class.
+  It retrieves the object stored in the genomicAnnotation
+  slot of the RNAseq object and apply the \code{ranges}
+  function on it. The object retrieved can be of the
+  \code{\linkS4class{RangedData}} or
+  \code{\linkS4class{GRangesList}} class.
 }
-
 \examples{
-	\dontrun{
+\dontrun{
 	library("RnaSeqTutorial")
 	obj <- new('RNAseq',
 		organismName="Dmelanogaster",
@@ -38,8 +38,8 @@
 	ranges(obj)
 	}
 }
-
-\author{Nicolas Delhomme}
-
+\author{
+  Nicolas Delhomme
+}
 \keyword{methods}
 

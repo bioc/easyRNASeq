@@ -1,56 +1,70 @@
 \name{easyRNASeq summarization methods}
-
+\alias{easyRNASeq summarization methods}
 \alias{exonCounts}
 \alias{featureCounts}
 \alias{geneCounts}
 \alias{islandCounts}
 \alias{transcriptCounts}
-
 \title{Count methods for RNAseq object}
-
-\description{
-  Summarize the read counts per exon, feature, gene, transcript or island.
-  \itemize{
-	\item{\code{exonCounts}}: for that summarization, reads are summarized per exons. An "exon" field is necessary in the annotation object for this to work. See \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq annotation methods}} for more details on the annotation object.
-	\item{\code{featureCounts}} is similar to the 'exons' one. This is just a wrapper to summarize count for genomic features that are not exon related. I.e. one could use it to measure eRNAs. Again, a "feature" field is necessary in the annotation object for this to work.
-	\item{\code{geneCounts}} sums the counts per either \code{bestExons} or \code{geneModels}. In either case, the annotation object needs to contain both an "exon" and a "gene" field.
-	\item{\code{islandCounts}} sums the counts per computed islands.
-	\item{\code{transcriptCounts}} sums the counts obtained by exons into their respective transcripts. Note that this often result in counting some reads several times. For this function to work you need both an "exon" and a "transcript" field in your annotation object. To avoid this, one could create transcript specific synthetic exons, i.e. features that would be unique to a transcript. To offer this possibility, transcripts count can be summarized from "features", in which case the annotation object need to have both the "feature" and "transcript" fields defined.
-  }
-}
-
-\usage{
-  exonCounts(obj)
-  geneCounts(obj,summarization=c("bestExons","geneModels"),...)
-  featureCounts(obj)
-  islandCounts(obj,force=FALSE,...)
-  transcriptCounts(obj, from="exons")
-}
-
 \arguments{
-  \item{obj}{An object derived from class \code{\linkS4class{RNAseq}},can be a \code{matrix} for RPKM, see details}
-  \item{force}{For \code{islandCount}, force RNAseq to redo \code{findIsland}}
-  \item{from}{either "exons" or "features" can be used to summarize per transcript}
+  \item{obj}{An object derived from class
+  \code{\linkS4class{RNAseq}},can be a \code{matrix} for
+  RPKM, see details}
+
+  \item{force}{For \code{islandCount}, force RNAseq to redo
+  \code{findIsland}}
+
+  \item{from}{either "exons" or "features" can be used to
+  summarize per transcript}
+
   \item{summarization}{Method use for summarize genes}
+
   \item{\dots}{See details}
 }
-
-\details{
-	\dots for
-	\itemize{
-	\item{geneCounts}: additional options for the \code{\link[easyRNASeq:easyRNASeq-summarization-internal-methods]{.geneModelSummarization}}
-	\item{islandCounts}: additional options for \code{\link[easyRNASeq:easyRNASeq-island-methods]{findIslands}}
-	}
-}
-
 \value{
-  A numeric vector containing count per exon, feature, gene or transcript.
+  A numeric vector containing count per exon, feature, gene
+  or transcript.
 }
-
-\author{Nicolas Delhomme}
-
+\description{
+  Summarize the read counts per exon, feature, gene,
+  transcript or island. \itemize{ \item{\code{exonCounts}:
+  for that summarization, reads are summarized per exons.
+  An "exon" field is necessary in the annotation object for
+  this to work. See
+  \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq
+  annotation methods}} for more details on the annotation
+  object.} \item{\code{featureCounts} is similar to the
+  'exons' one. This is just a wrapper to summarize count
+  for genomic features that are not exon related. I.e. one
+  could use it to measure eRNAs. Again, a "feature" field
+  is necessary in the annotation object for this to work.}
+  \item{\code{geneCounts} sums the counts per either
+  \code{bestExons} or \code{geneModels}. In either case,
+  the annotation object needs to contain both an "exon" and
+  a "gene" field.} \item{\code{islandCounts} sums the
+  counts per computed islands.}
+  \item{\code{transcriptCounts} sums the counts obtained by
+  exons into their respective transcripts. Note that this
+  often result in counting some reads several times. For
+  this function to work you need both an "exon" and a
+  "transcript" field in your annotation object. To avoid
+  this, one could create transcript specific synthetic
+  exons, i.e. features that would be unique to a
+  transcript. To offer this possibility, transcripts count
+  can be summarized from "features", in which case the
+  annotation object need to have both the "feature" and
+  "transcript" fields defined.  } }
+}
+\details{
+  \dots{} for \itemize{ \item{geneCounts: additional
+  options for the
+  \code{\link[easyRNASeq:easyRNASeq-summarization-internal-methods]{.geneModelSummarization}}}
+  \item{islandCounts: additional options for
+  \code{\link[easyRNASeq:easyRNASeq-island-methods]{findIslands}}
+  }}
+}
 \examples{
-	\dontrun{
+\dontrun{
 	## create an RNAseq object
 	## summarizing 4 bam files by exons
 	rnaSeq <- easyRNASeq(system.file(
@@ -72,11 +86,14 @@
 	rnaSeq <- transcriptCounts(rnaSeq)
 	}
 }
-
+\author{
+  Nicolas Delhomme
+}
 \seealso{
-	\code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq annotation methods}}
-	\code{\link[easyRNASeq:easyRNASeq-summarization-internal-methods]{.geneModelSummarization}}
-	\code{\link[easyRNASeq:easyRNASeq-island-methods]{findIslands}}
+  \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq
+  annotation methods}}
+  \code{\link[easyRNASeq:easyRNASeq-summarization-internal-methods]{.geneModelSummarization}}
+  \code{\link[easyRNASeq:easyRNASeq-island-methods]{findIslands}}
 }
 \keyword{methods}
 

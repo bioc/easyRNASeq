@@ -1,47 +1,51 @@
 \name{easyRNASeq correction methods}
-
+\alias{easyRNASeq correction methods}
 \alias{RPKM}
-\alias{RPKM,RNAseq,ANY,ANY,ANY-method}
 \alias{RPKM,matrix,ANY,vector,vector-method}
-
+\alias{RPKM,RNAseq,ANY,ANY,ANY-method}
 \title{easyRNASeq count table correction to RPKM}
-
-\description{
-	Convert a count table obtained from the easyRNASeq function into an RPKM corrected count table.
-}
-
-\usage{
-	RPKM(obj,
-	from=c("exons","features","transcripts","bestExons","geneModels","islands"),
-	lib.size=numeric(1),
-	feature.size=numeric(1),
-	unique=TRUE,...)
-}
-
 \arguments{
-  \item{feature.size}{Precise the feature (e.g. exons, genes) sizes. It should be a named numeric list, named after the feature names.} 
-  \item{from}{Determine the kind of coverage to use, choice limited to: exons, features, transcripts, bestExons, geneModels or islands.}
-  \item{lib.size}{Precise the library size. It should be a named numeric list, i.e. named after the sample names.}
-  \item{obj}{An object of class \code{\linkS4class{RNAseq}} or a \code{matrix}, see details}
-  \item{unique}{If set to TRUE, whenever a feature (exon, feature, ...) is duplicated in the count table, it is only returned once.}
+  \item{feature.size}{Precise the feature (e.g. exons,
+  genes) sizes. It should be a named numeric list, named
+  after the feature names.}
+
+  \item{from}{Determine the kind of coverage to use, choice
+  limited to: exons, features, transcripts, bestExons,
+  geneModels or islands.}
+
+  \item{lib.size}{Precise the library size. It should be a
+  named numeric list, i.e. named after the sample names.}
+
+  \item{obj}{An object of class \code{\linkS4class{RNAseq}}
+  or a \code{matrix}, see details}
+
+  \item{unique}{If set to TRUE, whenever a feature (exon,
+  feature, ...) is duplicated in the count table, it is
+  only returned once.}
+
   \item{\dots}{additional arguments. See details}
 }
-
 \value{
-	A \code{matrix} containing RPKM corrected read counts.
+  A \code{matrix} containing RPKM corrected read counts.
 }
-
+\description{
+  Convert a count table obtained from the easyRNASeq
+  function into an RPKM corrected count table.
+}
 \details{
-	RPKM accepts two sets of arguments:
-	\itemize{
-	\item{RNAseq,character} the \dots are additional arguments to be passed to the \code{\link[easyRNASeq:easyRNASeq-accessors]{readCounts}} method.
-	\item{matrix,named vector} normalize a count matrix by providing the feature sizes (e.g. gene sizes) as a named vector where the names match the row names of the count matrix and the lib sizes as a named vector where the names match the column names of the count matrix .
-	}
+  RPKM accepts two sets of arguments: \itemize{
+  \item{RNAseq,character}{ the \dots{} are additional
+  arguments to be passed to the
+  \code{\link[easyRNASeq:easyRNASeq-accessors]{readCounts}}
+  method.} \item{matrix,named vector}{normalize a count
+  matrix by providing the feature sizes (e.g. gene sizes)
+  as a named vector where the names match the row names of
+  the count matrix and the lib sizes as a named vector
+  where the names match the column names of the count
+  matrix.}}
 }
-
 \examples{
-
-	\dontrun{
+\dontrun{
 	## get an RNAseq object
 	rnaSeq <- easyRNASeq(filesDirectory=
 		    			system.file(
@@ -62,7 +66,7 @@
 
 	## get the RPKM
 	rpkm <- RPKM(rnaSeq,from="exons")
-	
+
 	## the same from a count table
 	count.table <- readCounts(rnaSeq,count="exons")
 
@@ -80,12 +84,11 @@
 			lib.size=librarySize(rnaSeq))
 }
 }
-
-\seealso{
-	\code{\link[easyRNASeq:easyRNASeq-accessors]{readCounts}}
+\author{
+  Nicolas Delhomme
 }
-
-\author{Nicolas Delhomme}
-
+\seealso{
+  \code{\link[easyRNASeq:easyRNASeq-accessors]{readCounts}}
+}
 \keyword{methods}
 

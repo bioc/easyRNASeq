@@ -1,30 +1,28 @@
-\name{edgeR methods}
-
+\name{edgeR additional methods}
+\alias{edgeR additional methods}
 \alias{plotNormalizationFactors}
 \alias{plotNormalizationFactors,DGEList,character,character-method}
-
-\title{ Extension for the edgeR package}
-\description{
-	This method extends the edgeR package by offering the functionality to plot 
-	the effect of the normalization factor.
-}
-
-\usage{
-	plotNormalizationFactors(obj=DGEList(),cond1=character(1),cond2=character(1))
-}
-
+\title{Extension for the edgeR package}
 \arguments{
-  \item{obj}{An object of class \code{\linkS4class{DGEList}}}
-  \item{cond1}{A character string describing the first condition}
-  \item{cond2}{A character string describing the second condition}
-}
+  \item{obj}{An object of class
+  \code{\linkS4class{DGEList}}}
 
+  \item{cond1}{A character string describing the first
+  condition}
+
+  \item{cond2}{A character string describing the second
+  condition}
+}
 \value{
-	none
+  none
 }
-
+\description{
+  This method extends the edgeR package by offering the
+  functionality to plot the effect of the normalization
+  factor.
+}
 \examples{
-	\dontrun{
+\dontrun{
 	## create the object
 	dgeList <- DGEList(counts,group)
 	## calculate the sie factors
@@ -35,8 +33,8 @@
 		function(co,obj){plotNormalizationFactors(obj,co[1],co[2])},dgeList)
 	}
 }
-
-\author{Nicolas Delhomme}
-
+\author{
+  Nicolas Delhomme
+}
 \keyword{methods}
 

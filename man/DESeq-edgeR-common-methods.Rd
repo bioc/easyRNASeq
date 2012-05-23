@@ -1,37 +1,36 @@
-\name{DESeq edgeR common methods}
-
+\name{DESeq and edgeR common methods}
+\alias{DESeq and edgeR common methods}
 \alias{plotDispersionEstimates}
 \alias{plotDispersionEstimates,CountDataSet-method}
 \alias{plotDispersionEstimates,DGEList-method}
-
 \title{DESeq and edgeR common methods}
-
-\description{
-	\code{plotDispersionEstimates(obj,...)} extends the \pkg{DESeq} and \pkg{edgeR} packages by offering the functionality to plot the dispersion estimate as described in their respective vignettes: \code{\linkS4class{CountDataSet}{DESeq}} and \code{\link[edgeR:edgeR-package]{edgeR}}.
-}
-
-\usage{
-	plotDispersionEstimates(obj,...)
-}
-
 \arguments{
-  \item{obj}{An object of class \code{\linkS4class{CountDataSet}} or of class \code{\linkS4class{DGEList}}}
+  \item{obj}{An object of class
+  \code{\linkS4class{CountDataSet}} or of class
+  \code{\linkS4class{DGEList}}}
+
   \item{\dots}{See details}
 }
-
-\details{
-	\itemize{
-	\item{\code{\linkS4class{CountDataSet}{DESeq}}} A character string describing the first condition, to be provided as cond=value
-	\item{\code{\link[edgeR:edgeR-package]{edgeR}}} Unused, just for compatibility.
-	}
-}
-
 \value{
-	none
+  none
 }
-
+\description{
+  \code{plotDispersionEstimates(obj,...)} extends the
+  \pkg{DESeq} and \pkg{edgeR} packages by offering the
+  functionality to plot the dispersion estimate as
+  described in their respective vignettes:
+  \code{\linkS4class{CountDataSet}{DESeq}} and
+  \code{\link[edgeR:edgeR-package]{edgeR}}.
+}
+\details{
+  \itemize{ \item\code{\linkS4class{CountDataSet}{DESeq}} A
+  character string describing the first condition, to be
+  provided as cond=value
+  \item\code{\link[edgeR:edgeR-package]{edgeR}} Unused,
+  just for compatibility.  }
+}
 \examples{
-	\dontrun{
+\dontrun{
 	## edgeR
 	## create the object
 	dgeList <- DGEList(counts,group)
@@ -43,7 +42,7 @@
 		function(co,obj){plotNormalizationFactors(obj,co[1],co[2])},dgeList)
 	## the dispersion estimates
 	plotDispersionEstimates(obj)
-	
+
 	## DESeq
 	## these are helper function for the DESeq package
 	## refer to its vignette first
@@ -53,7 +52,8 @@
 	plotDispersionEstimates(cds,conditions[1])
 	}
 }
-
-\author{Nicolas Delhomme}
-
+\author{
+  Nicolas Delhomme
+}
 \keyword{methods}
+

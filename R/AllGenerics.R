@@ -1,42 +1,43 @@
 ## accessors
 ## getters
+##' @exportMethod genomicAnnotation
 setGeneric(
            name="genomicAnnotation",
            def=function(obj){
              standardGeneric("genomicAnnotation")
            })
-
+##' @exportMethod readCoverage
 setGeneric(
            name="readCoverage",
            def=function(obj){
              standardGeneric("readCoverage")
            })
-
+##' @exportMethod readLength
 setGeneric(
            name="readLength",
            def=function(obj){
              standardGeneric("readLength")
            })
-
+##' @exportMethod readCounts
 setGeneric(
            name="readCounts",
            def=function(obj,count=c("exons","features","genes","islands","transcripts"),summarization=c("bestExons","geneModels"),unique=FALSE){
              standardGeneric("readCounts")
            }
            )
-
+##' @exportMethod librarySize
 setGeneric(
            name="librarySize",
            def=function(obj){
              standardGeneric("librarySize")
            })
-
+##' @exportMethod organismName
 setGeneric(
            name="organismName",
            def=function(obj){
              standardGeneric("organismName")
            })
-
+##' @exportMethod geneModel
 setGeneric(
            name="geneModel",
            def=function(obj){
@@ -48,13 +49,13 @@ setGeneric(
            def=function(obj){
              standardGeneric("readIslands")
            })
-
+##' @exportMethod chrSize
 setGeneric(
            name="chrSize",
            def=function(obj){
              standardGeneric("chrSize")
            })
-
+##' @exportMethod fileName
 setGeneric(
            name="fileName",
            def=function(obj){
@@ -62,49 +63,49 @@ setGeneric(
            })
 
 ## setters
+##' @exportMethod genomicAnnotation<-
 setGeneric(
            name="genomicAnnotation<-",
            def=function(obj,value){
              standardGeneric("genomicAnnotation<-")
            })
-
+##' @exportMethod readLength<-
 setGeneric(
            name="readLength<-",
            def=function(obj,value){
              standardGeneric("readLength<-")
            })
-
-
+##' @exportMethod readCoverage<-
 setGeneric(
            name="readCoverage<-",
            def=function(obj,value){
              standardGeneric("readCoverage<-")
            })
-
+##' @exportMethod chrSize<-
 setGeneric(
            name="chrSize<-",
            def=function(obj,value){
              standardGeneric("chrSize<-")
            })
-
+##' @exportMethod readCounts<-
 setGeneric(
            name="readCounts<-",
            def=function(obj,value){
              standardGeneric("readCounts<-")
            })
-
+##' @exportMethod librarySize<-
 setGeneric(
            name="librarySize<-",
            def=function(obj,value){
              standardGeneric("librarySize<-")
            })
-
+##' @exportMethod organismName<-
 setGeneric(
            name="organismName<-",
            def=function(obj,value){
              standardGeneric("organismName<-")
            })
-
+##' @exportMethod geneModel<-
 setGeneric(
            name="geneModel<-",
            def=function(obj,value){
@@ -116,7 +117,7 @@ setGeneric(
            def=function(obj,value){
              standardGeneric("readIslands<-")
            })
-
+##' @exportMethod fileName<-
 setGeneric(
            name="fileName<-",
            def=function(obj,value){
@@ -125,17 +126,19 @@ setGeneric(
 
 ## pre-processing methods
 ## ShortRead
+##' @exportMethod demultiplex
 setGeneric(name="demultiplex",
            def=function(obj,barcodes=c(),barcodes.qty=12,barcode.length=6, edition.dist=2, type=c("independant","within"),index.only=FALSE){
              standardGeneric("demultiplex")
            })
-
+##' @exportMethod barcodePlot
 setGeneric(name="barcodePlot",
            def=function(obj,barcodes=c(),type=c("independant","within"),barcode.length=6,show.barcode=20,...){
              standardGeneric("barcodePlot")
            })
 
 ## Annotations
+##' @exportMethod fetchAnnotation
 setGeneric(
            name="fetchAnnotation",
            def=function(obj,
@@ -159,24 +162,25 @@ setGeneric(
            })
 
 ## count methods
+##' @exportMethod exonCounts
 setGeneric(
            name="exonCounts",
            def=function(obj){
              standardGeneric("exonCounts")
            })
-
+##' @exportMethod featureCounts
 setGeneric(
            name="featureCounts",
            def=function(obj){
              standardGeneric("featureCounts")
            })
-
+##' @exportMethod transcriptCounts
 setGeneric(
            name="transcriptCounts",
            def=function(obj,from="exons"){
              standardGeneric("transcriptCounts")
            })
-
+##' @exportMethod geneCounts
 setGeneric(
            name="geneCounts",
            def=function(obj,summarization=c("bestExons","geneModels"),...){
@@ -190,6 +194,7 @@ setGeneric(
            })
 
 ## summary methods
+##' @exportMethod RPKM
 setGeneric(
            name="RPKM",
            def=function(obj,
@@ -204,7 +209,7 @@ setGeneric(
              unique=TRUE,...){
              standardGeneric("RPKM")
            })
-
+##' @exportMethod fetchCoverage
 setGeneric(
            name="fetchCoverage",
            def=function(obj,format=c("aln","bam"),
@@ -217,6 +222,7 @@ setGeneric(
            })
 
 ## easy processing
+##' @exportMethod easyRNASeq
 setGeneric(
            name="easyRNASeq",
            def=function(filesDirectory=character(1),
@@ -244,6 +250,7 @@ setGeneric(
            })
 
 ## edgeR extension
+##' @exportMethod plotNormalizationFactors
 setGeneric(
            name="plotNormalizationFactors",
            def=function(
@@ -255,6 +262,7 @@ setGeneric(
            })
 
 ## edgeR & DESeq extension
+##' @exportMethod plotDispersionEstimates
 setGeneric(
            name="plotDispersionEstimates",
            def=function(obj,...){
@@ -269,6 +277,7 @@ setGeneric(
 ##              standardGeneric("fitInfo")
 ##            })
 
+##' @exportMethod multivariateConditions
 setGeneric(
            name="multivariateConditions",
            def=function(obj){
