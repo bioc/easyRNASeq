@@ -59,3 +59,5 @@ gAnnot <- split(gAnnot,seqnames(gAnnot))
 18) Deprecate the list usage for the chr size.
 
 19) Add a use case to clean up annotations against double counting.
+
+20) add a function to list the supported organisms

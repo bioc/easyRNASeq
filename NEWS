@@ -1,3 +1,15 @@
+CHANGES IN VERSION 1.3.4
+-------------------------
+
+NEW FEATURES
+
+    o Added an additional validity check for chromosome names
+    Thanks to Simon Anders for generating a reproducible use-case for that.
+    Same change as in the stable version 1.2.3
+
+    o Ensure that gtf with non Ensembl ID are correctly parsed as well.
+
+
 CHANGES IN VERSION 1.3.3
 -------------------------
 
@@ -38,6 +50,16 @@ CHANGES IN VERSION 1.3.0
 -------------------------
 
 	o New development version for Bioconductor 2.11
+
+CHANGES IN VERSION 1.2.3
+-------------------------
+
+NEW FEATURES
+
+    o Added an additional validity check for chromosome names
+    Thanks to Simon Anders for generating a reproducible use-case for that.
+
+    o Ensure that gtf with non Ensembl ID are correctly parsed as well.
 
 CHANGES IN VERSION 1.2.2
 -------------------------

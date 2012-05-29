@@ -173,10 +173,14 @@
 	
 	## we need 3,5, 7 and 9
 	## gene 
-	all.annotation$gene <- substr(gffAttr[,3],2,19)
-	
+        ## if we have no "ENSG"
+        last <- ifelse(length(grep("ENSG",gffAttr[,3]))==0,1000000L,19L)
+	 
+        ## remove possible annoyance
+        all.annotation$gene <- gsub("\";?","",substr(gffAttr[,3],2,last))
+        
 	## transcript
-	all.annotation$transcript <- substr(gffAttr[,5],2,19)
+	all.annotation$transcript <- gsub("\";?","",substr(gffAttr[,5],2,last))
 	
 	## exon
 	all.annotation$exon <- paste(all.annotation$gene,gsub("\";?","",gffAttr[,7]),sep="_")

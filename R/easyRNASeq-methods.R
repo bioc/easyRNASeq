@@ -797,6 +797,14 @@ setMethod(
                                    validity.check=validity.check,
                                    chr.map=chr.map,
                                    gapped=gapped,...)
+
+              ## emergency stop
+              if(length(intersect(names(readCoverage(obj)),names(genomicAnnotation(obj))))==0 & organism == character(1) & validity.check == FALSE){
+                stop(paste("Emergency stop.",
+                           "The chromosome names in your bam file do not match those in your annotation.",
+                           "You might solve that issue by providing a value to the 'organism' parameter and",
+                           "making sure that the 'validity.check' is set to 'TRUE'."))
+              }
               
               ## Do count
               obj <- switch(count,
