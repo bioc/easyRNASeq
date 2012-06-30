@@ -383,6 +383,8 @@ setMethod(
 ##' enhancer loci. These are processed as the exons are. For "islands", it is
 ##' for an under development function that identifies de-novo expression loci
 ##' and count the number of reads overlapping them. }
+##' \item{chr.sizes If set to "auto", then the format has to be "bam", in which
+##' case the chromosome names and size are extracted from the BAM header}
 ##' }
 ##' 
 ##' @aliases easyRNASeq easyRNASeq,character-method
@@ -398,7 +400,7 @@ setMethod(
 ##' names towards wished chromosome names. See details.
 ##' @param chr.sel A vector of chromosome names to subset the final results.
 ##' @param chr.sizes A vector or a list containing the chromosomes' size of the
-##' selected organism
+##' selected organism or simply the string "auto". See details.
 ##' @param conditions A vector of descriptor, each sample must have a
 ##' descriptor if you use outputFormat DESeq or edgeR. The size of this list
 ##' must be equal to the number of sample. In addition the vector should be
@@ -411,6 +413,7 @@ setMethod(
 ##' "aln" format
 ##' @param format The format of the reads, one of "aln","bam". If not "bam",
 ##' all the types supported by the \pkg{ShortRead} package are supported too.
+##' As of version 1.3.5, it defaults to bam.
 ##' @param gapped Is the bam file provided containing gapped alignments?
 ##' @param ignoreWarnings set to TRUE (bad idea! they have a good reason to be
 ##' there) if you do not want warning messages.
@@ -500,12 +503,12 @@ setMethod(
           definition=function(
             filesDirectory=character(1),
             organism=character(1),
-            chr.sizes=c(),
+            chr.sizes=c("auto"),
             readLength=integer(1),
             annotationMethod=c("biomaRt","env","gff","gtf","rda"),
             annotationFile=character(1),
             annotationObject = RangedData(),
-            format=c("aln","bam"),
+            format=c("bam","aln"),
             gapped=FALSE,
             count=c('exons','features','genes','islands','transcripts'),
             outputFormat=c("DESeq","edgeR","matrix","RNAseq"),
@@ -523,12 +526,26 @@ setMethod(
             if(!silent){
               .catn("Checking arguments...")
             }
-            
+
+            ## TODO remove in next version
             ## Check if user give a format
-            if(length(format)>1){
-              stop("You must indicate the format of you source files, by setting argument 'format'")
-            }
+            ## if(length(format)>1){
+            ##   stop("You must indicate the format of you source files, by setting argument 'format'")
+            ## }
+
+            ## we use a default now.
+            format <- match.arg(format)
+
+            ## TODO this is probably not needed then
+            ## check and remove
             .checkArguments("easyRNASeq","format",format)
+
+            ## check the chr.sizes
+            if(length(chr.sizes)==1){
+              if(chr.sizes=="auto" & format != "bam"){
+                stop("As you are not using the 'bam' format, you need to set the 'chr.sizes' option.")
+              }
+            }
             
             ## test the counts
             if(length(count)!=1){
@@ -634,6 +651,34 @@ setMethod(
             obj <- new('RNAseq',organismName=organism,readLength=readLength,fileName=names(filesList))
             
             ## Set chromosome size
+            if(length(chr.sizes)==1){
+              if(chr.sizes == "auto"){
+                
+                ## read the headers
+                headers <- scanBamHeader(filesList)
+                
+                ## Two sanity checks
+                if(!all(sapply(headers,
+                               function(header,expected){
+                                 all(identical(names(header$targets),expected))
+                               },names(headers[[1]]$targets)))){
+                  stop("Not all BAM files use the same chromosome names.")
+                }
+                chr.sizes <- headers[[1]]$targets
+                if(!all(sapply(headers, function(header,chr.sizes){
+                  all(identical(header$targets,chr.sizes))
+                },chr.sizes))){
+                  stop("The chromosome lengths differ between BAM files.")
+                }
+
+                ## check if we got some chr sizes at all
+                if(length(chr.sizes)==0){
+                  stop("No chromosome sizes could be determined from your BAM file(s).Is the BAM header present?\nIf not, you can use the 'chr.sizes' argument to provided the chromosome sizes information.")
+                }
+              }
+            }
+
+            ## TODO check if we still need a list
             if(!is.list(chr.sizes)){
               chr.sizes <- as.list(chr.sizes)
             }
@@ -641,15 +686,15 @@ setMethod(
             
             ## check if the chromosome size are valid
             if(validity.check){
-##              chr.grep <- grep("chr",names(chrSize(obj)))
-##              if(length(chr.grep)== 0 | !all(1:length(names(chrSize(obj))) %in% chr.grep)){
-                if(organismName(obj) != "custom"){
+              if(organismName(obj) != "custom"){
+                chr.grep <- grep("chr",names(chrSize(obj)))
+                if(length(chr.grep)== 0 | !all(1:length(names(chrSize(obj))) %in% chr.grep)){
                   if(!ignoreWarnings){
                     warning("You enforce UCSC chromosome conventions, however the provided chromosome size list is not compliant. Correcting it.")
                   }
                 }
-                names(chrSize(obj)) <- .convertToUCSC(names(chrSize(obj)),organismName(obj),chr.map)
-##              }
+              }
+              names(chrSize(obj)) <- .convertToUCSC(names(chrSize(obj)),organismName(obj),chr.map)
             }
             
             ## fetch annotation

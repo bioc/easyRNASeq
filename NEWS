@@ -1,3 +1,19 @@
+CHANGES IN VERSION 1.3.5
+-------------------------
+
+NEW FEATURES
+
+    o bam is now the default format for the easyRNASeq method.
+    o chromosome sizes are now extracted from the BAM header 
+    when the 'chr.sizes' argument is set to "auto". Thanks to
+    Simon Anders for pushing that off my TODO list and the nice
+    implementation.
+
+BUG FIXES
+    
+    o Adapted to an API change of the edgeR package for estimating
+    the tagwise dispersion.
+
 CHANGES IN VERSION 1.3.4
 -------------------------
 

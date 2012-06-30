@@ -62,7 +62,7 @@
 
                   if(plot){
                     ## plot the dispersion estimate
-                    obj <- estimateTagwiseDisp(obj, prior.n = 10, trend = "movingave",prop.used = 0.3, grid.length = 500)
+                    obj <- estimateTagwiseDisp(obj)
                     plotDispersionEstimates(obj)
                     plotMeanVar(obj, show.raw.vars = TRUE, show.tagwise.vars = TRUE,
                                 NBline = TRUE, main="Mean-variance (tag variances against tag abundance)")

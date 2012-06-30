@@ -24,7 +24,8 @@
   final results.}
 
   \item{chr.sizes}{A vector or a list containing the
-  chromosomes' size of the selected organism}
+  chromosomes' size of the selected organism or simply the
+  string "auto". See details.}
 
   \item{conditions}{A vector of descriptor, each sample
   must have a descriptor if you use outputFormat DESeq or
@@ -47,7 +48,8 @@
 
   \item{format}{The format of the reads, one of
   "aln","bam". If not "bam", all the types supported by the
-  \pkg{ShortRead} package are supported too.}
+  \pkg{ShortRead} package are supported too. As of version
+  1.3.5, it defaults to bam.}
 
   \item{gapped}{Is the bam file provided containing gapped
   alignments?}
@@ -170,7 +172,10 @@
   the user, e.g. enhancer loci. These are processed as the
   exons are. For "islands", it is for an under development
   function that identifies de-novo expression loci and
-  count the number of reads overlapping them. } }
+  count the number of reads overlapping them. }
+  \item{chr.sizes If set to "auto", then the format has to
+  be "bam", in which case the chromosome names and size are
+  extracted from the BAM header} }
 }
 \examples{
 \dontrun{

@@ -32,7 +32,7 @@ gAnnot <- split(gAnnot,seqnames(gAnnot))
 
 5) clarify the vignette (email from Gordon Assaf, paired end, detail more the geneModels) and rework the Rd (clean them up, use describe instead of itemize, etc.)
 
-6) Add a use case section in the vignette based on Francesco and Wade issues. Add Simon's data
+6) Add Simon's data
 
 7) Offer the possibility to define your own organism name conversion, akine to the srFilter
 
@@ -61,3 +61,7 @@ gAnnot <- split(gAnnot,seqnames(gAnnot))
 19) Add a use case to clean up annotations against double counting.
 
 20) add a function to list the supported organisms
+
+21) check that for easyRNASeq: http://bioinformatics.oxfordjournals.org/content/28/7/1021.full
+
+22) Remove/Hide the readLength argument once we have introduced variable read length reads. Change the vignette then.

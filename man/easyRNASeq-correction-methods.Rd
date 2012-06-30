@@ -1,8 +1,8 @@
 \name{easyRNASeq correction methods}
-\alias{easyRNASeq correction methods}
 \alias{RPKM}
-\alias{RPKM,matrix,ANY,vector,vector-method}
 \alias{RPKM,RNAseq,ANY,ANY,ANY-method}
+\alias{RPKM,matrix,ANY,vector,vector-method}
+\alias{easyRNASeq correction methods}
 \title{easyRNASeq count table correction to RPKM}
 \arguments{
   \item{feature.size}{Precise the feature (e.g. exons,

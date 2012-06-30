@@ -9,6 +9,7 @@
 \newcommand{\Robject}[1]{{\texttt{#1}}}
 \newcommand{\Rpackage}[1]{{\textit{#1}}}
 \newcommand{\Rclass}[1]{{\textit{#1}}}
+\newcommand{\pref}[1]{\ref{#1} (page \pageref{#1})}
 
 \title{easyRNASeq, an overview}
 \author{Nicolas Delhomme, Isma\"{e}l Padioleau}
@@ -45,15 +46,30 @@ the \Robject{RnaSeqTutorial} vignette in the data package
 understanding the details behind the content of the present
 vignette. If neither nor, just go ahead.
 
-\section{Recent changes to the vignette}
+\section{Changes to the vignette}
 
-Part of that vignette have been recently updated to:
+The last changes are reported in red.
+
+\paragraph{1.3.5}
+The vignette has been updated to report function call changes to the
+\Rfunction{easyRNASeq} function:
+\begin{itemize}
+  \item the format argument defaults to bam
+  \item the chr.sizes can be derived from the bam file header
+\end{itemize}
+Sections affected are: 
+\pref{ss:usage}, \pref{p:args}, \pref{p:input}, \pref{ss:diffInput},
+\pref{p:pasohs},pref{p:dwai}
+
+\paragraph{1.3.1}
+The vignette has been updated to:
 \begin{itemize}
   \item first: enhance its readability.
   \item second: introduce a new \textbf{Use Case} section
 \end{itemize}
-
-To make these changes more easily identifiable, they are colored in red.
+Sections affected are:
+\pref{s:eRS}, \pref{ss:usage}, \pref{p:annot}, \pref{ss:diffAnn},
+\pref{ss:demultiplex}, \pref{s:useCases}
 
 \newpage
 
@@ -115,6 +131,7 @@ companion data package \Rpackage{RnaSeqTutorial}.
 \newpage
 
 \section{easyRNASeq}
+\label{s:eRS}
 
 We will use the data present in the \Rpackage{RnaSeqTutorial} data
 package to perform the examples. Refer to its documentation for more
@@ -142,21 +159,20 @@ specified in the corresponding \Rpackage{BSgenome} package,
 \emph{i.e.} ``Dmelanogaster'' for the
 \Rpackage{BSgenome.Dmelanogaster.UCSC.dm3} package. 
 
-\textcolor{red}{
-  \textbf{Important Note:} As there are numerous RNA-Seq protocol,
-  each with its own specificities, the \Rfunction{easyRNASeq} offers
-  many arguments to adapt to these. This number of arguments, with
-  only a few defaults values, might be intimidating. We are in the
-  process of consolidating them to make it easier to handle them. In
-  the meantime, please refer to the documentation and the examples in
-  this vignette and the \Rpackage{RnaSeqTutorial} one to get familiar
-  with them. Do not hesitate to ask on the Bioconductor mailing list
-  if the purpose of some argument was still unclear.
-}
+\textbf{Important Note:} As there are numerous RNA-Seq protocol,
+each with its own specificities, the \Rfunction{easyRNASeq} offers
+many arguments to adapt to these. This number of arguments, with
+only a few defaults values, might be intimidating. We are in the
+process of consolidating them to make it easier to handle them. In
+the meantime, please refer to the documentation and the examples in
+this vignette and the \Rpackage{RnaSeqTutorial} one to get familiar
+with them. Do not hesitate to ask on the Bioconductor mailing list
+if the purpose of some argument was still unclear.
 
 \newpage
 
 \subsection{usage}
+\label{ss:usage}
 
 \paragraph{Initial example}
 In the following, the \Rfunction{easyRNASeq} function is called with
@@ -166,6 +182,9 @@ was subjected to a 36 cycles sequencing on an Illumina GAIIX
 machine. The annotation were retrieved from FlyBase and
 converted into an ``Rdata'' object. We're interested to retrieve the
 count table of 4 samples for every exon in the genome.
+\textcolor{red}{As of version $1.3.5$, 'bam' is the default
+  format. Hence, the argument 'format' has been removed from the
+  following function call.}
 
 <<Load the library and create the object>>=
 library("easyRNASeq")
@@ -176,7 +195,6 @@ count.table <- easyRNASeq(filesDirectory=system.file(
                             "extdata",
                             package="RnaSeqTutorial"),
                           pattern="[A,C,T,G]{6}\\.bam$",
-                          format="bam",
                           readLength=30L,
                           organism="Dmelanogaster",
                           chr.sizes=as.list(seqlengths(Dmelanogaster)),
@@ -217,13 +235,17 @@ to get a read count value per exon and per sample.
 And that is all. In that one command, you got the exon count table for
 your 4 samples!
 
-\textcolor{red}{
-  \textbf{Important Note:} It is not required to use any of the
-  \Rpackage{BSgenome} packages to retrieve the chr sizes. These can be provided
-  as a simple list. We just use the
-  \Rpackage{BSgenome.Dmelanogaster.UCSC.dm3}  package for
-  commodity. See the additional comments in the use case page \pageref{chrsize}.
-}
+\textbf{Important Note:} It is not required to use any of the
+\Rpackage{BSgenome} packages to retrieve the chr sizes. These can be provided
+as a simple list. We just use the
+\Rpackage{BSgenome.Dmelanogaster.UCSC.dm3}  package for
+commodity. 
+\textcolor{red}{Moreover, since version $1.3.5$, the 'chr.sizes' can
+  be extracted from the BAM file header; \emph{i.e.} setting
+  'chr.sizes' to ``auto'' (the default) would have retrieved the
+  chromosome sizes list from the BAM file. Note that this obviously
+  does not work if your format is not 'bam'.}
+See the additional comments in the use case page \pageref{chrsize}.
 
 \paragraph{Warnings}
 
@@ -246,7 +268,7 @@ overlapping features. The \Rfunction{disjoin} function from the
 \Rpackage{IRanges} package offers a way to achieve this.
 
 \paragraph{Arguments}
-
+\label{p:args}
 Going back to the \Rfunction{easyRNASeq} function, more arguments can
 be set to fine tune it, depending on the input at hand, the desired
 output, etc. Most will be detailed in the following, but not all, so check
@@ -261,17 +283,22 @@ count.table <- easyRNASeq(system.file(
                                       "extdata",
                                       package="RnaSeqTutorial"),
                           organism="Dmelanogaster",
-                          chr.sizes=as.list(seqlengths(Dmelanogaster)),
                           readLength=30L,
                           annotationMethod="rda",
                           annotationFile=system.file(
                             "data",
                             "gAnnot.rda",
                             package="RnaSeqTutorial"),
-                          format="bam",
                           count="exons",
                           filenames=c("ACACTG.bam", "ACTAGC.bam"))
 @
+
+\textcolor{red}{As of version $1.3.5$, 'bam' is the default
+  format. Hence, the argument 'format' has been removed from the
+  previous function call. The same is true for the 'chr.sizes'
+  argument. Removing it results in setting it to its default value:
+  'auto', which has the effect of determining the chromosome sizes
+  using the BAM header.}
 
 <<Show, eval=FALSE>>=
 head(count.table)
@@ -293,16 +320,21 @@ There are several arguments that influence how the
 \end{itemize}
 
 \paragraph{Input}
+\label{p:input}
 Using the \Robject{format} arguments, reads can be loaded from BAM
 files or any format supported by the \Rpackage{ShortRead} 
 \citep{Morgan:2009p739} package. The SAM/BAM format
 \citep{Li:2009p1662} is becoming a \emph{de-facto} standard for
 storing NGS aligned data. Gapped alignment can be read from BAM files,
-set the \Robject{gapped} argument to ``TRUE'' for that.
+set the \Robject{gapped} argument to ``TRUE'' for that. 
+\textcolor{red}{
+As of version $1.3.5$, the 'bam' format is the default. If you are
+using bam files, you do not need to precise that argument anymore.
+}
 
 \paragraph{Annotation}
+\label{p:annot}
 
-\textcolor{red}{
 The \Rfunction{easyRNASeq} function currently accepts the following \Robject{annotationMethods}:
 \begin{itemize}
   \item ``biomaRt'' use the \Rpackage{biomaRt}
@@ -323,10 +355,8 @@ The \Rfunction{easyRNASeq} function currently accepts the following \Robject{ann
 \end{itemize}
 The structure of the \Rclass{RangedData} object that has to be
 provided when using the ``rda'' or ``env'' \Robject{annotationMethods}
-is described in the section \ref{subsec:diffAnn}, page
-\pageref{subsec:diffAnn}. For using a \Rclass{GRangesList}, see the
+is described in the section \pref{ss:diffAnn}. For using a \Rclass{GRangesList}, see the
 use case page \pageref{grnglist}.
-}
 
 \paragraph{Summarization}
 
@@ -382,7 +412,7 @@ will be presented.
 \newpage
 
 \subsection{different input}
-
+\label{ss:diffInput}
 The following show how to load an 'export' file. This was the default
 Illumina output before Illumina released CASAVA v1.8 in spring
 2011. The alignment are done with ELAND. The \Robject{format} argument
@@ -418,39 +448,46 @@ count.table <- easyRNASeq(system.file(
                             chastityFilter()))
 @ 
 
+\textcolor{red}{Note that here the chr.sizes argument has to be
+  specified. Indeed, we are using the 'aln' format and consequently
+  cannot determine the chromosome sizes from the header of the BAM files.}
+
 In the next example, we read a BAM file containing gapped
 alignments. In that particular case, TopHat \citep{Trapnell:2009p156}
 was used to look for splicing events. Note the use of the
 \Robject{gapped} boolean argument. 
+\textcolor{red}{As of version $1.3.5$, the format argument default to
+  bam and has therefore been removed from the following function call.}
 
 <<read a gapped  bam file, eval=FALSE>>=
 count.table <- easyRNASeq(system.file(
                                       "extdata",
                                       package="RnaSeqTutorial"),
                           organism="Dmelanogaster",
-                          chr.sizes=as.list(seqlengths(Dmelanogaster)),
+                          chr.sizes="auto",
                           readLength=36L,
                           annotationMethod="rda",
                           annotationFile=system.file(
                             "data",
                             "gAnnot.rda",
                             package="RnaSeqTutorial"),
-                          format="bam",
                           gapped=TRUE,
                           count="exons",
                           filenames="gapped.bam")
 @ 
 
+\textcolor{red}{Note that setting the 'chr.sizes' argument to 'auto'
+  is the same as removing it from the function call.}
+
 \newpage
 
 \subsection{different annotation}
-\label{subsec:diffAnn}
+\label{ss:diffAnn}
 
 The following paragraphs present how to use different annotation
 sources to retrieve the genic information. It describes as the well
 the expected format of these annotations.
 
-\textcolor{red}{
 \textbf{Important Note:} There are many derivative of the GFF3 and GTF
 file formats, some of which do not strictly follow the convention
 these files should have. Using incorrectly formatted file will fail
@@ -463,7 +500,6 @@ format, the example file present in the \Rpackage{RnaSeqTutorial} can
 be used as a guideline. If you have installed this package, suggested
 by the \Rpackage{easyRNASeq} package, the following will give you the
 path of that file on your machine:
-}
 
 <<GFF3, eval=FALSE>>=
 system.file(
@@ -472,10 +508,8 @@ system.file(
             package="RnaSeqTutorial")
 @ 
 
-\textcolor{red}{
 If you do not manage to identify the issue, please contact the
 Bioconductor mailing list for help.
-}
 
 \paragraph{biomaRt}
 
@@ -485,10 +519,8 @@ count.table <- easyRNASeq(system.file(
                                       "extdata",
                                       package="RnaSeqTutorial"),
                           organism="Dmelanogaster",
-                          chr.sizes=as.list(seqlengths(Dmelanogaster)),
                           readLength=36L,
                           annotationMethod="biomaRt",
-                          format="bam",
                           gapped=TRUE,
                           count="exons",
                           filenames="gapped.bam")
@@ -532,14 +564,12 @@ count.table <- easyRNASeq(system.file(
                                       "extdata",
                                       package="RnaSeqTutorial"),
                           organism="Dmelanogaster",
-                          chr.sizes=as.list(seqlengths(Dmelanogaster)),
                           readLength=36L,
                           annotationMethod="gff",
                           annotationFile=system.file(
                             "extdata",
                             "annot.gff",
                             package="RnaSeqTutorial"),
-                          format="bam",
                           gapped=TRUE,
                           count="exons",
                           filenames="gapped.bam")
@@ -623,14 +653,12 @@ rnaSeq <- easyRNASeq(system.file(
                                  "extdata",
                                  package="RnaSeqTutorial"),
                      organism="Dmelanogaster",
-                     chr.sizes=as.list(seqlengths(Dmelanogaster)),
                      readLength=30L,
                      annotationMethod="rda",
                      annotationFile=system.file(
                        "data",
                        "gAnnot.rda",
                        package="RnaSeqTutorial"),
-                     format="bam",
                      count="exons",
                      pattern="[A,C,T,G]{6}\\.bam$",
                      outputFormat="RNAseq")
@@ -721,14 +749,12 @@ rnaSeq2 <- easyRNASeq(system.file(
                                   "extdata",
                                   package="RnaSeqTutorial"),
                       organism="Dmelanogaster",
-                      chr.sizes=as.list(seqlengths(Dmelanogaster)),
                       readLength=30L,
                       annotationMethod="rda",
                       annotationFile=system.file(
                         "data",
                         "gAnnot.rda",
                         package="RnaSeqTutorial"),
-                      format="bam",
                       count="genes",
                       summarization="geneModels",
                       pattern="[A,C,T,G]{6}\\.bam$",
@@ -758,14 +784,12 @@ count.table <- easyRNASeq(system.file(
                                       "extdata",
                                       package="RnaSeqTutorial"),
                           organism="Dmelanogaster",
-                          chr.sizes=as.list(seqlengths(Dmelanogaster)),
                           readLength=30L,
                           annotationMethod="rda",
                           annotationFile=system.file(
                             "data",
                             "gAnnot.rda",
                             package="RnaSeqTutorial"),
-                          format="bam",
                           count="exons",
                           filenames=c("ACACTG.bam", "ACTAGC.bam", 
                             "ATGGCT.bam", "TTGCGA.bam"),
@@ -836,14 +860,12 @@ countDataSet <- easyRNASeq(system.file(
                                       "extdata",
                                       package="RnaSeqTutorial"),
                           organism="Dmelanogaster",
-                          chr.sizes=as.list(seqlengths(Dmelanogaster)),
                           readLength=30L,
                           annotationMethod="rda",
                           annotationFile=system.file(
                             "data",
                             "gAnnot.rda",
                             package="RnaSeqTutorial"),
-                          format="bam",
                           count="exons",
                           filenames=c("ACACTG.bam", "ACTAGC.bam", 
                             "ATGGCT.bam", "TTGCGA.bam"),
@@ -872,14 +894,12 @@ dgeList <- easyRNASeq(system.file(
                                   "extdata",
                                   package="RnaSeqTutorial"),
                       organism="Dmelanogaster",
-                      chr.sizes=as.list(seqlengths(Dmelanogaster)),
                       readLength=30L,
                       annotationMethod="rda",
                       annotationFile=system.file(
                         "data",
                         "gAnnot.rda",
                         package="RnaSeqTutorial"),
-                      format="bam",
                       count="exons",
                       filenames=c("ACACTG.bam", "ACTAGC.bam",
                         "ATGGCT.bam", "TTGCGA.bam"),
@@ -918,7 +938,7 @@ identification of expressed regions.
 The same can be directly done on object of the \Rclass{RNAseq} class.
 
 \subsection{De-multiplexing samples}
-
+\label{ss:demultiplex}
 Nowadays, NGS machines produces such huge quantity of``raw'' reads
 (40M, 100M and 160M per Illumina GAIIx, ABI SOLiD4 or Illumina HiSeq
 lanes (or equivalent), respectively ), that the coverage obtained per
@@ -951,7 +971,6 @@ in a separate sequencing reaction after the first mate sequencing.
 The data used in the following example has been sequenced using the
 Illumina protocol. We'll look at the specificities that this introduce.
 
-\textcolor{red}{
 \textbf{Important Note:} This pre-processing procedure has to be
 applied on the raw reads before any alignment is performed. Most
 often, one would use the ``fastq'' formatted file as input. In the
@@ -963,7 +982,6 @@ reads, \textit{i.e.} the export file may not contain any alignment
 information. As the ShortRead package offers a quick functionality to
 access the barcode field of an export file, we use this example to
 introduce it.
-}
 
 \begin{comment}
 Are you sure the Hamming distance is the best? There is a lot of
@@ -1131,8 +1149,7 @@ function as described in the first part of the present vignette! Enjoy.
 \newpage
 
 \section{Use Cases}
-  
-\textcolor{red}{
+\label{s:useCases}
 The following use cases have been created to answer user request from
 the Bioconductor mailing list. We want to thank Francesco Lescai and
 Wade Davis for asking pertinent questions that helped us make this
@@ -1147,14 +1164,13 @@ when for example the chromosome names in the aligned file(s) are
 different from the annotation retrieved using \Rpackage({biomaRt}. In
 both use case, we will assume the \Rpackage{easyRNASeq} library as
 already been loaded as in:
-}
+
 <<load the lib, eval=FALSE>>=
 library(easyRNASeq)
 @
 
 \paragraph{Processing a set of human samples}
-
-\textcolor{red}{
+\label{p:pasohs}
 First, we start by retrieveing the size of the chromosomes. This is an
 important information for calculating any feature count. Actually,
 neither the BSgenome nor any related packages are required for
@@ -1170,26 +1186,33 @@ features that have at least one read aligning to them, i.e. every
 feature having no reads will be missed. One could then either return
 only those features having counts or returning a value of 0 counts for
 those that do not. We do not find these solutions satisfying and to
-ensure that we return coherent data, we return the counts for every
+ensure that we provide coherent data, we return the counts for every
 feature present on the chromosomes. For that purpose, the chromosome
 size is essential as it allows us to define those features on a
 chromosome that are located between the last feature having a number a
 count bigger or equal to one and the end of the chromosome - features,
 which would otherwise be ignored. It is as well a mean to monitor that
 the provided annotation is pertinent.
-\label{chrsize}
+\textcolor{red}{As of version $1.3.5$, when using the 'bam' format, it
+  is even easier. Setting the 'chr.sizes' argument to \textbf{auto}
+  will result in the chromosome sizes to be retrieved from the BAM
+  header. However, the purpose of this use case is to, at least partly,
+  demonstrate the importance of using appropriate annotations and
+  therefore the use of the 'chr.sizes' argument is demonstrated.
 }
+\label{chrsize}
+
 <<chromosome size, eval=FALSE>>=
 library(BSgenome.Hsapiens.UCSC.hg19)
 chr.sizes=as.list(seqlengths(Hsapiens))
 @ 
-\textcolor{red}{
+
 Then, we list the BAM files. 
-}
+
 <<bam files name, eval=FALSE>>=
 bamfiles=dir(getwd(),pattern="*\\.bam$")
 @
-\textcolor{red}{
+
 We can now run the \Rfunction{easyRNASeq} function, fetching the
 annotation using \Rpackage{biomaRt}. As this is time consuming (about
 10 minutes from an average network) and
@@ -1197,35 +1220,37 @@ since we might want to work on these annotation to avoid
 double-counting, we first ask the function to return an instance of the
 \Rclass{RNAseq} class. Then, using the genomicAnnotation accessor, we 
 extract the retrieved annotation.
-}
+\textcolor{red}{Note: As of version $1.3.5$, 'bam' is the default
+  format. Hence, the argument 'format' has been removed from the
+following function call.}
+
 <<Fetching with biomaRt, eval=FALSE>>=
 rnaSeq <- easyRNASeq(filesDirectory=getwd(),
                     organism="Hsapiens",
                     chr.sizes=chr.sizes,
                     readLength=100L,
                     annotationMethod="biomaRt",
-                    format="bam",
                     count="exons",
                     filenames=bamfiles[1],
                     outputFormat="RNAseq"
                     )
 gAnnot <- genomicAnnotation(rnaSeq)
 @
-\textcolor{red}{
+
 As one can see by looking at this object, it contains 244
 ``chromosomes'', most of which are of no interest to us. For that
 reason, we first filter it and then save it to the disk for later
 re-use. The ``.rda'' extension is a synonym of the ``.RData'' one and
 identifies a serialized R data file.
 \label{rda}
-}
+
 <<filtering the annot, eval=FALSE>>=
 gAnnot <- gAnnot[space(gAnnot) %in% paste("chr",c(1:22,"X","Y","M"),sep=""),]
 save(gAnnot,file="gAnnot.rda")
 @ 
-\textcolor{red}{
+
 Now using the modified, saved annotation, we can get a count table as follows:
-}
+
 <<get a count table, eval=FALSE>>=
 countTable <- easyRNASeq(filesDirectory=getwd(),
                         organism="Hsapiens",
@@ -1233,12 +1258,11 @@ countTable <- easyRNASeq(filesDirectory=getwd(),
                         readLength=100L,
                         annotationMethod="rda",
                         annotationFile="gAnnot.rda",
-                        format="bam",
                         count="exons",
                         filenames=bamfiles[1]
                         )
 @ 
-\textcolor{red}{
+
 Another way to retrieve the annotation is to use the
 \Rpackage{GenomicFeatures} library. \Rpackage{easyRNASeq} does not yet supports
 that library automatically, but it can take \Robject{GRangesList}
@@ -1248,7 +1272,7 @@ the obtained object so that it can be used by the
 \Rfunction{easyRNASeq}: first, a metadata element needs to be updated
 and then the object needs to be converted into a \Robject{GRangesList}.
 \label{grnglist}
-}
+
 <<using different annotation, eval=FALSE>>=
 library(GenomicFeatures)
 hg19.tx <- makeTranscriptDbFromUCSC(
@@ -1261,7 +1285,7 @@ colnames(elementMetadata(gAnnot)) <- "exon"
 
 gAnnot <- split(gAnnot,seqnames(gAnnot))
 @ 
-\textcolor{red}{
+
 As previously, this annotation could be saved to disk or can as well
 be used directly, using the \Robject{annotationMethod} "env" and the
 \Robject{annotationObject} arguments. Additionaly, one can select chromosome of
@@ -1269,21 +1293,24 @@ interest using the \Robject{chr.sel} argument. It accepts a vector of
 chromosome names. In the following, we subset for the chromosome ``1'' only.
 \label{env}
 \label{chr.sel}
-}
+
 <<sub setting, eval=FALSE>>= 
 countTable <- easyRNASeq(filesDirectory=getwd(),
                         organism="Hsapiens",
-                        chr.sizes=chr.sizes,
                         readLength=100L,
                         annotationMethod="env",
                         annotationObject=gAnnot,
-                        format="bam",
                         count="exons",
                         filenames=bamfiles[1],
                         chr.sel="1"
                         )
 @
-\textcolor{red}{
+
+\textcolor{red}{Note that in the previous call, we removed the
+  'chr.sizes' argument, just to demonstrate that the chr.sizes can be
+  retrieved from the bam files. Removing the argument is the same as
+  setting it to its default value: 'auto'}
+
 Finally, instead of returning a count table, we can get a
 \Robject{CountDataSet} instance from the \Rpackage{DESeq}
 package. This will perform the normalization of the data and generate
@@ -1298,7 +1325,7 @@ significant results. Here, as we have no replicates, we need to pass
 additional arguments (the last two) that will be tunnelled to the \Rpackage{DESeq}
 \Rfunction{estimateDispersions} function. See the \Rpackage{DESeq} vignette for
 more details on these.
-}
+
 <<DESeq run, eval=FALSE>>=
 conditions <- c("A","B")
 names(conditions) <- bamfiles
@@ -1309,7 +1336,6 @@ countDataSet <- easyRNASeq(filesDirectory=getwd(),
                           readLength=100L,
                           annotationMethod="env",
                           annotationObject=gAnnot,
-                          format="bam",
                           count="exons",
                           filenames=bamfiles,
                           chr.sel="1",
@@ -1322,7 +1348,7 @@ countDataSet <- easyRNASeq(filesDirectory=getwd(),
 @ 
 
 \paragraph{Dealing with annotation inconsistencies}
-\textcolor{red}{
+\label{p:dwai}
 This use case shows how to deal with inconsistent annotations,
 \textit{e.g.} when the chromosome names present in the aligned file
 are different from those that can be retrieved from an annotation
@@ -1333,7 +1359,7 @@ files. Reading in the data using the \Rpackage{ShortRead} package is
 quite resource demanding as the whole sequences are loaded in memory.
 Then we look at the chromosome names. These differs from what we
 expect - UCSC standards - as they have an additional ``.fa'' extension.
-}
+
 <<read the data, eval=FALSE>>=
 aln <- readAligned("data",type="SolexaExport",pattern="*.txt.gz")
 gc()
@@ -1344,7 +1370,6 @@ levels(chromosome(aln))
 c("chr1.fa","chr10.fa","...","chrY.fa")
 @ 
 
-\textcolor{red}{
 They are different from what \Rpackage{biomaRt} will return as well:
 \textit{i.e.} 1:19, X, Y and MT plus others. This triple inconsistency will
 be a problem for \Rpackage{easyRNASeq}. If there were only two sets of
@@ -1357,7 +1382,7 @@ by-pass. The solution is to first fetch the annotation, modify it and
 save it as an R data file. Some of the retrieved annotation are ``NT''
 contigs. There are only a few of them, so instead of filtering them
 out, we just ignore them.
-}
+
 <<fetch the annotation, eval=FALSE>>=
 obj <- fetchAnnotation(new('RNAseq',
                           organismName="Mmusculus"
@@ -1377,7 +1402,7 @@ length(grep("NT_",space(gAnnot)))
 <<modify the annotation, eval=FALSE>>=
 names(gAnnot) <- paste("chr",names(gAnnot),".fa",sep="")
 @
-\textcolor{red}{
+
 As described previously, see page \pageref{rda} we can save the
 annotation to a file or use it directly, using the
 \Robject{AnnotationMethod} ``env'' argument. In that later case,
@@ -1389,60 +1414,58 @@ obtained annotation as an rda file on your file system.
 \newline
 Before going on, we do some cleanup as some of the objects we have
 generated take large amounts of memory.
-}
+
 <<clean, eval=FALSE>>=
 rm(aln,obj)
 gc()
 @ 
-\textcolor{red}{
+
 As on page \pageref{chrsize} we get the chromosome sizes.
 Again, note that the use of the BSgenome is not mandatory. It's just
 easy as they are available in Bioconductor. Typing in your own
 chromosome size list is as valid.
-}
+
 <<chrsize, eval=FALSE>>=
 library(BSgenome.Mmusculus.UCSC.mm9)
 chr.sizes<- as.list(seqlengths(Mmusculus))
 @ 
-\textcolor{red}{
+
 Note that this will change to a vector soon, which is more
 intuitive. The list is an historical remnant of the RangedData API and
 will be deprecated in the near future. 
+\textcolor{red}{Note as well that the chr.sizes will be necessary here
+as we are using 'aln' files and not 'bam' files.}
 \newline
 We can now create the chromosome name mapping.
-}
+
 <<create the chr.map, eval=FALSE>>=
 chr.map <- data.frame(
                       from=paste("chr",c(1:19,"X","Y"),".fa",sep=""),
                       to=paste("chr",c(1:19,"X","Y"),sep=""))
 @ 
-\textcolor{red}{
+
 Using this chromosome map, we can now summarize the reads per feature
 of interest. Here we want to look for gene models, so we set the
 \Robject{count} and \Robject{summarization} argument. Note again that
 the \Robject{summarization} argument will be deprecated in the near
 future and its values merged with the \Robject{count} ones. 
-}
-\textcolor{red}{
+\newline
 Asking to get back an \Rclass{RNAseq} instance allows us to look at the gene
 models defined by \Rpackage{easyRNASeq}. This offers the possibility
 to clean them to avoid multiple counting. An additional use case
 describing how to do this will be introduced soon. 
-}
-\textcolor{red}{
+\newline
 As we are provided with Illumina export data, we need to define a set
 of Filter to ensure that the data is read properly. Indeed, the export
 file contains all the reads, so the one that do not pass the chastity
 filter have to be removed. In addition, some of the other reads are
 for internal QC, and they have no position. For that reason, we need
 to filter those too out. 
-}
-\textcolor{red}{
+\newline
 Reading in export data is more resource exhausting that reading in bam
 files, as we are loading in the sequence and quality information as
 well, whereas we do not need them. 
-}
-\textcolor{red}{
+\newline
 We will now look through three different set of parameters that will
 stepwise reduce the number of warnings emitted. These warnings are
 there to help you understand the different pitfalls that the
@@ -1451,7 +1474,7 @@ data. The first approach generates a lot of warnings, because of the
 differing annotations, since we are using the entire set of annotation
 we got. As we do not want to generate all these warnings, these code
 lines are not evaluated. To get a feel about these warnings, they will look as the follows:
-}
+
 \begin{verbatim}
 Warning messages:
 1: In .convertToUCSC(names(genomicAnnotation(obj)), organismName(obj),  :
@@ -1462,9 +1485,9 @@ There are 6096 synthetic exons as determined from your annotation that overlap!
 This implies that some reads will be counted more than once!
 Is that really what you want?
 \end{verbatim}
-\textcolor{red}{
+
 Let us start with the full set of annotation.
-}
+
 <<no filter, eval=FALSE>>=
 rnaSeq <- easyRNASeq(filesDirectory="data",
                     organism="custom",
@@ -1484,10 +1507,10 @@ rnaSeq <- easyRNASeq(filesDirectory="data",
                     nbCore=2
                     )
 @ 
-\textcolor{red}{
+
 To reduce the number of warnings emitted, we can select for the
 chromosome we are interested in as previously done on page \pageref{chr.sel}.
-}
+
 <<selected chr, eval=FALSE>>=
 rnaSeq <- easyRNASeq(filesDirectory="data",
                     organism="custom",
@@ -1508,20 +1531,20 @@ rnaSeq <- easyRNASeq(filesDirectory="data",
                     nbCore=2
                     )
 @
-\textcolor{red}{
+
 Finally, to further reduce the warnings, we can manipulate the
 \Robject{RangedData} object to remove the unnecessary annotation.
-}
+
 <<remove annotation, eval=FALSE>>=
 sel <- grep("NT_",names(gAnnot))
 gAnnot <- RangedData(ranges=ranges(gAnnot)[-sel,],values=values(gAnnot)[-sel,])
 colnames(gAnnot) <- gsub("values\\.","",colnames(gAnnot))
 @ 
-\textcolor{red}{
+
 This last call will only generate two warnings, one that could be
 easily dealt with (a complaint about the chrMT). The other one is
 about double counting and it requires to adapt the annotation.
-}
+
 <<final call, eval=FALSE>>=
 rnaSeq <- easyRNASeq(filesDirectory="data",
                     organism="custom",

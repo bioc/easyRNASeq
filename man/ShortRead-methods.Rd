@@ -1,5 +1,6 @@
 \docType{methods}
 \name{ShortRead additional methods}
+\alias{ShortRead additional methods}
 \alias{barcodePlot}
 \alias{barcodePlot,AlignedRead-method}
 \alias{barcodePlot,DNAStringSet-method}
@@ -12,7 +13,6 @@
 \alias{demultiplex,ShortReadQ-method}
 \alias{naPositionFilter}
 \alias{naPositionFilter,SRFilter-method}
-\alias{ShortRead additional methods}
 \title{Methods extending the ShortRead package functionalities}
 \arguments{
   \item{.name}{An internal string describing the filter}
