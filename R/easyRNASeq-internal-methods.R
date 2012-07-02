@@ -19,6 +19,7 @@
 ##' \item{.getName Get the genomicAnnotation object names. Necessary to deal
 ##' with the different possible annotation object: \code{RangedData} or
 ##' \code{GRangesList}.}
+##' \item{.list.files check the arguments passed through the \dots to select only the valid ones.}
 ##' \item{.normalizationDispatcher a function to dispatch
 ##' the normalization depending on the 'outputFormat' chosen by the user.}
 ##' \item{reduce Allow proper dispatch between the
@@ -36,6 +37,7 @@
 ##' 
 ##' @aliases .catn .checkArguments .convertToUCSC .doBasicCount
 ##' .extendCountList .extractIRangesList .getArguments .getName
+##' .list.files
 ##' .normalizationDispatcher reduce reduce,RNAseq-method strand
 ##' strand,RNAseq-method strand<- strand<-,RNAseq-method
 ##' @name easyRNASeq internal methods
@@ -75,9 +77,10 @@
 ##' \link[intervals:Intervals_virtual-class]{intervals} or
 ##' \link[genomeIntervals:Genome_intervals_stranded-class]{genomeIntervals}
 ##' package
-##' @param \dots For \code{getArguments} a list of named parameters to be
-##' matched against a function formal definition. For \code{catn}, the values
-##' to be printed.
+##' @param \dots For \code{.getArguments} a list of named parameters to be
+##' matched against a function formal definition. For \code{.catn}, the values
+##' to be printed. For \code{.list.files}, the additional parameters to be filtered
+##' for the list.files function.
 ##' @return
 ##' \item{argString}{a character string representing these arguments
 ##' and their value that matched those defined in the formal definition of the
@@ -226,7 +229,7 @@
   ## report them as a string
   val<-""
   if(sum(sel)>0){
-    val <- paste(",",paste(names(add.args[sel]),sapply(add.args,function(arg){ifelse(is.character(arg),paste("'",arg,"'",sep=""),arg)}),sep="=",collapse=", "))
+    val <- paste(",",paste(names(add.args[sel]),sapply(add.args[sel],function(arg){ifelse(is.character(arg),paste("'",arg,"'",sep=""),arg)}),sep="=",collapse=", "))
   }
   return(val)
 }
@@ -287,5 +290,20 @@ setReplaceMethod(
                 "RangedData"={unlist(values(genomicAnnotation(obj)[,sub("s$","",count)]))[,1]},
                 stop(paste("No .getName functionality implemented for the class: ",class(genomicAnnotation(obj)),"!",sep=""))
                 ))
+}
+
+## to allow list.files additional parameters
+.list.files <- function(path,pattern,...){
+  dots <- list(...)
+  dots <- dots[names(dots) %in% names(formals(fun=list.files))]
+  dots <- dots[!names(dots) %in% c("path","pattern","full.names")]
+  l.args <- c(list(path=path,pattern=pattern,full.names=TRUE),dots)
+  
+  eval(parse(text=
+             gsub("[\\]","\\\\\\\\",
+                  paste("list.files(",
+                        paste(names(l.args),paste("",l.args,"",sep="'"),
+                              sep='=',collapse=","),")",sep=""))
+             ))
 }
 

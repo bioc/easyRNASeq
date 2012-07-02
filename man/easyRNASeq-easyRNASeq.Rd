@@ -139,15 +139,18 @@
   being recommended over RPKM).} }
 }
 \details{
-  \itemize{ \item{\dots{} Additional arguments, passed to
-  the \pkg{biomaRt} \code{\link[biomaRt:getBM]{getBM}}
-  function or to the
+  \itemize{ \item{\dots{} Additional arguments for
+  different functions: \itemize{ \item{For the
+  \pkg{biomaRt} \code{\link[biomaRt:getBM]{getBM}}
+  function} \item{For the
   \code{\link[easyRNASeq:easyRNASeq-annotation-internal-methods]{readGffGtf}}
   internal function that takes an optional arguments:
   annotation.type that default to "exon" (used to select
-  the proper rows of the gff or gtf file) or to the
+  the proper rows of the gff or gtf file)} \item{ For the
   \code{\link[DESeq:estimateDispersions]{DESeq
-  estimateDispersions}} method.} \item{the annotationObject
+  estimateDispersions}} method} \item{For to the
+  \code{\link[base:list.files]{list.files}} function used
+  to locate the read files.} }} \item{the annotationObject
   When the \code{annotationMethods} is set to \code{env} or
   \code{rda}, a properly formatted \code{RangedData} or
   \code{GRangesList} object need to be provided. Check the

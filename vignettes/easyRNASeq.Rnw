@@ -50,7 +50,7 @@ vignette. If neither nor, just go ahead.
 
 The last changes are reported in red.
 
-\paragraph{1.3.5}
+\paragraph{1.3.5 - 1.3.6}
 The vignette has been updated to report function call changes to the
 \Rfunction{easyRNASeq} function:
 \begin{itemize}
@@ -59,7 +59,7 @@ The vignette has been updated to report function call changes to the
 \end{itemize}
 Sections affected are: 
 \pref{ss:usage}, \pref{p:args}, \pref{p:input}, \pref{ss:diffInput},
-\pref{p:pasohs},pref{p:dwai}
+\pref{p:pasohs},\pref{p:dwai}
 
 \paragraph{1.3.1}
 The vignette has been updated to:
@@ -330,6 +330,9 @@ set the \Robject{gapped} argument to ``TRUE'' for that.
 \textcolor{red}{
 As of version $1.3.5$, the 'bam' format is the default. If you are
 using bam files, you do not need to precise that argument anymore.
+As of version $1.3.6$, it is possible to set additional options to
+locate the read files. All the options from the list.files base
+function are available, \emph{i.e.} one can search for file recursively.
 }
 
 \paragraph{Annotation}

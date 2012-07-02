@@ -354,13 +354,17 @@ setMethod(
 ##' DESeq methods}} for post-processing the data (either of them being
 ##' recommended over RPKM).}  }
 ##' 
-##' \itemize{ \item{\dots{} Additional arguments, passed
-##' to the \pkg{biomaRt} \code{\link[biomaRt:getBM]{getBM}} function or to the
-##' \code{\link[easyRNASeq:easyRNASeq-annotation-internal-methods]{readGffGtf}}
+##' \itemize{ \item{\dots{} Additional arguments for different functions:
+##' \itemize{
+##' \item{For the \pkg{biomaRt} \code{\link[biomaRt:getBM]{getBM}} function}
+##' \item{For the \code{\link[easyRNASeq:easyRNASeq-annotation-internal-methods]{readGffGtf}}
 ##' internal function that takes an optional arguments: annotation.type that
-##' default to "exon" (used to select the proper rows of the gff or gtf file)
-##' or to the \code{\link[DESeq:estimateDispersions]{DESeq
-##' estimateDispersions}} method.}
+##' default to "exon" (used to select the proper rows of the gff or gtf file)}
+##' \item{ For the \code{\link[DESeq:estimateDispersions]{DESeq
+##' estimateDispersions}} method}
+##' \item{For to the \code{\link[base:list.files]{list.files}}
+##' function used to locate the read files.}
+##' }}
 ##' \item{the annotationObject When the
 ##' \code{annotationMethods} is set to \code{env} or \code{rda}, a properly
 ##' formatted \code{RangedData} or \code{GRangesList} object need to be
@@ -536,10 +540,6 @@ setMethod(
             ## we use a default now.
             format <- match.arg(format)
 
-            ## TODO this is probably not needed then
-            ## check and remove
-            .checkArguments("easyRNASeq","format",format)
-
             ## check the chr.sizes
             if(length(chr.sizes)==1){
               if(chr.sizes=="auto" & format != "bam"){
@@ -607,7 +607,7 @@ setMethod(
             }
             
             ## get source files from the given directory
-            filesList <- list.files(path.expand(filesDirectory),pattern=pattern,full.name=TRUE)            
+            filesList <- .list.files(path=path.expand(filesDirectory),pattern=pattern,...)
             names(filesList) <- basename(filesList)
             
             ## check the list of file

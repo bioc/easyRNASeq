@@ -7,6 +7,7 @@
 \alias{.extractIRangesList}
 \alias{.getArguments}
 \alias{.getName}
+\alias{.list.files}
 \alias{.normalizationDispatcher}
 \alias{easyRNASeq internal methods}
 \alias{reduce}
@@ -82,9 +83,11 @@
   \link[genomeIntervals:Genome_intervals_stranded-class]{genomeIntervals}
   package}
 
-  \item{\dots}{For \code{getArguments} a list of named
+  \item{\dots}{For \code{.getArguments} a list of named
   parameters to be matched against a function formal
-  definition. For \code{catn}, the values to be printed.}
+  definition. For \code{.catn}, the values to be printed.
+  For \code{.list.files}, the additional parameters to be
+  filtered for the list.files function.}
 }
 \value{
   \item{argString}{a character string representing these
@@ -117,6 +120,8 @@
   genomicAnnotation object names. Necessary to deal with
   the different possible annotation object:
   \code{RangedData} or \code{GRangesList}.}
+  \item{.list.files check the arguments passed through the
+  \dots to select only the valid ones.}
   \item{.normalizationDispatcher a function to dispatch the
   normalization depending on the 'outputFormat' chosen by
   the user.} \item{reduce Allow proper dispatch between the

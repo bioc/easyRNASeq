@@ -1,3 +1,14 @@
+CHANGES IN VERSION 1.3.6
+-------------------------
+NEW FEATURES
+    
+    o It is now possible to pass arguments to list files through the 
+    three dots. I.e. setting recursive=TRUE is now possible.
+
+BUG FIXES
+
+    o Corrected a bug in the .getArguments internal function.
+
 CHANGES IN VERSION 1.3.5
 -------------------------
 
