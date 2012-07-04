@@ -1,6 +1,8 @@
 \name{easyRNASeq annotation methods}
 \alias{easyRNASeq annotation methods}
 \alias{fetchAnnotation}
+\alias{knownOrganisms}
+\alias{knownOrganisms,missing-method}
 \title{Fetch genic annotation from a gff/gtf file or using biomaRt}
 \arguments{
   \item{obj}{An object of class \code{RNAseq}}
@@ -19,6 +21,8 @@
 \value{
   A \code{\linkS4class{RangedData}} containing the fetched
   annotations.
+
+  A vector containing the known organisms
 }
 \description{
   The annotation can be retrieved in two ways \itemize{
@@ -34,7 +38,14 @@
   gff3 from Ensembl) is expected. The function
   \pkg{genomeIntervals}
   \code{\link[genomeIntervals:readGff3]{readGff3}} is used
-  to read the data in.
+  to read the data in. Another annotation caveat is the
+  reference names, \emph{i.e.} the chromosome/scaffold
+  names used in the alignment files and those fetched when
+  retrieving the genic annotation might differ.
+  \pkg{easyRNASeq} tries to be clever in this case and
+  guess the correspondance. However, it is not always
+  obvious. Organisms were this has been checked can be
+  listed with the \emph{knownOrganisms} function.
 }
 \details{
   \dots{} are for additional arguments, passed to the
@@ -61,8 +72,11 @@
 						"annot.gff",
 						package="RnaSeqTutorial"))
 	}
+knownOrganisms()
 }
 \author{
+  Nicolas Delhomme
+
   Nicolas Delhomme
 }
 \keyword{connection}

@@ -19,7 +19,7 @@
   \item{obj}{An object of class \code{\linkS4class{RNAseq}}
   or a \code{matrix}, see details}
 
-  \item{unique}{If set to TRUE, whenever a feature (exon,
+  \item{simplify}{If set to TRUE, whenever a feature (exon,
   feature, ...) is duplicated in the count table, it is
   only returned once.}
 

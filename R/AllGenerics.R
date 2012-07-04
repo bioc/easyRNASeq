@@ -206,7 +206,7 @@ setGeneric(
                "islands"),
              lib.size=numeric(1),
              feature.size=numeric(1),
-             unique=TRUE,...){
+             simplify=TRUE,...){
              standardGeneric("RPKM")
            })
 ##' @exportMethod fetchCoverage
@@ -217,7 +217,7 @@ setGeneric(
              type="SolexaExport",chr.sel=c(),
              isUnmappedQuery=FALSE,what=c("rname","pos","qwidth"),
              validity.check=TRUE,chr.map=data.frame(),
-             ignoreWarnings=FALSE,gapped=TRUE,...){
+             ignoreWarnings=FALSE,gapped=TRUE,bp.coverage=FALSE,...){
              standardGeneric("fetchCoverage")
            })
 
@@ -247,6 +247,14 @@ setGeneric(
              ignoreWarnings=FALSE,
              silent=FALSE,...){
              standardGeneric("easyRNASeq")
+           })
+
+## known organisms
+##' @exportMethod knownOrganisms
+setGeneric(
+           name="knownOrganisms",
+           def= function(missing){
+             standardGeneric("knownOrganisms")
            })
 
 ## edgeR extension

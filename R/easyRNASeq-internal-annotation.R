@@ -89,12 +89,6 @@
   ## check for the annotation type
   ## TODO we only accept one, does that make sense?
   annotation.type <- match.arg(annotation.type)
-
-  if(!ignoreWarnings){
-    if(length(list(...)) != 0){
-      warning("In .readGffGtf: Ignoring extra argument(s).")
-    }
-  }
   
   ## sanity check
   if(!file.exists(filename)){

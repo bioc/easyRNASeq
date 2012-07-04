@@ -15,94 +15,6 @@
 ## get the annotation
 ## TODO check the GenomicFeatures package
 
-##' Fetch genic annotation from a gff/gtf file or using biomaRt
-##' 
-##' The annotation can be retrieved in two ways \itemize{
-##' \item{biomaRt}{Use biomaRt and Ensembl to get organism specific annotation.}
-##' \item{gff/gtf}{Use a gff or gtf local annotation file.}}
-##' When using \pkg{biomaRt}, it is
-##' important that the \code{organismName} slot of the
-##' \code{\linkS4class{RNAseq}} object is set the prefix of one of the value
-##' available using the \pkg{biomaRt}
-##' \code{\link[biomaRt:listDatasets]{listDatasets}} function, e.g.
-##' "Dmelanogaster".  When reading from a gff/gtf file, a version 3 formatted
-##' gff (gtf are modified gff3 from Ensembl) is expected. The function
-##' \pkg{genomeIntervals} \code{\link[genomeIntervals:readGff3]{readGff3}} is
-##' used to read the data in.
-##' 
-##' \dots{} are for additional arguments, passed to the \pkg{biomaRt}
-##' \code{\link[biomaRt:getBM]{getBM}} function or to the
-##' \code{\link[easyRNASeq:easyRNASeq-annotation-internal-methods]{readGffGtf}}
-##' internal function that takes an optional arguments: annotation.type that
-##' default to "exon". This is used to select the proper rows of the gff or gtf
-##' file.
-##' 
-##' @aliases fetchAnnotation
-##' @name easyRNASeq annotation methods
-##' @rdname easyRNASeq-annotation-methods
-##' @param obj An object of class \code{RNAseq}
-##' @param method one of biomaRt, gff, gtf
-##' @param filename If the method is gff or gtf, the actual gtf, gff filename
-##' @param ignoreWarnings set to TRUE (bad idea! they have a good reason to be
-##' there) if you do not want warning messages.
-##' @param \dots See details
-##' @return A \code{\linkS4class{RangedData}} containing the fetched
-##' annotations.
-##' @author Nicolas Delhomme
-##' @keywords connection data methods
-##' @examples
-##' 
-##' 	\dontrun{
-##' 	library("RnaSeqTutorial")
-##' 	obj <- new('RNAseq',
-##' 		organismName="Dmelanogaster",
-##' 		readLength=36L,
-##' 		chrSize=as.list(seqlengths(Dmelanogaster))
-##' 		)
-##' 
-##' 	obj <- fetchAnnotation(obj,
-##' 				method="gff",
-##'                                 filename=system.file(
-##' 						"extdata",
-##' 						"annot.gff",
-##' 						package="RnaSeqTutorial"))
-##' 	}
-##' 
-setMethod(
-          f="fetchAnnotation",
-          signature="RNAseq",
-          definition=function(obj,
-            method=c("biomaRt","gff","gtf"),
-            filename=character(1),
-            ignoreWarnings=FALSE,...){
-            
-            ## get the methods
-            methods <- eval(formals("fetchAnnotation")$method)
-            
-            ## check the provided one
-            if(!method %in% methods){
-              stop(paste(
-                         "The given method:",
-                         method,
-                         "is not part of the supported methods:",
-                         paste(methods,collapse=", ")))
-            }
-            
-            ## switch depending on the method
-            exon.range <- switch(EXPR=method,
-                                 "biomaRt"={.getBmRange(organismName(obj),ignoreWarnings=ignoreWarnings,...)},
-                                 "gff"={.getGffRange(organismName(obj),filename=filename,ignoreWarnings=ignoreWarnings,...)},
-                                 "gtf"={.getGtfRange(organismName(obj),filename=filename,ignoreWarnings=ignoreWarnings,...)}
-                                 )
-            
-            ## update the obj
-            genomicAnnotation(obj)<-exon.range
-            
-            ## return
-            return(obj)
-          })
-
-
 ##' Compute the coverage from a Short Read Alignment file
 ##' 
 ##' Computes the genomic reads' coverage from a
@@ -175,7 +87,8 @@ setMethod(
             validity.check=TRUE,
             chr.map=data.frame(),
             ignoreWarnings=FALSE,
-            gapped=TRUE,...){
+            gapped=TRUE,
+            bp.coverage=FALSE,...){
             
             ## check the filename
             if(!file.exists(filename)){
@@ -241,7 +154,12 @@ setMethod(
                          ". Make sure that your file is valid, that your 'chr.sel' (if provided) contains valid values; i.e. values as found in the file, not as returned by 'RNAseq'.",
                          sep=""))
             } else {
-              librarySize(obj) <- sum(as.numeric(sapply(aln.ranges,length)))
+              
+              ## librarySize(obj) <- sum(as.numeric(sapply(aln.ranges,length)))
+              ## much faster
+              ## librarySize(obj) <- sum(sapply(width(aln.ranges),length))
+              ## much much faster
+              librarySize(obj) <- sum(elementLengths(aln.ranges))
             }
             
             ## UCSC chr naming convention validity check
@@ -257,21 +175,23 @@ setMethod(
                 }
                 names(aln.ranges) <- .convertToUCSC(names(aln.ranges),organismName(obj),chr.map)
 ##              }
-                
-                ## ensure that we have the right readLength and only one length
-                rL <- unique(sapply(aln.ranges,function(rng){ifelse(length(rng)>0,unique(width(rng)),0)}))
-                rL <- rL[rL != 0]
-                if(length(rL) > 1 ){
-                  stop(paste("The file", filename, "contains reads of different sizes:",paste(rL,collapse=", "),". We cannot deal with such data at the moment. Please contact the authors to add this functionality." ))
-                }
-                if(rL != readLength(obj)){
-                  warning(paste("The read length stored in the object (probably provided as argument):",
-                                readLength(obj),
-                                "\nis not the same as the one:",rL,"determined from the file:",
-                                filename,"\nUpdating it."))
-                  readLength(obj) <- as.integer(rL)
-                }
-            }
+              }
+
+            ## check if we have a single read length
+            rL <- unique(do.call("c",lapply(width(aln.ranges),unique)))
+            rL <- rL[rL != 0]
+
+            ## check what the user provided
+            ## the double && is to make sure we have
+            ## a single value tested even if rL
+            ## has more than one element. R test anyway all conditions...
+            if(length(rL) == 1 && rL != readLength(obj)){
+              warning(paste("The read length stored in the object (probably provided as argument):",
+                            readLength(obj),
+                            "\nis not the same as the one:",rL,"determined from the file:",
+                            filename,"\nUpdating it."))
+              readLength(obj) <- as.integer(rL)
+            }               
 
             ## check for the chromosome size and report any problem
             tmp <- sapply(names(aln.ranges),function(chr){
@@ -284,7 +204,7 @@ setMethod(
             if(any(tmp>0)){
               stop("Some of your read coordinates are bigger than the chromosome sizes you provided. Aborting!")
             }
-
+            
             ## check and correct the names in the width and in the ranges, keep the common selector
             valid.names <- sort(intersect(names(aln.ranges),names(chrSize(obj))))
             if(length(chr.sel)>0){
@@ -326,7 +246,40 @@ setMethod(
             }
             
             ## calc the coverage
-            readCoverage(obj) <- coverage(aln.ranges[match(valid.names,names(aln.ranges))],width=chrSize(obj)[match(valid.names,names(chrSize(obj)))])
+
+            ## define the possibilities
+            ## 00 is variable length and read coverage
+            ## 01 is variable length and bp coverage
+            ## 10 is unique length and read coverage
+            ## 11 is unique length and bp coverage
+            ## 01 and 11 are the same, we just return the bp coverage
+            
+            ## the 1e6 series of division allows us to take into account the read proportions for
+            ## read of variable length. One would normally divide by the individual readLength, but
+            ## weight can only take integers. As a consequence, using a multiplier / divisor of 1e6
+            ## lessen the effect of rounding up
+            ## IMPORTANT: note that this might result in an integer overflow in the coverage function
+            ## that is not reported!! On a 32bit machine, we should still be able to deal with a 2000+ bp coverage
+            ## would anyone sequence that deep??
+            readCoverage(obj) <- switch(paste(as.integer(c(length(rL)==1,bp.coverage)),collapse=""),
+                                        "00" = coverage(aln.ranges[match(valid.names,names(aln.ranges))],
+                                          width=as.list(chrSize(obj)[match(valid.names,names(chrSize(obj)))]),
+                                          weight=1e6/width(aln.ranges)[match(valid.names,names(aln.ranges))])/1e6,
+                                        "10" = coverage(aln.ranges[match(valid.names,names(aln.ranges))],
+                                          width=as.list(chrSize(obj)[match(valid.names,names(chrSize(obj)))]))/readLength(obj),
+                                        {coverage(aln.ranges[match(valid.names,names(aln.ranges))],
+                                                  width=as.list(chrSize(obj)[match(valid.names,names(chrSize(obj)))]))})
+
+            ## ensure that we're not returning junk
+            ## could happen if 1e6 is too much and we
+            ## reach the integer limits
+            if(!bp.coverage){
+              obs <- sum(sum(readCoverage(obj)))
+              exp <- librarySize(obj)
+              if( (obs < exp * 0.9) | (obs > exp * 1.1)){
+                stop("The observed number of count differs from the expected number! Something went wrong, please contact the author.")
+              }
+            }
             
             ## return obj
             return(obj)
@@ -444,7 +397,10 @@ setMethod(
 ##' summarizing reads by genes. So far, only "geneModels" is available.
 ##' @param type The type of data when using the "aln" format. See the ShortRead
 ##' library.
-##' @param validity.check Shall UCSC chromosome name convention be enforced
+##' @param validity.check Shall UCSC chromosome name convention be enforced?
+##' This is only supported for a set of organisms, see
+##' \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq:knownOrganisms}},
+##' otherwise the argument 'chr.map' can be used to complement it.
 ##' @param \dots additional arguments. See details
 ##' @return Returns a count table (a matrix of m features x n samples) unless
 ##' the \code{outputFormat} option has been set, in which case an object of
@@ -455,6 +411,7 @@ setMethod(
 ##' @seealso \code{\linkS4class{RNAseq}}
 ##' \code{\link[edgeR:DGEList]{edgeR:DGEList}}
 ##' \code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}}
+##' \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq:knownOrganisms}}
 ##' @keywords methods
 ##' @examples
 ##' 
@@ -577,10 +534,20 @@ setMethod(
               }              
               if(!ignoreWarnings){
                 warning("No organism was provided. No validity check for the UCSC compliance of the chromosome name will be applied.")
-              }
+              }                           
               validity.check=FALSE
             }
-
+            if(!tolower(organism) %in% c(tolower(knownOrganisms()),"custom") & nrow(chr.map) ==0){
+              warning(paste("Your organism has no mapping defined to perform the validity check for the UCSC compliance of the chromosome name.",
+                            "Defined organism's mapping can be listed using the 'knownOrganisms' function.",
+                            "To benefit from the validity check, you can provide a 'chr.map' to your 'easyRNASeq' function call.",
+                            "As you did not do so, 'validity.check' is turned off",sep="\n"))
+              validity.check=FALSE
+            }
+            if(organism=="custom" & nrow(chr.map) ==0){
+              stop("You want to use a 'custom' organism, but do not provide a 'chr.map'. Aborting.")
+            }
+            
             ## check the output formats, default to matrix
             if(length(outputFormat)==4){
               outputFormat='matrix'
@@ -678,10 +645,7 @@ setMethod(
               }
             }
 
-            ## TODO check if we still need a list
-            if(!is.list(chr.sizes)){
-              chr.sizes <- as.list(chr.sizes)
-            }
+            ## store them
             chrSize(obj) <- chr.sizes
             
             ## check if the chromosome size are valid
@@ -819,7 +783,7 @@ setMethod(
             if(!silent){
               .catn("Summarizing counts...")
             }
-            countData <- lapply(filesList,function(file,obj=obj,
+            countData <- lapply(filesList,function(filename,obj=obj,
                                                    format=format,
                                                    filter=filter,
                                                    count=count,
@@ -832,11 +796,11 @@ setMethod(
                                                    min.lengh=min.length,
                                                    plot=plot,gapped=gapped,...){
               if(!silent){
-                .catn(paste("Processing",basename(file)))
+                .catn(paste("Processing",basename(filename)))
               }
               ## Fetch coverage
               obj <- fetchCoverage(obj,format=format,
-                                   filename=file,
+                                   filename=filename,
                                    filter=filter,type=type,
                                    chr.sel=chr.sel,
                                    validity.check=validity.check,
@@ -848,7 +812,9 @@ setMethod(
                 stop(paste("Emergency stop.",
                            "The chromosome names in your bam file do not match those in your annotation.",
                            "You might solve that issue by providing a value to the 'organism' parameter and",
-                           "making sure that the 'validity.check' is set to 'TRUE'."))
+                           "making sure that the 'validity.check' is set to 'TRUE'.",
+                           "Or you can select 'custom' as an organims and use the 'chr.map' argument to define",
+                           "the conversion to be applied to the chromosome names",sep="\n"))
               }
               
               ## Do count

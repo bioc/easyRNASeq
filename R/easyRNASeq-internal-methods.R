@@ -206,6 +206,16 @@
 ## check arguments
 ".checkArguments" <- function(fun,arg,value){
   args <- eval(formals(fun)[[arg]])
+
+  ## first stop if too many values
+  if(length(value)!=1){
+    stop(paste(
+               "Please select a value for the argument: '",arg,
+               "' among the supported arguments: ",
+               paste(args,collapse=", "),sep=""))
+  }
+
+  ## second stop if not valid
   if(!value %in% args){
     stop(paste(
                "The given ",arg," argument:",

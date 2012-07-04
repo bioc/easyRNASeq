@@ -14,8 +14,8 @@
 }
 \details{
   \tabular{ll}{ Package: \tab easyRNASeq\cr Type: \tab
-  Package\cr Version: \tab 1.3.6\cr Date: \tab
-  2012-07-01\cr License: \tab Artistic-2.0\cr LazyLoad:
+  Package\cr Version: \tab 1.3.7\cr Date: \tab
+  2012-07-04\cr License: \tab Artistic-2.0\cr LazyLoad:
   \tab yes\cr Depends: \tab methods, parallel, biomaRt,
   edgeR, DESeq, genomeIntervals, Rsamtools, ShortRead,
   RnaSeqTutorial\cr Suggests: \tab

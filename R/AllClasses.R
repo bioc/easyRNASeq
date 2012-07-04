@@ -3,6 +3,7 @@
 ## TODO should we have one readAnnotation slot
 ## containing all the genomicAnnoation, geneModel, and readIslands info?
 ## and have it more dynamic?
+## TODO add a slot section
 ##' Class "RNAseq"
 ##' 
 ##' A class holding all the necessary information and annotation to summarize
@@ -12,7 +13,7 @@
 ##' 
 ##' @name RNAseq class
 ##' @rdname easyRNASeq-class
-##' @aliases RNAseq-class RNAseq chrSize,RNAseq-method chrSize<-,RNAseq-method
+##' @aliases RNAseq-class RNAseq 
 ##' easyRNASeq,RNAseq-method exonCounts,RNAseq-method
 ##' featureCounts,RNAseq-method fetchAnnotation,RNAseq-method
 ##' fetchCoverage,RNAseq-method fileName,RNAseq-method fileName<-,RNAseq-method
@@ -52,7 +53,7 @@
 setClass(
          Class="RNAseq",
          representation=representation(
-           chrSize="list",
+           chrSize="integer",
            fileName="character",
            geneModel="RangedData",
            genomicAnnotation="Vector",
@@ -64,7 +65,7 @@ setClass(
            readLength="integer"
            ),
          prototype=prototype(
-           chrSize=list(),
+           chrSize=integer(0),
            fileName=character(0),
            geneModel=RangedData(),           
            genomicAnnotation=RangedData(),

@@ -25,7 +25,7 @@
 ##' list, i.e. named after the sample names.
 ##' @param obj An object of class \code{\linkS4class{RNAseq}} or a
 ##' \code{matrix}, see details
-##' @param unique If set to TRUE, whenever a feature (exon, feature, ...) is
+##' @param simplify If set to TRUE, whenever a feature (exon, feature, ...) is
 ##' duplicated in the count table, it is only returned once.
 ##' @param \dots additional arguments. See details
 ##' @return A \code{matrix} containing RPKM corrected read counts.
@@ -77,7 +77,7 @@
 setMethod(
           f="RPKM",
           signature=c("matrix","ANY","vector","vector"),
-          definition=function(obj,from,lib.size=numeric(1),feature.size=integer(1),unique=TRUE,...){
+          definition=function(obj,from,lib.size=numeric(1),feature.size=integer(1),simplify=TRUE,...){
             
             ## SANITY check here
             if(length(lib.size) != ncol(obj)){
@@ -105,7 +105,7 @@ setMethod(
             
             colnames(res) <- colnames(obj)
             rownames(res) <- rownames(obj)
-            if(unique){
+            if(simplify){
               res<-res[!duplicated(rownames(res)),,drop=FALSE]
             }
             return(res)
@@ -116,11 +116,11 @@ setMethod(
           signature="RNAseq",
           definition=function(obj,
             from=c("exons","features","transcripts","bestExons","geneModels","islands"),
-            lib.size=numeric(1),feature.size=integer(1),unique=TRUE,...){
+            lib.size=numeric(1),feature.size=integer(1),simplify=TRUE,...){
             
             ## get the possible values
             .checkArguments("RPKM","from",from)
-
+            
             ## switch to get the values
             mCounts <- switch(from,
                               "exons"=readCounts(obj,'exons',...),
@@ -176,7 +176,7 @@ setMethod(
             },mCounts,mSize,libSizes))
             colnames(res) <- colnames(mCounts)
             ## filter for unique row names
-            if(unique){
+            if(simplify){
               res<-res[!duplicated(rownames(res)),,drop=FALSE]
             }
             return(res)

@@ -46,7 +46,7 @@
                                                         ranges(geneModel(obj))[gm.sel],
                                                         sum)
                                               )
-                                       ) / readLength(obj),
+                                       ),
                             list(gene=geneModel(obj)[gm.sel]$gene),
                             sum)
   gCounts <- ceiling(gAgg[,2])
@@ -76,7 +76,7 @@
     )))
 
   ## return value
-  return(ceiling(counts/readLength(obj)))
+  return(ceiling(counts))
 }
 
 ".extendCountList" <- function(

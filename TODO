@@ -44,9 +44,7 @@ gAnnot <- split(gAnnot,seqnames(gAnnot))
 
 11) lookup all the TODOs in the code
 
-12) recursive file finding either filenames or pattern
-
-13) From Simon, to filter reads: "NH:i:n" with n>1. However, not all aligner use the NH tag properly, so this is not a full solution. Another possibility is to discard everything with mapping quality below 10, because non-uniquly mapped reads should have a MAPQ<3.
+12) From Simon, to filter reads: "NH:i:n" with n>1. However, not all aligner use the NH tag properly, so this is not a full solution. Another possibility is to discard everything with mapping quality below 10, because non-uniquly mapped reads should have a MAPQ<3.
 
 14) Check the possibility to split BAM files
 
@@ -56,12 +54,10 @@ gAnnot <- split(gAnnot,seqnames(gAnnot))
 
 17) Check for assymetric reads and variable read length in general.
 
-18) Deprecate the list usage for the chr size.
-
 19) Add a use case to clean up annotations against double counting.
-
-20) add a function to list the supported organisms
 
 21) check that for easyRNASeq: http://bioinformatics.oxfordjournals.org/content/28/7/1021.full
 
 22) Remove/Hide the readLength argument once we have introduced variable read length reads. Change the vignette then.
+
+23) Have the current directory as default,

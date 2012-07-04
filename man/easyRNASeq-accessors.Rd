@@ -1,7 +1,10 @@
 \name{easyRNASeq accessors}
 \alias{accessors}
 \alias{chrSize}
+\alias{chrSize,RNAseq-method}
 \alias{chrSize<-}
+\alias{chrSize<-,RNAseq,integer-method}
+\alias{chrSize<-,RNAseq,list-method}
 \alias{easyRNASeq accessors}
 \alias{fileName}
 \alias{fileName<-}

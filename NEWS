@@ -1,3 +1,34 @@
+CHANGES IN VERSION 1.3.7
+-------------------------
+NEW FEATURES
+
+    o easyRNASeq now supports read of different lenghts. Thanks
+    to Mark Robinson for the toy dataset.
+
+    o Added a function that lists existing organism conversion
+    when applying the validity checks.
+
+    o Added a bp.coverage to the fetchCoverage function that 
+    defaults to FALSE. To allow for variable length reads, it
+    now returns read coverage proportion per bp by default.
+
+    o Added additional checks in the .checkArguments internal
+    function.
+
+BUG FIXES
+
+    o Not a real bug, but more a consolidation. When an organism is
+    unknown and no custom.map is provided, then the validity checks
+    are turned off and a warning is emitted.
+
+    o Providing the chr.sizes as as list has been deprecated. 
+    Only named numeric vector are supported.
+
+    o Removed a now useless warning in the .readGffGtf function.
+
+    o Modified the RPKM function generic to avoid using a 'protected'
+    word as argument: i.e. 'unique' was replaced by 'simplify'
+
 CHANGES IN VERSION 1.3.6
 -------------------------
 NEW FEATURES

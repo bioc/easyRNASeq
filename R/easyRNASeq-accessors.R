@@ -10,10 +10,11 @@
 ##' objects in the \pkg{easyRNASeq} package.
 ##' 
 ##' 
-##' @aliases accessors chrSize<- chrSize fileName<- fileName geneModel<-
+##' @aliases accessors chrSize chrSize,RNAseq-method fileName<- fileName geneModel<-
 ##' geneModel genomicAnnotation<- genomicAnnotation librarySize<- librarySize
 ##' organismName<- organismName readCounts<- readCounts readCoverage<-
 ##' readCoverage readIslands<- readIslands readLength<- readLength
+##' chrSize<- chrSize<-,RNAseq,integer-method chrSize<-,RNAseq,list-method 
 ##' @name easyRNASeq accessors
 ##' @rdname easyRNASeq-accessors
 ##' @param obj An object derived from class \code{RNAseq}.
@@ -175,19 +176,25 @@ setReplaceMethod(
 
 setReplaceMethod(
                  f="chrSize",
-                 signature="RNAseq",
+                 signature=c("RNAseq","list"),
+                 definition=function(obj,value){
+
+                   ## deprecated
+                   .Deprecated("chrSize<-,RNAseq,numeric-methods",
+                               msg="The use of the list for providing chromosome sizes has been deprecated. Use a named numeric vector instead.")
+                                      
+                   ## init
+                   initialize(obj,chrSize=unlist(value))
+                 })
+
+setReplaceMethod(
+                 f="chrSize",
+                 signature=c("RNAseq","integer"),
                  definition=function(obj,value){
                    ## check
                    if(is.null(names(value))){
                      stop("We need a named vector or a named list for the chrSize slot!")
                    }
-                   ## convert
-                   if(is.vector(value)){
-                     value <- as.list(value)
-                   }
-                   ## order
-                   value[order(names(value))]
-                   
                    ## init
                    initialize(obj,chrSize=value)
                  })

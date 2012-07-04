@@ -4,8 +4,6 @@
 \alias{RNAseq class}
 \alias{RNAseq-class}
 \alias{RPKM,RNAseq-method}
-\alias{chrSize,RNAseq-method}
-\alias{chrSize<-,RNAseq-method}
 \alias{easyRNASeq,RNAseq-method}
 \alias{exonCounts,RNAseq-method}
 \alias{featureCounts,RNAseq-method}

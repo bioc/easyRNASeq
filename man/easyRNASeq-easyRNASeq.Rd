@@ -103,7 +103,11 @@
   See the ShortRead library.}
 
   \item{validity.check}{Shall UCSC chromosome name
-  convention be enforced}
+  convention be enforced? This is only supported for a set
+  of organisms, see
+  \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq:knownOrganisms}},
+  otherwise the argument 'chr.map' can be used to
+  complement it.}
 
   \item{\dots}{additional arguments. See details}
 }
@@ -230,6 +234,7 @@
   \code{\linkS4class{RNAseq}}
   \code{\link[edgeR:DGEList]{edgeR:DGEList}}
   \code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}}
+  \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq:knownOrganisms}}
 }
 \keyword{methods}
 

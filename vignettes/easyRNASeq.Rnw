@@ -50,18 +50,20 @@ vignette. If neither nor, just go ahead.
 
 The last changes are reported in red.
 
-\paragraph{1.3.5 - 1.3.6}
+\paragraph{1.3.5 - 1.3.7}
 The vignette has been updated to report function call changes to the
 \Rfunction{easyRNASeq} function:
 \begin{itemize}
   \item the format argument defaults to bam
   \item the chr.sizes can be derived from the bam file header
+  \item the addition of the knownOrganisms function
+  \item support for variable length reads
 \end{itemize}
 Sections affected are: 
 \pref{ss:usage}, \pref{p:args}, \pref{p:input}, \pref{ss:diffInput},
 \pref{p:pasohs},\pref{p:dwai}
 
-\paragraph{1.3.1}
+\paragraph{1.3.1 - 1.3.4}
 The vignette has been updated to:
 \begin{itemize}
   \item first: enhance its readability.
@@ -333,6 +335,11 @@ using bam files, you do not need to precise that argument anymore.
 As of version $1.3.6$, it is possible to set additional options to
 locate the read files. All the options from the list.files base
 function are available, \emph{i.e.} one can search for file recursively.
+As of version $1.3.7$, variable read lengths is supported. 
+The current implementation results in a small, neglictible approximation
+of the read counts, due to the likelyhood of an integer overflow. This is
+currently investigated and appropriate warnings will be raised if it
+were to affect the results.
 }
 
 \paragraph{Annotation}
@@ -1414,6 +1421,10 @@ possible multiple countings of reads will be raised. Double counting
 reads is not what ones want, that is why the better way is to rework
 the obtained annotation to remove/clarify these cases and save the
 obtained annotation as an rda file on your file system. 
+\newline
+\textcolor{red}{Note that \Rpackage{easyRNASeq} does support some chromosome names
+conversion by default. The list of organism for which this is possible
+can be listed using the knownOrganisms function.}
 \newline
 Before going on, we do some cleanup as some of the objects we have
 generated take large amounts of memory.
