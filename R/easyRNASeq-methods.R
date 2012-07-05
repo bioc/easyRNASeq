@@ -412,6 +412,7 @@ setMethod(
 ##' \code{\link[edgeR:DGEList]{edgeR:DGEList}}
 ##' \code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}}
 ##' \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq:knownOrganisms}}
+##' \code{\link[ShortRead:readAligned]{ShortRead:readAligned}}
 ##' @keywords methods
 ##' @examples
 ##' 
@@ -783,52 +784,19 @@ setMethod(
             if(!silent){
               .catn("Summarizing counts...")
             }
-            countData <- lapply(filesList,function(filename,obj=obj,
-                                                   format=format,
-                                                   filter=filter,
-                                                   count=count,
-                                                   type=type,
-                                                   chr.sel=chr.sel,
-                                                   validity.check=validity.check,
-                                                   summarization=summarization,
-                                                   max.gap=max.gap,
-                                                   min.cov=min.cov,
-                                                   min.lengh=min.length,
-                                                   plot=plot,gapped=gapped,...){
-              if(!silent){
-                .catn(paste("Processing",basename(filename)))
-              }
-              ## Fetch coverage
-              obj <- fetchCoverage(obj,format=format,
-                                   filename=filename,
-                                   filter=filter,type=type,
-                                   chr.sel=chr.sel,
-                                   validity.check=validity.check,
-                                   chr.map=chr.map,
-                                   gapped=gapped,...)
 
-              ## emergency stop
-              if(length(intersect(names(readCoverage(obj)),names(genomicAnnotation(obj))))==0 & organism == character(1) & validity.check == FALSE){
-                stop(paste("Emergency stop.",
-                           "The chromosome names in your bam file do not match those in your annotation.",
-                           "You might solve that issue by providing a value to the 'organism' parameter and",
-                           "making sure that the 'validity.check' is set to 'TRUE'.",
-                           "Or you can select 'custom' as an organims and use the 'chr.map' argument to define",
-                           "the conversion to be applied to the chromosome names",sep="\n"))
-              }
-              
-              ## Do count
-              obj <- switch(count,
-                            "exons"=exonCounts(obj),
-                            "features"=featureCounts(obj),
-                            ## no need for the nbCore here, the gene model was already done
-                            "genes"=geneCounts(obj,summarization),
-                            "transcripts"=transcriptCounts(obj),
-                            "islands"=islandCounts(obj,max.gap=max.gap,min.cov=min.cov,min.length=min.length,plot=plot)
-                            )
-
-              return(list(counts=readCounts(obj,count,summarization),size=librarySize(obj)))
-            },obj,format,filter,count,type,chr.sel,validity.check,summarization,max.gap,min.cov,min.length,plot,gapped,...)
+            ## perform the count (in parallel if asked)
+            countData <- parallelize(obj=filesList,fun=.doCount,nnodes=nbCore,
+                                     rnaSeq=obj,format=format,
+                                     filter=filter,count=count,
+                                     type=type,chr.map=chr.map,
+                                     chr.sel=chr.sel,
+                                     validity.check=validity.check,
+                                     summarization=summarization,
+                                     max.gap=max.gap,min.cov=min.cov,
+                                     min.length=min.length,
+                                     plot=plot,gapped=gapped,
+                                     silent=silent,...)
 
             ## decomplex the data
             ## counts

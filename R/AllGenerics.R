@@ -292,3 +292,10 @@ setGeneric(
              standardGeneric("multivariateConditions")
            })
 
+## parallel extension
+##' @exportMethod parallelize
+setGeneric(name="parallelize",
+           def=function(obj=list(),
+             fun=NULL,
+             nnodes=integer(1),...){
+             standardGeneric("parallelize")})

@@ -235,6 +235,7 @@
   \code{\link[edgeR:DGEList]{edgeR:DGEList}}
   \code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}}
   \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq:knownOrganisms}}
+  \code{\link[ShortRead:readAligned]{ShortRead:readAligned}}
 }
 \keyword{methods}
 

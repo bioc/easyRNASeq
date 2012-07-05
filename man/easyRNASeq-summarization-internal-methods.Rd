@@ -1,28 +1,126 @@
 \name{easyRNASeq summarization internal methods}
 \alias{.bestExonSummarization}
+\alias{.doBasicCount}
+\alias{.doCount}
+\alias{.extendCountList}
 \alias{.geneModelSummarization}
 \alias{easyRNASeq summarization internal methods}
-\title{Summarization of reads count per gene}
+\title{Internal count and summarization methods}
 \usage{
   .bestExonSummarization(obj)
 }
 \arguments{
+  \item{chr.map}{A data.frame describing the mapping of
+  original chromosome names towards wished chromosome
+  names. See the details in
+  \code{\link[easyRNASeq:easyRNASeq]{easyRNASeq}}.}
+
+  \item{chr.sel}{A vector of chromosome names to subset the
+  final results.}
+
+  \item{cList}{list of lists that contain count results}
+
+  \item{count}{The feature used to summarize the reads. One
+  of 'exons','features','genes','islands' or
+  'transcripts'.}
+
+  \item{filename}{The full path of the file to use}
+
+  \item{filter}{The filter to be applied when loading the
+  data using the "aln" format}
+
+  \item{format}{The format of the reads, one of
+  "aln","bam". If not "bam", all the types supported by the
+  \pkg{ShortRead} package are supported too. As of version
+  1.3.5, it defaults to bam.}
+
+  \item{gapped}{Is the bam file provided containing gapped
+  alignments?}
+
+  \item{min.cov}{When computing read islands, the minimal
+  coverage to take into account for calling an island}
+
+  \item{min.length}{The minimal size an island should have
+  to be kept}
+
+  \item{max.gap}{When computing read islands, the maximal
+  gap size allowed between two islands to merge them}
+
   \item{obj}{An object derived from class
   \code{\linkS4class{RNAseq}}}
+
+  \item{plot}{Whether or not to plot assessment graphs.}
+
+  \item{rnaSeq}{An object derived from class
+  \code{\linkS4class{RNAseq}}}
+
+  \item{summarization}{A character defining which method to
+  use when summarizing reads by genes. So far, only
+  "geneModels" is available.}
+
+  \item{silent}{set to TRUE if you do not want messages to
+  be printed out.}
+
+  \item{subType}{character string defining a sub type of
+  counts, i.e. for the gene type one of bestExon or
+  geneModel}
+
+  \item{type}{\itemize{ \item .extendCountList: character
+  string specifying the type of count ("exons",
+  "transcripts", "genes" or islands) \item .doCount: the
+  type of data when using the "aln" format. See the
+  ShortRead library. }}
+
+  \item{validity.check}{Shall UCSC chromosome name
+  convention be enforced? This is only supported for a set
+  of organisms, see
+  \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq:knownOrganisms}},
+  otherwise the argument 'chr.map' can be used to
+  complement it.}
+
+  \item{values}{a named vector containing count results}
+
+  \item{\dots}{additional arguments. See the details in
+  \code{\link[easyRNASeq:easyRNASeq]{easyRNASeq}}.}
 }
 \value{
-  A vector containing read counts
+  \itemize{ \item .doCount: a list containing \itemize{
+  \item counts: the summarized counts as a matrix of
+  dimension number of genes x 1 \item size: the library
+  size } \item .doBasicCount: a vector containing read
+  counts. \item .bestExonSummarization: a vector containing
+  summarized counts. \item .geneModelSummarization: a
+  vector containing summarized counts. \item
+  .extendCountList: a named list of matrices. The names are
+  according to the counting/summarization already
+  performed. }
 }
 \description{
-  Called by the method \code{geneCounts}. Having performed
-  the \code{exonCounts} is a pre-requisite.  \itemize{
-  \item.bestExonSummarization Identify the exon showing the
-  highest coverage. \item.geneModelSummarization Sum the
-  coverage values of the synthetic exons constituting a
-  gene model.  }
+  These are internal methods related to counting and
+  summarizing reads \itemize{ \item For counting reads:
+  \itemize{ \item .doCount A dispatcher higher level
+  function to count and summarize reads. Externalized so
+  that it can be parallelized. \item .doBasicCount A
+  function to calculate the counts for 'exons' or
+  'features' } \item For summarizing per genes: these
+  methods are called by the method \code{geneCounts}.
+  Having performed the \code{exonCounts} is a
+  pre-requisite. \itemize{ \item .bestExonSummarization
+  Identify the exon showing the highest coverage. \item
+  .geneModelSummarization Sum the coverage values of the
+  synthetic exons constituting a gene model. } \item For
+  managing the summarized read count structure: \itemize{
+  \item .extendCountList extend or create the result count
+  list of matrices } }
 }
 \author{
   Nicolas Delhomme
+}
+\seealso{
+  \itemize{ \item
+  \code{\link[ShortRead:readAligned]{ShortRead:readAligned}}
+  \item \code{\linkS4class{RNAseq}}
+  \code{\link[easyRNASeq:easyRNASeq]{easyRNASeq}}. }
 }
 \keyword{internal}
 

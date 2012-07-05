@@ -1,5 +1,6 @@
 ## the threedots are for:
-## RPKM: the count and summarization 
+## RPKM: the count and summarization
+## TODO get the Roxygen code here from easyRNASeq-internal-methods.R
 ".normalizationDispatcher" <- function(obj,type=c("DESeq","edgeR","RPKM","RNAseq"),silent=FALSE,plot=TRUE,...){
 
   ## report

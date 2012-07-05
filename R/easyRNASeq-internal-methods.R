@@ -1,77 +1,57 @@
+## TODO update the returned values in the Roxygen doc
 ##' Internal methods of RNAseq objects
 ##' 
 ##' These are generic internal methods:
 ##' \itemize{
-##' \item{.catn Just some pretty
-##' printing.}
-##' \item{.checkArguments check that the provided argument match one
-##' of the formal definition of the function. Stop if not.}
-##' \item{.convertToUCSC
-##' convert chromosome names to UCSC compliant ones.}
-##' \item{.doBasicCount A
-##' function to calculate the counts for 'exons' or 'features'}
-##' \item{.extendCountList extend or create the result count list of lists.}
-##' \item{.extractIRangesList extract an IRanges object from an AlignedRead or a
+##' \item .catn Just some pretty printing.
+##' \item .checkArguments check that the provided argument match one
+##' of the formal definition of the function. Stop if not.
+##' \item .convertToUCSC
+##' convert chromosome names to UCSC compliant ones.
+##' \item .extractIRangesList extract an IRanges object from an AlignedRead or a
 ##' GappedAlignments object or a list returned by reading a bam file with
-##' Rsamtools.}
-##' \item{.getArguments For a given function returns the arguments
-##' passed as part of the \dots{} that match that function formals.}
-##' \item{.getName Get the genomicAnnotation object names. Necessary to deal
+##' Rsamtools.
+##' \item .getArguments For a given function returns the arguments
+##' passed as part of the \dots{} that match that function formals.
+##' \item .getName Get the genomicAnnotation object names. Necessary to deal
 ##' with the different possible annotation object: \code{RangedData} or
-##' \code{GRangesList}.}
-##' \item{.list.files check the arguments passed through the \dots to select only the valid ones.}
-##' \item{.normalizationDispatcher a function to dispatch
-##' the normalization depending on the 'outputFormat' chosen by the user.}
-##' \item{reduce Allow proper dispatch between the
+##' \code{GRangesList}.
+##' \item .list.files check the arguments passed through the \dots to select only the valid ones.
+##' \item .normalizationDispatcher a function to dispatch
+##' the normalization depending on the 'outputFormat' chosen by the user.
+##' \item reduce Allow proper dispatch between the
 ##' \link[intervals:Intervals_virtual-class]{intervals} and the
-##' \link[GenomicRanges:GRanges-class]{GenomicRanges} reduce function}
-##' \item{strand Allow proper dispatch between the
+##' \link[GenomicRanges:GRanges-class]{GenomicRanges} reduce function
+##' \item strand Allow proper dispatch between the
 ##' \link[genomeIntervals:Genome_intervals_stranded-class]{genomeIntervals} and
-##' the \link[GenomicRanges:GRanges-class]{GenomicRanges} strand function}
-##' \item{strand<- Allow proper dispatch between the
+##' the \link[GenomicRanges:GRanges-class]{GenomicRanges} strand function
+##' \item strand<- Allow proper dispatch between the
 ##' \link[genomeIntervals:Genome_intervals_stranded-class]{genomeIntervals} and
 ##' the \link[GenomicRanges:GRanges-class]{GenomicRanges} strand replace
-##' function }
+##' function
 ##' }
 ##' 
-##' 
-##' @aliases .catn .checkArguments .convertToUCSC .doBasicCount
-##' .extendCountList .extractIRangesList .getArguments .getName
+##' @aliases .catn .checkArguments .convertToUCSC 
+##' .extractIRangesList .getArguments .getName
 ##' .list.files
 ##' .normalizationDispatcher reduce reduce,RNAseq-method strand
 ##' strand,RNAseq-method strand<- strand<-,RNAseq-method
 ##' @name easyRNASeq internal methods
 ##' @rdname easyRNASeq-internal-methods
-##' @param aln A ShortRead AlignedRead object.
 ##' @param arg The argument name to check for.
-##' @param bam A list as returned by the Rsamtools scanBam function.
-##' @param chr.map An optional parameter to provide the actual mappiung between
-##' the original and desired chromosome names. Only works with the 'organism'
-##' parameter set to the "custom" value.
 ##' @param chr.names The chromosome names, as a character vector, to be
 ##' converted to UCSC ones
 ##' @param chr.sel A list of chromosome to restrict the IRanges spaces
 ##' returned.
-##' @param cList list of lists that contain count results
 ##' @param fun The name of the function
-##' @param gapped An object of the
-##' \link[GenomicRanges:GappedAlignments-class]{GappedAlignments} kind.
 ##' @param obj An RNAseq object, or for the 'normalizationDispatcher',
 ##' depending on the type: a CountDataSet, a DGEList, a matrix, or an RNAseq
 ##' object respectively
 ##' @param organism The organism name
-##' @param plot The organism used to lookup UCSC chromosome names
-##' @param silent a boolean to decide whether or not to plot information
-##' @param silent a boolean to decide whether or not to print progress
-##' information
-##' @param subType character string defining a sub type of counts, i.e. for the
-##' gene type one of bestExon or geneModel
-##' @param type character string specifying the type of count ("exons",
-##' "transcripts", "genes" or islands) or the type of object
+##' @param type character string specifying the type of object
 ##' (normalizationDispatcher)
 ##' @param value the appropriate strand object (strand and strand<-) or the
 ##' provided argument value (checkArguments)
-##' @param values a named vector containing count results
 ##' @param x an object of the
 ##' \link[GenomicRanges:GRanges-class]{GenomicRanges},
 ##' \link[intervals:Intervals_virtual-class]{intervals} or
@@ -86,9 +66,6 @@
 ##' and their value that matched those defined in the formal definition of the
 ##' function}
 ##' \item{convertedChrNames}{a converted vector of chromosome names}
-##' \item{counts}{an RleList}
-##' \item{countList}{an updated list of lists that
-##' contain count results}
 ##' \item{i.range}{an IRange object} \item{names}{The
 ##' annotation names, i.e. a combination of exon, feature, transcript and gene}
 ##' \item{normalized.counts}{Depending on the type, a CountDataSet, a DGEList,
