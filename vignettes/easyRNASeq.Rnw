@@ -45,8 +45,22 @@ the \Robject{RnaSeqTutorial} vignette in the data package
 understanding the details behind the content of the present
 vignette. If neither nor, just go ahead.
 
+Finally, if you find \Rpackage{easyRNASeq} useful and apply it in the
+frame of your research for a publication, please cite it:
+
+\subparagraph{}
+easyRNASeq: a bioconductor package for processing RNA-Seq data\\
+Nicolas Delhomme; Ismael Padioleau; Eileen E. Furlong; Lars M. Steinmetz\\
+Bioinformatics 2012; doi: 10.1093/bioinformatics/bts477\\
+
 \section{Recent changes to the vignette}
 
+\paragraph{1.2.4}
+Not much change to the vignette, but for the fact that the
+\Rpackage{easyRNASeq} application note got published in
+\textbf{Bioinformatics} \citep{Delhomme:2012p4678}.
+
+\paragraph{1.2.3}
 Part of that vignette have been recently updated to:
 \begin{itemize}
   \item first: enhance its readability.
