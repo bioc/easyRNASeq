@@ -46,9 +46,22 @@ the \Robject{RnaSeqTutorial} vignette in the data package
 understanding the details behind the content of the present
 vignette. If neither nor, just go ahead.
 
+Moreover, if you find \Rpackage{easyRNASeq} useful and apply it in the
+frame of your research for a publication, please cite it:
+
+\subparagraph{}
+easyRNASeq: a bioconductor package for processing RNA-Seq data\\
+Nicolas Delhomme; Ismael Padioleau; Eileen E. Furlong; Lars M. Steinmetz\\
+Bioinformatics 2012; doi: 10.1093/bioinformatics/bts477\\
+
 \section{Changes to the vignette}
 
 The last changes are reported in red.
+
+\paragraph{1.3.9}
+Not much change to the vignette, but for the fact that the
+\Rpackage{easyRNASeq} application note got published in
+\textbf{Bioinformatics} \citep{Delhomme:2012p4678}.
 
 \paragraph{1.3.5 - 1.3.8}
 The vignette has been updated to report function call changes to the
@@ -506,8 +519,9 @@ and most of the time a relevant error message will be reported. GTF
 files as produced by Ensembl and GFF3 files as produced by Flybase are
 correct implementation of these formats and are processed smoothly by
 the \Rfunction{easyRNASeq} function. If you encounter problem while
-using such an annotation file, please try to correct them. For the GTF
-format, the example file present in the \Rpackage{RnaSeqTutorial} can
+using such an annotation file, please try to correct them. For the GFF
+format, the example file present in the \Rpackage{RnaSeqTutorial}
+package can
 be used as a guideline. If you have installed this package, suggested
 by the \Rpackage{easyRNASeq} package, the following will give you the
 path of that file on your machine:

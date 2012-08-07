@@ -180,19 +180,24 @@ setMethod(
             ## check if we have a single read length
             rL <- unique(do.call("c",lapply(width(aln.ranges),unique)))
             rL <- rL[rL != 0]
-
+            rl <- sort(rL,decreasing=TRUE)
+            
             ## check what the user provided
             ## the double && is to make sure we have
             ## a single value tested even if rL
             ## has more than one element. R test anyway all conditions...
-            if(length(rL) == 1 && rL != readLength(obj)){
+            ## 2012-07-06 Changed to change the readLengh as well when there are multiple
+            ## readLengths
+            ## TODO make sure it works
+            if(any(rL != readLength(obj))){
               warning(paste("The read length stored in the object (probably provided as argument):",
                             readLength(obj),
-                            "\nis not the same as the one:",rL,"determined from the file:",
-                            filename,"\nUpdating it."))
+                            "\nis not the same as the",ifelse(length(rL)==1,"one:","ones:"),
+                            paste(rL,collapse=", "),"determined from the file:",
+                            filename,"\nUpdating the readLength slot."))
               readLength(obj) <- as.integer(rL)
-            }               
-
+            }
+            
             ## check for the chromosome size and report any problem
             tmp <- sapply(names(aln.ranges),function(chr){
               if(!chr %in% names(chrSize(obj))){
@@ -253,7 +258,11 @@ setMethod(
             ## 10 is unique length and read coverage
             ## 11 is unique length and bp coverage
             ## 01 and 11 are the same, we just return the bp coverage
-            
+
+            ## Nico August 6th 2012 v1.3.9
+            ## Removed the 1e6 divisions as Herve added the support for numeric Rle as a result
+            ## from the coverage vector.
+            ## Nico sometime July 2012 v1.3.7
             ## the 1e6 series of division allows us to take into account the read proportions for
             ## read of variable length. One would normally divide by the individual readLength, but
             ## weight can only take integers. As a consequence, using a multiplier / divisor of 1e6
@@ -264,22 +273,27 @@ setMethod(
             readCoverage(obj) <- switch(paste(as.integer(c(length(rL)==1,bp.coverage)),collapse=""),
                                         "00" = coverage(aln.ranges[match(valid.names,names(aln.ranges))],
                                           width=as.list(chrSize(obj)[match(valid.names,names(chrSize(obj)))]),
-                                          weight=1e6/width(aln.ranges)[match(valid.names,names(aln.ranges))])/1e6,
+                                          weight=1/width(aln.ranges)[match(valid.names,names(aln.ranges))]),
+                                          ##weight=1e6/width(aln.ranges)[match(valid.names,names(aln.ranges))])/1e6,
                                         "10" = coverage(aln.ranges[match(valid.names,names(aln.ranges))],
                                           width=as.list(chrSize(obj)[match(valid.names,names(chrSize(obj)))]))/readLength(obj),
                                         {coverage(aln.ranges[match(valid.names,names(aln.ranges))],
                                                   width=as.list(chrSize(obj)[match(valid.names,names(chrSize(obj)))]))})
 
+            ## Nico August 6th 2012 v1.3.9
+            ## commented ou as Herve implemented support for Rle numeric vectors for the coverage
+            ## and it would return a warning if any coverage value would be NA (i.e. above the 32/64 bit limit). 
+            ## Nico sometime July 2012 v1.3.7
             ## ensure that we're not returning junk
             ## could happen if 1e6 is too much and we
             ## reach the integer limits
-            if(!bp.coverage){
-              obs <- sum(sum(readCoverage(obj)))
-              exp <- librarySize(obj)
-              if( (obs < exp * 0.9) | (obs > exp * 1.1)){
-                stop("The observed number of count differs from the expected number! Something went wrong, please contact the author.")
-              }
-            }
+            ## if(!bp.coverage){
+            ##   obs <- sum(sum(readCoverage(obj)))
+            ##   exp <- librarySize(obj)
+            ##   if( (obs < exp * 0.9) | (obs > exp * 1.1)){
+            ##     stop("The observed number of count differs from the expected number! Something went wrong, please contact the author.")
+            ##   }
+            ## }
             
             ## return obj
             return(obj)

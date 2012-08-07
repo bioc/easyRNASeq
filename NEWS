@@ -1,3 +1,22 @@
+CHANGES IN VERSION 1.3.9
+-------------------------
+
+    o Added the manuscript citation.
+
+    o Updated the package version dependencies.
+
+BUG FIXES
+
+    o Improved the support for reads of different lengths.
+
+    o A cosmetic change to report read lengths as well when 
+    read files with variable read length are processed.
+
+    o Corrected a bug and enhanced the loading of gtf annotation
+    files. Thanks to Tomasz Kulinski for spotting the issue and 
+    providing the dataset to reproduce it.
+    
+
 CHANGES IN VERSION 1.3.8
 -------------------------
 NEW FEATURES

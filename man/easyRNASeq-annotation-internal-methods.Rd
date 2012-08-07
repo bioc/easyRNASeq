@@ -14,6 +14,10 @@
   to keep the information from in a gtf or gff file. If set
   to NULL all the annotations are returned.}
 
+  \item{fields}{added a parameter that allows defining the
+  fields parsed from a gtf file. Still internal, but could
+  easily be externalized.}
+
   \item{format}{describes the kind of annotation provided.
   One of gtf or gff.}
 

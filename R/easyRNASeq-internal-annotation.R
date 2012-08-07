@@ -21,6 +21,8 @@
 ##' @param annotation.type describes the kind of annotation to keep the
 ##' information from in a gtf or gff file. If set to NULL all the annotations
 ##' are returned.
+##' @param fields added a parameter that allows defining the fields parsed from
+##' a gtf file. Still internal, but could easily be externalized.
 ##' @param format describes the kind of annotation provided. One of gtf or gff.
 ##' @param organism Organism name
 ##' @param gAnnot a \code{\linkS4class{RangedData}} object containing exon
@@ -157,30 +159,41 @@
 	return(exon.range)
 }
 
-".getGtfRange" <- function(organism=character(1),filename=filename,ignoreWarnings=FALSE,...){
+".getGtfRange" <- function(organism=character(1),
+                           filename=filename,
+                           ignoreWarnings=FALSE,
+                           fields=c("gene_id","transcript_id","exon_id","gene_name"),...){
 	
 	## read the file and do sanity checks
 	all.annotation <- .readGffGtf(filename=filename,ignoreWarnings=ignoreWarnings,format="gtf",...)
 	
 	## extract the attributes
 	gffAttr <- do.call(rbind,strsplit(all.annotation$gffAttributes," "))
-	
-	## we need 3,5, 7 and 9
+
+        ## stop if the attributes we need are not present
+        if(!all(fields %in% gffAttr[1,])){
+          stop(paste("Your gtf file: ",filename," does not contain all the required fields: ",
+                     paste(fields,collapse=", "),".",sep=""))
+        }
+        
+        ## identify the columns we need
+        sel <- match(fields,gffAttr[1,]) + 1
+        
 	## gene 
         ## if we have no "ENSG"
-        last <- ifelse(length(grep("ENSG",gffAttr[,3]))==0,1000000L,19L)
+        last <- ifelse(length(grep("ENSG",gffAttr[,sel[1]]))==0,1000000L,19L)
 	 
         ## remove possible annoyance
-        all.annotation$gene <- gsub("\";?","",substr(gffAttr[,3],2,last))
+        all.annotation$gene <- gsub("\";?","",substr(gffAttr[,sel[1]],2,last))
         
 	## transcript
-	all.annotation$transcript <- gsub("\";?","",substr(gffAttr[,5],2,last))
+	all.annotation$transcript <- gsub("\";?","",substr(gffAttr[,sel[2]],2,last))
 	
 	## exon
-	all.annotation$exon <- paste(all.annotation$gene,gsub("\";?","",gffAttr[,7]),sep="_")
+	all.annotation$exon <- paste(all.annotation$gene,gsub("\";?","",gffAttr[,sel[3]]),sep="_")
 	
 	## gene name
-	all.annotation$gene.name <- gsub("\";?","",gffAttr[,9])
+	all.annotation$gene.name <- gsub("\";?","",gffAttr[,sel[4]])
 	
 	## done
 	exon.range <- as(all.annotation,"RangedData")

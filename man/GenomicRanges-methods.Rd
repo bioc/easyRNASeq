@@ -1,8 +1,8 @@
 \name{GenomicRanges additional methods}
-\alias{GenomicRanges additional methods}
 \alias{colnames}
-\alias{colnames,GRangesList-method}
 \alias{colnames,GenomicRanges-method}
+\alias{colnames,GRangesList-method}
+\alias{GenomicRanges additional methods}
 \title{Extension of the GenomicRanges package}
 \arguments{
   \item{obj}{An object of the \code{\linkS4class{GRanges}}

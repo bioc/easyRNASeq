@@ -57,3 +57,9 @@ gAnnot <- split(gAnnot,seqnames(gAnnot))
 22) Remove/Hide the readLength argument once we have introduced variable read length reads. Change the vignette then.
 
 23) Have the current directory as default
+
+24) Add the comments from Rich in both vignettes
+
+25) fix the bug reported by Tomek
+
+26) figure out the white pages for GFF anf GTF files and put them in the vignette
