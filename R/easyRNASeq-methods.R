@@ -279,7 +279,7 @@ setMethod(
                                           width=as.list(chrSize(obj)[match(valid.names,names(chrSize(obj)))]))/readLength(obj),
                                         {coverage(aln.ranges[match(valid.names,names(aln.ranges))],
                                                   width=as.list(chrSize(obj)[match(valid.names,names(chrSize(obj)))]))})
-
+          
             ## Nico August 6th 2012 v1.3.9
             ## commented ou as Herve implemented support for Rle numeric vectors for the coverage
             ## and it would return a warning if any coverage value would be NA (i.e. above the 32/64 bit limit). 
@@ -294,6 +294,10 @@ setMethod(
             ##     stop("The observed number of count differs from the expected number! Something went wrong, please contact the author.")
             ##   }
             ## }
+
+            ## Nico August 9th 2012 v.1.3.10
+            ## coverage use to return a named list which it does not anymore
+            names(readCoverage(obj)) <- valid.names
             
             ## return obj
             return(obj)
@@ -379,7 +383,8 @@ setMethod(
 ##' @param count The feature used to summarize the reads. One of
 ##' 'exons','features','genes','islands' or 'transcripts'. See details.
 ##' @param filenames The name, not the path, of the files to use
-##' @param filesDirectory The directory where the files to be used are located
+##' @param filesDirectory The directory where the files to be used are located.
+##' Defaults to the current directory.
 ##' @param filter The filter to be applied when loading the data using the
 ##' "aln" format
 ##' @param format The format of the reads, one of "aln","bam". If not "bam",
@@ -477,7 +482,7 @@ setMethod(
           f="easyRNASeq",
           signature="character",
           definition=function(
-            filesDirectory=character(1),
+            filesDirectory=getwd(),
             organism=character(1),
             chr.sizes=c("auto"),
             readLength=integer(1),
@@ -564,6 +569,7 @@ setMethod(
             }
             
             ## check the output formats, default to matrix
+            ## TODO use a default here as:  format <- match.arg(format)
             if(length(outputFormat)==4){
               outputFormat='matrix'
             }

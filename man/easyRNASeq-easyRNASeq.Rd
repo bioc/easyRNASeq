@@ -41,7 +41,7 @@
   use}
 
   \item{filesDirectory}{The directory where the files to be
-  used are located}
+  used are located. Defaults to the current directory.}
 
   \item{filter}{The filter to be applied when loading the
   data using the "aln" format}

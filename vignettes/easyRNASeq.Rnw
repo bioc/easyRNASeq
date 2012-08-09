@@ -58,6 +58,13 @@ Bioinformatics 2012; doi: 10.1093/bioinformatics/bts477\\
 
 The last changes are reported in red.
 
+\paragraph{1.3.10}
+Some vignette discrepancies have been corrected. Thanks to Richard
+Friedman for spotting them, see paragraph \ref{p:W}, page \pageref{p:W}.
+Some additional information about the 'gtf' and 'gff' format has been
+added after fixing the bug reported by Tomasz Kulinski. See
+section \ref{ss:usage}, page \pageref{ss:usage}.
+
 \paragraph{1.3.9}
 Not much change to the vignette, but for the fact that the
 \Rpackage{easyRNASeq} application note got published in
@@ -203,8 +210,8 @@ count table of 4 samples for every exon in the genome.
   following function call.}
 
 <<Load the library and create the object>>=
-library("easyRNASeq")
-library("RnaSeqTutorial")
+library(easyRNASeq)
+library(RnaSeqTutorial)
 library(BSgenome.Dmelanogaster.UCSC.dm3)
 
 count.table <- easyRNASeq(filesDirectory=system.file(
@@ -262,11 +269,17 @@ commodity.
   chromosome sizes from the BAM file. Note that this obviously
   does not work if your format is not 'bam'.}
 See the additional comments in the use case page \pageref{chrsize}.
+\textcolor{red}{In addition, since version $1.3.10$, the
+  'filesDirectory' argument defaults to the current directory. This
+  one can be looked up using the \Rfunction{getwd()} function.}
 
 \paragraph{Warnings}
-
-As you could see when running the previous example, a warning is
-emitted and quite rightly so. The annotation we are using here is
+\label{p:W}
+\textcolor{red}{As you could see when running the previous example,  warnings were
+emitted and quite rightly so. 
+\begin{enumerate}
+\item about the annotation:
+The annotation we are using here is
 redundant and this at two levels. First, some exons overlap. These are
 alternative exons from different transcript isoforms. Second, the
 annotation contains the information about all the possible different
@@ -282,6 +295,15 @@ summarization by ``GeneModels'' that address that problem (\emph{c.f.}
 solution is to provide an annotation object that contains no
 overlapping features. The \Rfunction{disjoin} function from the
 \Rpackage{IRanges} package offers a way to achieve this.
+\item about potential naming issue in the input file:
+It is (sadly) very frequent that the sequencing facilities use
+different naming conventions for the chromosomes they report in the
+alignment files. It is therefore very frequent that the annotation
+provided to easyRNASeq uses different chromosome names than the
+alignment file. These warnings are there to inform you about this
+issue.
+\end{enumerate}
+}
 
 \paragraph{Arguments}
 \label{p:args}
@@ -381,6 +403,19 @@ The structure of the \Rclass{RangedData} object that has to be
 provided when using the ``rda'' or ``env'' \Robject{annotationMethods}
 is described in the section \pref{ss:diffAnn}. For using a \Rclass{GRangesList}, see the
 use case page \pageref{grnglist}.
+\textcolor{red}{
+More details on the gff3 and gtf format can be obtained from:
+\begin{itemize}
+\item gff3: http://www.sequenceontology.org/gff3.shtml
+\item gtf: http://mblab.wustl.edu/GTF22.html
+\end{itemize}
+Unlike for the gtf, the gff3 ninth column holding the attributes has
+no mandatory tags. Some of them are however ``predefined''. As
+exemplified further down (see \ref{p:gI}, \pageref{p:gI}), we expect
+these ``predefined'' attributes to be used and we rely on the ``ID'',
+``Parent'' and ``Name'' to identify the relation between a gene and
+its exons and transcripts.
+}
 
 \paragraph{Summarization}
 
@@ -564,7 +599,7 @@ arguments``annotationMethod'' and ``annotationFile'' set to ``rda''
 and the path where you would have saved the rda file.
 
 \paragraph{genomeIntervals}
-
+\label{p:gI}
 In the next example is shown how to use a gff file for the same
 purpose. Clearly, every gff formatted file will have different gff
 attributes (its last column). This column contains ``key=value'' pairs
