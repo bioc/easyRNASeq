@@ -162,7 +162,7 @@
 ".getGtfRange" <- function(organism=character(1),
                            filename=filename,
                            ignoreWarnings=FALSE,
-                           fields=c("gene_id","transcript_id","exon_id","gene_name"),...){
+                           fields=c("gene_id","transcript_id","exon_number","gene_name"),...){
 	
 	## read the file and do sanity checks
 	all.annotation <- .readGffGtf(filename=filename,ignoreWarnings=ignoreWarnings,format="gtf",...)
