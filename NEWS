@@ -1,3 +1,31 @@
+CHANGES IN VERSION 1.3.12
+-------------------------
+
+    o Providing the 'outputFormat' argument is not
+    necessary anymore, it defaults to matrix (i.e. count
+    table).
+
+    o Relaxed the gtf file checking. If the gene_name is
+    absent, the gene_id is used instead.
+
+    o Improved some reporting and remove a bottle-neck 
+    occuring when there are many sequences in the reference.
+
+
+BUG FIXES
+
+    o Ensure that only the matched ranges are returned when
+    reading gapped alignments.
+
+    o The library size is more exactly calculated and is the 
+    number of aligned reads.
+
+    o Corrected a bug in the validity checking that prevented
+    bam files created by different aligners using the same 
+    reference to be processed as the reference sequences were
+    not ordered in the same fashion.
+
+
 CHANGES IN VERSION 1.3.11
 -------------------------
 

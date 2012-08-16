@@ -123,64 +123,60 @@ setMethod(
             
             ## switch to read the file
             ## not sure that the ... works for readAligned.
-            aln.ranges <- switch(format,
-                                 aln=.extractIRangesList(
-                                   readAligned(dirname(filename),
-                                               pattern=basename(filename),
-                                               filter=filter,type=type,...),
-                                   chr.sel),
-                                 bam={
-                                   flag <- eval(parse(text=paste(
-                                                        "scanBamFlag(isUnmappedQuery=isUnmappedQuery",
-                                                        .getArguments(scanBamFlag,...),")",sep="")))
-                                   .extractIRangesList(scanBam(filename,
-                                                              index=filename,
-                                                              param=ScanBamParam(flag=flag,what=what))[[1]],
-                                                              chr.sel)
-                                 },
-                                 gapped=.extractIRangesList(
+            aln.info <- switch(format,
+                               aln=.extractIRangesList(
+                                 readAligned(dirname(filename),
+                                             pattern=basename(filename),
+                                             filter=filter,type=type,...),
+                                 chr.sel),
+                               bam={
+                                 flag <- eval(parse(text=paste(
+                                                      "scanBamFlag(isUnmappedQuery=isUnmappedQuery",
+                                                      .getArguments(scanBamFlag,...),")",sep="")))
+                                 .extractIRangesList(scanBam(filename,
+                                                             index=filename,
+                                                             param=ScanBamParam(flag=flag,what=what))[[1]],
+                                                     chr.sel)
+                               },
+                               gapped=.extractIRangesList(
                                    readGappedAlignments(filename,
                                                         index=filename,
-                                                        format="BAM"
+                                                        format="BAM",
+                                                        use.names=TRUE
                                                         ),
-                                   chr.sel
-                                   )
+                                 chr.sel
                                  )
+                               )
             
             ## stop if the chr sel removes everything!
-            if(length(aln.ranges)==0){
+            if(length(aln.info$rng.list)==0){
               stop(paste("No data was retrieved from the file: ",
                          filename,
                          ". Make sure that your file is valid, that your 'chr.sel' (if provided) contains valid values; i.e. values as found in the file, not as returned by 'RNAseq'.",
                          sep=""))
-            } else {
-              
-              ## librarySize(obj) <- sum(as.numeric(sapply(aln.ranges,length)))
-              ## much faster
-              ## librarySize(obj) <- sum(sapply(width(aln.ranges),length))
-              ## much much faster
-              librarySize(obj) <- sum(elementLengths(aln.ranges))
             }
+            
+            librarySize(obj) <- aln.info$lib.size
             
             ## UCSC chr naming convention validity check
             if(validity.check){
               ## modified in version 1.1.9 (06.03.2012) as it was unwise to check for chr in the names
               ## that's dealt with in the .convertToUSCS function
-##              chr.grep <- grep("chr",names(aln.ranges))
-##              if(length(chr.grep)== 0 | !all(1:length(names(aln.ranges)) %in% chr.grep)){
+##              chr.grep <- grep("chr",names(aln.info$rng.list))
+##              if(length(chr.grep)== 0 | !all(1:length(names(aln.info$rng.list)) %in% chr.grep)){
                 if(organismName(obj) != "custom"){
                   if(!ignoreWarnings){
                     warning("You enforce UCSC chromosome conventions, however the provided alignments are not compliant. Correcting it.")
                   }
                 }
-                names(aln.ranges) <- .convertToUCSC(names(aln.ranges),organismName(obj),chr.map)
+                names(aln.info$rng.list) <- .convertToUCSC(names(aln.info$rng.list),organismName(obj),chr.map)
 ##              }
               }
 
             ## check if we have a single read length
-            rL <- unique(do.call("c",lapply(width(aln.ranges),unique)))
+            rL <- unique(do.call("c",lapply(width(aln.info$rng.list),unique)))
             rL <- rL[rL != 0]
-            rl <- sort(rL,decreasing=TRUE)
+            rL <- sort(rL,decreasing=TRUE)
             
             ## check what the user provided
             ## the double && is to make sure we have
@@ -188,37 +184,49 @@ setMethod(
             ## has more than one element. R test anyway all conditions...
             ## 2012-07-06 Changed to change the readLengh as well when there are multiple
             ## readLengths
-            ## TODO make sure it works
-            if(any(rL != readLength(obj))){
-              warning(paste("The read length stored in the object (probably provided as argument):",
-                            readLength(obj),
-                            "\nis not the same as the",ifelse(length(rL)==1,"one:","ones:"),
-                            paste(rL,collapse=", "),"determined from the file:",
-                            filename,"\nUpdating the readLength slot."))
-              readLength(obj) <- as.integer(rL)
+            if(length(readLength(obj))==1 && readLength(obj)==integer(1)){
+              .catn("Updating the read length information.")
+              if(length(rL)>1){
+                .catn(switch(format,"gapped" = "The alignments are gapped.",
+                             "The reads have been trimmed."))
+                .catn("Minimum length of",min(rL),"bp.")
+                .catn("Maximum length of",max(rL),"bp.")
+              } else {                
+                .catn("The reads are of",rL,"bp.")
+              }
+            } else {
+              if(any(rL != readLength(obj))){
+                warning(paste("The read length stored in the object (probably provided as argument):",
+                              readLength(obj),
+                              "\nis not the same as the",ifelse(length(rL)==1,"one:","ones:"),
+                              paste(rL,collapse=", "),"determined from the file:",
+                              filename,"\nUpdating the readLength slot."))
+              }
             }
+            readLength(obj) <- as.integer(rL)
             
             ## check for the chromosome size and report any problem
-            tmp <- sapply(names(aln.ranges),function(chr){
-              if(!chr %in% names(chrSize(obj))){
-                warning(paste("The chromosome:", chr, "is not present in the provided 'chr.sizes' argument"))
-                return(0)
-              }
-              sum(any(start(aln.ranges[[chr]]) > chrSize(obj)[match(chr,names(chrSize(obj)))]))
-            })
-            if(any(tmp>0)){
+            ## TODO this would not be necessary if chr.size is auto
+            if(!all(names(aln.info$rng.list) %in% names(chrSize(obj)))){
+              warning(paste("The chromosome(s):",
+                            paste(names(aln.info$rng.list)[!names(aln.info$rng.list) %in% names(chrSize(obj))],collapse=", "),
+                            "is (are) not present in the provided 'chr.sizes' argument"))
+            }
+           
+            if(any(unlist(start(aln.info$rng.list),use.names=FALSE) > chrSize(obj)[rep(names(aln.info$rng.list),
+                                                     elementLengths(start(aln.info$rng.list)))])){
               stop("Some of your read coordinates are bigger than the chromosome sizes you provided. Aborting!")
             }
             
             ## check and correct the names in the width and in the ranges, keep the common selector
-            valid.names <- sort(intersect(names(aln.ranges),names(chrSize(obj))))
+            valid.names <- sort(intersect(names(aln.info$rng.list),names(chrSize(obj))))
             if(length(chr.sel)>0){
               chrs <- .convertToUCSC(chr.sel,organismName(obj),chr.map)
               if(!all(chrs %in% valid.names)){
                 valid.names <- valid.names[valid.names %in% chrs]
                 if(!ignoreWarnings){
                   warn=FALSE
-                  if(!all(names(aln.ranges)[names(aln.ranges) %in% chrs] %in% valid.names)){
+                  if(!all(names(aln.info$rng.list)[names(aln.info$rng.list) %in% chrs] %in% valid.names)){
                     warning("Not all the selected ('chr.sel') chromosome names from your read file(s) (aln or bam) exist in your chromosome size list 'chr.sizes'.")   
                     warn=TRUE
                   }
@@ -235,7 +243,7 @@ setMethod(
             } else {
               if(!ignoreWarnings){
                 warn=FALSE
-                if(!all(names(aln.ranges) %in% valid.names)){
+                if(!all(names(aln.info$rng.list) %in% valid.names)){
                   warning("Not all the chromosome names present in your read file(s) (aln or bam) exist in your chromosome size list 'chr.sizes'.")   
                   warn=TRUE
                 }
@@ -271,13 +279,13 @@ setMethod(
             ## that is not reported!! On a 32bit machine, we should still be able to deal with a 2000+ bp coverage
             ## would anyone sequence that deep??
             readCoverage(obj) <- switch(paste(as.integer(c(length(rL)==1,bp.coverage)),collapse=""),
-                                        "00" = coverage(aln.ranges[match(valid.names,names(aln.ranges))],
+                                        "00" = coverage(aln.info$rng.list[match(valid.names,names(aln.info$rng.list))],
                                           width=as.list(chrSize(obj)[match(valid.names,names(chrSize(obj)))]),
-                                          weight=1/width(aln.ranges)[match(valid.names,names(aln.ranges))]),
-                                          ##weight=1e6/width(aln.ranges)[match(valid.names,names(aln.ranges))])/1e6,
-                                        "10" = coverage(aln.ranges[match(valid.names,names(aln.ranges))],
+                                          weight=1/width(aln.info$rng.list)[match(valid.names,names(aln.info$rng.list))]),
+                                          ##weight=1e6/width(aln.info$rng.list)[match(valid.names,names(aln.info$rng.list))])/1e6,
+                                        "10" = coverage(aln.info$rng.list[match(valid.names,names(aln.info$rng.list))],
                                           width=as.list(chrSize(obj)[match(valid.names,names(chrSize(obj)))]))/readLength(obj),
-                                        {coverage(aln.ranges[match(valid.names,names(aln.ranges))],
+                                        {coverage(aln.info$rng.list[match(valid.names,names(aln.info$rng.list))],
                                                   width=as.list(chrSize(obj)[match(valid.names,names(chrSize(obj)))]))})
           
             ## Nico August 6th 2012 v1.3.9
@@ -492,7 +500,7 @@ setMethod(
             format=c("bam","aln"),
             gapped=FALSE,
             count=c('exons','features','genes','islands','transcripts'),
-            outputFormat=c("DESeq","edgeR","matrix","RNAseq"),
+            outputFormat=c("matrix","DESeq","edgeR","RNAseq"),
             pattern=character(1),filenames=character(0),nbCore=1,
             filter=srFilter(),type="SolexaExport",
             chr.sel=c(),summarization=c("bestExons","geneModels"),
@@ -570,10 +578,7 @@ setMethod(
             
             ## check the output formats, default to matrix
             ## TODO use a default here as:  format <- match.arg(format)
-            if(length(outputFormat)==4){
-              outputFormat='matrix'
-            }
-            .checkArguments("easyRNASeq","outputFormat",outputFormat)
+            outputFormat <- match.arg(outputFormat)
 
             ## Check if library are loaded
             ## not needed, libraries are loaded by the package
@@ -648,13 +653,14 @@ setMethod(
                 ## Two sanity checks
                 if(!all(sapply(headers,
                                function(header,expected){
-                                 all(identical(names(header$targets),expected))
-                               },names(headers[[1]]$targets)))){
+                                 identical(sort(names(header$targets)),expected)
+                               },sort(names(headers[[1]]$targets))))){
                   stop("Not all BAM files use the same chromosome names.")
                 }
                 chr.sizes <- headers[[1]]$targets
                 if(!all(sapply(headers, function(header,chr.sizes){
-                  all(identical(header$targets,chr.sizes))
+                  identical(header$targets[match(names(chr.sizes),
+                                                 names(header$targets))],chr.sizes)
                 },chr.sizes))){
                   stop("The chromosome lengths differ between BAM files.")
                 }

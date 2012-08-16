@@ -28,32 +28,38 @@ gAnnot <- split(gAnnot,seqnames(gAnnot))
 ## create the disjoin exon
 ## report both the disjoin exon count and the new annotation
 
-5) clarify the vignette (email from Gordon Assaf, paired end, detail more the geneModels) and rework the Rd (clean them up, use describe instead of itemize, etc.)
+4) clarify the vignette (email from Gordon Assaf, paired end, detail more the geneModels) and rework the Rd (clean them up, use describe instead of itemize, etc.)
 
-6) Add Simon's data
+5) Add Simon's data
 
-7) Offer the possibility to define your own organism name conversion, akine to the srFilter
+6) Offer the possibility to define your own organism name conversion, akine to the srFilter
 
-8) rework geneModels to use the disjoin function / add a geneModel switch to the annotation (add geneModels functionality to return and modify the created gene models)
+7) rework geneModels to use the disjoin function / add a geneModel switch to the annotation (add geneModels functionality to return and modify the created gene models)
 
-9) deprecate the summarization
+8) deprecate the summarization
 
-10) group the parameter a la scanbamWhat
+9) group the parameter a la scanbamWhat
 
-11) lookup all the TODOs in the code
+10) lookup all the TODOs in the code
 
-12) From Simon, to filter reads: "NH:i:n" with n>1. However, not all aligner use the NH tag properly, so this is not a full solution. Another possibility is to discard everything with mapping quality below 10, because non-uniquly mapped reads should have a MAPQ<3.
+11) From Simon, to filter reads: "NH:i:n" with n>1. However, not all aligner use the NH tag properly, so this is not a full solution. Another possibility is to discard everything with mapping quality below 10, because non-uniquly mapped reads should have a MAPQ<3.
 
-14) Check the possibility to split BAM files
+12) Check the possibility to split BAM files
 
-15) Chek the possibility to stream BAM files
+13) Chek the possibility to stream BAM files
 
-16) Develop fragment counting
+14) Develop fragment counting
 
-19) Add a use case to clean up annotations against double counting.
+15) Add a use case to clean up annotations against double counting.
 
-21) check that for easyRNASeq: http://bioinformatics.oxfordjournals.org/content/28/7/1021.full
+16) check that for easyRNASeq: http://bioinformatics.oxfordjournals.org/content/28/7/1021.full
 
-22) Remove/Hide the readLength argument once we have introduced variable read length reads. Change the vignette then.
+17) Remove/Hide the readLength argument once we have introduced variable read length reads. Change the vignette then.
 
-23) Update RnaSeqTutorial dependencies to 0.0.10
+18) check if countBam is not faster for both bam and gappedAlignments to get the library size
+
+19) deal with paired end data
+
+20) the count should default to "exons", not "features"
+
+21) check richard's email about the H. sapiens use case.

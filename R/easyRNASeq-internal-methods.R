@@ -10,7 +10,7 @@
 ##' convert chromosome names to UCSC compliant ones.
 ##' \item .extractIRangesList extract an IRanges object from an AlignedRead or a
 ##' GappedAlignments object or a list returned by reading a bam file with
-##' Rsamtools.
+##' Rsamtools. It returns a list containing the IRangesList and library size.
 ##' \item .getArguments For a given function returns the arguments
 ##' passed as part of the \dots{} that match that function formals.
 ##' \item .getName Get the genomicAnnotation object names. Necessary to deal
@@ -73,23 +73,48 @@
 ##' @author Nicolas Delhomme
 ##' @keywords internal
 ## conversion from aln, bam, GRanges to IRangesList
+## returns as well the library size
 ".extractIRangesList" <- function(obj,chr.sel=c()){
   ## the default is bam (easy, it has no class, just a list)
-  aln.ranges <- switch(class(obj),
-                       "AlignedRead" = {
-                         if(any(is.na(position(obj)))){
-                           stop("Your read file contains NA position, please filter for them. Check '?naPositionFilter'.")
-                         }
-                         ## no need to do it for the width, reads always have a positive width
-                         split(IRanges(start=position(obj),width=width(obj)),as.character(chromosome(obj)))
-                       },
-                       "GappedAlignments" = split(ranges(obj),rname(obj)),
-                       split(IRanges(start=obj$pos,width=obj$qwidth),obj$rname)
-                       )
+  ## and only the aligned reads are kept at this point
+  
+  ## pre-filter
   if(!length(chr.sel)==0){
-    aln.ranges <- aln.ranges[names(aln.ranges) %in% chr.sel,]
+    obj <- switch(class(obj),
+                  "AlignedRead" = {
+                    obj[chromosome(obj) %in% chr.sel,]
+                  },
+                  "GappedAlignments" = {
+                    obj[seqnames(obj) %in% chr.sel,]
+                  },
+                  {
+                    sel <- obj$rname %in% chr.sel
+                    lapply(obj,"[",sel)
+                  }
+                  )      
   }
-  return(aln.ranges)
+
+  ## TODO check if countBam is not faster for both bam and gappedAlignments
+  
+  ## get the ranges and lib sizes
+  return(switch(class(obj),
+                "AlignedRead" = {
+                  if(any(is.na(position(obj)))){
+                    stop("Your read file contains NA position, please filter for them. Check '?naPositionFilter'.")
+                  }
+                  ## no need to do it for the width, reads always have a positive width
+                  list(rng.list=split(IRanges(start=position(obj),width=width(obj)),as.character(chromosome(obj))),
+                       lib.size=length(obj))
+                },
+                "GappedAlignments" = {
+                  ## we want only the mapped regions
+                  grnglist <- grglist(obj,drop.D.range=TRUE)
+                  list(rng.list=split(unlist(ranges(grnglist),use.names=FALSE),unlist(seqnames(grnglist),use.names=FALSE)),
+                       lib.size=length(unique(names(obj))))
+                },
+                list(rng.list=split(IRanges(start=obj$pos,width=obj$qwidth),obj$rname),
+                     lib.size=length(obj$rname))
+                ))
 }
 
 ## keep only the valid names

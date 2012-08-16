@@ -74,15 +74,17 @@
   .convertToUCSC convert chromosome names to UCSC compliant
   ones. \item .extractIRangesList extract an IRanges object
   from an AlignedRead or a GappedAlignments object or a
-  list returned by reading a bam file with Rsamtools. \item
-  .getArguments For a given function returns the arguments
-  passed as part of the \dots{} that match that function
-  formals. \item .getName Get the genomicAnnotation object
-  names. Necessary to deal with the different possible
-  annotation object: \code{RangedData} or
-  \code{GRangesList}. \item .list.files check the arguments
-  passed through the \dots to select only the valid ones.
-  \item .normalizationDispatcher a function to dispatch the
+  list returned by reading a bam file with Rsamtools. It
+  returns a list containing the IRangesList and library
+  size. \item .getArguments For a given function returns
+  the arguments passed as part of the \dots{} that match
+  that function formals. \item .getName Get the
+  genomicAnnotation object names. Necessary to deal with
+  the different possible annotation object:
+  \code{RangedData} or \code{GRangesList}. \item
+  .list.files check the arguments passed through the \dots
+  to select only the valid ones. \item
+  .normalizationDispatcher a function to dispatch the
   normalization depending on the 'outputFormat' chosen by
   the user. \item reduce Allow proper dispatch between the
   \link[intervals:Intervals_virtual-class]{intervals} and

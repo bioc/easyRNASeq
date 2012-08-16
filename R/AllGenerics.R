@@ -234,7 +234,7 @@ setGeneric(
              annotationObject=RangedData(),
              format=c("bam","aln"),gapped=FALSE,
              count=c('exons','features','genes','islands','transcripts'),
-             outputFormat=c("DESeq","edgeR","matrix","RNAseq"),
+             outputFormat=c("matrix","DESeq","edgeR","RNAseq"),
              pattern=character(1),filenames=character(0),nbCore=1,
              filter=srFilter(),type="SolexaExport",
              chr.sel=c(),summarization=c("bestExons","geneModels"),

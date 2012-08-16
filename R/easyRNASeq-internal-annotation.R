@@ -168,10 +168,11 @@
 	all.annotation <- .readGffGtf(filename=filename,ignoreWarnings=ignoreWarnings,format="gtf",...)
 	
 	## extract the attributes
-	gffAttr <- do.call(rbind,strsplit(all.annotation$gffAttributes," "))
+	gffAttr <- do.call(rbind,strsplit(all.annotation$gffAttributes," |;"))
 
         ## stop if the attributes we need are not present
-        if(!all(fields %in% gffAttr[1,])){
+        ## we relax on gene_name
+        if(!all(fields[fields != "gene_name"] %in% gffAttr[1,])){
           stop(paste("Your gtf file: ",filename," does not contain all the required fields: ",
                      paste(fields,collapse=", "),".",sep=""))
         }
@@ -184,17 +185,22 @@
         last <- ifelse(length(grep("ENSG",gffAttr[,sel[1]]))==0,1000000L,19L)
 	 
         ## remove possible annoyance
-        all.annotation$gene <- gsub("\";?","",substr(gffAttr[,sel[1]],2,last))
+        all.annotation$gene <- gsub(" \";?","",substr(gffAttr[,sel[1]],1,last))
         
 	## transcript
-	all.annotation$transcript <- gsub("\";?","",substr(gffAttr[,sel[2]],2,last))
+	all.annotation$transcript <- gsub(" \";?","",substr(gffAttr[,sel[2]],1,last))
 	
 	## exon
 	all.annotation$exon <- paste(all.annotation$gene,gsub("\";?","",gffAttr[,sel[3]]),sep="_")
 	
 	## gene name
-	all.annotation$gene.name <- gsub("\";?","",gffAttr[,sel[4]])
-	
+        ## we can only have one NA: gene_name, if so, get the gene_id instead
+        if(is.na(sel[4])){
+          all.annotation$gene.name <- all.annotation$gene
+        } else {
+          all.annotation$gene.name <- gsub("\";?","",gffAttr[,sel[4]])
+        }
+        
 	## done
 	exon.range <- as(all.annotation,"RangedData")
 	universe(exon.range)<-organism
