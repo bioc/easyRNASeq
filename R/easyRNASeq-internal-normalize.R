@@ -62,10 +62,10 @@
 
                   if(plot){
                     ## plot the dispersion estimate
-                    obj <- estimateTagwiseDisp(obj, prior.n = 10, trend = TRUE,prop.used = 0.3, grid.length = 500)
+                    obj <- estimateTagwiseDisp(obj)
                     plotDispersionEstimates(obj)
                     plotMeanVar(obj, show.raw.vars = TRUE, show.tagwise.vars = TRUE,
-                                dispersion.method = "qcml", NBline = TRUE, main="Mean-variance (tag variances against tag abundance)")
+                                NBline = TRUE, main="Mean-variance (tag variances against tag abundance)")
                     legend("bottomright",col=c("gray60","lightskyblue","darkred","dodgerblue3",1),
                            pch=c("o","o","x",rep(NA,2)),lty=c(rep(NA,3),1,1),lwd=c(rep(NA,3),4,1),
                            ,pt.cex=0.6,c("raw tagwise variances","gene estimated variance",

@@ -1,3 +1,20 @@
+CHANGES IN VERSION 1.2.5
+-------------------------
+
+BUG FIXES
+
+    o Corrected a bug in the condition file name checking.
+    o When using edgeR, it was not possible to de-activate
+    the drawing of the quality assessment plots.
+    o Some edgeR changes to the API have been ported to the
+    stable R version, should not have occured... The following 
+    are changes that adapt to that new API, changes ported from 
+    version the easyRNASeq development version 1.3.3...
+    o Adapted to the new arguments of the edgeR 
+    estimateTagwiseDisp function
+    o Removed the dispersion.method argument from the plotMeanVar
+    edgeR method call as this argument is defunct.
+
 CHANGES IN VERSION 1.2.4
 -------------------------
 

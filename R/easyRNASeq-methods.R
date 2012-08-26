@@ -355,7 +355,7 @@ setMethod(
               filesList <- filesList[match(filenames,names(filesList))]
             } else {
               if(length(conditions)>0){
-                filesList <- filesList[,match(names(conditions),names(filesList))]
+                filesList <- filesList[match(names(conditions),names(filesList))]
               }
             }
             
@@ -600,7 +600,7 @@ setMethod(
                           "edgeR"={
                             dgeList <- DGEList(counts=readCounts(obj,count,summarization,unique=TRUE),group=conditions)
                             if(normalize){
-                              dgeList <- .normalizationDispatcher(dgeList,type="edgeR",silent=silent)
+                              dgeList <- .normalizationDispatcher(dgeList,type="edgeR",silent=silent,plot=plot)
                             }
                             return(dgeList)
                           },
