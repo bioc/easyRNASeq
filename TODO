@@ -63,3 +63,7 @@ gAnnot <- split(gAnnot,seqnames(gAnnot))
 20) the count should default to "exons", not "features"
 
 21) check richard's email about the H. sapiens use case.
+
+22) Add support for SummarizedExperiments
+
+23) Check that the double quotes are removed from textual context attribute when loading a gtf
