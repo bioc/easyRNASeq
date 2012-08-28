@@ -58,7 +58,13 @@ Bioinformatics 2012; doi: 10.1093/bioinformatics/bts477\\
 
 The last changes are reported in red.
 
-\paragraph{1.3.10}
+\paragraph{1.3.14}
+A new section: \ref{s:ytc} was added describing foreseen changes to
+the package, see page \pageref{s:ytc}. Additional changes to the
+vignette use-case where made thanks to Richard Friedman's suggestions,
+see section \ref{p:pasohs}, page \pageref{p:pasohs}.
+
+\paragraph{1.3.10 - 1.3.13}
 Some vignette discrepancies have been corrected. Thanks to Richard
 Friedman for spotting them, see paragraph \ref{p:W}, page \pageref{p:W}.
 Some additional information about the 'gtf' and 'gff' format has been
@@ -1229,23 +1235,76 @@ and the resulting bam files processed with the \Rfunction{easyRNASeq}
 function as described in the first part of the present vignette! Enjoy.
 
 \newpage
+\section{Yet to come}
+\label{s:ytc}
+\textcolor{red}{
+The \Rfunction{easyRNASeq} can now return a
+\Rclass{SummarizedExperiment} object. The aim is to have it be the
+only output in the next development version of the
+\Rpackage{easyRNASeq} package (version $1.5.x$). This in order to
+consolidate the kind of objects used for Next-Generation Sequencing in
+the Bioconductor repository (rather ambitious, yes). For this, as of
+version $1.3.14$, a new function: \Rfunction{count} has been
+introduced that supersedes the \Rfunction{easyRNASeq} function. An
+example follows, however the parameters -currently alike those of the
+\Rfunction{easyRNASeq} - will be refined in order to consolidate and
+structure them, so do not rely on them for writing production code.
+}
+
+<<count function example, eval=FALSE>>=
+## creating a SummarizedExperiment from 4 bam files
+sumExp <- count(filesDirectory=system.file(
+                  "extdata",
+                  package="RnaSeqTutorial"),
+                pattern="[A,C,T,G]{6}\\.bam$",
+                readLength=30L,
+                organism="Dmelanogaster",
+                chr.sizes=seqlengths(Dmelanogaster),
+                annotationMethod="rda",
+                annotationFile=system.file(
+                  "data",
+                  "gAnnot.rda",
+                  package="RnaSeqTutorial"),
+                count="exons"
+                )
+## the counts
+assays(sumExp)
+## the sample info
+colData(sumExp)
+## the 'features' info
+rowData(sumExp)
+
+@
+
+\textcolor{red}{
+See the \Rpackage{GenomicRange} package \Rclass{SummarizedExperiment}
+class for more details on last three accessors used in the example.
+}
+
+\newpage
 
 \section{Use Cases}
 \label{s:useCases}
 The following use cases have been created to answer user request from
-the Bioconductor mailing list. We want to thank Francesco Lescai and
-Wade Davis for asking pertinent questions that helped us make this
-vignette better.
+the Bioconductor mailing list. We want to thank Francesco Lescai,
+Wade Davis and Richard Friedman for asking pertinent questions that
+helped us make this vignette better.
 \newline
 The first use case examplify how to use the \Rfunction{easyRNASeq} to
 get \Rpackage{DESeq} normalized data from two human samples. It
 introduces as well how to use the \Rpackage{GenomicFeatures} to
-retrieve annotations. The second use case
-describe how to combine different annotation (chromosomic and genic),
-when for example the chromosome names in the aligned file(s) are
-different from the annotation retrieved using \Rpackage({biomaRt}. In
-both use case, we will assume the \Rpackage{easyRNASeq} library as
-already been loaded as in:
+retrieve annotations. \textcolor{red}{Note that the data for this example
+is not readily available. If you want to reproduce this example, you
+will need to get 2 (at least) fastq files from either the SRA or ENA websites and
+align them against the human genome using your aligner of choice and
+convert the alignment into the BAM format. An example of how to
+achieve this in R is described in the beginning of the use case.}
+\newline
+The second use case describe how to combine different annotation
+(chromosomic and genic), when for example the chromosome names in the
+aligned file(s) are different from the annotation retrieved using
+\Rpackage({biomaRt}. In both use case, we will assume the
+\Rpackage{easyRNASeq} library as already been loaded as in:
 
 <<load the lib, eval=FALSE>>=
 library(easyRNASeq)
@@ -1253,6 +1312,89 @@ library(easyRNASeq)
 
 \paragraph{Processing a set of human samples}
 \label{p:pasohs}
+
+\subparagraph{Getting the data}
+\textcolor{red}{If you already have a set of bam files resulting of short read
+alignments against the human genome, you can just proceed to the next
+paragraph. If not here is an example on how to retrieve and align data
+in R. Note that the \Rpackage{Rsubread} is only supported on the linux
+platform. You'll need to use your aligner of choice and generate BAM
+files if you're using another platform. However you should still be
+able to download the SRA/ENA files. The files listed in this example
+are from the \citet{Jaager:2012p4708} study, but where simply selected for their
+small size. Still downloading and creating all the necessary file
+requires times and a computer with a sufficient amount of memory to
+index the human genome.}
+<<bam prep, eval=FALSE>>=
+library(BSgenome.Hsapiens.UCSC.hg19)
+library(GEOquery)
+library(SRAdb)
+library(Rsamtools)
+library(Rsubread)
+
+## create a temp dir
+dir.create(file.path(getwd(),"tmp1234"))
+
+## change the working directory
+setwd(file.path(getwd(),"tmp1234"))
+
+## init SRA
+sqlfile <- getSRAdbFile()
+
+## init a connection
+sra_con <- dbConnect(SQLite(),sqlfile)
+
+## list the files
+acc <- c("SRR490224","SRR490225")
+getFASTQinfo( in_acc = acc, srcType = 'ftp' )
+
+## get the read files
+getSRAfile( in_acc=acc, sra_con, destDir = getwd(),
+           fileType = 'fastq', srcType = 'ftp' )
+
+## close the connection
+dbDisconnect( sra_con )
+
+## write the human genome sequences
+writeXStringSet(Reduce(append,
+                       lapply(seqnames(Hsapiens),
+                              function(nam){
+                                dss <- DNAStringSet(unmasked(Hsapiens[[nam]]))
+                                names(dss) <- nam
+                                dss
+                              })),
+                file="hg19.fa")
+
+## create the indexes
+dir.create("indexes")
+buildindex(basename=file.path("indexes","hg19"),
+           reference="hg19.fa")
+
+## align the reads
+sapply(dir(pattern="*\\.gz$"),function(fil){
+  ## decompress the files
+  gunzip(fil)
+  
+  ## align
+  align(index=file.path("indexes","hg19"),
+        readfile1=sub("\\.gz$","",fil),
+        nsubreads=2,TH1=1,
+        output_file=sub("\\.fastq\\.gz$","\\.sam",fil)
+        )
+  
+  ## create bam files
+  asBam(file=sub("\\.fastq\\.gz$","\\.sam",fil),
+        destination=sub("\\.fastq\\.gz$","",fil),
+        indexDestination=TRUE)
+})
+
+@ 
+
+\textcolor{red}{Note that this has generated a number of files that
+  you should clean up afterwards, i.e. delete the ``tmp1234'' folder,
+  once you are done with the use case.}
+
+\subparagraph{Processing the data}
 First, we start by retrieveing the size of the chromosomes. This is an
 important information for calculating any feature count. Actually,
 neither the BSgenome nor any related packages are required for
@@ -1310,7 +1452,7 @@ following function call.}
 rnaSeq <- easyRNASeq(filesDirectory=getwd(),
                     organism="Hsapiens",
                     chr.sizes=chr.sizes,
-                    readLength=100L,
+                    readLength=58L,
                     annotationMethod="biomaRt",
                     count="exons",
                     filenames=bamfiles[1],
@@ -1319,7 +1461,7 @@ rnaSeq <- easyRNASeq(filesDirectory=getwd(),
 gAnnot <- genomicAnnotation(rnaSeq)
 @
 
-As one can see by looking at this object, it contains 244
+As one can see by looking at this object, it contains $434$
 ``chromosomes'', most of which are of no interest to us. For that
 reason, we first filter it and then save it to the disk for later
 re-use. The ``.rda'' extension is a synonym of the ``.RData'' one and
@@ -1337,7 +1479,7 @@ Now using the modified, saved annotation, we can get a count table as follows:
 countTable <- easyRNASeq(filesDirectory=getwd(),
                         organism="Hsapiens",
                         chr.sizes=chr.sizes,
-                        readLength=100L,
+                        readLength=58L,
                         annotationMethod="rda",
                         annotationFile="gAnnot.rda",
                         count="exons",
@@ -1372,19 +1514,19 @@ As previously, this annotation could be saved to disk or can as well
 be used directly, using the \Robject{annotationMethod} "env" and the
 \Robject{annotationObject} arguments. Additionaly, one can select chromosome of
 interest using the \Robject{chr.sel} argument. It accepts a vector of
-chromosome names. In the following, we subset for the chromosome ``1'' only.
+chromosome names. In the following, we subset for the chromosome ``chr1'' only.
 \label{env}
 \label{chr.sel}
 
 <<sub setting, eval=FALSE>>= 
 countTable <- easyRNASeq(filesDirectory=getwd(),
                         organism="Hsapiens",
-                        readLength=100L,
+                        readLength=58L,
                         annotationMethod="env",
                         annotationObject=gAnnot,
                         count="exons",
                         filenames=bamfiles[1],
-                        chr.sel="1"
+                        chr.sel="chr1"
                         )
 @
 
@@ -1392,6 +1534,22 @@ countTable <- easyRNASeq(filesDirectory=getwd(),
   'chr.sizes' argument, just to demonstrate that the chr.sizes can be
   retrieved from the bam files. Removing the argument is the same as
   setting it to its default value: 'auto'}
+
+\textcolor{red}{Alternatively, one can use the \Rfunction{count}
+function to get a \Rclass{SummarizedExperiment} object back. Mind the
+comments in section \ref{s:ytc}, page \pageref{s:ytc} though.}
+
+<<using the count function, eval=FALSE>>=
+sumExp <- count(filesDirectory=getwd(),
+                    organism="Hsapiens",
+                    readLength=58L,
+                    annotationMethod="env",
+                    annotationObject=gAnnot,
+                    count="exons",
+                    filenames=bamfiles[1],
+                    chr.sel="chr1"
+                    )
+@ 
 
 Finally, instead of returning a count table, we can get a
 \Robject{CountDataSet} instance from the \Rpackage{DESeq}
@@ -1415,12 +1573,11 @@ names(conditions) <- bamfiles
 countDataSet <- easyRNASeq(filesDirectory=getwd(),
                           organism="Hsapiens",
                           chr.sizes=chr.sizes,
-                          readLength=100L,
                           annotationMethod="env",
                           annotationObject=gAnnot,
                           count="exons",
                           filenames=bamfiles,
-                          chr.sel="1",
+                          chr.sel="chr1",
                           outputFormat="DESeq",
                           normalize=TRUE,
                           conditions=conditions,
@@ -1428,6 +1585,11 @@ countDataSet <- easyRNASeq(filesDirectory=getwd(),
                           method="blind"
                         )
 @ 
+
+\textcolor{red}{Note that as the read length differs between the two
+files: $58$ and $76$, the \Robject{readLength} argument was removed
+from the previous function call. The read size is then identified
+automatically.}
 
 \paragraph{Dealing with annotation inconsistencies}
 \label{p:dwai}

@@ -18,14 +18,14 @@ setMethod(
           f="print",
           signature="RNAseq",
           definition=function(x,verbose=FALSE,...){
-            cat(class(x), "annotation and data for", organismName(x), "containing:\n\n")
+            .catn(class(x), "annotation and data for", organismName(x), "containing:\n")
             ## annotations
-            cat("1) Annotations:\n\n")
+            .catn("1) Annotations:\n")
             
             
             ## chromosomes
             if(verbose){
-              cat("\ta) Chromosome sizes:\n\n")
+              .catn("\ta) Chromosome sizes:\n")
               if(length(chrSize(x)>3)){
                 sToDisp <- unlist(chrSize(x))[c(1,2,length(chrSize(x)))]
                 sToDisp[4]<-sToDisp[3]
@@ -34,37 +34,41 @@ setMethod(
                 names(sToDisp[3])<-"..."
                 print(sToDisp)
               } else {
-                cat(unlist(chrSize(x)),"\n")
+                .catn(unlist(chrSize(x)))
               }
             } else {
-              cat("\ta)",length(chrSize(x)),"chromosomes\n\n")
+              .catn("\ta)",length(chrSize(x)),"chromosomes\n")
             }
             
             ## genomic Annotations (inc. geneModel and readIslands)
             if(verbose){
-              cat("\n\tb) Genomic annotations:\n\n")
+              .catn("\n\tb) Genomic annotations:\n")
               print(genomicAnnotation(x))
-              cat("\n\tc) Gene models\n\n")
+              .catn("\n\tc) Gene models\n")
               print(geneModel(x))
-              cat("\n\td) Read islands\n\n")
+              .catn("\n\td) Read islands\n")
               print(readIslands(x))
             } else {
-              cat("\n\tb)",length(genomicAnnotation(x)),"genomic annotations\n\n")
-              cat("\n\tc)",length(geneModel(x)),"gene models\n\n")
-              cat("\n\td)",length(readIslands(x)),"read islands\n\n")
+              .catn("\n\tb)",length(genomicAnnotation(x)),"genomic annotations\n")
+              .catn("\n\tc)",length(geneModel(x)),"gene models\n")
+              .catn("\n\td)",length(readIslands(x)),"read islands\n")
             }
             
             ## data
-            cat("\n\n2) Data:\n")
-            cat("\tcoming from reads of length:",readLength(x),"\n")
+            .catn("\n\n2) Data:")
+            if(length(readLength(x))>1){
+              .catn("\tcoming from reads of length spanning the range: ",min(readLength(x)),"-",max(readLength(x)))
+            } else {
+              .catn("\tcoming from reads of length:",readLength(x))
+            }
             if(verbose){
-              cat("\tresulting in the coverage:\n\n")
-              cat(show(readCoverage(x)),"\n")
+              .catn("\tresulting in the coverage:\n")
+              .catn(show(readCoverage(x)))
             } else {
               if(length(chrSize(x))>0){
                 if(length(readCoverage(x))>0){
                   sel<-match(names(readCoverage(x)),names(chrSize(x)))
-                  cat(
+                  .catn(
                       paste("\thaving an average ",
                             signif(
                                    mean(
@@ -76,7 +80,7 @@ setMethod(
                                           
                                           ),
                                    digits=2),
-                            "X coverage.\n\n",
+                            "X coverage.\n",
                             sep=""))
                 }
               }
@@ -84,39 +88,39 @@ setMethod(
             
             ## results
             if(length(readCounts(x))>0){
-              cat("\n3) Results:\n")
+              .catn("\n3) Results:")
               i<-j<-1
               section <- c("a","b","c","d")
               subsection<-c(1,2)
               for(count.name in names(readCounts(x))){
                 switch(EXPR=count.name,
                        "exons"={
-                         cat("\n\t",section[i],") exon summarization\n",sep="")
-                         cat(str(readCounts(x)$exons),"\n")
+                         .catn("\n\t",section[i],") exon summarization",sep="")
+                         .catn(str(readCounts(x)$exons))
                        },
                        "features"={
-                         cat("\n\t",section[i],") feature summarization\n",sep="")
-                         cat(str(readCounts(x)$features),"\n")
+                         .catn("\n\t",section[i],") feature summarization",sep="")
+                         .catn(str(readCounts(x)$features))
                        },
                        "island"={
-                         cat("\n\t",section[i],") island summarization\n",sep="")
-                         cat(str(readCounts(x)$islands),"\n")
+                         .catn("\n\t",section[i],") island summarization",sep="")
+                         .catn(str(readCounts(x)$islands))
                        },
                        "transcripts"={
-                         cat("\n\t",section[i],") transcript summarization\n",sep="")
-                         cat(str(readCounts(x)$transcripts),"\n")
+                         .catn("\n\t",section[i],") transcript summarization",sep="")
+                         .catn(str(readCounts(x)$transcripts))
                        },
                        "genes"={
-                         cat("\n\t",section[i],") gene summarization\n",sep="")
+                         .catn("\n\t",section[i],") gene summarization",sep="")
                          for(gene.name in names(readCounts(x)$genes)){
                            switch(EXPR=gene.name,
                                   "bestExons"={
-                                    cat("\n\t\t",subsection[j],") best exon summarization\n",sep="")
-                                    cat(str(readCounts(x)$genes$bestExon),"\n")
+                                    .catn("\n\t\t",subsection[j],") best exon summarization",sep="")
+                                    .catn(str(readCounts(x)$genes$bestExon))
                                   },
                                   "geneModels"={
-                                    cat("\n\t\t",subsection[j],") gene model summarization\n",sep="")
-                                    cat(str(readCounts(x)$genes$geneModel),"\n")
+                                    .catn("\n\t\t",subsection[j],") gene model summarization",sep="")
+                                    .catn(str(readCounts(x)$genes$geneModel))
                                   })
                            j<-j+1
                          }

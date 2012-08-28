@@ -81,9 +81,10 @@
   organism}
 
   \item{outputFormat}{By default, easyRNASeq returns a
-  count matrix. If one of
-  \code{DESeq},\code{edgeR},\code{RNAseq} is provided then
-  the respective object will be returned.}
+  matrix. If one of
+  \code{DESeq},\code{edgeR},\code{RNAseq},
+  \code{\linkS4class{SummarizedExperiment}} is provided
+  then the respective object is returned.}
 
   \item{pattern}{For easyRNASeq, the pattern of file to
   look for, e.g. "bam$"}
@@ -113,11 +114,12 @@
 }
 \value{
   Returns a count table (a matrix of m features x n
-  samples) unless the \code{outputFormat} option has been
-  set, in which case an object of type
-  \code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}}
-  or \code{\link[edgeR:DGEList]{edgeR:DGEList}} or
-  \code{\linkS4class{RNAseq}} is returned
+  samples). If the \code{outputFormat} option has been set,
+  a corresponding object is returned: a
+  \code{\linkS4class{SummarizedExperiment}}, a
+  \code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}},
+  a \code{\link[edgeR:DGEList]{edgeR:DGEList}} or
+  \code{\linkS4class{RNAseq}}.
 }
 \description{
   This function is a wrapper around the more low level
@@ -232,6 +234,7 @@
 }
 \seealso{
   \code{\linkS4class{RNAseq}}
+  \code{\linkS4class{SummarizedExperiment}}
   \code{\link[edgeR:DGEList]{edgeR:DGEList}}
   \code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}}
   \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq:knownOrganisms}}

@@ -1,3 +1,23 @@
+CHANGES IN VERSION 1.3.14
+-------------------------
+
+NEW FEATURES
+
+    o easyRNASeq now returns a SummarizedExperiment in
+    an effort to consolidate the objects used for Next 
+    Generation Sequencing in Bioconductor. This is the
+    new default of the count function. The count function
+    is a new function to supersed easyRNASeq in the coming 
+    development version (1.5.x) to consolidate the 
+    parameters and output of the easyRNASeq function.
+
+BUG FIXES
+
+    o corrected a validity check that went permissive.
+    o changed the print method to display the read length
+    range when dealing with variable read lengths rather
+    than every single value.
+
 CHANGES IN VERSION 1.3.13
 -------------------------
 

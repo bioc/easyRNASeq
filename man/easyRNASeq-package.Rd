@@ -14,8 +14,8 @@
 }
 \details{
   \tabular{ll}{ Package: \tab easyRNASeq\cr Type: \tab
-  Package\cr Version: \tab 1.3.13\cr Date: \tab
-  2012-08-25\cr License: \tab Artistic-2.0\cr LazyLoad:
+  Package\cr Version: \tab 1.3.14\cr Date: \tab
+  2012-08-27\cr License: \tab Artistic-2.0\cr LazyLoad:
   \tab yes\cr Depends: \tab methods, parallel, biomaRt,
   edgeR, DESeq, genomeIntervals, Rsamtools, ShortRead,
   RnaSeqTutorial\cr Suggests: \tab
@@ -26,11 +26,15 @@
   \code{\link[easyRNASeq:easyRNASeq]{easyRNASeq}} will
   summarize the counts per feature of interest, for as many
   samples as provided and will return a count matrix (N*M)
-  where N will be the features and M the samples. This data
-  can be corrected to \pkg{RPKM} in which case a matrix of
+  where N are the features and M the samples. This data can
+  be corrected to \pkg{RPKM} in which case a matrix of
   corrected value is returned instead, with the same
-  dimensions. If the necessary sample information are
-  provided, the data can be normalized using either
+  dimensions. Alternatively a
+  \code{\linkS4class{SummarizedExperiment}} can be returned
+  and this is expected to be the default in the upcoming
+  version of easyRNASeq (as of 1.5.x). If the necessary
+  sample information are provided, the data can be
+  normalized using either
   \code{\link[DESeq:newCountDataSet]{DESeq}} or
   \code{\link[edgeR:DGEList]{edgeR}} and the corresponding
   package object returned. For more insider details, and
@@ -82,6 +86,9 @@
 \seealso{
   The class RNAseq specification:
   \code{\linkS4class{RNAseq}}
+
+  The default output class specification:
+  \code{\linkS4class{SummarizedExperiment}}
 
   The imported packages:
   \code{\link[biomaRt:useMart]{biomaRt}}

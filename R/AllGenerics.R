@@ -234,7 +234,7 @@ setGeneric(
              annotationObject=RangedData(),
              format=c("bam","aln"),gapped=FALSE,
              count=c('exons','features','genes','islands','transcripts'),
-             outputFormat=c("matrix","DESeq","edgeR","RNAseq"),
+             outputFormat=c("matrix","SummarizedExperiment","DESeq","edgeR","RNAseq"),
              pattern=character(1),filenames=character(0),nbCore=1,
              filter=srFilter(),type="SolexaExport",
              chr.sel=c(),summarization=c("bestExons","geneModels"),
@@ -247,6 +247,15 @@ setGeneric(
              ignoreWarnings=FALSE,
              silent=FALSE,...){
              standardGeneric("easyRNASeq")
+           })
+
+##' @exportMethod count
+setGeneric(
+           name="count",
+           def=function(filesDirectory=character(1),
+             outputFormat=c("SummarizedExperiment","matrix","DESeq","edgeR","RNAseq"),
+             ...){
+             standardGeneric("count")
            })
 
 ## known organisms
