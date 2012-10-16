@@ -154,7 +154,7 @@ setMethod(
             ## as the feature can be filtered differently than the annotation, we need to pay attention to it too
             mSize <- switch(from,
                             "exons"=width(genomicAnnotation(obj))[match(rownames(mCounts),.getName(obj,"exons"))],
-                            "features"=width(genomicAnnotation(obj))[match(rownames(mCounts),getName(obj,"features"))],
+                            "features"=width(genomicAnnotation(obj))[match(rownames(mCounts),.getName(obj,"features"))],
                             "transcripts"= {
                               ## aggregate first
                               agg <- stats:::aggregate(width(genomicAnnotation(obj)),list(transcript=.getName(obj,"transcripts")),sum)

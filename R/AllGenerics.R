@@ -21,7 +21,8 @@ setGeneric(
 ##' @exportMethod readCounts
 setGeneric(
            name="readCounts",
-           def=function(obj,count=c("exons","features","genes","islands","transcripts"),summarization=c("bestExons","geneModels"),unique=FALSE){
+           def=function(obj,count=c("exons","features","genes","islands","transcripts"),
+             summarization=c("bestExons","geneModels"),unique=FALSE){
              standardGeneric("readCounts")
            }
            )

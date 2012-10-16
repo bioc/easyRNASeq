@@ -1818,8 +1818,9 @@ rnaSeq <- easyRNASeq(filesDirectory="data",
 
 \section{Session Information}
 
-The version number of R\citep{ref:R} and packages loaded for
-generating the vignette were: 
+The version number of R\citep{ref:R} and Bioconductor
+\citep{Gentleman:2004p2013} packages loaded for generating the
+vignette were:
 
 <<SessionInfo, echo=FALSE>>=
 library(easyRNASeq)
