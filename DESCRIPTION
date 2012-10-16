@@ -1,6 +1,6 @@
 Package: easyRNASeq
-Version: 1.4.1
-Date: 2011-10-02
+Version: 1.4.2
+Date: 2011-10-15
 Type: Package
 Title: Count summarization and normalization for RNA-Seq data.
 Author: Nicolas Delhomme, Ismael Padioleau
