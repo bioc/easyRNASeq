@@ -138,7 +138,7 @@ NULL
 ##' @importFrom edgeR calcNormFactors DGEList estimateCommonDisp
 ##' estimateTagwiseDisp maPlot plotMDS.DGEList plotMeanVar
 ##' @importFrom genomeIntervals getGffAttribute readGff3
-##' @importFrom GenomicRanges readGappedAlignments
+##' @importFrom GenomicRanges readGAlignments
 ##' @importFrom graphics abline axis boxplot grid hist legend lines
 ##' mtext par plot rect
 ##' @importFrom IRanges IRanges IRangesList isSingleString LogicalList

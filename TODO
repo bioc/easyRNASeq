@@ -56,7 +56,7 @@ gAnnot <- split(gAnnot,seqnames(gAnnot))
 
 17) Remove/Hide the readLength argument once we have introduced variable read length reads. Change the vignette then.
 
-18) check if countBam is not faster for both bam and gappedAlignments to get the library size
+18) check if countBam is not faster for both bam and GAlignments to get the library size
 
 19) deal with paired end data
 

@@ -9,7 +9,7 @@
 ##' \item .convertToUCSC
 ##' convert chromosome names to UCSC compliant ones.
 ##' \item .extractIRangesList extract an IRanges object from an AlignedRead or a
-##' GappedAlignments object or a list returned by reading a bam file with
+##' GAlignments object or a list returned by reading a bam file with
 ##' Rsamtools. It returns a list containing the IRangesList and library size.
 ##' \item .getArguments For a given function returns the arguments
 ##' passed as part of the \dots{} that match that function formals.
@@ -84,7 +84,7 @@
                   "AlignedRead" = {
                     obj[chromosome(obj) %in% chr.sel,]
                   },
-                  "GappedAlignments" = {
+                  "GAlignments" = {
                     obj[seqnames(obj) %in% chr.sel,]
                   },
                   {
@@ -94,7 +94,7 @@
                   )      
   }
 
-  ## TODO check if countBam is not faster for both bam and gappedAlignments
+  ## TODO check if countBam is not faster for both bam and GAlignments
   
   ## get the ranges and lib sizes
   return(switch(class(obj),
@@ -106,7 +106,7 @@
                   list(rng.list=split(IRanges(start=position(obj),width=width(obj)),as.character(chromosome(obj))),
                        lib.size=length(obj))
                 },
-                "GappedAlignments" = {
+                "GAlignments" = {
                   ## we want only the mapped regions
                   grnglist <- grglist(obj,drop.D.range=TRUE)
                   list(rng.list=split(unlist(ranges(grnglist),use.names=FALSE),unlist(seqnames(grnglist),use.names=FALSE)),

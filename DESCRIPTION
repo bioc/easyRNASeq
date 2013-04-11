@@ -1,5 +1,5 @@
 Package: easyRNASeq
-Version: 1.7.0
+Version: 1.7.1
 Date: 2011-10-15
 Type: Package
 Title: Count summarization and normalization for RNA-Seq data.
@@ -22,9 +22,9 @@ Depends:
     Biostrings (>= 2.27.0),
     BSgenome (>= 1.27.0),
     DESeq (>= 1.11.0),
-    GenomicRanges (>= 1.11.0),
+    GenomicRanges (>= 1.13.3),
     IRanges (>= 1.17.0),
-    Rsamtools (>= 1.11.0),
+    Rsamtools (>= 1.13.1),
     ShortRead (>= 1.17.0)
 Suggests:
     BSgenome.Dmelanogaster.UCSC.dm3 (>= 1.3.17),

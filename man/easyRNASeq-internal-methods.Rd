@@ -73,7 +73,7 @@
   definition of the function. Stop if not. \item
   .convertToUCSC convert chromosome names to UCSC compliant
   ones. \item .extractIRangesList extract an IRanges object
-  from an AlignedRead or a GappedAlignments object or a
+  from an AlignedRead or a GAlignments object or a
   list returned by reading a bam file with Rsamtools. It
   returns a list containing the IRangesList and library
   size. \item .getArguments For a given function returns

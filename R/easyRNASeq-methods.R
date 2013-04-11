@@ -139,11 +139,11 @@ setMethod(
                                                      chr.sel)
                                },
                                gapped=.extractIRangesList(
-                                   readGappedAlignments(filename,
-                                                        index=filename,
-                                                        format="BAM",
-                                                        use.names=TRUE
-                                                        ),
+                                   readGAlignments(filename,
+                                                   index=filename,
+                                                   format="BAM",
+                                                   use.names=TRUE
+                                                   ),
                                  chr.sel
                                  )
                                )
