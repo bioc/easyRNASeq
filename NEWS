@@ -1,3 +1,16 @@
+CHANGES IN VERSION 1.6.1
+-------------------------
+
+  o Adapted the package dependency
+
+  o Added a check to stop processing whenever 
+  annotation are outside of the chromosomes.
+
+CHANGES IN VERSION 1.6.0
+-------------------------
+
+  o No changes, Bioconductor release version 2.12
+
 CHANGES IN VERSION 1.5.1
 -------------------------
 	o Adapted the dependencies version to match the
