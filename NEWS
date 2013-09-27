@@ -1,3 +1,10 @@
+CHANGES IN VERSION 1.6.2
+-------------------------
+
+  o Released the constraint on the gtf annotation file 
+  parsing to allow for gtf file without the "exon_number"
+  attribute such as those retrieved from UCSC.
+
 CHANGES IN VERSION 1.6.1
 -------------------------
 
