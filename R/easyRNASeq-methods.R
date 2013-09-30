@@ -612,7 +612,8 @@ setMethod(
                          "No file to work with, you should check your pattern: '",
                          pattern,
                          "' or your directory:",
-                         filesDirectory,
+                         paste(filesDirectory,".",sep=""),
+                         "Note that no recursive search is performed.",
                          sep=" "
                          )
                    )

@@ -1,6 +1,6 @@
 Package: easyRNASeq
-Version: 1.6.2
-Date: 2013-09-27
+Version: 1.6.3
+Date: 2013-09-29
 Type: Package
 Title: Count summarization and normalization for RNA-Seq data.
 Author: Nicolas Delhomme, Ismael Padioleau
@@ -24,6 +24,7 @@ Depends:
     DESeq (>= 1.12.1),
     GenomicRanges (>= 1.12.5),
     IRanges (>= 1.18.4),
+    LSD (>= 2.5),
     Rsamtools (>= 1.12.4),
     ShortRead (>= 1.18.0)
 Suggests:

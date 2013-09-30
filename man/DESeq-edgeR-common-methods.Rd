@@ -23,11 +23,11 @@
   \code{\link[edgeR:edgeR-package]{edgeR}}.
 }
 \details{
-  \itemize{ \item\code{\linkS4class{CountDataSet}{DESeq}} A
-  character string describing the first condition, to be
-  provided as cond=value
-  \item\code{\link[edgeR:edgeR-package]{edgeR}} Unused,
-  just for compatibility.  }
+  \itemize{ \item \code{\linkS4class{CountDataSet}{DESeq}}
+  A character string describing the first condition, to be
+  provided as cond=value \item
+  \code{\link[edgeR:edgeR-package]{edgeR}} Unused, just for
+  compatibility.  }
 }
 \examples{
 \dontrun{

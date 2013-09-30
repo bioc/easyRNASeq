@@ -302,6 +302,15 @@ setGeneric(
              standardGeneric("multivariateConditions")
            })
 
+##' @exportMethod plotDispersionEstimates
+setGeneric(
+  name="plotDispLSD",
+  def=function(cds, name = NULL, ymin, 
+               linecol = "#00000080", xlab = "mean of normalized counts", 
+               ylab = "dispersion", log = "xy", cex = 0.45,...){
+    standardGeneric("plotDispLSD")
+  })
+
 ## parallel extension
 ##' @exportMethod parallelize
 setGeneric(name="parallelize",

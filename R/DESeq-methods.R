@@ -15,10 +15,16 @@
 ##' \itemize{
 ##' \item{\code{multivariateConditions} is simply an accessor for the
 ##' \code{multivariateConditions} slot of a \code{\linkS4class{CountDataSet}}
-##' object.  }}
+##' object}
+##' \item{\code{plotDispLSD} is a function silimar to 
+##' \code{\link[DESeq:plotDispEsts]{plotDispEsts}}
+##' that adds a density estimate as a colored heatmap from grey (few) to yellow
+##' (many).}
+##' }
 ##' 
 ##' 
 ##' @aliases multivariateConditions multivariateConditions,CountDataSet-method
+##' plotDispLSD plotDispLSD,CountDataSet-method
 ##' @name DESeq additional methods
 ##' @rdname DESeq-methods
 ##' @param obj An object of class \code{\linkS4class{CountDataSet}}
@@ -26,6 +32,7 @@
 ##' whether the data to analyze is multivariate or not }}
 ##' @author Nicolas Delhomme
 ##' @seealso \code{\linkS4class{CountDataSet}}
+##' \code{\link[DESeq:plotDispEsts]{plotDispEsts}}
 ##' @keywords methods
 ##' @examples
 ##' 
@@ -45,6 +52,39 @@ setMethod(
             obj@multivariateConditions
           })
 
+setMethod(
+  f="plotDispLSD",
+  signature="CountDataSet",
+  definition=function(cds, name = NULL, ymin, 
+                      linecol = "#00000080", xlab = "mean of normalized counts", 
+                      ylab = "dispersion", log = "xy", cex = 0.45, ...) {
+    px = rowMeans(counts(cds, normalized = TRUE))
+    sel = (px > 0)
+    px = px[sel]
+    py = fitInfo(cds, name = name)$perGeneDispEsts[sel]
+    if (missing(ymin)) 
+      ymin = 10^floor(log10(min(py[py > 0], na.rm = TRUE)) - 
+                        0.1)
+    heatscatter(log10(px), log10(pmax(py, ymin)), xlab = xlab, ylab = ylab, 
+                pch = ifelse(py < ymin, 6, 16), cexplot = cex, 
+                xaxt='n', yaxt='n', ...)
+    
+    # Fix logged axes labels
+    atx <- axTicks(1)
+    aty <- axTicks(2)
+    xlabels <- sapply(atx, function (i)
+      as.expression(bquote(10^ .(i)))
+    )
+    ylabels <- sapply(aty, function (i)
+      as.expression(bquote(10^ .(i)))
+    )
+    axis(1, at=atx, labels=xlabels)
+    axis(2, at=aty, labels=ylabels)
+    xg = 10^seq(-0.5, 5, length.out = 100)
+    lines(log10(xg), log10(fitInfo(cds, name = name)$dispFun(xg)), col = linecol, 
+          lwd = 4, lty = 1
+    )
+  })
 
 ##' DESeq and edgeR common methods
 ##' 
@@ -54,9 +94,9 @@ setMethod(
 ##' \code{\linkS4class{CountDataSet}{DESeq}} and
 ##' \code{\link[edgeR:edgeR-package]{edgeR}}.
 ##' 
-##' \itemize{ \item\code{\linkS4class{CountDataSet}{DESeq}} A character string
+##' \itemize{ \item \code{\linkS4class{CountDataSet}{DESeq}} A character string
 ##' describing the first condition, to be provided as cond=value
-##' \item\code{\link[edgeR:edgeR-package]{edgeR}} Unused, just for
+##' \item \code{\link[edgeR:edgeR-package]{edgeR}} Unused, just for
 ##' compatibility.  }
 ##' 
 ##' @aliases plotDispersionEstimates
