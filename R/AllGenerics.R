@@ -302,7 +302,7 @@ setGeneric(
              standardGeneric("multivariateConditions")
            })
 
-##' @exportMethod plotDispersionEstimates
+##' @exportMethod plotDispLSD
 setGeneric(
   name="plotDispLSD",
   def=function(cds, name = NULL, ymin, 

@@ -1,7 +1,13 @@
+CHANGES IN VERSION 1.6.4
+-------------------------
+
+  o Made the plotDispLSD function visible (now proporly
+exported)
+
 CHANGES IN VERSION 1.6.3
 -------------------------
 
-  o Added a plotLSDEsts function that adds a density
+  o Added a plotDispLSD function that adds a density
   estimate color map to the DESeq plotDispEsts function.
 
 CHANGES IN VERSION 1.6.2
