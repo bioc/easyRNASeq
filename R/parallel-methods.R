@@ -46,8 +46,6 @@ setMethod(f = "parallelize",
   if(nnodes == 1){
     res <- lapply(obj,fun,...)
   } else {
-    ## parallel is part of R, we just ensure it's loaded
-    library("parallel")
     ## save the names
     nams <- names(obj)
     cluster <- makePSOCKcluster(nnodes)

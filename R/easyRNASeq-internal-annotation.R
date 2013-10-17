@@ -99,7 +99,8 @@
   
   ## gff 3?
   if(format=="gff"){
-    if(sub("\\D+","",readLines(filename,1))!=3){
+      ## gsub in case we have additional space after the header
+    if(gsub("\\D+","",readLines(filename,1))!=3){
       stop(paste("Your file:",filename,"does not contain a gff header: '##gff-version 3' as first line. Is that really a gff3 file?"))
     }
   }
@@ -170,37 +171,45 @@
 	## extract the attributes
 	gffAttr <- do.call(rbind,strsplit(all.annotation$gffAttributes," |;"))
 
-        ## stop if the attributes we need are not present
-        ## we relax on gene_name
-        if(!all(fields[fields != "gene_name"] %in% gffAttr[1,])){
-          stop(paste("Your gtf file: ",filename," does not contain all the required fields: ",
-                     paste(fields,collapse=", "),".",sep=""))
-        }
-        
-        ## identify the columns we need
-        sel <- match(fields,gffAttr[1,]) + 1
+	## stop if the attributes we need are not present
+	## we relax on gene_name
+	if(!all(fields[!fields %in% c("exon_number","gene_name")] %in% gffAttr[1,])){
+	  stop(paste("Your gtf file: ",filename," does not contain all the required fields: ",
+	             paste(fields,collapse=", "),".",sep=""))
+	}
+	
+	## identify the columns we need
+	sel <- match(fields,gffAttr[1,]) + 1
         
 	## gene 
-        ## if we have no "ENSG"
-        last <- ifelse(length(grep("ENSG",gffAttr[,sel[1]]))==0,1000000L,19L)
-	 
-        ## remove possible annoyance
-        all.annotation$gene <- gsub(" \";?","",substr(gffAttr[,sel[1]],1,last))
+	## if we have no "ENSG"
+	last <- ifelse(length(grep("ENSG",gffAttr[,sel[1]]))==0,1000000L,19L)
+	
+	## remove possible annoyance
+	all.annotation$gene <- gsub(" |\"|;","",substr(gffAttr[,sel[1]],1,last))
         
 	## transcript
-	all.annotation$transcript <- gsub(" \";?","",substr(gffAttr[,sel[2]],1,last))
+	all.annotation$transcript <- gsub(" |\"|;","",substr(gffAttr[,sel[2]],1,last))
 	
 	## exon
-	all.annotation$exon <- paste(all.annotation$gene,gsub("\";?","",gffAttr[,sel[3]]),sep="_")
-	
+	## create the exon number if they are missing
+	if(is.na(sel[3])){
+	  exonNum <- lapply(runLength(Rle(all.annotation$gene)),":",1)
+    sel <- strand(all.annotation[match(unique(all.annotation$gene),all.annotation$gene)]) == "+"
+    exonNum[sel] <- lapply(exonNum[sel],rev)
+	  all.annotation$exon <- paste(all.annotation$gene,unlist(exonNum),sep="_")
+  } else {
+    all.annotation$exon <- paste(all.annotation$gene,gsub(" |\"|;","",gffAttr[,sel[3]]),sep="_")
+	}
+  
 	## gene name
-        ## we can only have one NA: gene_name, if so, get the gene_id instead
-        if(is.na(sel[4])){
-          all.annotation$gene.name <- all.annotation$gene
-        } else {
-          all.annotation$gene.name <- gsub("\";?","",gffAttr[,sel[4]])
-        }
-        
+	## we can only have one NA: gene_name, if so, get the gene_id instead
+	if(is.na(sel[4])){
+	  all.annotation$gene.name <- all.annotation$gene
+	} else {
+	  all.annotation$gene.name <- gsub(" |\"|;","",gffAttr[,sel[4]])
+	}
+	
 	## done
 	exon.range <- as(all.annotation,"RangedData")
 	universe(exon.range)<-organism

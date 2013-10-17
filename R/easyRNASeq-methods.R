@@ -612,7 +612,8 @@ setMethod(
                          "No file to work with, you should check your pattern: '",
                          pattern,
                          "' or your directory:",
-                         filesDirectory,
+                         paste(filesDirectory,".",sep=""),
+                         "Note that no recursive search is performed.",
                          sep=" "
                          )
                    )
@@ -745,6 +746,12 @@ setMethod(
                      )
               }
 
+              ## check if any annotation is outside the chrSizes boundaries
+              common.names <- intersect(names(ranges(obj)),names(chrSize(obj)))
+              if(any(sapply(lapply(ranges(obj)[match(common.names,names(ranges(obj)))],range),end) > chrSize(obj)[match(common.names,names(chrSize(obj)))])){
+                stop("Your annotation is not in sync with your alignments! Some annotation lie outside the sequences range reported in your BAM file. You may be using two different genome versions.")
+              }
+              
               ## check for overlaps
               ## TODO this is a bit fishy as it depends on the order of the summarization argument...
               if(!(count == "genes" & summarization[1] == "geneModels")){

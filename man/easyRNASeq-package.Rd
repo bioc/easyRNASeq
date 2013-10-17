@@ -14,10 +14,10 @@
 }
 \details{
   \tabular{ll}{ Package: \tab easyRNASeq\cr Type: \tab
-  Package\cr Version: \tab 1.5.1\cr Date: \tab
-  2012-10-15\cr License: \tab Artistic-2.0\cr LazyLoad:
+  Package\cr Version: \tab 1.8.1\cr Date: \tab
+  2013-10-16\cr License: \tab Artistic-2.0\cr LazyLoad:
   \tab yes\cr Depends: \tab methods, parallel, biomaRt,
-  edgeR, DESeq, genomeIntervals, Rsamtools, ShortRead,
+  edgeR, DESeq, genomeIntervals, LSD, Rsamtools, ShortRead,
   RnaSeqTutorial\cr Suggests: \tab
   BSgenome.Dmelanogaster.UCSC.dm3 }
 }
@@ -81,7 +81,7 @@
 	}
 }
 \author{
-  Nicolas Delhomme
+  Nicolas Delhomme, Bastian Schiffthaler, Ismael Padioleau
 }
 \seealso{
   The class RNAseq specification:

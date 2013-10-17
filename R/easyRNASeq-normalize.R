@@ -157,13 +157,13 @@ setMethod(
                             "features"=width(genomicAnnotation(obj))[match(rownames(mCounts),.getName(obj,"features"))],
                             "transcripts"= {
                               ## aggregate first
-                              agg <- stats:::aggregate(width(genomicAnnotation(obj)),list(transcript=.getName(obj,"transcripts")),sum)
+                              agg <- stats::aggregate(width(genomicAnnotation(obj)),list(transcript=.getName(obj,"transcripts")),sum)
                               ## then sort
                               agg[match(rownames(mCounts),agg[,1]),2]},
                             "bestExons"= width(genomicAnnotation(obj))[match(rownames(mCounts),.getName(obj,"exons"))],
                             "geneModels"= {
                               ## aggregate
-                              agg<-stats:::aggregate(width(geneModel(obj)),list(gene=geneModel(obj)$gene),sum)
+                              agg<-stats::aggregate(width(geneModel(obj)),list(gene=geneModel(obj)$gene),sum)
                               ## sort
                               agg[match(rownames(mCounts),agg[,1]),2]},
                             ## same as that: as(by(width(geneModel(obj)),geneModel(obj)$gene,sum),"vector") but faster

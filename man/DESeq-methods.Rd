@@ -2,6 +2,8 @@
 \alias{DESeq additional methods}
 \alias{multivariateConditions}
 \alias{multivariateConditions,CountDataSet-method}
+\alias{plotDispLSD}
+\alias{plotDispLSD,CountDataSet-method}
 \title{Extension for the DESeq package}
 \arguments{
   \item{obj}{An object of class
@@ -15,7 +17,11 @@
 \description{
   \itemize{ \item{\code{multivariateConditions} is simply
   an accessor for the \code{multivariateConditions} slot of
-  a \code{\linkS4class{CountDataSet}} object.  }}
+  a \code{\linkS4class{CountDataSet}} object}
+  \item{\code{plotDispLSD} is a function silimar to
+  \code{\link[DESeq:plotDispEsts]{plotDispEsts}} that adds
+  a density estimate as a colored heatmap from grey (few)
+  to yellow (many).} }
 }
 \examples{
 \dontrun{
@@ -28,10 +34,11 @@
 	}
 }
 \author{
-  Nicolas Delhomme
+  Nicolas Delhomme, Bastian Schiffthaler
 }
 \seealso{
   \code{\linkS4class{CountDataSet}}
+  \code{\link[DESeq:plotDispEsts]{plotDispEsts}}
 }
 \keyword{methods}
 

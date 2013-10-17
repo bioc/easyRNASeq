@@ -1,3 +1,62 @@
+CHANGES IN VERSION 1.8.1
+-------------------------
+
+	o Imported changes that were lost from version 1.6.4
+
+	o Adapted the dependencies version to match the
+	Bioconductor release version 2.13
+
+	o Switched to use GAlignments instead of 
+	GappedAlignments
+
+	o Corrected 2 Notes occuring during R CMD check that
+	had to do with the DESCRIPTION Depends and Enhances
+	fields and the use of pkg:::name vs. pkg::name
+
+	o Added Bastian Schiffthaler as an author
+
+CHANGES IN VERSION 1.8.0
+-------------------------
+
+  o No changes, Bioconductor release version 2.13
+
+CHANGES IN VERSION 1.7.0
+-------------------------
+
+  o No changes, Bioconductor development version 2.13
+
+CHANGES IN VERSION 1.6.4
+-------------------------
+
+  o Made the plotDispLSD function visible (now proporly
+exported)
+
+CHANGES IN VERSION 1.6.3
+-------------------------
+
+  o Added a plotDispLSD function that adds a density
+  estimate color map to the DESeq plotDispEsts function.
+
+CHANGES IN VERSION 1.6.2
+-------------------------
+
+  o Released the constraint on the gtf annotation file 
+  parsing to allow for gtf file without the "exon_number"
+  attribute such as those retrieved from UCSC.
+
+CHANGES IN VERSION 1.6.1
+-------------------------
+
+  o Adapted the package dependency
+
+  o Added a check to stop processing whenever 
+  annotation are outside of the chromosomes.
+
+CHANGES IN VERSION 1.6.0
+-------------------------
+
+  o No changes, Bioconductor release version 2.12
+
 CHANGES IN VERSION 1.5.1
 -------------------------
 	o Adapted the dependencies version to match the

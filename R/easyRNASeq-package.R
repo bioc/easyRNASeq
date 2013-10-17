@@ -10,11 +10,11 @@
 ##' \tabular{ll}{
 ##' Package: \tab easyRNASeq\cr
 ##' Type: \tab Package\cr
-##' Version: \tab 1.5.1\cr
-##' Date: \tab 2012-10-15\cr
+##' Version: \tab 1.8.1\cr
+##' Date: \tab 2013-10-16\cr
 ##' License: \tab Artistic-2.0\cr
 ##' LazyLoad: \tab yes\cr
-##' Depends: \tab methods, parallel, biomaRt, edgeR, DESeq, genomeIntervals, Rsamtools, ShortRead, RnaSeqTutorial\cr
+##' Depends: \tab methods, parallel, biomaRt, edgeR, DESeq, genomeIntervals, LSD, Rsamtools, ShortRead, RnaSeqTutorial\cr
 ##' Suggests: \tab BSgenome.Dmelanogaster.UCSC.dm3
 ##' }
 ##'
@@ -44,7 +44,7 @@
 ##' @rdname easyRNASeq-package
 ##' @aliases easyRNASeq-package
 ##' @docType package
-##' @author Nicolas Delhomme
+##' @author Nicolas Delhomme, Bastian Schiffthaler, Ismael Padioleau
 ##' @keywords package
 ##' @seealso
 ##' 	The class RNAseq specification:
@@ -138,11 +138,12 @@ NULL
 ##' @importFrom edgeR calcNormFactors DGEList estimateCommonDisp
 ##' estimateTagwiseDisp maPlot plotMDS.DGEList plotMeanVar
 ##' @importFrom genomeIntervals getGffAttribute readGff3
-##' @importFrom GenomicRanges readGAlignments
+##' @importFrom GenomicRanges readGappedAlignments
 ##' @importFrom graphics abline axis boxplot grid hist legend lines
 ##' mtext par plot rect
 ##' @importFrom IRanges IRanges IRangesList isSingleString LogicalList
 ##' RangedData RangesList SplitDataFrameList
+##' @importFrom LSD heatscatter
 ##' @importFrom methods as extends is new
 ##' @importFrom parallel makePSOCKcluster parLapply stopCluster
 ##' @importFrom Rsamtools scanBamFlag
