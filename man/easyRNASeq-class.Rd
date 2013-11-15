@@ -1,5 +1,9 @@
 \docType{class}
 \name{RNAseq class}
+\alias{RNAseq}
+\alias{RNAseq class}
+\alias{RNAseq-class}
+\alias{RPKM,RNAseq-method}
 \alias{easyRNASeq,RNAseq-method}
 \alias{exonCounts,RNAseq-method}
 \alias{featureCounts,RNAseq-method}
@@ -27,10 +31,6 @@
 \alias{readIslands<-,RNAseq-method}
 \alias{readLength,RNAseq-method}
 \alias{readLength<-,RNAseq-method}
-\alias{RNAseq}
-\alias{RNAseq class}
-\alias{RNAseq-class}
-\alias{RPKM,RNAseq-method}
 \alias{show,RNAseq-method}
 \alias{transcriptCounts,RNAseq-method}
 \title{Class "RNAseq"}

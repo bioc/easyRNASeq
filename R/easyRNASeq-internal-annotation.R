@@ -169,45 +169,51 @@
 	all.annotation <- .readGffGtf(filename=filename,ignoreWarnings=ignoreWarnings,format="gtf",...)
 	
 	## extract the attributes
-	gffAttr <- do.call(rbind,strsplit(all.annotation$gffAttributes," |;"))
-
-	## stop if the attributes we need are not present
+	attrList <- strsplit(all.annotation$gffAttributes," |;")
+	
+  ## identify the columns we need
+  pos <- match(fields,attrList[[1]])
+	
+  ## stop if the attributes we need are not present
+  ## NOTE THAT WE ONLY CHECK THE FIST LINE!!!
 	## we relax on gene_name
-	if(!all(fields[!fields %in% c("exon_number","gene_name")] %in% gffAttr[1,])){
+	if(!all(fields[!fields %in% c("exon_number","gene_name")] %in% attrList[[1]][pos])){
 	  stop(paste("Your gtf file: ",filename," does not contain all the required fields: ",
-	             paste(fields,collapse=", "),".",sep=""))
+	             paste(fields[!fields %in% c("exon_number","gene_name")],collapse=", "),".",sep=""))
 	}
 	
-	## identify the columns we need
-	sel <- match(fields,gffAttr[1,]) + 1
-        
+  ## create the selector
+	
+	## select
+  gffAttr <- do.call(rbind,lapply(attrList,"[",pos+1))
+      
 	## gene 
 	## if we have no "ENSG"
-	last <- ifelse(length(grep("ENSG",gffAttr[,sel[1]]))==0,1000000L,19L)
+	last <- ifelse(length(grep("ENSG",gffAttr[,1]))==0,1000000L,19L)
 	
 	## remove possible annoyance
-	all.annotation$gene <- gsub(" |\"|;","",substr(gffAttr[,sel[1]],1,last))
+	all.annotation$gene <- gsub(" |\"|;","",substr(gffAttr[,1],1,last))
         
 	## transcript
-	all.annotation$transcript <- gsub(" |\"|;","",substr(gffAttr[,sel[2]],1,last))
+	all.annotation$transcript <- gsub(" |\"|;","",substr(gffAttr[,2],1,last))
 	
 	## exon
 	## create the exon number if they are missing
-	if(is.na(sel[3])){
+	if(is.na(pos[3])){
 	  exonNum <- lapply(runLength(Rle(all.annotation$gene)),":",1)
     sel <- strand(all.annotation[match(unique(all.annotation$gene),all.annotation$gene)]) == "+"
     exonNum[sel] <- lapply(exonNum[sel],rev)
 	  all.annotation$exon <- paste(all.annotation$gene,unlist(exonNum),sep="_")
   } else {
-    all.annotation$exon <- paste(all.annotation$gene,gsub(" |\"|;","",gffAttr[,sel[3]]),sep="_")
+    all.annotation$exon <- paste(all.annotation$gene,gsub(" |\"|;","",gffAttr[,3]),sep="_")
 	}
   
 	## gene name
 	## we can only have one NA: gene_name, if so, get the gene_id instead
-	if(is.na(sel[4])){
+	if(is.na(pos[4])){
 	  all.annotation$gene.name <- all.annotation$gene
 	} else {
-	  all.annotation$gene.name <- gsub(" |\"|;","",gffAttr[,sel[4]])
+	  all.annotation$gene.name <- gsub(" |\"|;","",gffAttr[,4])
 	}
 	
 	## done

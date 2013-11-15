@@ -5,6 +5,7 @@
 \usepackage{verbatim}
 \usepackage{natbib}
 \usepackage{color}
+\usepackage{hyperref}
 \newcommand{\Rfunction}[1]{{\texttt{#1}}}
 \newcommand{\Robject}[1]{{\texttt{#1}}}
 \newcommand{\Rpackage}[1]{{\textit{#1}}}
@@ -17,6 +18,7 @@
 \SweaveOpts{keep.source=TRUE}
 
 \begin{document}
+\SweaveOpts{concordance=TRUE}
 
 \maketitle
 
@@ -57,6 +59,16 @@ Bioinformatics 2012; doi: 10.1093/bioinformatics/bts477\\
 \section{Changes to the vignette}
 
 The last changes are reported in red.
+
+\paragraph{1.8.2}
+Added a use case that describes how to create a set of "gene models"
+in a manner more efficient than the current implementation within the
+package. As "gene model" can actually refer to different things depending
+on the context, I switched to call these synthetic transcripts as what
+we create is a synthetic transcript containing every exons of the gene. 
+See the use case: \ref{synth:trx} page \pageref{synth:trx} for how this
+can be performed. This example was first introduced at the EMBO 2013 
+Practical Course: Analysis of High Throughput Sequencing Data.
 
 \paragraph{1.3.14}
 A new section: \ref{s:ytc} was added describing foreseen changes to
@@ -226,7 +238,6 @@ count.table <- easyRNASeq(filesDirectory=system.file(
                           pattern="[A,C,T,G]{6}\\.bam$",
                           readLength=30L,
                           organism="Dmelanogaster",
-                          chr.sizes=seqlengths(Dmelanogaster),
                           annotationMethod="rda",
                           annotationFile=system.file(
                             "data",
@@ -1259,7 +1270,6 @@ sumExp <- count(filesDirectory=system.file(
                 pattern="[A,C,T,G]{6}\\.bam$",
                 readLength=30L,
                 organism="Dmelanogaster",
-                chr.sizes=seqlengths(Dmelanogaster),
                 annotationMethod="rda",
                 annotationFile=system.file(
                   "data",
@@ -1290,7 +1300,17 @@ the Bioconductor mailing list. We want to thank Francesco Lescai,
 Wade Davis and Richard Friedman for asking pertinent questions that
 helped us make this vignette better.
 \newline
-The first use case examplify how to use the \Rfunction{easyRNASeq} to
+\textcolor{red}{
+The first use case shows how to create an annotation that contains
+synthetic transcripts; \emph{i.e.} a transcript combining every single
+exons of a gene into a single abiological splice-variant. The aim is to
+mesure expression at the gene level, while avoiding counting biases 
+that may be introduced when working with multiple splice variants sharing
+common exons. If you are interested in such splice variants expression, you
+need to look for more appropriate analysis expression pipeline (RSEM, MMSEQ, BitSeq, 
+\emph{etc.})}
+\newline
+The second use case examplifies how to use the \Rfunction{easyRNASeq} to
 get \Rpackage{DESeq} normalized data from two human samples. It
 introduces as well how to use the \Rpackage{GenomicFeatures} to
 retrieve annotations. \textcolor{red}{Note that the data for this example
@@ -1300,7 +1320,7 @@ align them against the human genome using your aligner of choice and
 convert the alignment into the BAM format. An example of how to
 achieve this in R is described in the beginning of the use case.}
 \newline
-The second use case describe how to combine different annotation
+The third use case describe how to combine different annotation
 (chromosomic and genic), when for example the chromosome names in the
 aligned file(s) are different from the annotation retrieved using
 \Rpackage({biomaRt}. In both use case, we will assume the
@@ -1310,10 +1330,145 @@ aligned file(s) are different from the annotation retrieved using
 library(easyRNASeq)
 @
 
-\paragraph{Processing a set of human samples}
+\subsection{Creating a set of synthetic transcripts}
+\label{synth:trx}
+
+The gff3 is retrieved from FlyBase \citep{Tweedie:2009p2014}: 
+\url{ftp://ftp.flybase.net/releases/FB2013_06/dmel_r5.54/gff/dmel-all-no-analysis-r5.54.gff.gz}.
+As the file is rather large, only the line containing "gene", "mRNA" and "exon" 
+are kept using an \emph{awk} script.
+\begin{verbatim}
+awk '{if($3=="gene"){print}; if($3=="mRNA"){print}; if($3=="exon"){print}}' 
+                        < dmel-all-no-analysis-r5.54.gff > dmel_r5-54.gff3
+\end{verbatim}
+
+Set your working environment to the directory where you created dmel\_r5-54.gff3.
+<<synthetic-transcript, eval=FALSE>>=
+## lib - loaded by easyRNASeq already
+library(genomeIntervals)
+
+## read in the gff
+gff <- readGff3("dmel_r5-54.gff3")
+
+## look at the gff
+gff
+nrow(gff[gff$type=="exon",])
+nrow(gff[gff$type=="mRNA",])
+nrow(gff[gff$type=="gene",])
+
+## map the mRNA ID to the gene ID
+transcriptGeneMapping <- data.frame(
+  getGffAttribute(gff[gff$type=="mRNA",],"ID"),
+  getGffAttribute(gff[gff$type=="mRNA",],"Parent"))
+head(transcriptGeneMapping)
+
+## extract the exons IRangesList
+## ie exons are grouped by gene
+## and their coordinates are stored as an IRanges object
+sel <- gff$type=="exon"
+rngList<- split(IRanges(start=gff[sel,1],end=gff[sel,2]),
+                transcriptGeneMapping[match(
+                  sapply(strsplit(
+                    getGffAttribute(gff[sel,],"Parent"),
+                    ","),"[",1),
+                  transcriptGeneMapping$ID),"Parent"])
+rngList
+
+## check what's the gene with the max number of exons
+mostExons <- rev(names(table(elementLengths(rngList))))[1]
+mostExons
+
+## work the magic; collapse the genes IRanges
+rngList<- reduce(rngList)
+rngList
+
+## what's the max now?
+rev(names(table(elementLengths(rngList))))[1]
+
+## create the gff
+## get the gff information; here we simply duplicate the
+## first exon of every gene by the number of synthetic 
+## exons per gene. The content will be updated afterwards.
+exons <- gff[sel,]
+syntheticGeneModel<- exons[rep(
+  match(names(rngList),
+  transcriptGeneMapping[
+    match(sapply(
+      strsplit(getGffAttribute(exons,"Parent"),
+               ","),"[",1),
+    transcriptGeneMapping$ID),"Parent"]),
+  elementLengths(rngList)),]
+
+## update the coordinates
+syntheticGeneModel[,1]<- unlist(start(rngList))
+syntheticGeneModel[,2]<- unlist(end(rngList))
+
+## change the source
+levels(syntheticGeneModel$source)<- "inhouse"
+
+## get the exon number for the minus strand
+exonNumber<- lapply(elementLengths(rngList),":",1)
+
+## reverse them on the plus strand
+sel<- strand(syntheticGeneModel)[cumsum(elementLengths(rngList))] == "+"
+exonNumber[sel]<- sapply(exonNumber[sel],rev)
+
+## update the attributes
+syntheticGeneModel$gffAttributes<- paste("ID=",
+  rep(names(rngList),elementLengths(rngList)),
+  ":",unlist(exonNumber),";Parent=",
+  rep(names(rngList),elementLengths(rngList)),".0",sep="")
+
+## write the file
+writeGff3(syntheticGeneModel,file="dmel_synthetic_transcript_r5-54.gff3")
+@
+
+%% remember that we could do that as a GRange and add the transcript column
+%## convert it into a GRangesList object
+%sel <- syntheticGeneModel$type=="exon"
+%annot <- split(GRanges(seqnames=seq_name(syntheticGeneModel[sel]),
+%                       ranges=IRanges(start=syntheticGeneModel[sel,1],
+%                                      end=syntheticGeneModel[sel,2]),
+%                       strand=strand(syntheticGeneModel[sel])),
+%               getGffAttribute(syntheticGeneModel,"Parent")[sel,1]
+%)
+
+%## finally save an rda object
+%save(annot,file="dmel_synthetic_transcript_r5-52.rda")
+
+Now we can use the 'gff3' files a our annotation. As we have created synthetic 
+transcripts, we can directly use the 'transcripts' value for the \Rclass{count} 
+argument of the \Rfunction{easyRNASeq} function 
+as follows:
+
+<<easyTrx, eval=FALSE>>=
+sumExp <- easyRNASeq(
+  filesDirectory=system.file(
+    "extdata",
+    package="RnaSeqTutorial"),
+  pattern="[A,C,T,G]{6}\\.bam$",
+  readLength=30L,
+  chr.sel="chr2L",
+  organism="Dmelanogaster",                
+  annotationMethod="gff",
+  annotationFile="dmel_synthetic_transcript_r5-54.gff3",
+  count="transcripts",
+  outputFormat="SummarizedExperiment"
+)
+@
+
+%% NOTE THAT THE chr.sel is necessary as the length of the ranges
+%% is larger than those in the BAM file. I.e. the coordinates have 
+%%  changed in that version of Flybase.
+
+That's it. Done much faster than using the 'geneModels' \Rclass{summarization} 
+argument. This is currently being ported to the development version of 
+\Rpackage{easyRNASeq}.
+
+\subsection{Processing a set of human samples}
 \label{p:pasohs}
 
-\subparagraph{Getting the data}
+\paragraph{Getting the data}
 \textcolor{red}{If you already have a set of bam files resulting of short read
 alignments against the human genome, you can just proceed to the next
 paragraph. If not here is an example on how to retrieve and align data
@@ -1394,7 +1549,7 @@ sapply(dir(pattern="*\\.gz$"),function(fil){
   you should clean up afterwards, i.e. delete the ``tmp1234'' folder,
   once you are done with the use case.}
 
-\subparagraph{Processing the data}
+\paragraph{Processing the data}
 First, we start by retrieveing the size of the chromosomes. This is an
 important information for calculating any feature count. Actually,
 neither the BSgenome nor any related packages are required for
@@ -1451,7 +1606,6 @@ following function call.}
 <<Fetching with biomaRt, eval=FALSE>>=
 rnaSeq <- easyRNASeq(filesDirectory=getwd(),
                     organism="Hsapiens",
-                    chr.sizes=chr.sizes,
                     readLength=58L,
                     annotationMethod="biomaRt",
                     count="exons",
@@ -1478,7 +1632,6 @@ Now using the modified, saved annotation, we can get a count table as follows:
 <<get a count table, eval=FALSE>>=
 countTable <- easyRNASeq(filesDirectory=getwd(),
                         organism="Hsapiens",
-                        chr.sizes=chr.sizes,
                         readLength=58L,
                         annotationMethod="rda",
                         annotationFile="gAnnot.rda",
@@ -1572,7 +1725,6 @@ names(conditions) <- bamfiles
 
 countDataSet <- easyRNASeq(filesDirectory=getwd(),
                           organism="Hsapiens",
-                          chr.sizes=chr.sizes,
                           annotationMethod="env",
                           annotationObject=gAnnot,
                           count="exons",
@@ -1591,7 +1743,7 @@ files: $58$ and $76$, the \Robject{readLength} argument was removed
 from the previous function call. The read size is then identified
 automatically.}
 
-\paragraph{Dealing with annotation inconsistencies}
+\subsection{Dealing with annotation inconsistencies}
 \label{p:dwai}
 This use case shows how to deal with inconsistent annotations,
 \textit{e.g.} when the chromosome names present in the aligned file
@@ -1835,7 +1987,7 @@ sessionInfo()
 \label{sec:finalRem}
 RNA-seq is still maturating and a lot of new developments are to be
 expected. If you have any questions, comments, feel free to contact me:
-delhomme \emph{at} embl \emph{dot} de.
+nicolas.delhomme \emph{at} umu \emph{dot} se.
 
 \begin{comment}
   The following code is just to make sure that the functionality of

@@ -1,3 +1,18 @@
+CHANGES IN VERSION 1.8.2
+-------------------------
+
+  o Reworked the parsing of gtf formatted files.
+
+  o Added a few more sanity checks in the easyRNASeq 
+  function.
+
+  o Added a use case to the vignette to show how to 
+  generate and use synthetic transcripts rather than
+  "gene models".
+
+  o Corrected a bug when exporting a SummarizedExperiment
+  for "transcrips" and "geneModels" count methods.
+
 CHANGES IN VERSION 1.8.1
 -------------------------
 

@@ -532,6 +532,10 @@ setMethod(
               if(chr.sizes=="auto" & format != "bam"){
                 stop("As you are not using the 'bam' format, you need to set the 'chr.sizes' option.")
               }
+              if(is.character(chr.sizes) & chr.sizes != "auto"){
+                stop(paste("The 'chr.sizes' option need only be set for non-bam",
+                           "formatted files and needs to be a named integer vector."))
+              }
             }
             
             ## test the counts
@@ -670,8 +674,18 @@ setMethod(
 
                 ## check if we got some chr sizes at all
                 if(length(chr.sizes)==0){
-                  stop("No chromosome sizes could be determined from your BAM file(s).Is the BAM header present?\nIf not, you can use the 'chr.sizes' argument to provided the chromosome sizes information.")
+                  stop(paste("No chromosome sizes could be determined from your",
+                             "BAM file(s).Is the BAM header present?\nIf not,",
+                             "you can use the 'chr.sizes' argument to provide",
+                             "the chromosome sizes information."))
                 }
+              }
+            } else {
+              if(! is.integer(chr.sizes)){
+                stop("chr.sizes should be a named list of integers. 'Use 'as.integer' to convert from numeric.")
+              }
+              if(is.null(names(chr.sizes))){
+                stop("chr.sizes should be a NAMED list of integers. Use 'names()<-' to set the appropriate chromosome names.")
               }
             }
 
@@ -783,6 +797,15 @@ setMethod(
                 ## TODO do I need to put the chr.sel here to ensure we only adapt those selected chromosomes?
                 names(genomicAnnotation(obj)) <- .convertToUCSC(names(genomicAnnotation(obj)),organismName(obj),chr.map)
 ##              }
+            }
+            
+            ## subset the annotation by chr.sel
+            if (length(chr.sel) >0){
+              if(!chr.sel %in% names(genomicAnnotation(obj))){
+                stop(paste("The chromosome name you have given in the 'chr.sel' argument",
+                           "does not match any chromosome in your annotation."))
+              }
+              genomicAnnotation(obj) <- genomicAnnotation(obj)[space(genomicAnnotation(obj)) %in% chr.sel,]
             }
             
             ## Check if the condition list have the same size as the file list
@@ -941,16 +964,50 @@ setMethod(
                                                 switch(summarization,
                                                        "geneModels"= as(geneModel(obj),"GRanges"),
                                                        switch(class(genomicAnnotation(obj)),
-                                                              "RangedData"=as(genomicAnnotation(obj),"GRanges"),
+                                                              ## FIXME; need to be tested!
+                                                              "RangedData"={
+                                                                grng <- as(genomicAnnotation(obj),"GRanges")
+                                                                sel <- !duplicated(grng$gene)
+                                                                mins <- sapply(split(start(grng),grng$gene),min)
+                                                                maxs <- sapply(split(end(grng),grng$gene),max)
+                                                                grng <- grng[sel,-match("exon",colnames(grng))]
+                                                                start(grng) <- mins[match(grng$gene,names(mins))]
+                                                                end(grng) <- maxs[match(grng$gene,names(maxs))]
+                                                                if(length(chr.sel)>0){ 
+                                                                  seqlevels(grng) <- chr.sel
+                                                                  seqnames(grng) <- factor(as.character(seqnames(grng)))
+                                                                }
+                                                                grng
+                                                              },
+                                                              ## FIXME; need to be adapted as the above!
                                                               "GRangesList"=unlist(genomicAnnotation(obj)),
                                                               genomicAnnotation(obj)))
+                                              },
+                                              "transcripts"={
+                                                switch(class(genomicAnnotation(obj)),
+                                                       "RangedData"={
+                                                         grng <- as(genomicAnnotation(obj),"GRanges")
+                                                         sel <- !duplicated(grng$transcript)
+                                                         mins <- sapply(split(start(grng),grng$transcript),min)
+                                                         maxs <- sapply(split(end(grng),grng$transcript),max)
+                                                         grng <- grng[sel,-match("exon",colnames(grng))]
+                                                         start(grng) <- mins[match(grng$transcript,names(mins))]
+                                                         end(grng) <- maxs[match(grng$transcript,names(maxs))]
+                                                         if(length(chr.sel)>0){ 
+                                                           seqlevels(grng) <- chr.sel
+                                                           seqnames(grng) <- factor(as.character(seqnames(grng)))
+                                                         }
+                                                         grng
+                                                         },
+                                                       ## FIXME; need to be adapted as the above!
+                                                       "GRangesList"=unlist(genomicAnnotation(obj)),
+                                                       genomicAnnotation(obj))
                                               },
                                               switch(class(genomicAnnotation(obj)),
                                                      "RangedData"=as(genomicAnnotation(obj),"GRanges"),
                                                      "GRangesList"=unlist(genomicAnnotation(obj)),
                                                      genomicAnnotation(obj))
                                               )
-
                             ## correct the seq lengths if we have any NA (occurs when we use a RangedData)
                             if(any(is.na(seqlengths(rowData)))){
                               common.names <- intersect(names(chrSize(obj)),names(seqlengths(rowData)))
