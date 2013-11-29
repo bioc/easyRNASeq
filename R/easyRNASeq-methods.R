@@ -742,7 +742,7 @@ setMethod(
                                                })
               
             } else {
-              obj <- fetchAnnotation(obj,method=annotationMethod,
+              obj <- fetchAnnotation(obj,annotationMethod=annotationMethod,
                                      filename=annotationFile,
                                      ignoreWarnings=ignoreWarnings,...)
             }

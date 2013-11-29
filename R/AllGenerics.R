@@ -143,7 +143,7 @@ setGeneric(name="barcodePlot",
 setGeneric(
            name="fetchAnnotation",
            def=function(obj,
-             method=c("biomaRt","gff","gtf"),
+             annotationMethod=c("biomaRt","gff","gtf"),
              filename=character(1),
              ignoreWarnings=FALSE,
              ...){

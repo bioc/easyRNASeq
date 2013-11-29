@@ -1,3 +1,13 @@
+CHANGES IN VERSION 1.8.3
+-------------------------
+
+BUG FIXES
+
+  o Changed one argument name of the fetchAnnotation function to avoid
+  arguments colliding when providing additional arguments to be passed
+  to DESeq through the ... argument. The argument has been renamed from
+  'method' to 'annotationMethod'.
+
 CHANGES IN VERSION 1.8.2
 -------------------------
 

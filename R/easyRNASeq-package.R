@@ -10,8 +10,8 @@
 ##' \tabular{ll}{
 ##' Package: \tab easyRNASeq\cr
 ##' Type: \tab Package\cr
-##' Version: \tab 1.8.2\cr
-##' Date: \tab 2013-11-15\cr
+##' Version: \tab 1.8.3\cr
+##' Date: \tab 2013-11-29\cr
 ##' License: \tab Artistic-2.0\cr
 ##' LazyLoad: \tab yes\cr
 ##' Depends: \tab methods, parallel, biomaRt, edgeR, DESeq, genomeIntervals, LSD, Rsamtools, ShortRead, RnaSeqTutorial\cr

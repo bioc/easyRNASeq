@@ -62,24 +62,30 @@ setMethod(
           f="fetchAnnotation",
           signature="RNAseq",
           definition=function(obj,
-            method=c("biomaRt","gff","gtf"),
+            annotationMethod=c("biomaRt","gff","gtf"),
             filename=character(1),
             ignoreWarnings=FALSE,...){
             
-            ## get the methods
-            methods <- eval(formals("fetchAnnotation")$method)
+            ## check if method was provided
+            annotationMethod <- match.arg(annotationMethod)
             
-            ## check the provided one
-            if(!method %in% methods){
-              stop(paste(
-                         "The given method:",
-                         method,
-                         "is not part of the supported methods:",
-                         paste(methods,collapse=", ")))
+            ## check if method was provided the old way
+            dots <- list(...)
+            if ("method" %in% names(dots)){
+              
+              ## get the methods
+              methods <- eval(formals("fetchAnnotation")$annotationMethod)
+    
+              ## check the provided one
+              if(dots$method %in% methods){
+                warning(
+                  "The 'method' argument to fetchAnnotation is deprecated. Use 'annotationMethod' instead.")
+                annotationMethod <- dots$method
+              }
             }
             
-            ## switch depending on the method
-            exon.range <- switch(EXPR=method,
+            ## switch depending on the annotationMethod
+            exon.range <- switch(EXPR=annotationMethod,
                                  "biomaRt"={.getBmRange(organismName(obj),ignoreWarnings=ignoreWarnings,...)},
                                  "gff"={.getGffRange(organismName(obj),filename=filename,ignoreWarnings=ignoreWarnings,...)},
                                  "gtf"={.getGtfRange(organismName(obj),filename=filename,ignoreWarnings=ignoreWarnings,...)}
