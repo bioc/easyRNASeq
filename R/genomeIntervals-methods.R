@@ -11,25 +11,30 @@
 ##' 
 ##' @aliases coerce,Genome_intervals,RangedData-method
 ##' coerce,Genome_intervals,GRangesList-method
-##' type,Genome_intervals-method
+##' as,Genome_intervals,RangedData-method
+##' as,Genome_intervals,GRangesList-method
+##' as as,Genome_intervals-method
+##' type type,Genome_intervals-method
 ##' @name genomeIntervals additional methods
 ##' @rdname genomeIntervals-methods
 ##' @param from An object of class \code{\linkS4class{Genome_intervals}}
+##' @param to a character string; either RangedData or GRangesList
 ##' @param x An object of class \code{\linkS4class{Genome_intervals}}
+##' @usage \S4method{type}{Genome_intervals}(x)
+##' \S4method{as}{Genome_intervals}(from,to)
 ##' @return \describe{
 ##' \item{coerce}{ A \code{\linkS4class{RangedData}} or
 ##' \code{\linkS4class{GRangesList}}
 ##' containing the result of the coercion.  }
 ##' \item{type}{ The content of the
 ##' type column, usually a factor or a character vector } }
-##'
 ##' @examples
 ##' \dontrun{
 ##' annot<-readGff3(system.file("extdata","annot.gff",package="RnaSeqTutorial")
-##' gAnnot<-as(annot,"RangedData") type(annot) }
-##' 
+##' gAnnot<-as(from=annot,to="RangedData") 
+##' type(annot)
+##' }
 ##' @author Nicolas Delhomme
-##' 
 ##' @seealso
 ##' \code{\link[genomeIntervals:Genome_intervals_stranded-class]{genomeIntervals
 ##' object}}
@@ -46,7 +51,7 @@ setMethod(
 ## convert a genome intervals into a RangedData
 ## TODO find a way to check and keep unexpected slots.
 ## or at least warn they would be ignored
-setAs("Genome_intervals","RangedData",function(from){
+setAs(from="Genome_intervals",to="RangedData",def=function(from){
   universe="intervals"
   
   # first check
@@ -89,7 +94,7 @@ setAs("Genome_intervals","RangedData",function(from){
 })
 
 ## coerce into 
-setAs("Genome_intervals","GRangesList",function(from){
+setAs(from="Genome_intervals",to="GRangesList",def=function(from){
 
   ## first check
   if (!is(from, "Genome_intervals")){stop("'from' must be a Genome_intervals object")}

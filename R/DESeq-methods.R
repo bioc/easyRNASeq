@@ -106,7 +106,13 @@ setMethod(
 ##' @rdname DESeq-edgeR-common-methods 
 ##' @param obj An object of class \code{\linkS4class{CountDataSet}} or of class
 ##' \code{\linkS4class{DGEList}}
-##' @param \dots See details
+##' @param cond A character string describing the first condition; for 
+##' \code{\linkS4class{CountDataSet}{CountDataSet}} obj only.
+##' @param log A character string passed onto 
+##' \code{\link[graphics:plot.default]{plot.default}}; for 
+##' \code{\linkS4class{CountDataSet}{CountDataSet}} obj only.
+##' @param ... Additional plotting parameters; for 
+##' \code{\linkS4class{CountDataSet}{CountDataSet}} obj only.
 ##' @return none
 ##' @author Nicolas Delhomme
 ##' @keywords methods
@@ -116,7 +122,7 @@ setMethod(
 ##' 	## edgeR
 ##' 	## create the object
 ##' 	dgeList <- DGEList(counts,group)
-##' 	## calculate the sie factors
+##' 	## calculate the size factors
 ##' 	dgeList <- calcNormFactors(dgeList)
 ##' 	## plot them
 ##' 	apply(combn(rownames(dgeList$samples),2),

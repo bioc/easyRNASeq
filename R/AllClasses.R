@@ -14,19 +14,16 @@
 ##' @name RNAseq class
 ##' @rdname easyRNASeq-class
 ##' @aliases RNAseq-class RNAseq 
-##' easyRNASeq,RNAseq-method exonCounts,RNAseq-method
-##' featureCounts,RNAseq-method fetchAnnotation,RNAseq-method
-##' fetchCoverage,RNAseq-method fileName,RNAseq-method fileName<-,RNAseq-method
-##' findIslands,RNAseq-method geneCounts,RNAseq-method geneModel,RNAseq-method
-##' geneModel<-,RNAseq-method genomicAnnotation,RNAseq-method
-##' genomicAnnotation<-,RNAseq-method islandCounts,RNAseq-method
+##' easyRNASeq,RNAseq-method 
+##' fileName,RNAseq-method fileName<-,RNAseq-method
+##' geneModel,RNAseq-method
+##' geneModel<-,RNAseq-method
 ##' librarySize,RNAseq-method librarySize<-,RNAseq-method
-##' organismName,RNAseq-method organismName<-,RNAseq-method print,RNAseq-method
+##' organismName,RNAseq-method organismName<-,RNAseq-method 
 ##' readCounts,RNAseq-method readCounts<-,RNAseq-method
 ##' readCoverage,RNAseq-method readCoverage<-,RNAseq-method
 ##' readIslands,RNAseq-method readIslands<-,RNAseq-method
 ##' readLength,RNAseq-method readLength<-,RNAseq-method RPKM,RNAseq-method
-##' show,RNAseq-method transcriptCounts,RNAseq-method
 ##' @docType class
 ##' @section Objects from the Class: Objects can be created by calls of the
 ##' form \code{new("RNAseq", ...)}.

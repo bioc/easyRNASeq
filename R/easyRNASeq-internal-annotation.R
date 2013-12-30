@@ -29,7 +29,7 @@
 ##' annotations
 ##' @param nbCore number of CPU cores to use
 ##' @param filename filename that contains the annotations
-##' @param \dots Additional arguments, passed to more internal functions.
+##' @param ... Additional arguments, passed to more internal functions.
 ##' @return A \code{\linkS4class{RangedData}} containing the loaded or
 ##' processed annotations.
 ##' @author Nicolas Delhomme

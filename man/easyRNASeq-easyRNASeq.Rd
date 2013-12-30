@@ -1,7 +1,23 @@
-\name{easyRNASeq}
+\docType{methods}
+\name{easyRNASeq,character-method}
 \alias{easyRNASeq}
 \alias{easyRNASeq,character-method}
 \title{easyRNASeq method}
+\usage{
+\S4method{easyRNASeq}{character}(filesDirectory = getwd(),
+  organism = character(1), chr.sizes = c("auto"), readLength = integer(1),
+  annotationMethod = c("biomaRt", "env", "gff", "gtf", "rda"),
+  annotationFile = character(1), annotationObject = RangedData(),
+  format = c("bam", "aln"), gapped = FALSE, count = c("exons", "features",
+  "genes", "islands", "transcripts"), outputFormat = c("matrix",
+  "SummarizedExperiment", "DESeq", "edgeR", "RNAseq"), pattern = character(1),
+  filenames = character(0), nbCore = 1, filter = srFilter(),
+  type = "SolexaExport", chr.sel = c(), summarization = c("bestExons",
+  "geneModels"), normalize = FALSE, max.gap = integer(1), min.cov = 1L,
+  min.length = integer(1), plot = TRUE, conditions = c(),
+  validity.check = TRUE, chr.map = data.frame(), ignoreWarnings = FALSE,
+  silent = FALSE, ...)
+}
 \arguments{
   \item{annotationFile}{The location (full path) of the
   annotation file}
@@ -110,81 +126,79 @@
   otherwise the argument 'chr.map' can be used to
   complement it.}
 
-  \item{\dots}{additional arguments. See details}
+  \item{...}{additional arguments. See details}
 }
 \value{
-  Returns a count table (a matrix of m features x n
-  samples). If the \code{outputFormat} option has been set,
-  a corresponding object is returned: a
-  \code{\linkS4class{SummarizedExperiment}}, a
-  \code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}},
-  a \code{\link[edgeR:DGEList]{edgeR:DGEList}} or
-  \code{\linkS4class{RNAseq}}.
+Returns a count table (a matrix of m features x n samples).
+If the \code{outputFormat} option has been set, a
+corresponding object is returned: a
+\code{\linkS4class{SummarizedExperiment}}, a
+\code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}},
+a \code{\link[edgeR:DGEList]{edgeR:DGEList}} or
+\code{\linkS4class{RNAseq}}.
 }
 \description{
-  This function is a wrapper around the more low level
-  functionalities of the package.  Is the easiest way to
-  get a count matrix from a set of read files.  It does the
-  following: \itemize{
-  \item{\code{\link[easyRNASeq:ShortRead-methods]{use
-  ShortRead/Rsamtools methods}} for loading/pre-processing
-  the data.}
-  \item{\code{\link[easyRNASeq:fetchAnnotation]{fetch the
-  annotations}} depending on the provided arguments}
-  \item{\code{\link[easyRNASeq:fetchCoverage]{get the reads
-  coverage}} from the provided file(s)}
-  \item{\code{\link[easyRNASeq:easyRNASeq-summarization-methods]{summarize
-  the reads}} according to the selected summarization
-  features}
-  \item{\code{\link[easyRNASeq:easyRNASeq-correction-methods]{optionally
-  apply}} a data correction (i.e. generating RPKM).}
-  \item{\code{\link[easyRNASeq:edgeR-methods]{use edgeR
-  methods}} for post-processing the data or}
-  \item{\code{\link[easyRNASeq:DESeq-methods]{use DESeq
-  methods}} for post-processing the data (either of them
-  being recommended over RPKM).} }
+This function is a wrapper around the more low level
+functionalities of the package.  Is the easiest way to get
+a count matrix from a set of read files.  It does the
+following: \itemize{
+\item{\code{\link[easyRNASeq:ShortRead-methods]{use
+ShortRead/Rsamtools methods}} for loading/pre-processing
+the data.}
+\item{\code{\link[easyRNASeq:fetchAnnotation]{fetch the
+annotations}} depending on the provided arguments}
+\item{\code{\link[easyRNASeq:fetchCoverage]{get the reads
+coverage}} from the provided file(s)}
+\item{\code{\link[easyRNASeq:easyRNASeq-summarization-methods]{summarize
+the reads}} according to the selected summarization
+features}
+\item{\code{\link[easyRNASeq:easyRNASeq-correction-methods]{optionally
+apply}} a data correction (i.e. generating RPKM).}
+\item{\code{\link[easyRNASeq:edgeR-methods]{use edgeR
+methods}} for post-processing the data or}
+\item{\code{\link[easyRNASeq:DESeq-methods]{use DESeq
+methods}} for post-processing the data (either of them
+being recommended over RPKM).} }
 }
 \details{
-  \itemize{ \item{\dots{} Additional arguments for
-  different functions: \itemize{ \item{For the
-  \pkg{biomaRt} \code{\link[biomaRt:getBM]{getBM}}
-  function} \item{For the
-  \code{\link[easyRNASeq:easyRNASeq-annotation-internal-methods]{readGffGtf}}
-  internal function that takes an optional arguments:
-  annotation.type that default to "exon" (used to select
-  the proper rows of the gff or gtf file)} \item{ For the
-  \code{\link[DESeq:estimateDispersions]{DESeq
-  estimateDispersions}} method} \item{For to the
-  \code{\link[base:list.files]{list.files}} function used
-  to locate the read files.} }} \item{the annotationObject
-  When the \code{annotationMethods} is set to \code{env} or
-  \code{rda}, a properly formatted \code{RangedData} or
-  \code{GRangesList} object need to be provided. Check the
-  paragraph RangedData in the vignette or the examples at
-  the bottom of this page for examples. The data.frame-like
-  structure of these objects is where \code{easyRNASeq}
-  will look for the exon, feature, transcript, or gene
-  identifier. Depending on the count method selected, it is
-  essential that the akin column name is present in the
-  annotationObject. E.g. when counting "features", the
-  annotationObject has to contain a "feature" field.}
-  \item{the chr.map The chr.map argument for the easyRNASeq
-  function only works for an "organismName" of value
-  'custom' with the "validity.check" parameter set to
-  'TRUE'.  This data.frame should contain two columns named
-  'from' and 'to'. The row should represent the chromosome
-  name in your original data and the wished name in the
-  output of the function.} \item{count The count can be
-  summarized by exons, features, genes, islands or
-  transcripts. While exons, genes and transcripts are
-  obvious, "features" describes any features provided by
-  the user, e.g. enhancer loci. These are processed as the
-  exons are. For "islands", it is for an under development
-  function that identifies de-novo expression loci and
-  count the number of reads overlapping them. }
-  \item{chr.sizes If set to "auto", then the format has to
-  be "bam", in which case the chromosome names and size are
-  extracted from the BAM header} }
+\itemize{ \item{\dots{} Additional arguments for different
+functions: \itemize{ \item{For the \pkg{biomaRt}
+\code{\link[biomaRt:getBM]{getBM}} function} \item{For the
+\code{\link[easyRNASeq:easyRNASeq-annotation-internal-methods]{readGffGtf}}
+internal function that takes an optional arguments:
+annotation.type that default to "exon" (used to select the
+proper rows of the gff or gtf file)} \item{ For the
+\code{\link[DESeq:estimateDispersions]{DESeq
+estimateDispersions}} method} \item{For to the
+\code{\link[base:list.files]{list.files}} function used to
+locate the read files.} }} \item{the annotationObject When
+the \code{annotationMethods} is set to \code{env} or
+\code{rda}, a properly formatted \code{RangedData} or
+\code{GRangesList} object need to be provided. Check the
+paragraph RangedData in the vignette or the examples at the
+bottom of this page for examples. The data.frame-like
+structure of these objects is where \code{easyRNASeq} will
+look for the exon, feature, transcript, or gene identifier.
+Depending on the count method selected, it is essential
+that the akin column name is present in the
+annotationObject. E.g. when counting "features", the
+annotationObject has to contain a "feature" field.}
+\item{the chr.map The chr.map argument for the easyRNASeq
+function only works for an "organismName" of value 'custom'
+with the "validity.check" parameter set to 'TRUE'.  This
+data.frame should contain two columns named 'from' and
+'to'. The row should represent the chromosome name in your
+original data and the wished name in the output of the
+function.} \item{count The count can be summarized by
+exons, features, genes, islands or transcripts. While
+exons, genes and transcripts are obvious, "features"
+describes any features provided by the user, e.g. enhancer
+loci. These are processed as the exons are. For "islands",
+it is for an under development function that identifies
+de-novo expression loci and count the number of reads
+overlapping them. } \item{chr.sizes If set to "auto", then
+the format has to be "bam", in which case the chromosome
+names and size are extracted from the BAM header} }
 }
 \examples{
 \dontrun{
@@ -230,15 +244,15 @@
 }
 }
 \author{
-  Nicolas Delhomme
+Nicolas Delhomme
 }
 \seealso{
-  \code{\linkS4class{RNAseq}}
-  \code{\linkS4class{SummarizedExperiment}}
-  \code{\link[edgeR:DGEList]{edgeR:DGEList}}
-  \code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}}
-  \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq:knownOrganisms}}
-  \code{\link[ShortRead:readAligned]{ShortRead:readAligned}}
+\code{\linkS4class{RNAseq}}
+\code{\linkS4class{SummarizedExperiment}}
+\code{\link[edgeR:DGEList]{edgeR:DGEList}}
+\code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}}
+\code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq:knownOrganisms}}
+\code{\link[ShortRead:readAligned]{ShortRead:readAligned}}
 }
 \keyword{methods}
 

@@ -5,6 +5,7 @@
 ##' 
 ##' @name show methods
 ##' @rdname show-methods
+##' @aliases show,RNAseq-method
 ##' @docType methods
 ##' @section Methods: \describe{ \item{list("signature(object = \"RNAseq\")")}{
 ##' Display the values of the different slots of the

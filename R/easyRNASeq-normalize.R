@@ -27,7 +27,7 @@
 ##' \code{matrix}, see details
 ##' @param simplify If set to TRUE, whenever a feature (exon, feature, ...) is
 ##' duplicated in the count table, it is only returned once.
-##' @param \dots additional arguments. See details
+##' @param ... additional arguments. See details
 ##' @return A \code{matrix} containing RPKM corrected read counts.
 ##' @author Nicolas Delhomme
 ##' @seealso \code{\link[easyRNASeq:easyRNASeq-accessors]{readCounts}}

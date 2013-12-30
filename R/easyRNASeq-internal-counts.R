@@ -63,7 +63,7 @@
 ##' \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq:knownOrganisms}},
 ##' otherwise the argument 'chr.map' can be used to complement it.
 ##' @param values a named vector containing count results
-##' @param \dots additional arguments. See the details in
+##' @param ... additional arguments. See the details in
 ##' \code{\link[easyRNASeq:easyRNASeq]{easyRNASeq}}.
 ##' @seealso
 ##' \itemize{

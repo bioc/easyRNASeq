@@ -1,6 +1,6 @@
 Package: easyRNASeq
-Version: 1.8.3
-Date: 2013-11-29
+Version: 1.8.4
+Date: 2013-12-29
 Type: Package
 Title: Count summarization and normalization for RNA-Seq data.
 Author: Nicolas Delhomme, Ismael Padioleau, Bastian Schiffthaler
@@ -31,30 +31,8 @@ Suggests:
     BSgenome (>= 1.30.0),
     BSgenome.Dmelanogaster.UCSC.dm3 (>= 1.3.19),
     GenomicFeatures (>= 1.14.0),
-    RnaSeqTutorial (>= 0.0.13)
+    RnaSeqTutorial (>= 0.0.13),
+    BiocStyle (>= 1.0.0)
 License: Artistic-2.0
 LazyLoad: yes
 biocViews: GeneExpression, RNAseq, Genetics, Preprocessing
-Collate:
-    'AllClasses.R'
-    'AllGenerics.R'
-    'DESeq-methods.R'
-    'easyRNASeq-accessors.R'
-    'easyRNASeq-counts.R'
-    'easyRNASeq-internal-annotation.R'
-    'easyRNASeq-internal-counts.R'
-    'easyRNASeq-internal-methods.R'
-    'easyRNASeq-internal-normalize.R'
-    'easyRNASeq-islands.R'
-    'easyRNASeq-methods.R'
-    'easyRNASeq-normalize.R'
-    'easyRNASeq-package.R'
-    'edgeR-methods.R'
-    'genomeIntervals-methods.R'
-    'GenomicRanges-methods.R'
-    'IRanges-methods.R'
-    'print-methods.R'
-    'ShortRead-methods.R'
-    'show-methods.R'
-    'easyRNASeq-annotation.R'
-    'parallel-methods.R'

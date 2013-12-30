@@ -1,8 +1,14 @@
+\docType{methods}
 \name{edgeR additional methods}
 \alias{edgeR additional methods}
 \alias{plotNormalizationFactors}
 \alias{plotNormalizationFactors,DGEList,character,character-method}
 \title{Extension for the edgeR package}
+\usage{
+
+  \S4method{plotNormalizationFactors}{DGEList,character,character}(obj = DGEList(),
+  cond1 = character(1), cond2 = character(1))
+}
 \arguments{
   \item{obj}{An object of class
   \code{\linkS4class{DGEList}}}
@@ -14,12 +20,12 @@
   condition}
 }
 \value{
-  none
+none
 }
 \description{
-  This method extends the edgeR package by offering the
-  functionality to plot the effect of the normalization
-  factor.
+This method extends the edgeR package by offering the
+functionality to plot the effect of the normalization
+factor.
 }
 \examples{
 \dontrun{
@@ -34,7 +40,7 @@
 	}
 }
 \author{
-  Nicolas Delhomme
+Nicolas Delhomme
 }
 \keyword{methods}
 

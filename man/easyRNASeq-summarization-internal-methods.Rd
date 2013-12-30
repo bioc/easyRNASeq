@@ -7,7 +7,7 @@
 \alias{easyRNASeq summarization internal methods}
 \title{Internal count and summarization methods}
 \usage{
-  .bestExonSummarization(obj)
+.bestExonSummarization(obj)
 }
 \arguments{
   \item{chr.map}{A data.frame describing the mapping of
@@ -80,47 +80,45 @@
 
   \item{values}{a named vector containing count results}
 
-  \item{\dots}{additional arguments. See the details in
+  \item{...}{additional arguments. See the details in
   \code{\link[easyRNASeq:easyRNASeq]{easyRNASeq}}.}
 }
 \value{
-  \itemize{ \item .doCount: a list containing \itemize{
-  \item counts: the summarized counts as a matrix of
-  dimension number of genes x 1 \item size: the library
-  size } \item .doBasicCount: a vector containing read
-  counts. \item .bestExonSummarization: a vector containing
-  summarized counts. \item .geneModelSummarization: a
-  vector containing summarized counts. \item
-  .extendCountList: a named list of matrices. The names are
-  according to the counting/summarization already
-  performed. }
+\itemize{ \item .doCount: a list containing \itemize{ \item
+counts: the summarized counts as a matrix of dimension
+number of genes x 1 \item size: the library size } \item
+.doBasicCount: a vector containing read counts. \item
+.bestExonSummarization: a vector containing summarized
+counts. \item .geneModelSummarization: a vector containing
+summarized counts. \item .extendCountList: a named list of
+matrices. The names are according to the
+counting/summarization already performed. }
 }
 \description{
-  These are internal methods related to counting and
-  summarizing reads \itemize{ \item For counting reads:
-  \itemize{ \item .doCount A dispatcher higher level
-  function to count and summarize reads. Externalized so
-  that it can be parallelized. \item .doBasicCount A
-  function to calculate the counts for 'exons' or
-  'features' } \item For summarizing per genes: these
-  methods are called by the method \code{geneCounts}.
-  Having performed the \code{exonCounts} is a
-  pre-requisite. \itemize{ \item .bestExonSummarization
-  Identify the exon showing the highest coverage. \item
-  .geneModelSummarization Sum the coverage values of the
-  synthetic exons constituting a gene model. } \item For
-  managing the summarized read count structure: \itemize{
-  \item .extendCountList extend or create the result count
-  list of matrices } }
+These are internal methods related to counting and
+summarizing reads \itemize{ \item For counting reads:
+\itemize{ \item .doCount A dispatcher higher level function
+to count and summarize reads. Externalized so that it can
+be parallelized. \item .doBasicCount A function to
+calculate the counts for 'exons' or 'features' } \item For
+summarizing per genes: these methods are called by the
+method \code{geneCounts}. Having performed the
+\code{exonCounts} is a pre-requisite. \itemize{ \item
+.bestExonSummarization Identify the exon showing the
+highest coverage. \item .geneModelSummarization Sum the
+coverage values of the synthetic exons constituting a gene
+model. } \item For managing the summarized read count
+structure: \itemize{ \item .extendCountList extend or
+create the result count list of matrices } }
 }
 \author{
-  Nicolas Delhomme
+Nicolas Delhomme
 }
 \seealso{
-  \itemize{ \item
-  \code{\link[ShortRead:readAligned]{ShortRead:readAligned}}
-  \item \code{\linkS4class{RNAseq}}
-  \code{\link[easyRNASeq:easyRNASeq]{easyRNASeq}}. }
+\itemize{ \item
+\code{\link[ShortRead:readAligned]{ShortRead:readAligned}}
+\item \code{\linkS4class{RNAseq}}
+\code{\link[easyRNASeq:easyRNASeq]{easyRNASeq}}. }
 }
 \keyword{internal}
 

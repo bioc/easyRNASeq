@@ -57,7 +57,7 @@
 ##' \link[intervals:Intervals_virtual-class]{intervals} or
 ##' \link[genomeIntervals:Genome_intervals_stranded-class]{genomeIntervals}
 ##' package
-##' @param \dots For \code{.getArguments} a list of named parameters to be
+##' @param ... For \code{.getArguments} a list of named parameters to be
 ##' matched against a function formal definition. For \code{.catn}, the values
 ##' to be printed. For \code{.list.files}, the additional parameters to be filtered
 ##' for the list.files function.
@@ -102,6 +102,12 @@
                   if(any(is.na(position(obj)))){
                     stop("Your read file contains NA position, please filter for them. Check '?naPositionFilter'.")
                   }
+                  
+                  ## warn for multiple mapping
+                  if(sum(duplicated(sread))>0){
+                    warning("Your alignment file potentially contains multi-mapping reads. This would bias the counting.")
+                  }
+                  
                   ## no need to do it for the width, reads always have a positive width
                   list(rng.list=split(IRanges(start=position(obj),width=width(obj)),as.character(chromosome(obj))),
                        lib.size=length(obj))
@@ -109,11 +115,19 @@
                 "GAlignments" = {
                   ## we want only the mapped regions
                   grnglist <- grglist(obj,drop.D.range=TRUE)
+                  if(any(elementMetadata(grnglist)$NH)>1){
+                    warning("Your alignment file potentially contains multi-mapping reads. This would bias the counting.")
+                  }
                   list(rng.list=split(unlist(ranges(grnglist),use.names=FALSE),unlist(seqnames(grnglist),use.names=FALSE)),
                        lib.size=length(unique(names(obj))))
                 },
-                list(rng.list=split(IRanges(start=obj$pos,width=obj$qwidth),obj$rname),
+                {
+                  if(any(obj$tag$NH)>1){
+                    warning("Your alignment file potentially contains multi-mapping reads. This would bias the counting.")
+                  }
+                  list(rng.list=split(IRanges(start=obj$pos,width=obj$qwidth),obj$rname),
                      lib.size=length(obj$rname))
+                }
                 ))
 }
 

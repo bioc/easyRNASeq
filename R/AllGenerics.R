@@ -218,7 +218,8 @@ setGeneric(
              type="SolexaExport",chr.sel=c(),
              isUnmappedQuery=FALSE,what=c("rname","pos","qwidth"),
              validity.check=TRUE,chr.map=data.frame(),
-             ignoreWarnings=FALSE,gapped=TRUE,bp.coverage=FALSE,...){
+             ignoreWarnings=FALSE,gapped=TRUE,tag="NH",
+                        bp.coverage=FALSE,...){
              standardGeneric("fetchCoverage")
            })
 

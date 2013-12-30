@@ -11,7 +11,9 @@
 ##' 
 ##' 
 ##' @aliases accessors chrSize chrSize,RNAseq-method fileName<- fileName geneModel<-
-##' geneModel genomicAnnotation<- genomicAnnotation librarySize<- librarySize
+##' geneModel genomicAnnotation<- genomicAnnotation<-,RNAseq-method
+##' genomicAnnotation genomicAnnotation,RNAseq-method
+##' librarySize<- librarySize
 ##' organismName<- organismName readCounts<- readCounts readCoverage<-
 ##' readCoverage readIslands<- readIslands readLength<- readLength
 ##' chrSize<- chrSize<-,RNAseq,integer-method chrSize<-,RNAseq,list-method 
@@ -25,8 +27,11 @@
 ##' @param unique For the 'exons' count only. Should the counts returned be
 ##' unique for their identifier (i.e. the matrix row names)?
 ##' @param value The replacement value.
+##' @usage genomicAnnotation(obj)
+##' readCounts(obj,count=c("exons","features","genes","islands","transcripts"),
+##' summarization=c("bestExons","geneModels"),unique=FALSE)
+##' genomicAnnotation(obj) <- value
 ##' @return
-##' 
 ##' Usually, the value of the corresponding slot, or other simple content
 ##' described on the help page of \code{easyRNASeq}.
 ##' @author Nicolas Delhomme

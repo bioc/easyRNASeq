@@ -1,9 +1,23 @@
+\docType{methods}
 \name{easyRNASeq coverage methods}
 \alias{easyRNASeq coverage methods}
 \alias{fetchCoverage}
+\alias{fetchCoverage,RNAseq-method}
 \title{Compute the coverage from a Short Read Alignment file}
+\usage{
+\S4method{fetchCoverage}{RNAseq}(obj, format = c("aln", "bam"),
+  filename = character(1), filter = srFilter(), type = "SolexaExport",
+  chr.sel = c(), isUnmappedQuery = FALSE, what = c("rname", "pos",
+  "qwidth"), validity.check = TRUE, chr.map = data.frame(),
+  ignoreWarnings = FALSE, gapped = TRUE, tag = "NH",
+  bp.coverage = FALSE, ...)
+}
 \arguments{
   \item{obj}{An \code{\linkS4class{RNAseq}} object}
+
+  \item{bp.coverage}{a boolean that default to FALSE to
+  decide whether coverage is to be calculated and stored by
+  bp}
 
   \item{chr.map}{A data.frame describing the mapping of
   original chromosome names towards wished chromosome
@@ -31,6 +45,10 @@
   \item{isUnmappedQuery}{additional argument for
   scanBamFlag \pkg{Rsamtools}}
 
+  \item{tag}{additional argument to the \pkg{Rsamtools}
+  scanBamFlag function called internally. The default is
+  NH, to check for multiple mapping.}
+
   \item{type}{The type of data when using the "aln" format.
   See the \pkg{ShortRead} package.}
 
@@ -40,21 +58,21 @@
   \item{what}{additional argument for ScanBamParam
   \pkg{Rsamtools}}
 
-  \item{\dots}{additional arguments. See details}
+  \item{...}{additional arguments. See details}
 }
 \value{
-  An \code{\linkS4class{RNAseq}} object. The slot
-  readCoverage contains a SimpleRleList object representing
-  a list of coverage vectors, one per chromosome.
+An \code{\linkS4class{RNAseq}} object. The slot
+readCoverage contains a SimpleRleList object representing a
+list of coverage vectors, one per chromosome.
 }
 \description{
-  Computes the genomic reads' coverage from a read file in
-  bam format or any format supported by \pkg{ShortRead}.
+Computes the genomic reads' coverage from a read file in
+bam format or any format supported by \pkg{ShortRead}.
 }
 \details{
-  \dots{} for fetchCoverage: Can be used for readAligned
-  method from package \pkg{ShortRead} or for scanBamFlag
-  method from package \pkg{Rsamtools}.
+\dots{} for fetchCoverage: Can be used for readAligned
+method from package \pkg{ShortRead} or for scanBamFlag
+method from package \pkg{Rsamtools}.
 }
 \examples{
 \dontrun{
@@ -78,11 +96,11 @@
 	}
 }
 \author{
-  Nicolas Delhomme
+Nicolas Delhomme
 }
 \seealso{
-  \code{\linkS4class{Rle}}
-  \code{\link[ShortRead:readAligned]{ShortRead:readAligned}}
+\code{\linkS4class{Rle}}
+\code{\link[ShortRead:readAligned]{ShortRead:readAligned}}
 }
 \keyword{methods}
 

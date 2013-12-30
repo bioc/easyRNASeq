@@ -13,7 +13,7 @@
 ##' @param fun the function to be applied in parallel
 ##' @param nnodes the number of nodes to use
 ##' @param obj the object which processing has to be parallelizes
-##' @param \dots additional arguments passed to the function \code{fun}
+##' @param ... additional arguments passed to the function \code{fun}
 ##' @return the result of the \code{\link[parallel:clusterApply]{clusterApply}} function.
 ##' @author Nicolas Delhomme
 ##' @seealso \code{\link[parallel:clusterApply]{clusterApply}}

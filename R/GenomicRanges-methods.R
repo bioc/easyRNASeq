@@ -12,14 +12,18 @@
 ##' @aliases colnames colnames,GenomicRanges-method colnames,GRangesList-method
 ##' @name GenomicRanges additional methods
 ##' @rdname GenomicRanges-methods
-##' @param obj An object of the \code{\linkS4class{GRanges}} or
+##' @param x An object of the \code{\linkS4class{GRanges}} or
 ##' \code{\linkS4class{GRangesList}} class
+##' @param do.NULL see \code{\link[BiocGenerics:colnames]{colnames}} for details
+##' @param prefix see \code{\link[BiocGenerics:colnames]{colnames}} for details
+##' @usage colnames(x, do.NULL = TRUE, prefix = "col")
 ##' @return A vector of column names.
 ##' @author Nicolas Delhomme
 ##' @seealso
 ##' \code{\linkS4class{DataFrame}}
 ##' \code{\linkS4class{GRanges}}
 ##' \code{\linkS4class{GRangesList}}
+##' \code{\link[BiocGenerics:colnames]{colnames}}
 ##' @keywords methods
 ##' @examples
 ##' 

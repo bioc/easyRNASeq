@@ -1,27 +1,39 @@
+\docType{methods}
 \name{GenomicRanges additional methods}
 \alias{GenomicRanges additional methods}
 \alias{colnames}
 \alias{colnames,GRangesList-method}
 \alias{colnames,GenomicRanges-method}
 \title{Extension of the GenomicRanges package}
+\usage{
+colnames(x, do.NULL = TRUE, prefix = "col")
+}
 \arguments{
-  \item{obj}{An object of the \code{\linkS4class{GRanges}}
-  or \code{\linkS4class{GRangesList}} class}
+  \item{x}{An object of the \code{\linkS4class{GRanges}} or
+  \code{\linkS4class{GRangesList}} class}
+
+  \item{do.NULL}{see
+  \code{\link[BiocGenerics:colnames]{colnames}} for
+  details}
+
+  \item{prefix}{see
+  \code{\link[BiocGenerics:colnames]{colnames}} for
+  details}
 }
 \value{
-  A vector of column names.
+A vector of column names.
 }
 \description{
-  Return the column name of a \code{\linkS4class{GRanges}}
-  or \code{\linkS4class{GRangesList}} object.
+Return the column name of a \code{\linkS4class{GRanges}} or
+\code{\linkS4class{GRangesList}} object.
 }
 \details{
-  It returns the actual column names of the elementMetadata
-  slot of the \code{\linkS4class{GRanges}} or
-  \code{\linkS4class{GRangesList}} object. The
-  elementMetadata contains a \code{\linkS4class{DataFrame}}
-  object used to store additional information provided by
-  the user, such as exon ID in our case.
+It returns the actual column names of the elementMetadata
+slot of the \code{\linkS4class{GRanges}} or
+\code{\linkS4class{GRangesList}} object. The
+elementMetadata contains a \code{\linkS4class{DataFrame}}
+object used to store additional information provided by the
+user, such as exon ID in our case.
 }
 \examples{
 \dontrun{
@@ -52,12 +64,12 @@
 	}
 }
 \author{
-  Nicolas Delhomme
+Nicolas Delhomme
 }
 \seealso{
-  \code{\linkS4class{DataFrame}}
-  \code{\linkS4class{GRanges}}
-  \code{\linkS4class{GRangesList}}
+\code{\linkS4class{DataFrame}} \code{\linkS4class{GRanges}}
+\code{\linkS4class{GRangesList}}
+\code{\link[BiocGenerics:colnames]{colnames}}
 }
 \keyword{methods}
 

@@ -10,7 +10,7 @@
 ##' @aliases ranges ranges,RNAseq-method
 ##' @name IRanges additional methods
 ##' @rdname IRanges-methods
-##' @param obj An object of the \code{\linkS4class{RNAseq}} class
+##' @param x An object of the \code{\linkS4class{RNAseq}} class
 ##' @return An \code{\linkS4class{IRanges}} object.
 ##' @author Nicolas Delhomme
 ##' @keywords methods

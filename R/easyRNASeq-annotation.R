@@ -27,15 +27,17 @@
 ##' default to "exon". This is used to select the proper rows of the gff or gtf
 ##' file.
 ##' 
-##' @aliases fetchAnnotation knownOrganisms knownOrganisms,missing-method
+##' @aliases fetchAnnotation fetchAnnotation,RNAseq-method
+##' knownOrganisms knownOrganisms,missing-method
 ##' @name easyRNASeq annotation methods
 ##' @rdname easyRNASeq-annotation-methods
 ##' @param obj An object of class \code{RNAseq}
-##' @param method one of biomaRt, gff, gtf
+##' @param annotationMethod one of biomaRt, gff, gtf
 ##' @param filename If the method is gff or gtf, the actual gtf, gff filename
 ##' @param ignoreWarnings set to TRUE (bad idea! they have a good reason to be
 ##' there) if you do not want warning messages.
-##' @param \dots See details
+##' @param ... See details
+## TODO complain to roxygen2 about \dots 
 ##' @return A \code{\linkS4class{RangedData}} containing the fetched
 ##' annotations.
 ##' @author Nicolas Delhomme

@@ -5,21 +5,21 @@
 \alias{easyRNASeq-package}
 \title{Count summarization and normalization pipeline for Next Generation Sequencing data.}
 \description{
-  Offers functionalities to summarize read counts per
-  feature of interest, e.g. exons, transcripts, genes, etc.
-  Offers functionalities to normalize the summarized counts
-  using 3rd party packages like
-  \code{\link[DESeq:newCountDataSet]{DESeq}} or
-  \code{\link[edgeR:DGEList]{edgeR}}.
+Offers functionalities to summarize read counts per feature
+of interest, e.g. exons, transcripts, genes, etc. Offers
+functionalities to normalize the summarized counts using
+3rd party packages like
+\code{\link[DESeq:newCountDataSet]{DESeq}} or
+\code{\link[edgeR:DGEList]{edgeR}}.
 }
 \details{
-  \tabular{ll}{ Package: \tab easyRNASeq\cr Type: \tab
-  Package\cr Version: \tab 1.8.3\cr Date: \tab
-  2013-11-29\cr License: \tab Artistic-2.0\cr LazyLoad:
-  \tab yes\cr Depends: \tab methods, parallel, biomaRt,
-  edgeR, DESeq, genomeIntervals, LSD, Rsamtools, ShortRead,
-  RnaSeqTutorial\cr Suggests: \tab
-  BSgenome.Dmelanogaster.UCSC.dm3 }
+\tabular{ll}{ Package: \tab easyRNASeq\cr Type: \tab
+Package\cr Version: \tab 1.8.4\cr Date: \tab 2013-12-29\cr
+License: \tab Artistic-2.0\cr LazyLoad: \tab yes\cr
+Depends: \tab methods, parallel, biomaRt, edgeR, DESeq,
+genomeIntervals, LSD, Rsamtools, ShortRead,
+RnaSeqTutorial\cr Suggests: \tab
+BSgenome.Dmelanogaster.UCSC.dm3 }
 }
 \section{Methods}{
   The main function
@@ -81,30 +81,29 @@
 	}
 }
 \author{
-  Nicolas Delhomme, Bastian Schiffthaler, Ismael Padioleau
+Nicolas Delhomme, Bastian Schiffthaler, Ismael Padioleau
 }
 \seealso{
-  The class RNAseq specification:
-  \code{\linkS4class{RNAseq}}
+The class RNAseq specification: \code{\linkS4class{RNAseq}}
 
-  The default output class specification:
-  \code{\linkS4class{SummarizedExperiment}}
+The default output class specification:
+\code{\linkS4class{SummarizedExperiment}}
 
-  The imported packages:
-  \code{\link[biomaRt:useMart]{biomaRt}}
-  \code{\link[edgeR:DGEList]{edgeR}}
-  \code{\link[genomeIntervals:Genome_intervals_stranded-class]{genomeIntervals}}
-  \code{\link[Biostrings:XString-class]{Biostrings}}
-  \code{\link[BSgenome:BSgenome-class]{BSgenome}}
-  \code{\link[DESeq:newCountDataSet]{DESeq}}
-  \code{\link[GenomicRanges:GRanges-class]{GenomicRanges}}
-  \code{\link[IRanges:IRanges-constructor]{IRanges}}
-  \code{\link[Rsamtools:scanBam]{Rsamtools}}
-  \code{\link[ShortRead:readAligned]{ShortRead}}
+The imported packages:
+\code{\link[biomaRt:useMart]{biomaRt}}
+\code{\link[edgeR:DGEList]{edgeR}}
+\code{\link[genomeIntervals:Genome_intervals_stranded-class]{genomeIntervals}}
+\code{\link[Biostrings:XString-class]{Biostrings}}
+\code{\link[BSgenome:BSgenome-class]{BSgenome}}
+\code{\link[DESeq:newCountDataSet]{DESeq}}
+\code{\link[GenomicRanges:GRanges-class]{GenomicRanges}}
+\code{\link[IRanges:IRanges-constructor]{IRanges}}
+\code{\link[Rsamtools:scanBam]{Rsamtools}}
+\code{\link[ShortRead:readAligned]{ShortRead}}
 
-  The suggested packages:
-  \code{\link[parallel:makeCluster]{parallel}}
-  \code{\link[GenomicFeatures:TranscriptDb-class]{GenomicFeatures}}
+The suggested packages:
+\code{\link[parallel:makeCluster]{parallel}}
+\code{\link[GenomicFeatures:TranscriptDb-class]{GenomicFeatures}}
 }
 \keyword{package}
 

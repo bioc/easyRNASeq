@@ -23,10 +23,12 @@
 ##' \dots{} for fetchCoverage: Can be used for readAligned method from package
 ##' \pkg{ShortRead} or for scanBamFlag method from package \pkg{Rsamtools}.
 ##' 
-##' @aliases fetchCoverage
+##' @aliases fetchCoverage fetchCoverage,RNAseq-method
 ##' @name easyRNASeq coverage methods
 ##' @rdname easyRNASeq-coverage-methods
 ##' @param obj An \code{\linkS4class{RNAseq}} object
+##' @param bp.coverage a boolean that default to FALSE to decide whether
+##' coverage is to be calculated and stored by bp
 ##' @param chr.map A data.frame describing the mapping of original chromosome
 ##' names towards wished chromosome names. See details.
 ##' @param chr.sel A vector of chromosome names to subset the final results.
@@ -39,11 +41,13 @@
 ##' @param ignoreWarnings set to TRUE (bad idea! they have a good reason to be
 ##' there) if you do not want warning messages.
 ##' @param isUnmappedQuery additional argument for scanBamFlag \pkg{Rsamtools}
+##' @param tag additional argument to the \pkg{Rsamtools} scanBamFlag function
+##' called internally. The default is NH, to check for multiple mapping. 
 ##' @param type The type of data when using the "aln" format. See the
 ##' \pkg{ShortRead} package.
 ##' @param validity.check Shall UCSC chromosome name convention be enforced
 ##' @param what additional argument for ScanBamParam \pkg{Rsamtools}
-##' @param \dots additional arguments. See details
+##' @param ... additional arguments. See details
 ##' @return An \code{\linkS4class{RNAseq}} object. The slot readCoverage
 ##' contains a SimpleRleList object representing a list of coverage vectors,
 ##' one per chromosome.
@@ -87,7 +91,7 @@ setMethod(
             validity.check=TRUE,
             chr.map=data.frame(),
             ignoreWarnings=FALSE,
-            gapped=TRUE,
+            gapped=TRUE,tag="NH",
             bp.coverage=FALSE,...){
             
             ## check the filename
@@ -108,6 +112,12 @@ setMethod(
               stop(paste("We are missing the index file: ",filename,".bai",sep=""))
             }
 
+            ## check for the tag
+            if(format=="bam" & ! "NH" %in% tag){
+              warning(paste("You removed NH for the list of tags to be extracted",
+                      "from the BAM file, hence multi-mapping detection is disabled."))
+            }
+            
             ## are we looking for gapped alignments?
             if(gapped){
               switch(format,
@@ -135,14 +145,17 @@ setMethod(
                                                       .getArguments(scanBamFlag,...),")",sep="")))
                                  .extractIRangesList(scanBam(filename,
                                                              index=filename,
-                                                             param=ScanBamParam(flag=flag,what=what))[[1]],
+                                                             param=ScanBamParam(tag=tag,
+                                                                                flag=flag,
+                                                                                what=what))[[1]],
                                                      chr.sel)
                                },
                                gapped=.extractIRangesList(
                                    readGAlignments(filename,
                                                    index=filename,
                                                    format="BAM",
-                                                   use.names=TRUE
+                                                   use.names=TRUE,
+                                                   param=ScanBamParam(tag=tag)
                                                    ),
                                  chr.sel
                                  )
@@ -429,7 +442,7 @@ setMethod(
 ##' This is only supported for a set of organisms, see
 ##' \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq:knownOrganisms}},
 ##' otherwise the argument 'chr.map' can be used to complement it.
-##' @param \dots additional arguments. See details
+##' @param ... additional arguments. See details
 ##' @return Returns a count table (a matrix of m features x n samples). If the
 ##' \code{outputFormat} option has been set, a corresponding object is returned:
 ##' a \code{\linkS4class{SummarizedExperiment}}, a
@@ -554,6 +567,16 @@ setMethod(
             
             if(length(summarization)==1){
               .checkArguments("easyRNASeq","summarization",summarization)
+              if(summarization=="bestExons"){
+                .Deprecated(NULL,msg=paste(
+                  "The bestExons summarization is deprecated as its relevance", 
+                  "for RNA-Seq counting is unconvincing."))
+              } else {
+                .Deprecated(NULL,msg=paste(
+                  "Consider using 'synthetic transcripts' as",
+                  "described in the section 7.1 of the vignette instead of the",
+                  "count=genes,summarization=geneModels deprecated paradigm."))
+              }
             }
 
             ## check the annotationMethod            
@@ -583,21 +606,11 @@ setMethod(
             }
             
             ## check the output formats, default to SummarizedExperiments
-            ## TODO use a default here as:  format <- match.arg(format)
             outputFormat <- match.arg(outputFormat)
-
-            ## Check if library are loaded
-            ## not needed, libraries are loaded by the package
-            ## if(0 == length(grep(paste("^package:", 'edgeR',"$", sep=""), search())) & outputFormat=="edgeR"){
-            ##   stop("\nLibrary edgeR need to be loaded to use easyRNASeq with option outputFormat equal to 'edgeR'\n")
-            ## }
-            ## if(0 == length(grep(paste("^package:", 'DESeq',"$", sep=""), search())) & outputFormat=="DESeq"){
-            ##   stop("\nLibrary DESeq need to be loaded to use easyRNASeq with option outputFormat equal to 'DESeq'\n")
-            ## }
             
             ## check the files
             if((length(filenames) == 0 & pattern == "") | (length(filenames) > 0 & pattern != "")){
-              stop("You need to provide either a list of 'filenames' present in the 'filesDirectory' or a 'pattern' matching them.")
+              stop("You need to provide EITHER a list of 'filenames' present in the 'filesDirectory' OR a 'pattern' matching them.")
             }
 
             ## if we have filenames, create the pattern
@@ -623,8 +636,22 @@ setMethod(
                    )
             }
             
-            ## check if we have index with bai
             if(format=="bam"){
+              ## check that the bai are not part of the filesList
+              if(length(grep("\\.bam\\.bai$",names(filesList)))>0){
+                if(length(filenames)>0){
+                  warning(paste("You have provided BAM index files (.bai) as",
+                                "part of the filenames argument; this is",
+                                "unnecessary. Removing these from the files",
+                                "list to process."))
+                } else {
+                  warning(paste("Your pattern matched bai (BAM index files)!",
+                                "Removing these from the files list to process."))
+                }
+                filesList <- filesList[-grep("\\.bam\\.bai$",names(filesList))]
+              }
+  
+              ## check if we have index with bai
               sel <- file.exists(paste(filesList,"bai",sep="."))
               if(any(!sel)){
                 stop(paste("Index files (bai) are required. They are missing for the files:",paste(filesList[!sel],collapse = " and ")))
@@ -769,14 +796,32 @@ setMethod(
               ## check for overlaps
               ## TODO this is a bit fishy as it depends on the order of the summarization argument...
               if(!(count == "genes" & summarization[1] == "geneModels")){
-                ovl.number <- sum(sapply(findOverlaps(ranges(obj),ignoreSelf=TRUE,ignoreRedundant=TRUE),function(hits){length(unique(queryHits(hits)))}))
-                if(ovl.number > 0 & ! ignoreWarnings){
-                  warning(paste("There are",ovl.number,"features/exons defined in your annotation that overlap! This implies that some reads will be counted more than once! Is that really what you want?"))
+                ovl <- findOverlaps(ranges(obj),
+                                    ignoreSelf=TRUE,
+                                    ignoreRedundant=TRUE)
+                ovl.number <- sum(sapply(ovl,
+                                         function(hits){length(unique(queryHits(hits)))}))
+                if(ovl.number > 0){                  
+                  if(! ignoreWarnings){
+                    warning(paste("There are",ovl.number,"features/exons defined",
+                                  "in your annotation that overlap!",
+                                  "This implies that some reads will be counted",
+                                  "more than once! Is that really what you want?"))
+                  }
+                  genomicAnnotation(obj)$overlap <- as.table(ovl) > 0
                 }
                 if(count == "transcripts"){
-                  dup.exon <- sum(sapply(findOverlaps(ranges(obj),ignoreSelf=TRUE,type="equal",ignoreRedundant=TRUE),function(hits){length(unique(queryHits(hits)))}))
-                  if(dup.exon > 0 & ! ignoreWarnings){
-                    warning(paste("There are",dup.exon,"exons defined in your annotation that overlap! This implies that some reads will be counted several time, i.e. once for every transcript! Is that really what you want?"))
+                  ovl <- findOverlaps(ranges(obj),ignoreSelf=TRUE,type="equal",
+                                      ignoreRedundant=TRUE)
+                  dup.exon <- sum(sapply(ovl,
+                                         function(hits){length(unique(queryHits(hits)))}))
+                  if(dup.exon > 0){
+                    if( ! ignoreWarnings){
+                      warning(paste("There are",dup.exon,"exons defined in your",
+                                    "annotation that overlap! This implies that",
+                                    "some reads will be counted several time, i.e.",
+                                    "once for every transcript! Is that really what you want?"))
+                    }
                   }
                 }
               }
@@ -830,9 +875,16 @@ setMethod(
                 geneModel(obj) <- .geneModelAnnotation(genomicAnnotation(obj),nbCore)
 
                 ## check the gene model
-                ovl.number <- sum(sapply(findOverlaps(geneModel(obj),ignoreSelf=TRUE,ignoreRedundant=TRUE),function(hits){length(unique(queryHits(hits)))}))
-                if(ovl.number > 0 & ! ignoreWarnings){
-                  warning(paste("There are",ovl.number,"synthetic exons as determined from your annotation that overlap! This implies that some reads will be counted more than once! Is that really what you want?"))
+                ovl <- findOverlaps(geneModel(obj),ignoreSelf=TRUE,ignoreRedundant=TRUE)
+                ovl.number <- sum(sapply(ovl,function(hits){length(unique(queryHits(hits)))}))
+                if(ovl.number > 0){ 
+                  if(! ignoreWarnings){
+                    warning(paste("There are",ovl.number,"synthetic exons as",
+                                  "determined from your annotation that overlap!",
+                                  "This implies that some reads will be counted",
+                                  "more than once! Is that really what you want?"))
+                  }
+                  geneModel(obj)$overlap <- as.table(ovl) > 0
                 }
               }
             }
@@ -1051,7 +1103,7 @@ setMethod(
 ##' of \code{DESeq},\code{edgeR},\code{RNAseq}, \code{matrix} is provided then
 ##' the respective object is returned. Ideally, this option should get deprecated
 ##' and only a SummarizedExperiment returned.
-##' @param \dots currently additional arguments to the easyRNASeq function.
+##' @param ... currently additional arguments to the easyRNASeq function.
 ##' @return Returns a  \code{\linkS4class{SummarizedExperiment}}. If the
 ##' \code{outputFormat} option has been set, a corresponding object is returned:
 ##' a count table (a matrix of m features x n samples), a
