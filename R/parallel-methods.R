@@ -9,11 +9,13 @@
 ##' @rdname parallel-methods
 ##' @name parallel additional methods
 ##' @aliases parallelize parallelize,list,function-method
-##' parallelize,vector,function-method parallelize,GRangesList,function-method
+##' parallelize,vector,function-method 
+##' parallelize,GRangesList,function-method
+##' parallelize,BamFileList,function-method
 ##' @param fun the function to be applied in parallel
 ##' @param nnodes the number of nodes to use
 ##' @param obj the object which processing has to be parallelizes
-##' @param \dots additional arguments passed to the function \code{fun}
+##' @param ... additional arguments passed to the function \code{fun}
 ##' @return the result of the \code{\link[parallel:clusterApply]{clusterApply}} function.
 ##' @author Nicolas Delhomme
 ##' @seealso \code{\link[parallel:clusterApply]{clusterApply}}
@@ -42,12 +44,18 @@ setMethod(f = "parallelize",
             .parallelize(obj,fun,nnodes,...)
           })
 
+setMethod(f = "parallelize",
+          signature = c("BamFileList","function"),
+          definition = function(obj,fun,nnodes=1,...){
+            .parallelize(obj,fun,nnodes,...)
+          })
+
 ".parallelize" <- function(obj,fun,nnodes=1,...){
   if(nnodes == 1){
     res <- lapply(obj,fun,...)
   } else {
     ## parallel is part of R, we just ensure it's loaded
-    library("parallel")
+    require("parallel")
     ## save the names
     nams <- names(obj)
     cluster <- makePSOCKcluster(nnodes)

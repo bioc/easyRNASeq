@@ -1,3 +1,4 @@
+\docType{methods}
 \name{easyRNASeq accessors}
 \alias{accessors}
 \alias{chrSize}
@@ -7,24 +8,48 @@
 \alias{chrSize<-,RNAseq,list-method}
 \alias{easyRNASeq accessors}
 \alias{fileName}
+\alias{fileName,RNAseq-method}
 \alias{fileName<-}
+\alias{fileName<-,RNAseq-method}
 \alias{geneModel}
+\alias{geneModel,RNAseq-method}
 \alias{geneModel<-}
+\alias{geneModel<-,RNAseq-method}
 \alias{genomicAnnotation}
+\alias{genomicAnnotation,RNAseq-method}
 \alias{genomicAnnotation<-}
+\alias{genomicAnnotation<-,RNAseq-method}
 \alias{librarySize}
+\alias{librarySize,RNAseq-method}
 \alias{librarySize<-}
+\alias{librarySize<-,RNAseq-method}
 \alias{organismName}
+\alias{organismName,RNAseq-method}
 \alias{organismName<-}
+\alias{organismName<-,RNAseq-method}
 \alias{readCounts}
+\alias{readCounts,RNAseq-method}
 \alias{readCounts<-}
+\alias{readCounts<-,RNAseq-method}
 \alias{readCoverage}
+\alias{readCoverage,RNAseq-method}
 \alias{readCoverage<-}
+\alias{readCoverage<-,RNAseq-method}
 \alias{readIslands}
+\alias{readIslands,RNAseq-method}
 \alias{readIslands<-}
+\alias{readIslands<-,RNAseq-method}
 \alias{readLength}
+\alias{readLength,RNAseq-method}
 \alias{readLength<-}
+\alias{readLength<-,RNAseq-method}
 \title{Accessors for RNAseq class}
+\usage{
+genomicAnnotation(obj)
+readCounts(obj,count=c("exons","features","genes","islands","transcripts"),
+summarization=c("bestExons","geneModels"),unique=FALSE)
+genomicAnnotation(obj) <- value
+}
 \arguments{
   \item{obj}{An object derived from class \code{RNAseq}.}
 
@@ -41,14 +66,13 @@
   \item{value}{The replacement value.}
 }
 \value{
-  Usually, the value of the corresponding slot, or other
-  simple content described on the help page of
-  \code{easyRNASeq}.
+Usually, the value of the corresponding slot, or other
+simple content described on the help page of
+\code{easyRNASeq}.
 }
 \description{
-  These functions and generics define `accessors` (to get
-  and set values) for objects in the \pkg{easyRNASeq}
-  package.
+These functions and generics define `accessors` (to get and
+set values) for objects in the \pkg{easyRNASeq} package.
 }
 \examples{
 rnaSeq<-new("RNAseq")
@@ -58,7 +82,7 @@ organismName(rnaSeq) <- "Dmelanogaster"
 orgName<-organismName(rnaSeq)
 }
 \author{
-  Nicolas Delhomme
+Nicolas Delhomme
 }
 \keyword{manip}
 

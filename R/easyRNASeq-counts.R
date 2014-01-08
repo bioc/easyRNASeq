@@ -33,7 +33,11 @@
 ##' \item{islandCounts: additional options for
 ##' \code{\link[easyRNASeq:easyRNASeq-island-methods]{findIslands}} }}
 ##' 
-##' @aliases exonCounts featureCounts geneCounts islandCounts transcriptCounts
+##' @aliases exonCounts exonCounts,RNAseq-method
+##' featureCounts featureCounts,RNAseq-method 
+##' geneCounts geneCounts,RNAseq-method
+##' islandCounts islandCounts,RNAseq-method
+##' transcriptCounts transcriptCounts,RNAseq-method
 ##' @name easyRNASeq summarization methods
 ##' @rdname easyRNASeq-summarization-methods
 ##' @param obj An object derived from class \code{\linkS4class{RNAseq}},can be
@@ -42,7 +46,12 @@
 ##' @param from either "exons" or "features" can be used to summarize per
 ##' transcript
 ##' @param summarization Method use for summarize genes
-##' @param \dots See details
+##' @param ... See details
+##' @usage exonCounts(obj)
+##' featureCounts(obj)
+##' transcriptCounts(obj,from="exons")
+##' geneCounts(obj,summarization=c("bestExons","geneModels"),...)
+##' islandCounts(obj,force=FALSE,...)
 ##' @return A numeric vector containing count per exon, feature, gene or
 ##' transcript.
 ##' @author Nicolas Delhomme
@@ -69,7 +78,7 @@
 ##'                        package="RnaSeqTutorial"),
 ##'                      format="bam",
 ##'                      count="exons",
-##'                      pattern="[A,C,T,G]{6}\.bam$",
+##'                      pattern="[A,C,T,G]{6}\\.bam$",
 ##'                      outputFormat="RNAseq")
 ##' 	## summing up the exons by transcript
 ##' 	rnaSeq <- transcriptCounts(rnaSeq)
@@ -143,7 +152,7 @@ setMethod(
             }
             
             ## summarize these counts
-            tAgg <- stats:::aggregate(readCounts(obj,from),list(transcript=.getName(obj,"transcripts")),sum)
+            tAgg <- stats::aggregate(readCounts(obj,from),list(transcript=.getName(obj,"transcripts")),sum)
             tCounts<-tAgg[,-1,drop=FALSE]
             rownames(tCounts)<-tAgg$transcript
             readCounts(obj)<-.extendCountList(readCounts(obj),tCounts,"transcripts",filename=fileName(obj))

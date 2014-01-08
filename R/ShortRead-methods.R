@@ -27,6 +27,12 @@
 ##' naPositionFilter,SRFilter-method demultiplex demultiplex,AlignedRead-method
 ##' demultiplex,DNAStringSet-method demultiplex,ShortReadQ-method
 ##' @docType methods
+##' @usage demultiplex(obj,barcodes=c(),barcodes.qty=12,barcode.length=6,
+##' edition.dist=2,type=c("independant","within"),index.only=FALSE)
+##' barcodePlot(obj,barcodes=c(),type=c("independant","within"),
+##' barcode.length=6,show.barcode=20,...)
+##' chastityFilter(.name="Illumina Chastity Filter")
+##' naPositionFilter(.name="NA Position Filter")
 ##' @param .name An internal string describing the filter
 ##' @param obj An object derived from class \code{\linkS4class{AlignedRead}}
 ##' @param barcodes A character vector describing the multiplex (i.e. barcode)
@@ -43,7 +49,7 @@
 ##' sequencing step performed once the first mate has been sequenced.
 ##' \code{within} represents barcodes that are part of the sequenced reads as
 ##' established by Lefrancois P et al., BMC Genomics, 2009
-##' @param \dots additional graphic parameters
+##' @param ... additional graphic parameters
 ##' @return \itemize{ \item\code{barcodePlot} returns invisibly the barcode
 ##' frequencies.  \item\code{chastityFilter} returns a
 ##' \code{\linkS4class{SRFilter}} instance.  \item\code{demultiplex} returns a
@@ -108,7 +114,10 @@
 setMethod(
           f="demultiplex",
           signature="AlignedRead",
-          definition=function(obj,barcodes=c(),barcodes.qty=12,barcode.length=6, edition.dist=2, type=c("independant","within"),index.only=FALSE){
+          definition=function(obj,barcodes=c(),barcodes.qty=12,
+                              barcode.length=6, edition.dist=2, 
+                              type=c("independant","within"),
+                              index.only=FALSE){
 
             ## TODO we only want one type!!
             ## default to independant
@@ -126,22 +135,28 @@ setMethod(
             ## do we have barcodes
             if(length(barcodes)==0){
               barcodes <- switch(type,
-                independant=sort(table(alignData(obj)$multiplexIndex),decreasing=TRUE)[1:barcodes.qty],
-                within=sort(table(as.character(narrow(sread(obj),start=1,width=barcode.length))),decreasing=TRUE)[1:barcodes.qty])
+                independant=sort(table(alignData(obj)$multiplexIndex),
+                                 decreasing=TRUE)[1:barcodes.qty],
+                within=sort(table(as.character(narrow(sread(obj),start=1,
+                                                      width=barcode.length))),
+                            decreasing=TRUE)[1:barcodes.qty])
             } else {
               if(length(unique(nchar(barcodes)))!=1){
                 stop("We accept only barcodes having the same length.")
               }
               if(!all(nchar(barcodes) == barcode.length)){
-                warning(paste("The provided barcode length was not correct. Set it to:",nchar(barcodes[1])))
+                warning(paste("The provided barcode length was not correct.",
+                              "Set it to:",nchar(barcodes[1])))
                 barcode.length=nchar(barcodes[1])
               }
             }
             
             ## get the barcodes, according to a certain size
             all.barcodes <- switch(type,
-                               independant=DNAStringSet(as.character(alignData(obj)$multiplexIndex)),
-                               within=narrow(sread(obj),start=1,width=barcode.length)
+                               independant=DNAStringSet(
+                                 as.character(alignData(obj)$multiplexIndex)),
+                               within=narrow(sread(obj),start=1,
+                                             width=barcode.length)
                                )
 
             ## just for illumina
@@ -156,13 +171,13 @@ setMethod(
             ## rather than calling unique, generate all possibilities instead
             ## and map it back
             unique.barcodes <- DNAStringSet(
-                                            apply(
-                                                  as.matrix(eval(parse(
-                                                                       text=paste(
-                                                                         "expand.grid(",
-                                                                         paste(rep("c('A','C','G','T','N')",barcode.length),collapse=","),
-                                                                         ",stringsAsFactors=FALSE)")
-                                                                       ))),1,paste,collapse=""))
+              apply(
+                as.matrix(eval(parse(
+                  text=paste(
+                    "expand.grid(",
+                    paste(rep("c('A','C','G','T','N')",barcode.length),collapse=","),
+                    ",stringsAsFactors=FALSE)")
+                ))),1,paste,collapse=""))
             
             dist <- do.call(cbind,srdistance(unique.barcodes,barcodes))[match(all.barcodes,unique.barcodes),]
             
@@ -205,7 +220,9 @@ setMethod(
 setMethod(
           f="demultiplex",
           signature="DNAStringSet",
-          definition=function(obj,barcodes=c(),barcodes.qty=12,barcode.length=6, edition.dist=2, type=c("independant","within"),index.only=FALSE){
+          definition=function(obj,barcodes=c(),barcodes.qty=12,
+                              barcode.length=6, edition.dist=2, 
+                              type=c("independant","within"),index.only=FALSE){
 
             ## There's only one possible type!!
             ## TODO extract this error to share it with other methods that go for a DNAStringSet
@@ -295,7 +312,9 @@ setMethod(
 setMethod(
           f="demultiplex",
           signature="ShortReadQ",
-          definition=function(obj,barcodes=c(),barcodes.qty=12,barcode.length=6, edition.dist=2, type=c("independant","within"),index.only=FALSE){
+          definition=function(obj,barcodes=c(),barcodes.qty=12,
+                              barcode.length=6, edition.dist=2, 
+                              type=c("independant","within"),index.only=FALSE){
             return(
                    demultiplex(sread(obj),barcodes=barcodes,barcodes.qty=barcodes.qty,barcode.length=barcode.length, edition.dist=edition.dist, type=type,index.only=index.only)
                    )
@@ -304,7 +323,8 @@ setMethod(
 setMethod(
           f="barcodePlot",
           signature="AlignedRead",
-          definition=function(obj,barcodes=c(),type=c("independant","within"),barcode.length=6,show.barcode=20,...){
+          definition=function(obj,barcodes=c(),type=c("independant","within"),
+                              barcode.length=6,show.barcode=20,...){
 
             ## TODO check that we got barcodes
             
@@ -378,7 +398,8 @@ setMethod(
 setMethod(
           f="barcodePlot",
           signature="DNAStringSet",
-          definition=function(obj,barcodes=c(),type=c("independant","within"),barcode.length=6,show.barcode=20,...){
+          definition=function(obj,barcodes=c(),type=c("independant","within"),
+                              barcode.length=6,show.barcode=20,...){
 
             ## TODO check that we got barcodes
             
@@ -449,9 +470,12 @@ setMethod(
 setMethod(
           f="barcodePlot",
           signature="ShortReadQ",
-          definition=function(obj,barcodes=c(),type=c("independant","within"),barcode.length=6,show.barcode=20,...){
+          definition=function(obj,barcodes=c(),type=c("independant","within"),
+                              barcode.length=6,show.barcode=20,...){
             return(
-                   barcodePlot(sread(obj),barcodes=barcodes,type=type,barcode.length=barcode.length,show.barcode=show.barcode,...)
+                   barcodePlot(sread(obj),barcodes=barcodes,type=type,
+                               barcode.length=barcode.length,
+                               show.barcode=show.barcode,...)
                    )
           })
 

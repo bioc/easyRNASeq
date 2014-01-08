@@ -1,0 +1,49 @@
+\docType{methods}
+\name{easyRNASeq AnnotParam accessors}
+\alias{AnnotParam-accessors}
+\alias{datasource}
+\alias{datasource,AnnotParam-method}
+\alias{easyRNASeq AnnotParam accessors}
+\alias{type,AnnotParam-method}
+\title{Accessors for AnnotParam class}
+\usage{
+datasource(object)
+\S4method{type}{AnnotParam}(x)
+}
+\arguments{
+  \item{x}{An object derived from class \code{AnnotParam}.}
+
+  \item{object}{An object derived from class
+  \code{AnnotParam}.}
+}
+\value{
+The value of the corresponding slot.
+}
+\description{
+These functions and generics define `accessors` (to get and
+set values) for \code{\linkS4class{AnnotParam}} objects
+within the \pkg{easyRNASeq} package. Implemented are:
+\itemize{ \item datasource \item type }
+}
+\examples{
+annot <- AnnotParam(
+  datasource=system.file(
+                        "extdata",
+                        "Dmel-mRNA-exon-r5.52.gff3",
+                        package="RnaSeqTutorial"))
+## get the datasource Parameter
+datasource(annot)
+}
+\author{
+Nicolas Delhomme
+}
+\seealso{
+The
+\code{\link[easyRNASeq:easyRNASeq-AnnotParam-class]{AnnotParam}}
+class. The type and organism generics are imported from the
+\code{\link[BSgenome:BSgenome-class]{BSgenome}} and
+\code{\link[Biostrings:XString-class]{Biostrings}} package,
+respectively.
+}
+\keyword{manip}
+

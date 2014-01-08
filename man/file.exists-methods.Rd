@@ -1,0 +1,23 @@
+\docType{methods}
+\name{file.exists methods}
+\alias{file.exists}
+\alias{file.exists methods}
+\alias{file.exists,BamFile-method}
+\title{Extend the file.exists function to check the path slot of a Rsamtools BamFile class for existence}
+\usage{
+\S4method{file.exists}{BamFile}(...)
+}
+\arguments{
+  \item{...}{a \code{\linkS4class{BamFile}} object}
+}
+\description{
+Check if the bam file represented by a
+\code{\linkS4class{BamFile}} object exists.
+}
+\section{Methods}{
+  \describe{ \item{list("signature(object =
+  \"BamFile\")")}{ Checkk if the bam file linked to by a
+  \code{\linkS4class{BamFile}} object exists.  } }
+}
+\keyword{methods}
+

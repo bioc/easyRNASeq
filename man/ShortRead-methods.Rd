@@ -1,5 +1,6 @@
 \docType{methods}
 \name{ShortRead additional methods}
+\alias{ShortRead additional methods}
 \alias{barcodePlot}
 \alias{barcodePlot,AlignedRead-method}
 \alias{barcodePlot,DNAStringSet-method}
@@ -12,8 +13,15 @@
 \alias{demultiplex,ShortReadQ-method}
 \alias{naPositionFilter}
 \alias{naPositionFilter,SRFilter-method}
-\alias{ShortRead additional methods}
 \title{Methods extending the ShortRead package functionalities}
+\usage{
+demultiplex(obj,barcodes=c(),barcodes.qty=12,barcode.length=6,
+edition.dist=2,type=c("independant","within"),index.only=FALSE)
+barcodePlot(obj,barcodes=c(),type=c("independant","within"),
+barcode.length=6,show.barcode=20,...)
+chastityFilter(.name="Illumina Chastity Filter")
+naPositionFilter(.name="NA Position Filter")
+}
 \arguments{
   \item{.name}{An internal string describing the filter}
 
@@ -48,42 +56,42 @@
   as established by Lefrancois P et al., BMC Genomics,
   2009}
 
-  \item{\dots}{additional graphic parameters}
+  \item{...}{additional graphic parameters}
 }
 \value{
-  \itemize{ \item\code{barcodePlot} returns invisibly the
-  barcode frequencies.  \item\code{chastityFilter} returns
-  a \code{\linkS4class{SRFilter}} instance.
-  \item\code{demultiplex} returns a list of
-  \code{\linkS4class{AlignedRead}} objects.
-  \item\code{naPositionFilter} returns a
-  \code{\linkS4class{SRFilter}} instance.  }
+\itemize{ \item\code{barcodePlot} returns invisibly the
+barcode frequencies.  \item\code{chastityFilter} returns a
+\code{\linkS4class{SRFilter}} instance.
+\item\code{demultiplex} returns a list of
+\code{\linkS4class{AlignedRead}} objects.
+\item\code{naPositionFilter} returns a
+\code{\linkS4class{SRFilter}} instance.  }
 }
 \description{
-  These are functions extending the ShortRead packages
-  capabilities:
+These are functions extending the ShortRead packages
+capabilities:
 }
 \details{
-  \itemize{ \item\code{barcodePlot} Creates a plot showing
-  the barcode distribution of a multiplexed sequencing
-  library. \item\code{chastityFilter} Creates a
-  \code{\linkS4class{SRFilter}} instance that filters
-  SolexaExport read according to the chastity filtering
-  value. \item\code{demultiplex} Split a single
-  \code{\linkS4class{AlignedRead}} object into a list of
-  \code{\linkS4class{AlignedRead}} objects according to the
-  barcodes provided by the user.
-  \item\code{naPositionFilter} Creates a
-  \code{\linkS4class{SRFilter}} instance that filters
-  SolexaExport read having an NA position.  }
+\itemize{ \item\code{barcodePlot} Creates a plot showing
+the barcode distribution of a multiplexed sequencing
+library. \item\code{chastityFilter} Creates a
+\code{\linkS4class{SRFilter}} instance that filters
+SolexaExport read according to the chastity filtering
+value. \item\code{demultiplex} Split a single
+\code{\linkS4class{AlignedRead}} object into a list of
+\code{\linkS4class{AlignedRead}} objects according to the
+barcodes provided by the user.
+\item\code{naPositionFilter} Creates a
+\code{\linkS4class{SRFilter}} instance that filters
+SolexaExport read having an NA position.  }
 
-  When demultiplexing, the function if provided with just
-  the \code{\linkS4class{AlignedRead}} will try to find out
-  how many barcodes were used and what they are. This is
-  unwise to do as many barcodes will get wrongly sequenced
-  and not always the most frequent ones are the one you
-  used! It's therefore strongly advised to specify the
-  barcodes' sequences that were used.
+When demultiplexing, the function if provided with just the
+\code{\linkS4class{AlignedRead}} will try to find out how
+many barcodes were used and what they are. This is unwise
+to do as many barcodes will get wrongly sequenced and not
+always the most frequent ones are the one you used! It's
+therefore strongly advised to specify the barcodes'
+sequences that were used.
 }
 \examples{
 \dontrun{
@@ -136,11 +144,11 @@
 	}
 }
 \author{
-  Nicolas Delhomme
+Nicolas Delhomme
 }
 \seealso{
-  \code{\linkS4class{SRFilter}}
-  \code{\linkS4class{AlignedRead}}
+\code{\linkS4class{SRFilter}}
+\code{\linkS4class{AlignedRead}}
 }
 \keyword{methods}
 

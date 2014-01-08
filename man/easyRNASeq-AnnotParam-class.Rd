@@ -1,0 +1,41 @@
+\docType{class}
+\name{AnnotParam class}
+\alias{AnnotParam class}
+\alias{AnnotParam-class}
+\alias{AnnotParamCharacter-class}
+\alias{AnnotParamObject-class}
+\title{Class "AnnotParam"}
+\description{
+A class holding all the necessary parameters to retrieve
+the necessary annotation for processing an RNA-Seq
+experiment.
+}
+\section{Objects from the Class}{
+  Objects can be created by calls of the form
+  \code{new("AnnotParamCharacter", ...)} or
+  \code{new("AnnotParamObject", ...)} (both subject to API
+  changes) or using the
+  \code{\link[easyRNASeq:easyRNASeq-AnnotParam]{AnnotParam}}
+  constructor (failsafe, prefered). The class
+  \code{AnnotParam} in itself is virtual and hence cannot
+  be instantiated.
+}
+\examples{
+showClass("AnnotParam")
+}
+\author{
+Nicolas Delhomme
+}
+\seealso{
+\itemize{ \item \code{\linkS4class{RnaSeqParam}} \item
+\code{\link[easyRNASeq:easyRNASeq-RnaSeqParam]{RnaSeqParam
+constructor}} ##\item
+\code{\link[easyRNASeq:easyRNASeq-RnaSeqParam-accessors]{RnaSeqParam
+accessors}} \item
+\code{\link[easyRNASeq:easyRNASeq-simpleRNASeq]{simpleRNASeq
+function}} \item
+\code{\link[easyRNASeq:easyRNASeq-AnnotParam]{AnnotParam
+constructor}} }
+}
+\keyword{classes}
+

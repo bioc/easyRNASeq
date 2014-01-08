@@ -1,0 +1,36 @@
+\name{easyRNASeq-global-variables}
+\alias{.onAttach}
+\alias{ANNOTATION.TYPE}
+\alias{GTF.FIELDS}
+\alias{easyRNASeq-global-variables}
+\title{Objects created when the package is attached.}
+\usage{
+.onAttach(libname, pkgname)
+}
+\arguments{
+  \item{libname}{a character string giving the library
+  directory where the package defining the namespace was
+  found.}
+
+  \item{pkgname}{a character string giving the name of the
+  package.}
+}
+\description{
+The package creates the following objects when attached
+\itemize{ \item GTF.FIELDS \item ANNOTATION.TYPE }
+}
+\details{
+These objects hold the following information \itemize{
+\item GTF.FIELDS
+\code{c("gene_id","transcript_id","exon_number","gene_name")}
+\item ANNOTATION.TYPE \code{c(mRNA="mRNA",exon="exon")} }
+and are designed as global variables to expose the fact
+that they are hardcoded. There exist as placeholder in case
+a user would require different values for these.
+}
+\seealso{
+\code{\link[base:ns-hooks]{.onAttach}} in the \code{base}
+package.
+}
+\keyword{internal}
+

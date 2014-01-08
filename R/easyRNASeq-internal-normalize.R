@@ -64,7 +64,7 @@
                   if(plot){
                     ## plot the dispersion estimate
                     obj <- estimateTagwiseDisp(obj)
-                    plotDispersionEstimates(obj)
+                    plotBCV(obj)
                     plotMeanVar(obj, show.raw.vars = TRUE, show.tagwise.vars = TRUE,
                                 NBline = TRUE, main="Mean-variance (tag variances against tag abundance)")
                     legend("bottomright",col=c("gray60","lightskyblue","darkred","dodgerblue3",1),

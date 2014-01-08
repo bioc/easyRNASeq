@@ -16,7 +16,7 @@
 ##' \item .getName Get the genomicAnnotation object names. Necessary to deal
 ##' with the different possible annotation object: \code{RangedData} or
 ##' \code{GRangesList}.
-##' \item .list.files check the arguments passed through the \dots to select only the valid ones.
+##' \item .list.files check the arguments passed through the \dots to select only the valid ones (deprecated).
 ##' \item .normalizationDispatcher a function to dispatch
 ##' the normalization depending on the 'outputFormat' chosen by the user.
 ##' \item reduce Allow proper dispatch between the
@@ -33,7 +33,7 @@
 ##' 
 ##' @aliases .catn .checkArguments .convertToUCSC 
 ##' .extractIRangesList .getArguments .getName
-##' .list.files
+##' .list.files .list.files-deprecated
 ##' .normalizationDispatcher reduce reduce,RNAseq-method strand
 ##' strand,RNAseq-method strand<- strand<-,RNAseq-method
 ##' @name easyRNASeq internal methods
@@ -57,9 +57,9 @@
 ##' \link[intervals:Intervals_virtual-class]{intervals} or
 ##' \link[genomeIntervals:Genome_intervals_stranded-class]{genomeIntervals}
 ##' package
-##' @param \dots For \code{.getArguments} a list of named parameters to be
+##' @param ... For \code{.getArguments} a list of named parameters to be
 ##' matched against a function formal definition. For \code{.catn}, the values
-##' to be printed. For \code{.list.files}, the additional parameters to be filtered
+##' to be printed. For \code{.list.files} (deprecated), the additional parameters to be filtered
 ##' for the list.files function.
 ##' @return
 ##' \item{argString}{a character string representing these arguments
@@ -102,19 +102,251 @@
                   if(any(is.na(position(obj)))){
                     stop("Your read file contains NA position, please filter for them. Check '?naPositionFilter'.")
                   }
+                  
+                  ## warn for multiple mapping
+                  if(sum(duplicated(id(obj)))>0){
+                      warning("Your alignment file potentially contains multi-mapping reads. This would bias the counting.")
+                  }
+
                   ## no need to do it for the width, reads always have a positive width
                   list(rng.list=split(IRanges(start=position(obj),width=width(obj)),as.character(chromosome(obj))),
                        lib.size=length(obj))
                 },
                 "GAlignments" = {
+                  if(any(elementMetadata(obj)$NH >1,na.rm=TRUE)){
+                    warning("Your alignment file potentially contains multi-mapping reads. This would bias the counting.")
+                  }
                   ## we want only the mapped regions
-                  grnglist <- grglist(obj,drop.D.range=TRUE)
+                  grnglist <- grglist(obj,drop.D.range=TRUE)                  
                   list(rng.list=split(unlist(ranges(grnglist),use.names=FALSE),unlist(seqnames(grnglist),use.names=FALSE)),
                        lib.size=length(unique(names(obj))))
                 },
-                list(rng.list=split(IRanges(start=obj$pos,width=obj$qwidth),obj$rname),
-                     lib.size=length(obj$rname))
+                {
+                    if(any(obj$tag$NH)>1){
+                        warning("Your alignment file potentially contains multi-mapping reads. This would bias the counting.")
+                    }
+                    list(rng.list=split(IRanges(start=obj$pos,width=obj$qwidth),obj$rname),
+                         lib.size=length(obj$rname))
+                }
                 ))
+}
+
+## old arguments for fetchCoverage
+## stream the bam reading
+".stream" <- function(bamFile,yieldSize=100000,verbose=FALSE){
+    
+  ## create a stream
+  stopifnot(is(bamFile,"BamFile"))
+  
+  ## set the yieldSize if it is not set already
+  yieldSize(bamFile) <- yieldSize
+  
+  ## open it
+  open(bamFile)
+  
+  ## verb
+  if(verbose){
+    message(paste("Streaming",basename(path(bamFile))))
+  }
+  
+  ## create the output
+  out <- GAlignments()
+  
+  ## process it
+  while(length(chunk <- readGAlignments(bamFile,param=ScanBamParam(tag="NH")))){
+    if(verbose){
+      message(paste("Processed",length(chunk),"reads"))
+    }
+    out <- c(out,chunk)
+  }
+  
+  ## close
+  close(bamFile)
+  
+  ## return
+  return(out)
+}
+
+## stream the bam reading
+".streamCount" <- function(bamFile,features,param,verbose=TRUE){
+  
+  ## libs
+  require(easyRNASeq)
+  
+  ## create a stream
+  stopifnot(is(bamFile,"BamFile"))
+  
+  ## set the yieldSize if it is not set already
+  if(is.na(yieldSize(bamFile))){
+    yieldSize(bamFile) <- yieldSize(param)
+  }
+  
+  ## open it
+  open(bamFile)
+  
+  ## verb
+  if(verbose){
+    message(paste("Streaming",basename(path(bamFile))))
+  }
+  
+  ## create the output
+  out <- GAlignments()
+  
+  ## process it
+  while(length(chunk <- readGAlignments(bamFile,param=ScanBamParam(tag="NH")))){
+    if(verbose){
+      message(paste("Processed",length(chunk),"reads"))
+    }
+    ## TODO we need to remove Multiple hits
+    ## check for NH, H0, H1, H2, HI, 
+    
+    ## switch based on precision
+    out <- switch(precision(param),
+             "read"={
+               
+               ## extracted from EMBO2013Day2 Interlude.Rnw
+#                counts <- vector(mode="integer",length=length(annot))
+#                while(length(chunk <- readGAlignmentsFromBam(bamFile))){
+#                  counts <- counts + assays(summarizeOverlaps(annot,chunk,mode="Union"))$counts
+#                }
+#                close(bamFile)
+#                
+               ## get the counts (à la BioC)
+               ## easyRNASeq::: is necessary for the parallel call
+               ## TODO set the mode and ignore.strand
+               assay(summarizeOverlaps(features=features,reads=chunk))},
+             "bp"={
+               
+               ## directly get the coverage?  
+               
+               ## stream the bam file
+               
+               ## if paired get the fragments
+               ## TODO is the name match necessary ?? or does the function do it
+               ## TODO valid.names, obj, rL and bp.coverage are not defined, this need to be edited
+               #                        r.sel = match(valid.names,names(reads))
+               #                        s.sel = match(valid.names,names(chrSize(obj)))
+               #                        switch(paste(as.integer(c(length(rL)==1,bp.coverage)),collapse=""),
+               #                               "00" = coverage(reads[r.sel],
+               #                                               width=as.list(chrSize(obj)[s.sel]),
+               #                                               weight=1/width(reads)[r.sel]),
+               #                               "10" = coverage(reads[sel],
+               #                                               width=as.list(chrSize(obj)[s.sel]))/readLength(obj),
+               #                                 {coverage(reads[sel],
+               #                                           width=as.list(chrSize(obj)[s.sel]))})
+             })
+    out <- unsafeAppend(out,chunk)
+
+  }
+  
+  ## close
+  close(bamFile)
+  
+  ## return
+  return(out)
+}
+
+## stream the aligned reads count
+".streamForTotalCount" <- function(bamFile,yieldSize=10^6,verbose=TRUE){
+
+  ## libs
+  require(easyRNASeq)
+  
+  ## create a stream
+  stopifnot(is(bamFile,"BamFile"))
+  
+  ## set the yieldSize if it is not set already
+  if(is.na(yieldSize(bamFile))){
+    yieldSize(bamFile) <- yieldSize
+  }
+
+  ## verb
+  if(verbose){
+    message(paste("Streaming",basename(path(bamFile))))
+  }
+  
+  ## open it
+  open(bamFile)
+
+  ## create the output
+  out <- 0
+  
+  ## process it
+  ## the parameter are minimized to optimize the reading speed
+  while(length(chunk <- scanBam(bamFile,param=ScanBamParam(flag=scanBamFlag(isUnmappedQuery=FALSE),
+                                          what="strand"))[[1]]$strand)){
+    if(verbose){
+      message(paste("Read",length(chunk),"reads"))
+    }
+    out <- out+length(chunk)
+  }
+  
+  ## close
+  close(bamFile)
+  
+  ## return
+  return(out)
+  
+}
+
+## stream the parameter extraction
+".streamForParam" <- function(bamFile,yieldSize=10^6,verbose=TRUE){
+
+  ## libs
+  require(easyRNASeq)
+  
+  ## create a stream
+  stopifnot(is(bamFile,"BamFile"))
+  
+  ## set the yieldSize if it is not set already
+  if(is.na(yieldSize(bamFile))){
+    yieldSize(bamFile) <- yieldSize
+  }
+  
+  ## open it
+  open(bamFile)
+  
+  ## verbose
+  if(verbose){
+    message(paste("Extracting parameter from",basename(path(bamFile))))
+  }
+
+  ## scan the file
+  params <- scanBam(bamFile,
+                    param=ScanBamParam(what=c("flag","rname","strand","pos","qwidth"),
+                      flag=scanBamFlag(isUnmappedQuery=FALSE)))[[1]]
+
+  ## extract some params
+  rng <- range(params$qwidth)
+
+  ## get the genomic ranges separated by strand and extract a tab of occurence
+  grng <- reduce(GRanges(IRanges(start=params$pos,width=params$qwidth),seqnames=params$rname,strand=params$strand))
+  tab <- table(countOverlaps(grng[strand(grng)=="+"],grng[strand(grng)=="-"],ignore.strand=TRUE))
+  
+  ## Create a DataFrame containing:
+  outDF <- DataFrame(
+                     ## a. paired
+                     Paired=any(bamFlagTest(params$flag,"isPaired")),
+                     ## b. read length
+                     ReadLength=ifelse(rng[1]==rng[2],
+                       paste(rng[1],"bp",sep=""),
+                       paste(rng,"bp",sep="",collapse="-")),
+                     ## c. strandedness
+                     Stranded=ifelse(
+                       tab["1"] / sum(tab["1"],tab["0"],na.rm=TRUE) > 0.9,
+                       FALSE,
+                       ifelse(tab["0"] / sum(tab["1"],tab["0"],na.rm=TRUE) > 0.9,
+                              TRUE,NA)),
+                     ## a Note
+                     Note=paste("Determined using",sum(tab),"regions spanning",sum(width(grng)),"bp on either strand, from a subset of",
+                       sum(tab["0"],tab["1"],na.rm=TRUE),"regions, at a 90% confidence threshold.")
+                     )
+  
+  ## close
+  close(bamFile)
+  
+  ## return
+  return(outDF)
 }
 
 ## keep only the valid names
@@ -284,13 +516,15 @@ setReplaceMethod(
 
 ## pretty printing
 ".catn" <- function(...){
-  cat(...,"\n")
+    .Deprecated("message")
+    cat(...,"\n")
 }
 
 ## get the names (exon ID, transcript ID, ...) from either a RangedData or GRangesList
 ## NB this is possible, because we order the read object (read coverage) according to the annotations!!!!
 ".getName" <- function(obj,count){
   return(switch(class(genomicAnnotation(obj)),
+                "GRanges"={values(genomicAnnotation(obj)[,sub("s$","",count)])[,1]},
                 "GRangesList"={unlist(
                                       lapply(
                                              lapply(
@@ -306,6 +540,7 @@ setReplaceMethod(
 
 ## to allow list.files additional parameters
 .list.files <- function(path,pattern,...){
+  .Deprecated("getBamFileList")
   dots <- list(...)
   dots <- dots[names(dots) %in% names(formals(fun=list.files))]
   dots <- dots[!names(dots) %in% c("path","pattern","full.names")]

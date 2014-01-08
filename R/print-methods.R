@@ -5,15 +5,15 @@
 ##' 
 ##' @name print methods
 ##' @rdname print-methods
-##' @aliases print
+##' @aliases print print,RNAseq-method
 ##' @docType methods
-##' @param rnaSeq An object derived from class \code{\linkS4class{RNAseq}}
+##' @param x An object derived from class \code{\linkS4class{RNAseq}}
 ##' @param verbose A logical to have a verbose or not output. Default to FALSE
-##' @param \dots Additional arguments, currently unused.
+##' @param ... Additional arguments, currently unused.
 ##' @return Print information about a \code{\linkS4class{RNAseq}} object.
 ##' @author Nicolas Delhomme
 ##' @keywords methods
-## TODO add the islands
+
 setMethod(
           f="print",
           signature="RNAseq",

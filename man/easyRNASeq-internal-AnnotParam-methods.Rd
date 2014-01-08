@@ -1,0 +1,31 @@
+\name{AnnotParam internal methods}
+\alias{.validate}
+\alias{AnnotParam internal methods}
+\title{Internal methods of AnnotParam objects}
+\usage{
+.validate(obj, verbose = TRUE)
+}
+\arguments{
+  \item{obj}{An AnnotParam object}
+
+  \item{verbose}{To print (or not) messages}
+
+  \item{\dots}{additional arguments passed to the retrieval
+  function. At the moment only forwarded to the
+  \pkg{biomaRt} \code{\link[biomaRt:getBM]{getBM}}
+  function.}
+}
+\value{
+\item{.validate}{invisibly return a TRUE logical on success
+and stops on failure}
+}
+\description{
+These are \code{\linkS4class{AnnotParam}}{AnnotParam} class
+internal methods: \itemize{ \item .validate validate the
+content of an AnnotParam object }
+}
+\author{
+Nicolas Delhomme
+}
+\keyword{internal}
+

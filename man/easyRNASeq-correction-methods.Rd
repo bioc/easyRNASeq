@@ -1,9 +1,15 @@
+\docType{methods}
 \name{easyRNASeq correction methods}
-\alias{easyRNASeq correction methods}
 \alias{RPKM}
-\alias{RPKM,matrix,ANY,vector,vector-method}
 \alias{RPKM,RNAseq,ANY,ANY,ANY-method}
+\alias{RPKM,RNAseq-method}
+\alias{RPKM,matrix,ANY,vector,vector-method}
+\alias{easyRNASeq correction methods}
 \title{easyRNASeq count table correction to RPKM}
+\usage{
+\S4method{RPKM}{matrix,ANY,vector,vector}(obj, from, lib.size = numeric(1),
+  feature.size = integer(1), simplify = TRUE, ...)
+}
 \arguments{
   \item{feature.size}{Precise the feature (e.g. exons,
   genes) sizes. It should be a named numeric list, named
@@ -23,26 +29,25 @@
   feature, ...) is duplicated in the count table, it is
   only returned once.}
 
-  \item{\dots}{additional arguments. See details}
+  \item{...}{additional arguments. See details}
 }
 \value{
-  A \code{matrix} containing RPKM corrected read counts.
+A \code{matrix} containing RPKM corrected read counts.
 }
 \description{
-  Convert a count table obtained from the easyRNASeq
-  function into an RPKM corrected count table.
+Convert a count table obtained from the easyRNASeq function
+into an RPKM corrected count table.
 }
 \details{
-  RPKM accepts two sets of arguments: \itemize{
-  \item{RNAseq,character}{ the \dots{} are additional
-  arguments to be passed to the
-  \code{\link[easyRNASeq:easyRNASeq-accessors]{readCounts}}
-  method.} \item{matrix,named vector}{normalize a count
-  matrix by providing the feature sizes (e.g. gene sizes)
-  as a named vector where the names match the row names of
-  the count matrix and the lib sizes as a named vector
-  where the names match the column names of the count
-  matrix.}}
+RPKM accepts two sets of arguments: \itemize{
+\item{RNAseq,character}{ the \dots{} are additional
+arguments to be passed to the
+\code{\link[easyRNASeq:easyRNASeq-accessors]{readCounts}}
+method.} \item{matrix,named vector}{normalize a count
+matrix by providing the feature sizes (e.g. gene sizes) as
+a named vector where the names match the row names of the
+count matrix and the lib sizes as a named vector where the
+names match the column names of the count matrix.}}
 }
 \examples{
 \dontrun{
@@ -51,7 +56,7 @@
 		    			system.file(
 					"extdata",
 					package="RnaSeqTutorial"),
-					pattern="[A,C,T,G]{6}\\.bam$",
+					pattern="[A,C,T,G]{6}\\\\.bam$",
 				format="bam",
 				readLength=36L,
 				organism="Dmelanogaster",
@@ -85,10 +90,10 @@
 }
 }
 \author{
-  Nicolas Delhomme
+Nicolas Delhomme
 }
 \seealso{
-  \code{\link[easyRNASeq:easyRNASeq-accessors]{readCounts}}
+\code{\link[easyRNASeq:easyRNASeq-accessors]{readCounts}}
 }
 \keyword{methods}
 

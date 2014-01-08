@@ -1,0 +1,33 @@
+\name{Deprecated functions}
+\alias{Deprecated functions}
+\alias{easyRNASeq}
+\alias{easyRNASeq,RNAseq-method}
+\alias{fetchAnnotation}
+\alias{fetchAnnotation,RNAseq-method}
+\alias{fetchCoverage}
+\alias{fetchCoverage,RNAseq-method}
+\alias{knownOrganisms}
+\alias{knownOrganisms,missing-method}
+\title{The following function have been deprecated:
+\itemize{
+\item \code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq}}
+\item \code{\link[easyRNASeq:easyRNASeq-coverage-methods]{fetchCoverage}}
+\item \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{fetchAnnotation}}
+\item \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{knownOrganisms}}
+}}
+\description{
+\itemize{ \item The
+\code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq}}
+function is superseded by the
+\code{\link[easyRNASeq:easyRNASeq-simpleRNASeq]{simpleRNASeq}}
+function to consolidate and prune the overall package. The
+changes are based on user comments and on the general
+standardization occuring in the field. \item The
+\code{\link[easyRNASeq:easyRNASeq-coverage-methods]{fetchCoverage}}
+function only had two parameters deprecated as the
+consequence of the package consolidation. As the scanBam
+function is not called directly anymore but through higher
+level functions (from the GenomicRanges package), the
+'what' and 'isUnmappedQuery' parameters were obsolete. }
+}
+

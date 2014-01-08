@@ -1,3 +1,5 @@
+0) Deal with the file searching...
+
 1) Deal with stranded RNA-Seq
 Have a look at the HistoneChIPseq package for the implementation
 
@@ -40,13 +42,7 @@ gAnnot <- split(gAnnot,seqnames(gAnnot))
 
 9) group the parameter a la scanbamWhat
 
-10) lookup all the TODOs in the code
-
 11) From Simon, to filter reads: "NH:i:n" with n>1. However, not all aligner use the NH tag properly, so this is not a full solution. Another possibility is to discard everything with mapping quality below 10, because non-uniquly mapped reads should have a MAPQ<3.
-
-12) Check the possibility to split BAM files
-
-13) Chek the possibility to stream BAM files
 
 14) Develop fragment counting
 
@@ -64,6 +60,5 @@ gAnnot <- split(gAnnot,seqnames(gAnnot))
 
 21) check richard's email about the H. sapiens use case.
 
-22) Add support for SummarizedExperiments
-
 23) Check that the double quotes are removed from textual context attribute when loading a gtf
+

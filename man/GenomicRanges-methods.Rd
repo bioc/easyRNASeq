@@ -1,27 +1,60 @@
-\name{GenomicRanges additional methods}
+\docType{methods}
+\name{easyRNASeq GenomicRanges package extension}
 \alias{colnames}
-\alias{colnames,GenomicRanges-method}
+\alias{colnames,GRanges-method}
 \alias{colnames,GRangesList-method}
-\alias{GenomicRanges additional methods}
+\alias{easyRNASeq GenomicRanges package extension}
+\alias{unsafeAppend}
+\alias{unsafeAppend,GAlignments,GAlignments-method}
 \title{Extension of the GenomicRanges package}
+\usage{
+colnames(x, do.NULL = TRUE, prefix = "col")
+unsafeAppend(obj1,obj2)
+}
 \arguments{
-  \item{obj}{An object of the \code{\linkS4class{GRanges}}
-  or \code{\linkS4class{GRangesList}} class}
+  \item{x}{An object of the \code{\linkS4class{GRanges}} or
+  \code{\linkS4class{GRangesList}} class}
+
+  \item{do.NULL}{see
+  \code{\link[BiocGenerics:colnames]{colnames}} for
+  details}
+
+  \item{prefix}{see
+  \code{\link[BiocGenerics:colnames]{colnames}} for
+  details}
+
+  \item{obj1}{A \code{\linkS4class{GAlignments}} object}
+
+  \item{obj2}{A \code{\linkS4class{GAlignments}} object}
 }
 \value{
-  A vector of column names.
+\itemize{ \item \code{colnames}: A vector of column names.
+\item \code{unsafeAppend}: A
+\code{\linkS4class{GAlignments}} object }
 }
 \description{
-  Return the column name of a \code{\linkS4class{GRanges}}
-  or \code{\linkS4class{GRangesList}} object.
+Describes extensions to the
+\code{\link[GenomicRanges:GRanges-class]{GenomicRanges}}
+package. For \code{\linkS4class{GRanges}} and
+\code{\linkS4class{GRangesList}} objects: \itemize{ \item
+\code{colnames} returns the column name of a
+\code{\linkS4class{GRanges}} or
+\code{\linkS4class{GRangesList}} object. \item
+\code{unsafeAppend} appends two
+\code{\linkS4class{GAlignments}} object together bypassing
+most sanity checks. Faster than the standard \code{c} or
+\code{append} function. }
 }
 \details{
-  It returns the actual column names of the elementMetadata
-  slot of the \code{\linkS4class{GRanges}} or
-  \code{\linkS4class{GRangesList}} object. The
-  elementMetadata contains a \code{\linkS4class{DataFrame}}
-  object used to store additional information provided by
-  the user, such as exon ID in our case.
+\itemize{ \item \code{colnames} returns the actual column
+names of the elementMetadata slot of the
+\code{\linkS4class{GRanges}} or
+\code{\linkS4class{GRangesList}} object. The
+elementMetadata contains a \code{\linkS4class{DataFrame}}
+object used to store additional information provided by the
+user, such as exon ID in our case.  \item
+\code{unsafeAppend} appends two
+\code{\linkS4class{GAlignments}} objects. }
 }
 \examples{
 \dontrun{
@@ -32,7 +65,7 @@
                              end=c(21,53,123)),
                           space=c("chr01","chr01","chr02"),
                           strand=c("+","+","-"),
-                          transcript=c("trA1","trA2","trB"),
+                          transcripts=c("trA1","trA2","trB"),
                           gene=c("gA","gA","gB"),
                           exon=c("e1","e2","e3"),
                           universe = "Hs19"
@@ -50,14 +83,20 @@
 	## accessing the colnames
 	colnames(grngsList)
 	}
+
+## For unsafeAppend
+library(GenomicAlignments)
+unsafeAppend(GAlignments(),GAlignments())
 }
 \author{
-  Nicolas Delhomme
+Nicolas Delhomme
 }
 \seealso{
-  \code{\linkS4class{DataFrame}}
-  \code{\linkS4class{GRanges}}
-  \code{\linkS4class{GRangesList}}
+\itemize{ \item \code{\linkS4class{DataFrame}} \item
+\code{\linkS4class{GRanges}} \item
+\code{\linkS4class{GRangesList}} \item
+\code{\linkS4class{GAlignments}}
+\code{\link[BiocGenerics:colnames]{colnames}} }
 }
 \keyword{methods}
 

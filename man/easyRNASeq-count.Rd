@@ -1,7 +1,12 @@
-\name{count}
+\docType{methods}
+\name{count,character-method}
 \alias{count}
 \alias{count,character-method}
 \title{count method}
+\usage{
+\S4method{count}{character}(filesDirectory = getwd(),
+  outputFormat = "SummarizedExperiment", ...)
+}
 \arguments{
   \item{filesDirectory}{The directory where the files to be
   used are located.}
@@ -13,23 +18,23 @@
   this option should get deprecated and only a
   SummarizedExperiment returned.}
 
-  \item{\dots}{currently additional arguments to the
+  \item{...}{currently additional arguments to the
   easyRNASeq function.}
 }
 \value{
-  Returns a \code{\linkS4class{SummarizedExperiment}}. If
-  the \code{outputFormat} option has been set, a
-  corresponding object is returned: a count table (a matrix
-  of m features x n samples), a
-  \code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}},
-  a \code{\link[edgeR:DGEList]{edgeR:DGEList}} or
-  \code{\linkS4class{RNAseq}}.
+Returns a \code{\linkS4class{SummarizedExperiment}}. If the
+\code{outputFormat} option has been set, a corresponding
+object is returned: a count table (a matrix of m features x
+n samples), a
+\code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}},
+a \code{\link[edgeR:DGEList]{edgeR:DGEList}} or
+\code{\linkS4class{RNAseq}}.
 }
 \description{
-  This function is to supersed the easyRNASeq function in
-  order to consolidate the option parameters as well as the
-  option output. Ideally, the only output would be a
-  SummarizedExperiment.
+This function is to supersed the easyRNASeq function in
+order to consolidate the option parameters as well as the
+option output. Ideally, the only output would be a
+SummarizedExperiment.
 }
 \examples{
 \dontrun{
@@ -60,15 +65,15 @@
 }
 }
 \author{
-  Nicolas Delhomme
+Nicolas Delhomme
 }
 \seealso{
-  \code{\linkS4class{RNAseq}}
-  \code{\linkS4class{SummarizedExperiment}}
-  \code{\link[edgeR:DGEList]{edgeR:DGEList}}
-  \code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}}
-  \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq:knownOrganisms}}
-  \code{\link[ShortRead:readAligned]{ShortRead:readAligned}}
+\code{\linkS4class{RNAseq}}
+\code{\linkS4class{SummarizedExperiment}}
+\code{\link[edgeR:DGEList]{edgeR:DGEList}}
+\code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}}
+\code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq:knownOrganisms}}
+\code{\link[ShortRead:readAligned]{ShortRead:readAligned}}
 }
 \keyword{methods}
 

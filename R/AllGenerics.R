@@ -1,5 +1,8 @@
+###==========================
+## RNAseq Class
+###==========================
 ## accessors
-## getters
+## 1. getters
 ##' @exportMethod genomicAnnotation
 setGeneric(
            name="genomicAnnotation",
@@ -63,7 +66,8 @@ setGeneric(
              standardGeneric("fileName")
            })
 
-## setters
+###==========================
+## 2. setters
 ##' @exportMethod genomicAnnotation<-
 setGeneric(
            name="genomicAnnotation<-",
@@ -125,7 +129,9 @@ setGeneric(
              standardGeneric("fileName<-")
            })
 
+###==========================
 ## pre-processing methods
+###==========================
 ## ShortRead
 ##' @exportMethod demultiplex
 setGeneric(name="demultiplex",
@@ -138,17 +144,25 @@ setGeneric(name="barcodePlot",
              standardGeneric("barcodePlot")
            })
 
+###==========================
 ## Annotations
 ##' @exportMethod fetchAnnotation
 setGeneric(
            name="fetchAnnotation",
            def=function(obj,
-             method=c("biomaRt","gff","gtf"),
+             annotationMethod=c("biomaRt","gff","gtf"),
              filename=character(1),
              ignoreWarnings=FALSE,
              ...){
              standardGeneric("fetchAnnotation")
            })
+
+##' @exportMethod getAnnotation
+setGeneric(
+  name="getAnnotation",
+  def=function(obj,...){
+  standardGeneric("getAnnotation")
+})
 
 ## setGeneric(
 ##            name="getCoverage",
@@ -162,7 +176,17 @@ setGeneric(
              standardGeneric("findIslands")
            })
 
+## known organisms
+##' @exportMethod knownOrganisms
+setGeneric(
+  name="knownOrganisms",
+  def= function(missing){
+    standardGeneric("knownOrganisms")
+  })
+
+###==========================
 ## count methods
+###==========================
 ##' @exportMethod exonCounts
 setGeneric(
            name="exonCounts",
@@ -194,7 +218,9 @@ setGeneric(
              standardGeneric("islandCounts")
            })
 
+###==========================
 ## summary methods
+###==========================
 ##' @exportMethod RPKM
 setGeneric(
            name="RPKM",
@@ -210,19 +236,25 @@ setGeneric(
              simplify=TRUE,...){
              standardGeneric("RPKM")
            })
+
+###==========================
+## coverage methods
+###==========================
 ##' @exportMethod fetchCoverage
 setGeneric(
            name="fetchCoverage",
            def=function(obj,format=c("aln","bam"),
              filename=character(1),filter=srFilter(),
              type="SolexaExport",chr.sel=c(),
-             isUnmappedQuery=FALSE,what=c("rname","pos","qwidth"),
              validity.check=TRUE,chr.map=data.frame(),
-             ignoreWarnings=FALSE,gapped=TRUE,bp.coverage=FALSE,...){
+             ignoreWarnings=FALSE,gapped=TRUE,
+               bp.coverage=FALSE,...){
              standardGeneric("fetchCoverage")
            })
 
+###==========================
 ## easy processing
+###==========================
 ##' @exportMethod easyRNASeq
 setGeneric(
            name="easyRNASeq",
@@ -250,6 +282,7 @@ setGeneric(
              standardGeneric("easyRNASeq")
            })
 
+## TODO we should remove it
 ##' @exportMethod count
 setGeneric(
            name="count",
@@ -259,15 +292,9 @@ setGeneric(
              standardGeneric("count")
            })
 
-## known organisms
-##' @exportMethod knownOrganisms
-setGeneric(
-           name="knownOrganisms",
-           def= function(missing){
-             standardGeneric("knownOrganisms")
-           })
-
+###==========================
 ## edgeR extension
+###==========================
 ##' @exportMethod plotNormalizationFactors
 setGeneric(
            name="plotNormalizationFactors",
@@ -279,11 +306,13 @@ setGeneric(
              standardGeneric("plotNormalizationFactors")
            })
 
+###==========================
 ## edgeR & DESeq extension
+###==========================
 ##' @exportMethod plotDispersionEstimates
 setGeneric(
            name="plotDispersionEstimates",
-           def=function(obj,...){
+           def=function(obj,cond=character(1),log="xy",...){
              standardGeneric("plotDispersionEstimates")
            })
 
@@ -302,10 +331,146 @@ setGeneric(
              standardGeneric("multivariateConditions")
            })
 
+##' @exportMethod plotDispLSD
+setGeneric(
+    name="plotDispLSD",
+    def=function(obj, name = NULL, ymin, 
+        linecol = "#00000080", xlab = "mean of normalized counts", 
+        ylab = "dispersion", log = "xy", cex = 0.45,...){
+        standardGeneric("plotDispLSD")
+    })
+
+###==========================
 ## parallel extension
+###==========================
 ##' @exportMethod parallelize
 setGeneric(name="parallelize",
            def=function(obj=list(),
              fun=NULL,
              nnodes=integer(1),...){
              standardGeneric("parallelize")})
+
+###==========================
+## BamFileList
+###==========================
+##' @exportMethod getBamFileList
+setGeneric(name="getBamFileList",
+           def=function(filenames=character(0)){
+             standardGeneric("getBamFileList")
+           })
+
+##' @exportMethod validate
+setGeneric(
+  name="validate",
+  def=function(obj,header=TRUE,cross.validation=TRUE){
+    standardGeneric("validate")
+  })
+
+###==========================
+## GenomicRanges extension
+###==========================
+##' @exportMethod colnames
+
+##' @exportMethod unsafeAppend
+setGeneric(
+  name="unsafeAppend",
+  def=function(obj1,obj2){
+    standardGeneric("unsafeAppend")
+  })
+
+###==========================
+### RnaSeqParam
+###==========================
+##' @exportMethod RnaSeqParam
+setGeneric(name="RnaSeqParam",
+           def=function(
+             annotParam=AnnotParam(),
+             bamParam=BamParam(),
+             countBy=c("exons","features","genes","transcripts"),
+             precision=c("read","bp")){
+             standardGeneric("RnaSeqParam")
+           })
+
+##' @exportMethod annotParam
+setGeneric(name="annotParam",
+           def=function(object){
+             standardGeneric("annotParam")
+           })
+
+##' @exportMethod bamParam
+setGeneric(name="bamParam",
+           def=function(object){
+             standardGeneric("bamParam")
+           })
+
+##' @exportMethod countBy
+setGeneric(name="countBy",
+           def=function(object){
+             standardGeneric("countBy")
+           })
+
+##' @exportMethod precision
+setGeneric(name="precision",
+           def=function(object){
+             standardGeneric("precision")
+           })
+
+###==========================
+### BamParam
+###==========================
+##' @exportMethod BamParam
+setGeneric(name="BamParam",
+           def=function(
+                        paired=TRUE,
+                        stranded=FALSE,
+                        yieldSize=100000L){
+             standardGeneric("BamParam")
+           })
+
+##' @exportMethod paired
+setGeneric(name="paired",
+           def=function(object){
+             standardGeneric("paired")
+           })
+
+##' @exportMethod stranded
+setGeneric(name="stranded",
+           def=function(object){
+             standardGeneric("stranded")
+           })
+
+## imported but need to be exported
+##' @exportMethod yieldSize
+
+###==========================
+### AnnotParam
+###==========================
+##' @exportMethod AnnotParam
+setGeneric(name="AnnotParam",
+           def=function(             
+             datasource=character(0),
+             ...){
+             standardGeneric("AnnotParam")
+           })
+
+##' @exportMethod datasource
+setGeneric(name="datasource",
+           def=function(object){
+             standardGeneric("datasource")
+           })
+
+## imported but need to be exported
+##' @exportMethod type
+
+###==========================
+## simpleRNASeq
+###==========================
+##' @exportMethod simpleRNASeq
+setGeneric(name="simpleRNASeq",
+          def=function(
+          bamFiles=BamFileList(),
+          param=RnaSeqParam(),
+          nnodes=1,
+          verbose=FALSE){
+            standardGeneric("simpleRNASeq")
+           })

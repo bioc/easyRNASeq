@@ -1,21 +1,68 @@
+\docType{methods}
 \name{DESeq additional methods}
 \alias{DESeq additional methods}
 \alias{multivariateConditions}
 \alias{multivariateConditions,CountDataSet-method}
+\alias{plotDispLSD}
+\alias{plotDispLSD,CountDataSet-method}
+\alias{plotDispersionEstimates}
+\alias{plotDispersionEstimates,CountDataSet-method}
 \title{Extension for the DESeq package}
+\usage{
+multivariateConditions(obj)
+plotDispLSD(obj, name = NULL, ymin,
+linecol = "#00000080", xlab = "mean of normalized counts",
+ylab = "dispersion", log = "xy", cex = 0.45, ...)
+plotDispersionEstimates(obj,cond,log,...)
+}
 \arguments{
   \item{obj}{An object of class
   \code{\linkS4class{CountDataSet}}}
+
+  \item{cex}{standard
+  \code{\link[graphics:plot.default]{plot.default}}
+  parameter}
+
+  \item{cond}{A character string describing the first
+  condition}
+
+  \item{linecol}{defines the line color}
+
+  \item{log}{A character string passed onto
+  \code{\link[graphics:plot.default]{plot.default}}}
+
+  \item{name}{argument passed to the \pkg{DESeq}
+  \code{\link[DESeq:fitInfo]{fitInfo}} function.}
+
+  \item{xlab}{standard
+  \code{\link[graphics:plot.default]{plot.default}}
+  parameter}
+
+  \item{ylab}{standard
+  \code{\link[graphics:plot.default]{plot.default}}
+  parameter}
+
+  \item{ymin}{numeric value defining the lower limit for
+  the y axis}
+
+  \item{...}{Additional plotting parameters}
 }
 \value{
-  \itemize{ \item{multivariateConditions returns a boolean
-  describing whether the data to analyze is multivariate or
-  not }}
+\itemize{ \item{\code{multivariateConditions} returns a
+boolean describing whether the data to analyze is
+multivariate or not} \item{\code{plotDispLSD} and
+\code{plotDispersionEstimates}} returns nothing }
 }
 \description{
-  \itemize{ \item{\code{multivariateConditions} is simply
-  an accessor for the \code{multivariateConditions} slot of
-  a \code{\linkS4class{CountDataSet}} object.  }}
+\itemize{ \item{\code{multivariateConditions} is simply an
+accessor for the \code{multivariateConditions} slot of a
+\code{\linkS4class{CountDataSet}} object}
+\item{\code{plotDispLSD} is a function silimar to
+\code{\link[DESeq:plotDispEsts]{plotDispEsts}} that adds a
+density estimate as a colored heatmap from grey (few) to
+yellow (many).} \item{\code{plotDispersionEstimates} offers
+the functionality to plot the dispersion estimate as
+described in the \pkg{DESeq} vignette.} }
 }
 \examples{
 \dontrun{
@@ -25,13 +72,15 @@
 	cds <- estimateSizeFactors(cds)
 	cds <- estimateDispersions(cds)
 	mVar <- multivariateConditions(cds)
+	plotDispersionEstimates(cds,conditions[1])
 	}
 }
 \author{
-  Nicolas Delhomme
+Nicolas Delhomme, Bastian Schiffthaler
 }
 \seealso{
-  \code{\linkS4class{CountDataSet}}
+\code{\linkS4class{CountDataSet}}
+\code{\link[DESeq:plotDispEsts]{plotDispEsts}}
 }
 \keyword{methods}
 

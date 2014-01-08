@@ -1,7 +1,13 @@
+\docType{methods}
 \name{easyRNASeq island methods}
 \alias{easyRNASeq island methods}
 \alias{findIslands}
+\alias{findIslands,RNAseq-method}
 \title{Identify expressed regions de-novo}
+\usage{
+\S4method{findIslands}{RNAseq}(obj, max.gap = integer(1), min.cov = 1L,
+  min.length = integer(1), plot = TRUE, ...)
+}
 \arguments{
   \item{obj}{An object of class \code{RNAseq}}
 
@@ -18,25 +24,24 @@
   Help the user to select an appropriate value for the
   minimum coverage.}
 
-  \item{\dots}{See details}
+  \item{...}{See details}
 }
 \value{
-  An \code{RNAseq} object with the readIsland slot set with
-  a RangedData containing the selected islands and the
-  readCount slot actualized with a list containing the
-  count table per island.
+An \code{RNAseq} object with the readIsland slot set with a
+RangedData containing the selected islands and the
+readCount slot actualized with a list containing the count
+table per island.
 }
 \description{
-  Process the coverage to locate regions with a minimum
-  coverage (min.cov). If regions are separated by a gap
-  shorter than a maximum length (max.gap), they are
-  unified. Only islands longer than min.length are
-  returned.  These functions are now outdated and would
-  need to be actualized.
+Process the coverage to locate regions with a minimum
+coverage (min.cov). If regions are separated by a gap
+shorter than a maximum length (max.gap), they are unified.
+Only islands longer than min.length are returned.  These
+functions are now outdated and would need to be actualized.
 }
 \details{
-  \dots{} are for providing additional options to the
-  \code{\link[graphics:hist]{hist}} plot function.
+\dots{} are for providing additional options to the
+\code{\link[graphics:hist]{hist}} plot function.
 }
 \examples{
 \dontrun{
@@ -64,7 +69,7 @@
 	}
 }
 \author{
-  Nicolas Delhomme
+Nicolas Delhomme
 }
 \keyword{connection}
 \keyword{data}

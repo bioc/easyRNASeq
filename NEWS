@@ -1,3 +1,123 @@
+CHANGES IN VERSION 1.9.2
+-------------------------
+
+  o Ported version 1.8.4 changes to the development version
+
+  o Started to import new classes from the git repository as part of the
+  package main function re-implementation
+
+CHANGES IN VERSION 1.9.1
+-------------------------
+
+  o Change from Bioc to insert GenomicAlignments
+
+CHANGES IN VERSION 1.9.0
+-------------------------
+
+  o No changes, new development version
+
+CHANGES IN VERSION 1.8.4
+-------------------------
+
+  o Added a check to filter bai file from the files gathered by the pattern
+  argument.
+
+  o Added a check for multi-mapping reads.
+
+  o Added a deprecation warning for count='genes', summarization='geneModels'.
+
+  o Extended the vignette, with details on the annotation warnings and
+  how to resolve them. Added an FAQ section.
+
+  o Modified the annotation warning, redirecting to the new vignette section
+  on how to resolve these.
+
+  o Switched to BiocStyle for the vignette.
+
+CHANGES IN VERSION 1.8.3
+-------------------------
+
+BUG FIXES
+
+  o Changed one argument name of the fetchAnnotation function to avoid
+  arguments colliding when providing additional arguments to be passed
+  to DESeq through the ... argument. The argument has been renamed from
+  'method' to 'annotationMethod'.
+
+CHANGES IN VERSION 1.8.2
+-------------------------
+
+  o Reworked the parsing of gtf formatted files.
+
+  o Added a few more sanity checks in the easyRNASeq 
+  function.
+
+  o Added a use case to the vignette to show how to 
+  generate and use synthetic transcripts rather than
+  "gene models".
+
+  o Corrected a bug when exporting a SummarizedExperiment
+  for "transcrips" and "geneModels" count methods.
+
+CHANGES IN VERSION 1.8.1
+-------------------------
+
+	o Imported changes that were lost from version 1.6.4
+
+	o Adapted the dependencies version to match the
+	Bioconductor release version 2.13
+
+	o Switched to use GAlignments instead of 
+	GappedAlignments
+
+	o Corrected 2 Notes occuring during R CMD check that
+	had to do with the DESCRIPTION Depends and Enhances
+	fields and the use of pkg:::name vs. pkg::name
+
+	o Added Bastian Schiffthaler as an author
+
+CHANGES IN VERSION 1.8.0
+-------------------------
+
+  o No changes, Bioconductor release version 2.13
+
+CHANGES IN VERSION 1.7.0
+-------------------------
+
+  o No changes, Bioconductor development version 2.13
+
+CHANGES IN VERSION 1.6.4
+-------------------------
+
+  o Made the plotDispLSD function visible (now proporly
+exported)
+
+CHANGES IN VERSION 1.6.3
+-------------------------
+
+  o Added a plotDispLSD function that adds a density
+  estimate color map to the DESeq plotDispEsts function.
+
+CHANGES IN VERSION 1.6.2
+-------------------------
+
+  o Released the constraint on the gtf annotation file 
+  parsing to allow for gtf file without the "exon_number"
+  attribute such as those retrieved from UCSC.
+
+CHANGES IN VERSION 1.6.1
+-------------------------
+
+  o Adapted the package dependency
+
+  o Added a check to stop processing whenever 
+  annotation are outside of the chromosomes.
+
+CHANGES IN VERSION 1.6.0
+-------------------------
+
+  o No changes, Bioconductor release version 2.12
+
 CHANGES IN VERSION 1.5.1
 -------------------------
 	o Adapted the dependencies version to match the

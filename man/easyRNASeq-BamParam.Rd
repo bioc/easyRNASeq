@@ -1,0 +1,45 @@
+\docType{methods}
+\name{easyRNASeq BamParam constructor}
+\alias{BamParam}
+\alias{BamParam,ANY-method}
+\alias{easyRNASeq BamParam constructor}
+\title{BamParam constructor}
+\usage{
+\S4method{BamParam}{ANY}(paired = TRUE, stranded = FALSE,
+  yieldSize = 100000L)
+}
+\arguments{
+  \item{paired}{TODO}
+
+  \item{stranded}{TODO}
+
+  \item{yieldSize}{TODO}
+}
+\description{
+This constructs a \code{\linkS4class{BamParam}} object. The
+default parameters are derived from the currently most
+common RNA-Seq experimental use-case and are detailed
+below: \itemize{ \item paired is TRUE, \emph{i.e.}
+paired-end sequencing is expected. \item stranded is FALSE
+\emph{i.e.} stranded sequencing is not expected. \item
+yieldSize is set to 100,000. This is the amount of reads
+iteratively processed from the bam file stream. It is a
+compromise between speed, process-parallelization and
+memory usage. }
+}
+\details{
+Calling the constructor without argument result in the
+default parameter described above to be returned. Calling
+the constructor with any parameter will affect the value of
+the selected parameters, leaving the other parameters
+unaffected.
+}
+\examples{
+## the defaults
+BamParam()
+
+## change the default
+BamParam(paired=FALSE)
+BamParam(stranded=TRUE,yieldSize=1L)
+}
+

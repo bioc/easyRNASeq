@@ -1,9 +1,15 @@
 ## Not sure we need a prototype later on
-
 ## TODO should we have one readAnnotation slot
 ## containing all the genomicAnnoation, geneModel, and readIslands info?
 ## and have it more dynamic?
 ## TODO add a slot section
+## for the parameters
+## TODO do we need sub-class that holds experiment, etc?
+## TODO add a constructor and add setters and getters
+
+###==========================
+### RNAseq
+###==========================
 ##' Class "RNAseq"
 ##' 
 ##' A class holding all the necessary information and annotation to summarize
@@ -13,27 +19,14 @@
 ##' 
 ##' @name RNAseq class
 ##' @rdname easyRNASeq-class
-##' @aliases RNAseq-class RNAseq 
-##' easyRNASeq,RNAseq-method exonCounts,RNAseq-method
-##' featureCounts,RNAseq-method fetchAnnotation,RNAseq-method
-##' fetchCoverage,RNAseq-method fileName,RNAseq-method fileName<-,RNAseq-method
-##' findIslands,RNAseq-method geneCounts,RNAseq-method geneModel,RNAseq-method
-##' geneModel<-,RNAseq-method genomicAnnotation,RNAseq-method
-##' genomicAnnotation<-,RNAseq-method islandCounts,RNAseq-method
-##' librarySize,RNAseq-method librarySize<-,RNAseq-method
-##' organismName,RNAseq-method organismName<-,RNAseq-method print,RNAseq-method
-##' readCounts,RNAseq-method readCounts<-,RNAseq-method
-##' readCoverage,RNAseq-method readCoverage<-,RNAseq-method
-##' readIslands,RNAseq-method readIslands<-,RNAseq-method
-##' readLength,RNAseq-method readLength<-,RNAseq-method RPKM,RNAseq-method
-##' show,RNAseq-method transcriptCounts,RNAseq-method
+##' @aliases RNAseq-class RNAseq
 ##' @docType class
 ##' @section Objects from the Class: Objects can be created by calls of the
 ##' form \code{new("RNAseq", ...)}.
 ##' @author Nicolas Delhomme
 ##' @seealso \itemize{ \item\code{\linkS4class{RangedData}}
 ##' \item\code{\linkS4class{RleList}}
-##' \item\code{\link[easyRNASeq:easyRNASeq]{easyRNASeq function}}
+##' \item\code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq function}}
 ##' \item\code{\link[easyRNASeq:easyRNASeq-accessors]{RNAseq accessors}}
 ##' \item\code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq
 ##' annotation methods}}
@@ -81,3 +74,148 @@ setClass(
 ##          }
          )
 
+###==========================
+### BamParam
+###==========================
+
+##' Class "BamParam"
+##' 
+##' A class describing the parameters of a bam file issued
+##' from an RNA-Seq experiment.
+##' 
+##' @name BamParam class
+##' @rdname easyRNASeq-BamParam-class
+##' @aliases BamParam-class
+##' @docType class
+##' @section Objects from the Class: Objects can be created by calls of the
+##' form \code{new("BamParam", ...)} or using the BamParam constructor.
+##' @author Nicolas Delhomme
+##' @seealso \itemize{
+##' \item \code{\linkS4class{RnaSeqParam}}
+##' \item \code{\link[easyRNASeq:easyRNASeq-RnaSeqParam]{RnaSeqParam constructor}}
+## ##' \item \code{\link[easyRNASeq:easyRNASeq-RnaSeqParam-accessors]{RnaSeqParam accessors}}
+##' \item \code{\link[easyRNASeq:easyRNASeq-simpleRNASeq]{simpleRNASeq function}}
+##' \item \code{\linkS4class{AnnotParam}}
+##' \item \code{\link[easyRNASeq:easyRNASeq-AnnotParam]{AnnotParam constructor}}
+##' }
+##' @keywords classes
+##' @examples
+##' 
+##' showClass("BamParam")
+##'
+##' @exportClass BamParam
+setClass("BamParam",
+         representation=representation(
+           paired="logical",
+           stranded="logical",
+           yieldSize="integer"),
+         prototype=prototype(
+           paired=TRUE,
+           stranded=FALSE,
+           yieldSize=100000L
+         ))
+
+###==========================
+### AnnotParam
+###==========================
+
+##' Class "AnnotParam"
+##' 
+##' A class holding all the necessary parameters to retrieve the necessary
+##' annotation for processing an RNA-Seq experiment.
+##' 
+##' @name AnnotParam class
+##' @rdname easyRNASeq-AnnotParam-class
+##' @aliases AnnotParam-class AnnotParamCharacter-class AnnotParamObject-class
+##' @docType class
+##' @section Objects from the Class: Objects can be created by calls of the
+##' form \code{new("AnnotParamCharacter", ...)} or \code{new("AnnotParamObject", ...)} 
+##' (both subject to API changes) or using the 
+##' \code{\link[easyRNASeq:easyRNASeq-AnnotParam]{AnnotParam}} constructor (failsafe, prefered).
+##' The class \code{AnnotParam} in itself is virtual and hence cannot be instantiated.
+##' @author Nicolas Delhomme
+##' @seealso \itemize{
+##' \item \code{\linkS4class{RnaSeqParam}}
+##' \item \code{\link[easyRNASeq:easyRNASeq-RnaSeqParam]{RnaSeqParam constructor}}
+## ##' \item \code{\link[easyRNASeq:easyRNASeq-RnaSeqParam-accessors]{RnaSeqParam accessors}}
+##' \item \code{\link[easyRNASeq:easyRNASeq-simpleRNASeq]{simpleRNASeq function}}
+##' \item \code{\link[easyRNASeq:easyRNASeq-AnnotParam]{AnnotParam constructor}}
+##' }
+##' @keywords classes
+##' @examples
+##' 
+##' showClass("AnnotParam")
+##'
+##' @exportClass AnnotParam
+setClass("AnnotParam")
+
+##' @exportClass AnnotParamCharacter
+setClass("AnnotParamCharacter",
+         representation=representation(
+           datasource="character",
+           type="character"
+         ),
+         prototype=prototype(
+           datasource=character(0),
+           type="gff3"
+         ),
+         contains="AnnotParam")
+         
+##' @exportClass AnnotParamObject
+setClass("AnnotParamObject",
+         representation=representation(
+           datasource="Vector"
+         ),
+         prototype=prototype(
+           datasource=GRangesList()
+         ),
+         contains="AnnotParam")
+
+###==========================
+### RnaSeqParam
+###==========================
+
+##' Class "RnaSeqParam"
+##' 
+##' A class holding all the necessary parameters to process a bam file issued
+##' from an RNA-Seq experiment together with the related annotation to compute
+##' a count-table using the \code{\link[easyRNASeq:easyRNASeq-simpleRNASeq]{simpleRNASeq function}}.
+##' The precision slot is used to determine the count unit:
+##' \itemize{
+##' \item{reads}{default. The standard \code{\link[GenomicAlignments:summarizeOverlaps]{GenomicAlignments summarizeOverlaps function}} is used to extract the read counts}
+##' \item{bp}{The \code{\link[easyRNASeq:easyRNASeq-summarization-methods]{easyRNASeq summarization functions}} are used to extract the read covered bp counts}
+##' }
+##' @name RnaSeqParam class
+##' @rdname easyRNASeq-RnaSeqParam-class
+##' @aliases RnaSeqParam-class
+##' @docType class
+##' @section Objects from the Class: Objects can be created by calls of the
+##' form \code{new("RnaSeqParam", ...)} or using the RnaSeqParam constructor.
+##' @author Nicolas Delhomme
+##' @seealso \itemize{
+##' \item \code{\link[easyRNASeq:easyRNASeq-RnaSeqParam]{RnaSeqParam constructor}}
+## ##' \item \code{\link[easyRNASeq:easyRNASeq-RnaSeqParam-accessors]{RnaSeqParam accessors}}
+##' \item \code{\link[easyRNASeq:easyRNASeq-simpleRNASeq]{simpleRNASeq function}}
+##' \item \code{\linkS4class{AnnotParam}}
+##' \item \code{\link[easyRNASeq:easyRNASeq-AnnotParam]{AnnotParam constructor}}
+##' \item \code{\linkS4class{BamParam}}
+##' \item \code{\link[easyRNASeq:easyRNASeq-BamParam]{BamParam constructor}}
+##' \item \code{\link[GenomicAlignments:summarizeOverlaps]{summarizeOverlaps}}
+##' \item \code{\link[easyRNASeq:easyRNASeq-summarization-methods]{easyRNASeq summarization functions}}
+##' }
+##' @keywords classes
+##' @examples
+##' 
+##' showClass("RnaSeqParam")
+##'
+##' @exportClass RnaSeqParam
+setClass("RnaSeqParam",
+         representation=representation(
+           annotParam="AnnotParam",
+           bamParam="BamParam",           
+           countBy="character",
+           precision="character"),
+         prototype=prototype(           
+           countBy="transcripts",
+           precision="read"
+         ))

@@ -1,0 +1,52 @@
+\docType{methods}
+\name{getBamFileList}
+\alias{getBamFileList}
+\alias{getBamFileList,character-method}
+\title{Get a BamFileList from a list of filenames}
+\usage{
+\S4method{getBamFileList}{character}(filenames = character(0))
+}
+\arguments{
+  \item{filenames}{a character vector containing fully
+  defined filenames}
+}
+\value{
+a \code{linkS4class{BamFileList-class}}{BamFileList}
+}
+\description{
+A utility function to create a
+\code{linkS4class{BamFileList-class}}{BamFileList} object
+from a set of filenames. The filenames need to contain the
+file path if they are not in the working directory.
+}
+\examples{
+library("RnaSeqTutorial")
+
+	## creating a BamFileList using a directory and pattern
+	bfl <- getBamFileList(
+                        dir(path=system.file("extdata",
+					                  package="RnaSeqTutorial"),
+					              pattern="[A,C,T,G]{6}\\\\.bam$",
+  				              full.names=TRUE))
+
+  ## using filenames
+  filenames <- dir(path=
+  	    			      system.file("extdata",
+					          package="RnaSeqTutorial"),
+					     pattern="[A,C,T,G]{6}\\\\.bam$",
+  				     full.names=TRUE)
+  bfl <- getBamFileList(filenames)
+
+  ## get them recursively
+  filenames <- dir(path=
+        			      system.file("extdata",
+					          package="RnaSeqTutorial"),
+					     pattern="[A,C,T,G]{6}\\\\.bam$",
+  				     full.names=TRUE,recursive=TRUE)
+  bfl <- getBamFileList(filenames)
+}
+\seealso{
+\code{linkS4class{BamFileList-class}}{BamFileList}
+\code{\link[base:list.files]{dir}}
+}
+

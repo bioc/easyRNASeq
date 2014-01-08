@@ -14,7 +14,7 @@
 ##' names match the column names of the count matrix.}}
 ##' 
 ##' @aliases RPKM RPKM,RNAseq,ANY,ANY,ANY-method
-##' RPKM,matrix,ANY,vector,vector-method
+##' RPKM,matrix,ANY,vector,vector-method RPKM,RNAseq-method
 ##' @name easyRNASeq correction methods
 ##' @rdname easyRNASeq-correction-methods
 ##' @param feature.size Precise the feature (e.g. exons, genes) sizes. It
@@ -27,7 +27,7 @@
 ##' \code{matrix}, see details
 ##' @param simplify If set to TRUE, whenever a feature (exon, feature, ...) is
 ##' duplicated in the count table, it is only returned once.
-##' @param \dots additional arguments. See details
+##' @param ... additional arguments. See details
 ##' @return A \code{matrix} containing RPKM corrected read counts.
 ##' @author Nicolas Delhomme
 ##' @seealso \code{\link[easyRNASeq:easyRNASeq-accessors]{readCounts}}
@@ -41,7 +41,7 @@
 ##' 		    			system.file(
 ##' 					"extdata",
 ##' 					package="RnaSeqTutorial"),
-##' 					pattern="[A,C,T,G]{6}\.bam$",
+##' 					pattern="[A,C,T,G]{6}\\.bam$",
 ##' 				format="bam",
 ##' 				readLength=36L,
 ##' 				organism="Dmelanogaster",
@@ -132,6 +132,12 @@ setMethod(
                               )
             
             ## get the lib sizes
+            if(any(librarySize(obj)==0)){
+              warning(paste("Some library size(s) were not set, hence RPKM could not be directly calculated.",
+                         "Getting the library sizes using the 'exon' counts so as to calculate the RPKM."))
+              cts <- readCounts(obj,'exons')
+              librarySize(obj) <- colSums(cts[!duplicated(rownames(cts)),])
+            }
             libSizes <- librarySize(obj)
             libSizes <- libSizes[match(colnames(mCounts),names(libSizes))]
             
@@ -157,13 +163,13 @@ setMethod(
                             "features"=width(genomicAnnotation(obj))[match(rownames(mCounts),.getName(obj,"features"))],
                             "transcripts"= {
                               ## aggregate first
-                              agg <- stats:::aggregate(width(genomicAnnotation(obj)),list(transcript=.getName(obj,"transcripts")),sum)
+                              agg <- stats::aggregate(width(genomicAnnotation(obj)),list(transcript=.getName(obj,"transcripts")),sum)
                               ## then sort
                               agg[match(rownames(mCounts),agg[,1]),2]},
                             "bestExons"= width(genomicAnnotation(obj))[match(rownames(mCounts),.getName(obj,"exons"))],
                             "geneModels"= {
                               ## aggregate
-                              agg<-stats:::aggregate(width(geneModel(obj)),list(gene=geneModel(obj)$gene),sum)
+                              agg<-stats::aggregate(width(geneModel(obj)),list(gene=geneModel(obj)$gene),sum)
                               ## sort
                               agg[match(rownames(mCounts),agg[,1]),2]},
                             ## same as that: as(by(width(geneModel(obj)),geneModel(obj)$gene,sum),"vector") but faster

@@ -27,7 +27,7 @@
 ##' @rdname easyRNASeq-summarization-internal-methods
 ##' @param chr.map A data.frame describing the mapping of original chromosome
 ##' names towards wished chromosome names. See the details in
-##' \code{\link[easyRNASeq:easyRNASeq]{easyRNASeq}}.
+##' \code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq}}.
 ##' @param chr.sel A vector of chromosome names to subset the final results.
 ##' @param cList list of lists that contain count results
 ##' @param count The feature used to summarize the reads. One of
@@ -63,13 +63,13 @@
 ##' \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq:knownOrganisms}},
 ##' otherwise the argument 'chr.map' can be used to complement it.
 ##' @param values a named vector containing count results
-##' @param \dots additional arguments. See the details in
-##' \code{\link[easyRNASeq:easyRNASeq]{easyRNASeq}}.
+##' @param ... additional arguments. See the details in
+##' \code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq}}.
 ##' @seealso
 ##' \itemize{
 ##' \item \code{\link[ShortRead:readAligned]{ShortRead:readAligned}}
 ##' \item \code{\linkS4class{RNAseq}}
-##' \code{\link[easyRNASeq:easyRNASeq]{easyRNASeq}}.
+##' \code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq}}.
 ##' }
 ##' 
 ##' @return \itemize{
@@ -108,7 +108,7 @@
   ## select for the proper spaces
   gm.sel <- na.omit(match(names(readCoverage(obj)),names(geneModel(obj))))
   
-  gAgg <- stats:::aggregate(
+  gAgg <- stats::aggregate(
                             as.integer(
                                        unlist(
                                               aggregate(
@@ -137,10 +137,14 @@
   
   ## not used by supposedly faster than aggregate
   ##RleViewsList(rleList=trackCoverage, rangesList=exons)
-            
+  
+  nams <- switch(class(genomicAnnotation(obj)),
+                 "GRanges"=seqlevels(genomicAnnotation(obj)),
+                 "RangedData"=names(genomicAnnotation(obj)))
+  
   ## counts
   counts=as.integer(unlist(aggregate(
-    readCoverage(obj)[match(names(genomicAnnotation(obj)),names(readCoverage(obj)))],
+    readCoverage(obj)[match(nams,names(readCoverage(obj)))],
     ranges(obj),
     sum
     )))
@@ -242,7 +246,7 @@
 
   ## load the library
   ## since we start fresh R instances
-  library(easyRNASeq)
+  require(easyRNASeq)
 
   ## some validity check
   ## useful only if I (the developer) misbehave.
@@ -256,6 +260,12 @@
   if(length(summarization)==1){
     stopifnot(count=="genes")
     .checkArguments("easyRNASeq","summarization",summarization)
+    if(summarization=="BestExons"){
+      .Deprecated(msg=paste("Summarizing by BestExons is deprecated and",
+                            "will not be supported anymore in the next version.",
+                            "There has been no use case so far for that functionality.",
+                            "Please report if you think otherwise."))
+    }
   }
   
   ## report

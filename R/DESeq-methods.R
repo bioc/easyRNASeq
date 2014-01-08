@@ -15,17 +15,45 @@
 ##' \itemize{
 ##' \item{\code{multivariateConditions} is simply an accessor for the
 ##' \code{multivariateConditions} slot of a \code{\linkS4class{CountDataSet}}
-##' object.  }}
-##' 
-##' 
+##' object}
+##' \item{\code{plotDispLSD} is a function silimar to 
+##' \code{\link[DESeq:plotDispEsts]{plotDispEsts}}
+##' that adds a density estimate as a colored heatmap from grey (few) to yellow
+##' (many).}
+##' \item{\code{plotDispersionEstimates} offers the functionality to plot 
+##' the dispersion estimate as described in the \pkg{DESeq} vignette.}
+##' }
+##'
 ##' @aliases multivariateConditions multivariateConditions,CountDataSet-method
+##' plotDispLSD plotDispLSD,CountDataSet-method plotDispersionEstimates
+##' plotDispersionEstimates,CountDataSet-method
 ##' @name DESeq additional methods
 ##' @rdname DESeq-methods
 ##' @param obj An object of class \code{\linkS4class{CountDataSet}}
-##' @return \itemize{ \item{multivariateConditions returns a boolean describing
-##' whether the data to analyze is multivariate or not }}
-##' @author Nicolas Delhomme
+##' @param cex standard \code{\link[graphics:plot.default]{plot.default}} parameter
+##' @param cond A character string describing the first condition
+##' @param linecol defines the line color
+##' @param log A character string passed onto 
+##' \code{\link[graphics:plot.default]{plot.default}}
+##' @param name argument passed to the \pkg{DESeq} \code{\link[DESeq:fitInfo]{fitInfo}}
+##' function.
+##' @param xlab standard \code{\link[graphics:plot.default]{plot.default}} parameter
+##' @param ylab standard \code{\link[graphics:plot.default]{plot.default}} parameter
+##' @param ymin numeric value defining the lower limit for the y axis
+##' @param ... Additional plotting parameters
+##' @usage multivariateConditions(obj)
+##' plotDispLSD(obj, name = NULL, ymin, 
+##' linecol = "#00000080", xlab = "mean of normalized counts", 
+##' ylab = "dispersion", log = "xy", cex = 0.45, ...)
+##' plotDispersionEstimates(obj,cond,log,...)
+##' @return \itemize{
+##' \item{\code{multivariateConditions} returns a boolean describing
+##' whether the data to analyze is multivariate or not}
+##' \item{\code{plotDispLSD} and \code{plotDispersionEstimates}} returns nothing
+##' }
+##' @author Nicolas Delhomme, Bastian Schiffthaler
 ##' @seealso \code{\linkS4class{CountDataSet}}
+##' \code{\link[DESeq:plotDispEsts]{plotDispEsts}}
 ##' @keywords methods
 ##' @examples
 ##' 
@@ -36,6 +64,7 @@
 ##' 	cds <- estimateSizeFactors(cds)
 ##' 	cds <- estimateDispersions(cds)
 ##' 	mVar <- multivariateConditions(cds)
+##' 	plotDispersionEstimates(cds,conditions[1])
 ##' 	}
 ##' 
 setMethod(
@@ -45,55 +74,40 @@ setMethod(
             obj@multivariateConditions
           })
 
+setMethod(
+  f="plotDispLSD",
+  signature="CountDataSet",
+  definition=function(obj, name = NULL, ymin, 
+                      linecol = "#00000080", xlab = "mean of normalized counts", 
+                      ylab = "dispersion", log = "xy", cex = 0.45, ...) {
+    px = rowMeans(counts(cds, normalized = TRUE))
+    sel = (px > 0)
+    px = px[sel]
+    py = fitInfo(cds, name = name)$perGeneDispEsts[sel]
+    if (missing(ymin)) 
+      ymin = 10^floor(log10(min(py[py > 0], na.rm = TRUE)) - 
+                        0.1)
+    heatscatter(log10(px), log10(pmax(py, ymin)), xlab = xlab, ylab = ylab, 
+                pch = ifelse(py < ymin, 6, 16), cexplot = cex, 
+                xaxt='n', yaxt='n', ...)
+    
+    # Fix logged axes labels
+    atx <- axTicks(1)
+    aty <- axTicks(2)
+    xlabels <- sapply(atx, function (i)
+      as.expression(bquote(10^ .(i)))
+    )
+    ylabels <- sapply(aty, function (i)
+      as.expression(bquote(10^ .(i)))
+    )
+    axis(1, at=atx, labels=xlabels)
+    axis(2, at=aty, labels=ylabels)
+    xg = 10^seq(-0.5, 5, length.out = 100)
+    lines(log10(xg), log10(fitInfo(cds, name = name)$dispFun(xg)), col = linecol, 
+          lwd = 4, lty = 1
+    )
+  })
 
-##' DESeq and edgeR common methods
-##' 
-##' \code{plotDispersionEstimates(obj,...)} extends the \pkg{DESeq} and
-##' \pkg{edgeR} packages by offering the functionality to plot the dispersion
-##' estimate as described in their respective vignettes:
-##' \code{\linkS4class{CountDataSet}{DESeq}} and
-##' \code{\link[edgeR:edgeR-package]{edgeR}}.
-##' 
-##' \itemize{ \item\code{\linkS4class{CountDataSet}{DESeq}} A character string
-##' describing the first condition, to be provided as cond=value
-##' \item\code{\link[edgeR:edgeR-package]{edgeR}} Unused, just for
-##' compatibility.  }
-##' 
-##' @aliases plotDispersionEstimates
-##' plotDispersionEstimates,CountDataSet-method
-##' plotDispersionEstimates,DGEList-method
-##' @name DESeq and edgeR common methods 
-##' @rdname DESeq-edgeR-common-methods 
-##' @param obj An object of class \code{\linkS4class{CountDataSet}} or of class
-##' \code{\linkS4class{DGEList}}
-##' @param \dots See details
-##' @return none
-##' @author Nicolas Delhomme
-##' @keywords methods
-##' @examples
-##' 
-##' 	\dontrun{
-##' 	## edgeR
-##' 	## create the object
-##' 	dgeList <- DGEList(counts,group)
-##' 	## calculate the sie factors
-##' 	dgeList <- calcNormFactors(dgeList)
-##' 	## plot them
-##' 	apply(combn(rownames(dgeList$samples),2),
-##' 		2,
-##' 		function(co,obj){plotNormalizationFactors(obj,co[1],co[2])},dgeList)
-##' 	## the dispersion estimates
-##' 	plotDispersionEstimates(obj)
-##' 	
-##' 	## DESeq
-##' 	## these are helper function for the DESeq package
-##' 	## refer to its vignette first
-##' 	cds <- newCountDataSet(countData,conditions)
-##' 	cds <- estimateSizeFactors(cds)
-##' 	cds <- estimateDispersions(cds)
-##' 	plotDispersionEstimates(cds,conditions[1])
-##' 	}
-##' 
 setMethod(
           f="plotDispersionEstimates",
           signature=c("CountDataSet"),

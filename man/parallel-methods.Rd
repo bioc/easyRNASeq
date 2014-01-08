@@ -1,10 +1,15 @@
+\docType{methods}
 \name{parallel additional methods}
 \alias{parallel additional methods}
 \alias{parallelize}
+\alias{parallelize,BamFileList,function-method}
 \alias{parallelize,GRangesList,function-method}
 \alias{parallelize,list,function-method}
 \alias{parallelize,vector,function-method}
 \title{parallel additional methods}
+\usage{
+\S4method{parallelize}{list,function}(obj, fun, nnodes = 1, ...)
+}
 \arguments{
   \item{fun}{the function to be applied in parallel}
 
@@ -13,35 +18,33 @@
   \item{obj}{the object which processing has to be
   parallelizes}
 
-  \item{\dots}{additional arguments passed to the function
+  \item{...}{additional arguments passed to the function
   \code{fun}}
 }
 \value{
-  the result of the
-  \code{\link[parallel:clusterApply]{clusterApply}}
-  function.
+the result of the
+\code{\link[parallel:clusterApply]{clusterApply}} function.
 }
 \description{
-  Functions defined in the easyRNASeq package that enhance
-  the parallel package.
+Functions defined in the easyRNASeq package that enhance
+the parallel package.
 }
 \details{
-  The parallelize function ease the use of the parallel
-  package. If the number of nodes provided by the user is
-  1, then a simple 'lapply' is used, otherwise a cluster
-  object is created and the object dispatched for
-  parallelization.
+The parallelize function ease the use of the parallel
+package. If the number of nodes provided by the user is 1,
+then a simple 'lapply' is used, otherwise a cluster object
+is created and the object dispatched for parallelization.
 }
 \examples{
 parallelize(list(a<-c(1,2),b<-c(2,1)),sum,nnodes=1)
 }
 \author{
-  Nicolas Delhomme
+Nicolas Delhomme
 }
 \seealso{
-  \code{\link[parallel:clusterApply]{clusterApply}}
-  \code{\link[parallel:makePSOCKcluster]{makePSOCKcluster}}
-  \code{\link[parallel:stopCluster]{stopCluster}}
+\code{\link[parallel:clusterApply]{clusterApply}}
+\code{\link[parallel:makePSOCKcluster]{makePSOCKcluster}}
+\code{\link[parallel:stopCluster]{stopCluster}}
 }
 \keyword{methods}
 

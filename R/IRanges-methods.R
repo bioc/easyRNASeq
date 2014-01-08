@@ -10,8 +10,9 @@
 ##' @aliases ranges ranges,RNAseq-method
 ##' @name IRanges additional methods
 ##' @rdname IRanges-methods
-##' @param obj An object of the \code{\linkS4class{RNAseq}} class
-##' @return An \code{\linkS4class{IRanges}} object.
+##' @param x An object of the \code{\linkS4class{RNAseq}} class
+##' @return An \code{\linkS4class{IRangesList}} object, where the split
+##' is performed by seqnames (\emph{e.g.} chromosomes).
 ##' @author Nicolas Delhomme
 ##' @keywords methods
 ##' @examples
@@ -39,6 +40,10 @@ setMethod(
           f="ranges",
           signature="RNAseq",
           definition=function(x){
-            ranges(genomicAnnotation(x))
+            switch(class(genomicAnnotation(x)),
+                   "GRanges"=split(ranges(genomicAnnotation(x)),
+                                   seqnames(genomicAnnotation(x))), 
+                   "RangedData"=ranges(genomicAnnotation(x))
+            )
           })
 

@@ -1,0 +1,90 @@
+##' AnnotParam constructor
+##' 
+##' This constructs a \code{\linkS4class{AnnotParam}} object.
+##' The datasource parameter (see details) is mandatory, however
+##' other parameters, \emph{i.e.} when the datasource is not a 
+##' \code{\linkS4class{GRangesList}} or \code{\linkS4class{RangedData}}
+##' default to "genes" and gff3", indicating that the datasource is in
+##' the gff3 format and that the contained information needs to be grouped
+##' by "genes". This representing the most common use case. Hence, it is 
+##' left to the user to refine the parameters accordingly to the annotation
+##' he is providing or whishes to retrieve.
+##' 
+##' Note that calling the constructor without argument fails, as the datasource
+##' is a mandatory parameter. Calling the constructor with additional (not all)
+##' parameters will affect the value of the selected parameters, leaving the other
+##' parameters unaffected.
+##' There are three parameters for an \code{\linkS4class{AnnotParam}} 
+##' object:
+##' \itemize{
+##' \item{datasource}{If no type is provided, the datasource should 
+##' be either a \code{\linkS4class{GRangesList}}(prefered) or a 
+##' \code{\linkS4class{RangedData}} (subject to future deprecation)
+##' object  containing the genic information. These can be obtained 
+##' using the \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{getAnnotation}} function.}
+##' \item{type}{One of biomaRt, gff3, gtf or rda. The default is "gff3". 
+##' In all cases, the datasource is a \code{character} describing:
+##' \itemize{
+##' \item For biomaRt, the name of the organism as known by the ensembl Mart, 
+##' \emph{e.g.} dmelanogaster or hsapiens.
+##' \item For gff3, gtf or rda, the filename (including the full or relative path).
+##' }
+##' }
+##' }
+##' 
+##' @aliases AnnotParam AnnotParam,character-method 
+##' AnnotParam,missing-method
+##' AnnotParam,RangedData-method AnnotParam,GRangesList-method
+##' @name easyRNASeq AnnotParam constructor
+##' @rdname easyRNASeq-AnnotParam
+##' @param datasource a character or a \code{\linkS4class{RangedData}} or a \code{\linkS4class{GRangesList}} object. See details.
+##' @param type one of NULL, biomaRt, gff3, gtf or rda. Default to NULL. See details.
+##' @seealso 
+##' \itemize{
+##' \item \code{\linkS4class{GRangesList}}
+##' \item \code{\linkS4class{RangedData}}
+##' \item \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{getAnnotation}}
+##' }
+##' @examples
+##' ## create an object
+##' annotParam <- AnnotParam(datasource="Hsapiens",type="biomaRt")
+##' 
+##' ## get the datasource and type
+##' datasource(annotParam)
+##' type(annotParam)
+##' 
+setMethod(f="AnnotParam",
+          signature="character",
+          definition=function(
+            datasource=character(0),
+            type=c("gff3","biomaRt","gtf","rda")){
+            type <- match.arg(type)
+            new("AnnotParamCharacter",
+                datasource=datasource,                
+                type=type
+                )
+          })
+
+setMethod(f="AnnotParam",
+          signature="RangedData",
+          definition=function(
+            datasource=RangedData()){            
+            new("AnnotParamObject",
+                datasource=datasource
+            )
+          })
+
+setMethod(f="AnnotParam",
+          signature="GRangesList",
+          definition=function(
+            datasource=GRangesList()){            
+            new("AnnotParamObject",
+                datasource=datasource
+            )
+          })
+
+setMethod(f="AnnotParam",
+          signature="missing",
+          definition=function(){
+            stop("You need to provide at least a datasource parameter to the AnnotParam constructor.")
+          })

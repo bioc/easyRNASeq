@@ -81,25 +81,7 @@ setMethod(
           signature=c("DGEList"),
           definition=function(obj=DGEList()){
 
-            ## check that the cond are in the samples
-            if(nrow(obj$samples)==0){
-              stop("Your 'DGEList' does not contain sample information!")
-            }
-
-            ## check that the tagwise dispersion and the common dispersion were calculated
-            if(is.null(obj$conc$conc.common)){
-              stop("You need to estimate the common dispersion before using this function.")
-            }
-
-            if(is.null(obj$tagwise.dispersion)){
-              stop("You need to estimate the tagwise dispersion before using this function")
-            }
-
-            ## plot
-            plot(log2(obj$conc$conc.common), obj$tagwise.dispersion,
-                 panel.first = grid(),ylab="tag dispersion",
-                 xlab="common dispersion (log2)")
-            abline(h = obj$common.dispersion, col = "dodgerblue", lwd = 3)
-            legend("topright",col="dodgerblue",lwd=3,lty=1,bty="n","common dispersion")
+            .Defunct(new="plotBCV",msg="This method is defunct due to change in
+                     the edgeR DGEList object.")
           })
 

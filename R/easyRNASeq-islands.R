@@ -8,7 +8,7 @@
 ##' \dots{} are for providing additional options to the
 ##' \code{\link[graphics:hist]{hist}} plot function.
 ##' 
-##' @aliases findIslands
+##' @aliases findIslands findIslands,RNAseq-method
 ##' @name easyRNASeq island methods
 ##' @rdname easyRNASeq-island-methods
 ##' @param obj An object of class \code{RNAseq}
@@ -17,7 +17,7 @@
 ##' @param min.length Minimum size of an island to be returned
 ##' @param plot If TRUE, draw plots of coverage distribution. Help the user to
 ##' select an appropriate value for the minimum coverage.
-##' @param \dots See details
+##' @param ... See details
 ##' @return An \code{RNAseq} object with the readIsland slot set with a
 ##' RangedData containing the selected islands and the readCount slot
 ##' actualized with a list containing the count table per island.
