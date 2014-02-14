@@ -115,8 +115,15 @@
                 "GAlignments" = {
                   ## we want only the mapped regions
                   grnglist <- grglist(obj,drop.D.range=TRUE)
-                  if(any(elementMetadata(grnglist)$NH)>1){
-                    warning("Your alignment file potentially contains multi-mapping reads. This would bias the counting.")
+                  
+                  ## check if NH tag are present
+                  ## we check only for the first...
+                  if(! "NH" %in% colnames(mcols(grnglist[[1]]))){
+                    warning("Your alignment file misses the NH tag. It may contains multi-mapping reads, which would bias the counting.")
+                  } else {                  
+                    if(any(as.data.frame(grnglist)$NH)>1){
+                      warning("Your alignment file potentially contains multi-mapping reads. This would bias the counting.")
+                    }
                   }
                   list(rng.list=split(unlist(ranges(grnglist),use.names=FALSE),unlist(seqnames(grnglist),use.names=FALSE)),
                        lib.size=length(unique(names(obj))))
