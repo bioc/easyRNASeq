@@ -21,8 +21,8 @@
 ##' \tabular{ll}{
 ##' Package: \tab easyRNASeq\cr
 ##' Type: \tab Package\cr
-##' Version: \tab 1.9.2\cr
-##' Date: \tab 2014-01-08\cr
+##' Version: \tab 1.9.3\cr
+##' Date: \tab 2014-02-15\cr
 ##' License: \tab Artistic-2.0\cr
 ##' LazyLoad: \tab yes\cr
 ##' Depends: \tab methods, parallel, biomaRt, edgeR, DESeq, genomeIntervals, LSD, Rsamtools, ShortRead, RnaSeqTutorial\cr
@@ -139,7 +139,7 @@ NULL
 ##' @importMethodsFrom IRanges "%in%" aggregate as.list as.matrix as.table
 ##' "colnames<-" countOverlaps coverage elementLengths elementMetadata
 ##' "elementMetadata<-" end "end<-" findOverlaps gsub ifelse levels
-##' mean median na.omit narrow nchar queryHits ranges reduce rev Rle
+##' mcols mean median na.omit narrow nchar queryHits ranges reduce rev Rle
 ##' "rownames<-" runLength runsum runValue space split start "start<-"
 ##' sub substr tolower "universe<-" unlist values which width
 ##' @importMethodsFrom methods coerce initialize show

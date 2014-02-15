@@ -1,3 +1,8 @@
+CHANGES IN VERSION 1.9.3
+-------------------------
+
+  o Mirrored changes in version 1.8.5
+
 CHANGES IN VERSION 1.9.2
 -------------------------
 
@@ -15,6 +20,13 @@ CHANGES IN VERSION 1.9.0
 -------------------------
 
   o No changes, new development version
+
+CHANGES IN VERSION 1.8.5
+-------------------------
+
+  o Added a check for handling cases where BAM files do not report the
+  number of alignments through the NH tag. Thanks to Alistair Chalk
+  for spotting that one.
 
 CHANGES IN VERSION 1.8.4
 -------------------------
