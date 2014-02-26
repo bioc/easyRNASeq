@@ -829,19 +829,16 @@ setMethod(
             
             ## check if the chromosome names are valid
             if(validity.check){
-              ## TODO what was that for ???
-              ## modified in version 1.1.9 (06.03.2012) as it was unwise to check for chr in the names
-              ## that's dealt with in the .convertToUSCS function
-##              chr.grep <- grep("chr",names(genomicAnnotation(obj)))
-##              if(length(chr.grep)== 0 | !all(1:length(names(genomicAnnotation(obj))) %in% chr.grep)){
-                if(annotationMethod!="biomaRt" & organismName(obj) != "custom"){
-                  if(!ignoreWarnings){
+              if (annotationMethod != "biomaRt" & organismName(obj) != "custom") {
+                chr.grep <- grep("chr", names(genomicAnnotation(obj)))
+                if (length(chr.grep) == 0 | !all(1:length(names(genomicAnnotation(obj))) %in% chr.grep)) {
+                  if (!ignoreWarnings) {
                     warning("You enforce UCSC chromosome conventions, however the provided annotation is not compliant. Correcting it.")
                   }
+                  names(genomicAnnotation(obj)) <- easyRNASeq:::.convertToUCSC(names(genomicAnnotation(obj)), 
+                                                                               organismName(obj), chr.map)
                 }
-                ## TODO do I need to put the chr.sel here to ensure we only adapt those selected chromosomes?
-                names(genomicAnnotation(obj)) <- .convertToUCSC(names(genomicAnnotation(obj)),organismName(obj),chr.map)
-##              }
+              }
             }
             
             ## subset the annotation by chr.sel
