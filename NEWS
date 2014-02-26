@@ -1,3 +1,8 @@
+CHANGES IN VERSION 1.9.4
+-------------------------
+
+  o Mirrored changes in version 1.8.6
+
 CHANGES IN VERSION 1.9.3
 -------------------------
 
@@ -20,6 +25,15 @@ CHANGES IN VERSION 1.9.0
 -------------------------
 
   o No changes, new development version
+
+CHANGES IN VERSION 1.8.6
+-------------------------
+
+  o Fixed an issue where RPKM values were all set to NAs. Thanks to Vijaya 
+  Mahalingam Shanmugiah for reporting that issue.
+
+  o Fixed a number of warnings introduced by changes to the underlying IRanges
+  package.
 
 CHANGES IN VERSION 1.8.5
 -------------------------

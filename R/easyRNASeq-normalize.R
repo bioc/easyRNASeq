@@ -139,7 +139,10 @@ setMethod(
               librarySize(obj) <- colSums(cts[!duplicated(rownames(cts)),])
             }
             libSizes <- librarySize(obj)
-            libSizes <- libSizes[match(colnames(mCounts),names(libSizes))]
+            libSizes <- libSizes[match(basename(colnames(mCounts)),basename(names(libSizes)))]
+            
+            ## an internal check; if that ever occurs add a proper message
+            stopifnot(all(!is.na(libSizes)))
             
             ## valid?
             if(is.null(mCounts) | length(mCounts)==0){

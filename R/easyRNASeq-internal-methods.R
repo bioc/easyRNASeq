@@ -540,7 +540,9 @@ setReplaceMethod(
                                                     "[",match(sub("s$","",count),colnames(genomicAnnotation(obj)))),
                                              unlist),
                                       use.names=FALSE)},
-                "RangedData"={unlist(values(genomicAnnotation(obj)[,sub("s$","",count)]))[,1]},
+                "RangedData"={
+                  unlist(values(genomicAnnotation(obj)[,"exon"])[,1],use.names=FALSE)
+                },
                 stop(paste("No .getName functionality implemented for the class: ",class(genomicAnnotation(obj)),"!",sep=""))
                 ))
 }
