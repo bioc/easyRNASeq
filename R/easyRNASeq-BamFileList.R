@@ -51,7 +51,8 @@ setMethod(f="getBamFileList",
             sel <- file.exists(filenames)
             if(any(!sel)){
               stop(paste("The file(s)",
-                         paste(filenames[!sel],collapse = " and ")),"do(es) not exist.")
+                         paste(filenames[!sel],collapse = " and ")),
+                   " do(es) not exist.")
             }            
             
             ## check that the bai are not part of the filesList

@@ -21,8 +21,8 @@
 ##' \tabular{ll}{
 ##' Package: \tab easyRNASeq\cr
 ##' Type: \tab Package\cr
-##' Version: \tab 1.9.4\cr
-##' Date: \tab 2014-02-26\cr
+##' Version: \tab 1.9.6\cr
+##' Date: \tab 2014-03-25\cr
 ##' License: \tab Artistic-2.0\cr
 ##' LazyLoad: \tab yes\cr
 ##' Depends: \tab methods, parallel, biomaRt, edgeR, DESeq, genomeIntervals, LSD, Rsamtools, ShortRead, RnaSeqTutorial\cr
@@ -53,7 +53,7 @@
 ##' 
 ##' @name easyRNASeq package
 ##' @rdname easyRNASeq-package
-##' @aliases easyRNASeq-package type yieldSize
+##' @aliases easyRNASeq-package type yieldSize BamFileList BamFileList-class
 ##' @docType package
 ##' @author Nicolas Delhomme, Bastian Schiffthaler, Ismael Padioleau
 ##' @keywords package
@@ -61,8 +61,8 @@
 ##' 	The class RNAseq specification:
 ##' 	\code{\linkS4class{RNAseq}}
 ##'
-##'     The default output class specification:
-##'     \code{\linkS4class{SummarizedExperiment}}
+##'   The default output class specification:
+##'   \code{\linkS4class{SummarizedExperiment}}
 ##' 
 ##' 	The imported packages:
 ##' 	\code{\link[biomaRt:useMart]{biomaRt}}
@@ -80,6 +80,11 @@
 ##' 	\code{\link[parallel:makeCluster]{parallel}}
 ##' 	\code{\link[GenomicFeatures:TranscriptDb-class]{GenomicFeatures}}
 ##' 
+##'   The following functions and classes that are made available from
+##'   other packages:
+##'   \code{\linkS4class{BamFileList}}
+##'   \code{\link[Rsamtools:BamFileList]{The BamFileList constructor}}
+##'   
 ##' @examples
 ##' 	\dontrun{
 ##' 	library("RnaSeqTutorial")
@@ -118,7 +123,7 @@ NULL
 ##' @importClassesFrom edgeR DGEList
 ##' @importClassesFrom genomeIntervals Genome_intervals
 ##' @importClassesFrom GenomicAlignments GAlignments
-##' @importClassesFrom GenomicRanges GRanges GRangesList
+##' @importClassesFrom GenomicRanges GRanges GRangesList SummarizedExperiment
 ##' @importClassesFrom IRanges RangedData RleList Vector
 ##' @importClassesFrom methods ANY character "function" integer
 ##' list matrix missing numeric vector
@@ -166,6 +171,9 @@ NULL
 ##' @importFrom Rsamtools BamFileList bamFlagTest index scanBamFlag
 ##' @importFrom ShortRead alignData
 ##' @importFrom utils combn str
+## and export!
+##' @exportClass BamFileList
+##' @export BamFileList
 NULL
 
 ###==========================

@@ -1,3 +1,15 @@
+CHANGES IN VERSION 1.9.6
+-------------------------
+
+  o Ported changes from the Git repository
+  including further class refinements and
+  unit testing.
+
+CHANGES IN VERSION 1.9.5
+-------------------------
+
+  o Automatic version number bump by Bioc
+
 CHANGES IN VERSION 1.9.4
 -------------------------
 

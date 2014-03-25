@@ -1,5 +1,7 @@
 \docType{package}
 \name{easyRNASeq package}
+\alias{BamFileList}
+\alias{BamFileList-class}
 \alias{easyRNASeq package}
 \alias{easyRNASeq package-package}
 \alias{easyRNASeq-package}
@@ -16,7 +18,7 @@ functionalities to normalize the summarized counts using
 }
 \details{
 \tabular{ll}{ Package: \tab easyRNASeq\cr Type: \tab
-Package\cr Version: \tab 1.9.4\cr Date: \tab 2014-02-26\cr
+Package\cr Version: \tab 1.9.6\cr Date: \tab 2014-03-25\cr
 License: \tab Artistic-2.0\cr LazyLoad: \tab yes\cr
 Depends: \tab methods, parallel, biomaRt, edgeR, DESeq,
 genomeIntervals, LSD, Rsamtools, ShortRead,
@@ -106,6 +108,11 @@ The imported packages:
 The suggested packages:
 \code{\link[parallel:makeCluster]{parallel}}
 \code{\link[GenomicFeatures:TranscriptDb-class]{GenomicFeatures}}
+
+The following functions and classes that are made available
+from other packages: \code{\linkS4class{BamFileList}}
+\code{\link[Rsamtools:BamFileList]{The BamFileList
+constructor}}
 }
 \keyword{package}
 

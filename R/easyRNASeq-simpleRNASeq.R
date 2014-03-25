@@ -18,26 +18,46 @@
 ##' \item returns a \code{\linkS4class{SummarizedExperiment}} object.
 ##' }
 ##' 
-##' @aliases simpleRNASeq simpleRNASeq,character-method
+##' @aliases simpleRNASeq simpleRNASeq,BamFileList-method
 ##' @rdname easyRNASeq-simpleRNASeq
 ##' @param bamFiles a \code{\linkS4class{BamFileList}} object
 ##' @param nnodes The number of CPU cores to use in parallel
 ##' @param param RnaSeqParam a \code{\linkS4class{RnaSeqParam}} object
-##' that describres the RNA-Seq experimental setup.
+##' that describes the RNA-Seq experimental setup.
 ##' @param verbose a logical to be report progress or not.
 ##' @return returns a \code{\linkS4class{SummarizedExperiment}} object.
 ##' @author Nicolas Delhomme
 ##' @seealso \code{\linkS4class{SummarizedExperiment}}
 ##' \code{\linkS4class{RnaSeqParam}}
+##' \code{\link[easyRNASeq:easyRNASeq-BamFileList]{getBamFileList}}
 ##' @keywords methods
 ##' @examples
 ##' 
 ##'   \dontrun{
-##'   TODO
+##'   
+##'   ## get the bam files' filename
+##'   filenames <- dir(system.file(
+##'                       package="RnaSeqTutorial",
+##'                       "extdata"),
+##'                   pattern="^[A,T].*.bam$",
+##'                   full.names=TRUE)
+##'   
+##'   ## get a bam file list from it
+##'   bamFiles <- getBamFileList(filenames)
+##'   
+##'   ## create the RnaSeqParam object
+##'   rsp <- RnaSeqParam(annotParam=AnnotParam(
+##'                 datasource=system.file(
+##'                                 "extdata",
+##'                                 "Dmel-mRNA-exon-r5.52.gff3",
+##'                                 package="RnaSeqTutorial")))
+##' 
+##'   ## call the function
+##'   simpleRNASeq(bamFiles,rsp)
 ##' }
 ##'
 setMethod(f="simpleRNASeq",
-          signature="character",
+          signature="BamFileList",
           definition=function(
           bamFiles=BamFileList(),
           param=RnaSeqParam(),
@@ -103,7 +123,7 @@ setMethod(f="simpleRNASeq",
   ## directly get the coverage?  
     
   ## stream the bam file
-  .stream(bamFiles,yieldSize(param),verbose)
+  .stream(bamFile,yieldSize(param),verbose)
   
   ## if paired get the fragments
   

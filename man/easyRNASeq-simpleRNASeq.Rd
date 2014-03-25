@@ -1,10 +1,10 @@
 \docType{methods}
-\name{simpleRNASeq,character-method}
+\name{simpleRNASeq,BamFileList-method}
 \alias{simpleRNASeq}
-\alias{simpleRNASeq,character-method}
+\alias{simpleRNASeq,BamFileList-method}
 \title{simpleRNASeq method}
 \usage{
-\S4method{simpleRNASeq}{character}(bamFiles = BamFileList(),
+\S4method{simpleRNASeq}{BamFileList}(bamFiles = BamFileList(),
   param = RnaSeqParam(), nnodes = 1, verbose = FALSE)
 }
 \arguments{
@@ -14,7 +14,7 @@
   \item{nnodes}{The number of CPU cores to use in parallel}
 
   \item{param}{RnaSeqParam a
-  \code{\linkS4class{RnaSeqParam}} object that describres
+  \code{\linkS4class{RnaSeqParam}} object that describes
   the RNA-Seq experimental setup.}
 
   \item{verbose}{a logical to be report progress or not.}
@@ -46,7 +46,26 @@ object. }
 }
 \examples{
 \dontrun{
-  TODO
+
+  ## get the bam files' filename
+  filenames <- dir(system.file(
+                      package="RnaSeqTutorial",
+                      "extdata"),
+                  pattern="^[A,T].*.bam$",
+                  full.names=TRUE)
+
+  ## get a bam file list from it
+  bamFiles <- getBamFileList(filenames)
+
+  ## create the RnaSeqParam object
+  rsp <- RnaSeqParam(annotParam=AnnotParam(
+                datasource=system.file(
+                                "extdata",
+                                "Dmel-mRNA-exon-r5.52.gff3",
+                                package="RnaSeqTutorial")))
+
+  ## call the function
+  simpleRNASeq(bamFiles,rsp)
 }
 }
 \author{
@@ -55,6 +74,7 @@ Nicolas Delhomme
 \seealso{
 \code{\linkS4class{SummarizedExperiment}}
 \code{\linkS4class{RnaSeqParam}}
+\code{\link[easyRNASeq:easyRNASeq-BamFileList]{getBamFileList}}
 }
 \keyword{methods}
 

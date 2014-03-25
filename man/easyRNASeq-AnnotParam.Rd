@@ -54,12 +54,21 @@ or rda, the filename (including the full or relative path).
 } } }
 }
 \examples{
-## create an object
+## create an object to retrieve annotation from biomaRt
 annotParam <- AnnotParam(datasource="Hsapiens",type="biomaRt")
 
 ## get the datasource and type
 datasource(annotParam)
 type(annotParam)
+
+## create an object to retrieve annotation from an rda object
+\dontrun{
+library(RnaSeqTutorial)
+annotParam <- AnnotParam(datasource=system.file(
+  package="RnaSeqTutorial",
+  "data","gAnnot.rda"
+),type="rda")
+}
 }
 \seealso{
 \itemize{ \item \code{\linkS4class{GRangesList}} \item
