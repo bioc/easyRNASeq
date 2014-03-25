@@ -1,3 +1,8 @@
+CHANGES IN VERSION 1.9.7
+-------------------------
+
+  o Same as release 1.8.7 change.
+
 CHANGES IN VERSION 1.9.6
 -------------------------
 
@@ -37,6 +42,13 @@ CHANGES IN VERSION 1.9.0
 -------------------------
 
   o No changes, new development version
+
+CHANGES IN VERSION 1.8.7
+-------------------------
+
+  o Fixed a bug in the summarization when using the 
+  "genes", "geneModels" paradigm and annotation in the
+  older RangedData format.
 
 CHANGES IN VERSION 1.8.6
 -------------------------
