@@ -53,7 +53,7 @@
   ## the object defaults
   checkTrue(obj@paired)
   checkTrue(!obj@stranded)
-  checkTrue(obj@yieldSize==10^5)  
+  checkTrue(obj@yieldSize==1e6L)  
 }
 
 ### =========================

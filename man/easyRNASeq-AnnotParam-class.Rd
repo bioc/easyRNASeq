@@ -29,7 +29,7 @@ Nicolas Delhomme
 \seealso{
 \itemize{ \item \code{\linkS4class{RnaSeqParam}} \item
 \code{\link[easyRNASeq:easyRNASeq-RnaSeqParam]{RnaSeqParam
-constructor}} ##\item
+constructor}} \item
 \code{\link[easyRNASeq:easyRNASeq-RnaSeqParam-accessors]{RnaSeqParam
 accessors}} \item
 \code{\link[easyRNASeq:easyRNASeq-simpleRNASeq]{simpleRNASeq

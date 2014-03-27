@@ -1,4 +1,5 @@
 ## Not sure we need a prototype later on
+## TODO deprecate the RNAseq class and deprecate the IRanges ranges method on it
 ## TODO should we have one readAnnotation slot
 ## containing all the genomicAnnoation, geneModel, and readIslands info?
 ## and have it more dynamic?
@@ -89,11 +90,20 @@ setClass(
 ##' @docType class
 ##' @section Objects from the Class: Objects can be created by calls of the
 ##' form \code{new("BamParam", ...)} or using the BamParam constructor.
+##' @section Slots from the Class: The \code{\linkS4class{BamParam}} class has
+##' the following slots:
+##' \itemize{
+##' \item paired
+##' \item stranded
+##' \item yieldSize
+##' }
+##' all of which can be accessed using the accordingly names accessor.
 ##' @author Nicolas Delhomme
 ##' @seealso \itemize{
+##' \item \code{\link[easyRNASeq:easyRNASeq-BamParam-accessors]{BamParam accessors}}
 ##' \item \code{\linkS4class{RnaSeqParam}}
 ##' \item \code{\link[easyRNASeq:easyRNASeq-RnaSeqParam]{RnaSeqParam constructor}}
-## ##' \item \code{\link[easyRNASeq:easyRNASeq-RnaSeqParam-accessors]{RnaSeqParam accessors}}
+##' \item \code{\link[easyRNASeq:easyRNASeq-RnaSeqParam-accessors]{RnaSeqParam accessors}}
 ##' \item \code{\link[easyRNASeq:easyRNASeq-simpleRNASeq]{simpleRNASeq function}}
 ##' \item \code{\linkS4class{AnnotParam}}
 ##' \item \code{\link[easyRNASeq:easyRNASeq-AnnotParam]{AnnotParam constructor}}
@@ -112,7 +122,7 @@ setClass("BamParam",
          prototype=prototype(
            paired=TRUE,
            stranded=FALSE,
-           yieldSize=100000L
+           yieldSize=1e6L
          ))
 
 ###==========================
@@ -137,7 +147,7 @@ setClass("BamParam",
 ##' @seealso \itemize{
 ##' \item \code{\linkS4class{RnaSeqParam}}
 ##' \item \code{\link[easyRNASeq:easyRNASeq-RnaSeqParam]{RnaSeqParam constructor}}
-## ##' \item \code{\link[easyRNASeq:easyRNASeq-RnaSeqParam-accessors]{RnaSeqParam accessors}}
+##' \item \code{\link[easyRNASeq:easyRNASeq-RnaSeqParam-accessors]{RnaSeqParam accessors}}
 ##' \item \code{\link[easyRNASeq:easyRNASeq-simpleRNASeq]{simpleRNASeq function}}
 ##' \item \code{\link[easyRNASeq:easyRNASeq-AnnotParam]{AnnotParam constructor}}
 ##' }
@@ -194,7 +204,7 @@ setClass("AnnotParamObject",
 ##' @author Nicolas Delhomme
 ##' @seealso \itemize{
 ##' \item \code{\link[easyRNASeq:easyRNASeq-RnaSeqParam]{RnaSeqParam constructor}}
-## ##' \item \code{\link[easyRNASeq:easyRNASeq-RnaSeqParam-accessors]{RnaSeqParam accessors}}
+##' \item \code{\link[easyRNASeq:easyRNASeq-RnaSeqParam-accessors]{RnaSeqParam accessors}}
 ##' \item \code{\link[easyRNASeq:easyRNASeq-simpleRNASeq]{simpleRNASeq function}}
 ##' \item \code{\linkS4class{AnnotParam}}
 ##' \item \code{\link[easyRNASeq:easyRNASeq-AnnotParam]{AnnotParam constructor}}

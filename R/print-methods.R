@@ -1,16 +1,22 @@
-##' Method to print a RNAseq object
+##' Pretty print the content of classes from the easyRNASeq package.
 ##' 
-##' Print information about a \code{\linkS4class{RNAseq}} object.
+##' Print information about a \code{\linkS4class{RNAseq}}, 
+##' \code{\linkS4class{AnnotParam}}, \code{\linkS4class{BamParam}} or 
+##' \code{\linkS4class{RnaSeqParam}} object.
 ##' 
 ##' 
 ##' @name print methods
 ##' @rdname print-methods
-##' @aliases print print,RNAseq-method
+##' @aliases print print,RNAseq-method print,AnnotParam-method print,BamParam-method
+##' print,RnaSeqParam-method
 ##' @docType methods
-##' @param x An object derived from class \code{\linkS4class{RNAseq}}
+##' @param x An object from class \code{\linkS4class{RNAseq}}, 
+##' \code{\linkS4class{AnnotParam}},
+##' \code{\linkS4class{BamParam}} or \code{\linkS4class{RnaSeqParam}} 
 ##' @param verbose A logical to have a verbose or not output. Default to FALSE
+##' For object of the \code{\linkS4class{RNAseq}} class only.
 ##' @param ... Additional arguments, currently unused.
-##' @return Print information about a \code{\linkS4class{RNAseq}} object.
+##' @return Print information about the provided object.
 ##' @author Nicolas Delhomme
 ##' @keywords methods
 
@@ -130,3 +136,41 @@ setMethod(
             }            
           })
 
+setMethod(
+  f="print",
+  signature="AnnotParam",
+  definition=function(x,...){
+    .catn(class(x),
+          " object set to retrieve '",
+          type(x),
+          "' formatted annotation from:",sep="")
+    .catn("\t",datasource(x))
+  })
+
+setMethod(
+  f="print",
+  signature="BamParam",
+  definition=function(x,...){
+    .catn(class(x),
+          " object set for '",
+          ifelse(paired(x),"paired","single"),
+          "-end', '",
+          ifelse(stranded(x),"strand-specific","unstranded"),
+          "' aligned reads in BAM format.",sep="")
+    .catn("The records will be processed",yieldSize(x),"at a time.")
+  })
+
+setMethod(
+  f="print",
+  signature="RnaSeqParam",
+  definition=function(x,...){
+    .catn(class(x),
+          " object set to count reads per'",
+          countBy(x),
+          "' at a '", precision(x), "'precision.",sep="")
+    .catn("Using:")
+    .catn("\tannotation from:")
+    print(annotParam(x))
+    .catn("\tand BAM alignments with following characteristics:")
+    print(bamParam(x))
+  })

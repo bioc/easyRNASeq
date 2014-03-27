@@ -21,8 +21,8 @@
 ##' \tabular{ll}{
 ##' Package: \tab easyRNASeq\cr
 ##' Type: \tab Package\cr
-##' Version: \tab 1.9.7\cr
-##' Date: \tab 2014-03-25\cr
+##' Version: \tab 1.99.0\cr
+##' Date: \tab 2014-03-27\cr
 ##' License: \tab Artistic-2.0\cr
 ##' LazyLoad: \tab yes\cr
 ##' Depends: \tab methods, parallel, biomaRt, edgeR, DESeq, genomeIntervals, LSD, Rsamtools, ShortRead, RnaSeqTutorial\cr
@@ -53,7 +53,7 @@
 ##' 
 ##' @name easyRNASeq package
 ##' @rdname easyRNASeq-package
-##' @aliases easyRNASeq-package type yieldSize BamFileList BamFileList-class
+##' @aliases easyRNASeq-package type BamFileList BamFileList-class
 ##' @docType package
 ##' @author Nicolas Delhomme, Bastian Schiffthaler, Ismael Padioleau
 ##' @keywords package
@@ -122,7 +122,7 @@ NULL
 ##' @importClassesFrom DESeq CountDataSet
 ##' @importClassesFrom edgeR DGEList
 ##' @importClassesFrom genomeIntervals Genome_intervals
-##' @importClassesFrom GenomicAlignments GAlignments
+##' @importClassesFrom GenomicAlignments GAlignments GAlignmentPairs
 ##' @importClassesFrom GenomicRanges GRanges GRangesList SummarizedExperiment
 ##' @importClassesFrom IRanges RangedData RleList Vector
 ##' @importClassesFrom methods ANY character "function" integer
@@ -159,7 +159,7 @@ NULL
 ##' @importFrom edgeR calcNormFactors DGEList estimateCommonDisp
 ##' estimateTagwiseDisp maPlot plotMDS.DGEList plotMeanVar plotBCV
 ##' @importFrom genomeIntervals getGffAttribute parseGffAttributes readGff3
-##' @importFrom GenomicAlignments GAlignments readGAlignments
+##' @importFrom GenomicAlignments GAlignments readGAlignments readGAlignmentPairs
 ##' @importFrom GenomicRanges GRanges GRangesList
 ##' @importFrom graphics abline axis axTicks boxplot grid hist legend lines
 ##' mtext par plot rect

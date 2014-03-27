@@ -1,3 +1,14 @@
+CHANGES IN VERSION 1.99.0
+-------------------------
+
+  o Ported the final changes from the Git
+  repository that make the simpleRNASeq function
+  functional. 
+
+  o Bumped the version number to 1.99 as these are
+  major changes and hence next Bioc release will 
+  have easyRNASeq 2.0.0.
+
 CHANGES IN VERSION 1.9.7
 -------------------------
 

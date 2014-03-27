@@ -174,8 +174,10 @@
   return(out)
 }
 
-## stream the bam reading
-".streamCount" <- function(bamFile,features,param,verbose=TRUE){
+### ===================================
+## stream the bam reading for counting
+### ===================================
+".streamCount" <- function(bamFile,features,df,param,verbose=TRUE){
   
   ## libs
   require(easyRNASeq)
@@ -188,69 +190,123 @@
     yieldSize(bamFile) <- yieldSize(param)
   }
   
+  ## get the param
+  stranded <- df[basename(bamFile),"Stranded"]
+  paired <- df[basename(bamFile),"Paired"]
+  
+  ## set the mode
+  mode <- ifelse(stranded,
+                 "IntersectionNotEmpty",
+                 "Union")
+  
+  ### ===================================
   ## open it
   open(bamFile)
-  
-  ## verb
   if(verbose){
     message(paste("Streaming",basename(path(bamFile))))
+    ## paired
+    message(paste("The data is",
+                  ifelse(paired,
+                         "paired-end; only valid mates will be kept.",
+                         "single-end")))
+    ## stranded
+    message(paste("The data is",
+                  ifelse(stranded,
+                         "stranded; only correct strand alignments will be considered.",
+                         "unstranded; overlapping features will be ignored.")))
+    
+    ## precision and mode
+    message(paste("The summarization is by '",
+                  precision(param),
+                  "' and the mode is: ",
+                  mode,".",sep=""))
   }
   
+  ### ===================================
   ## create the output
-  out <- GAlignments()
+  ## we want a vector of known length
+  counts <- vector(mode="integer",length=length(features))
   
-  ## process it
-  while(length(chunk <- readGAlignments(bamFile,param=ScanBamParam(tag="NH")))){
-    if(verbose){
-      message(paste("Processed",length(chunk),"reads"))
-    }
-    ## TODO we need to remove Multiple hits
-    ## check for NH, H0, H1, H2, HI, 
+  ### ===================================
+  ## an internal function
+  ### ===================================
+  ".local" <- function(chunk,param,stranded,mode){
     
     ## switch based on precision
-    out <- switch(precision(param),
-             "read"={
-               
-               ## extracted from EMBO2013Day2 Interlude.Rnw
-#                counts <- vector(mode="integer",length=length(annot))
-#                while(length(chunk <- readGAlignmentsFromBam(bamFile))){
-#                  counts <- counts + assays(summarizeOverlaps(annot,chunk,mode="Union"))$counts
-#                }
-#                close(bamFile)
-#                
-               ## get the counts (à la BioC)
-               ## easyRNASeq::: is necessary for the parallel call
-               ## TODO set the mode and ignore.strand
-               assay(summarizeOverlaps(features=features,reads=chunk))},
-             "bp"={
-               
-               ## directly get the coverage?  
-               
-               ## stream the bam file
-               
-               ## if paired get the fragments
-               ## TODO is the name match necessary ?? or does the function do it
-               ## TODO valid.names, obj, rL and bp.coverage are not defined, this need to be edited
-               #                        r.sel = match(valid.names,names(reads))
-               #                        s.sel = match(valid.names,names(chrSize(obj)))
-               #                        switch(paste(as.integer(c(length(rL)==1,bp.coverage)),collapse=""),
-               #                               "00" = coverage(reads[r.sel],
-               #                                               width=as.list(chrSize(obj)[s.sel]),
-               #                                               weight=1/width(reads)[r.sel]),
-               #                               "10" = coverage(reads[sel],
-               #                                               width=as.list(chrSize(obj)[s.sel]))/readLength(obj),
-               #                                 {coverage(reads[sel],
-               #                                           width=as.list(chrSize(obj)[s.sel]))})
-             })
-    out <- unsafeAppend(out,chunk)
-
+    switch(
+      precision(param),
+      "read"={
+        assays(summarizeOverlaps(features,
+                                 chunk,
+                                 ignore.strand=!stranded,
+                                 inter.feature=TRUE,
+                                 mode=mode))$counts
+      },
+      "bp"={
+          stop("This method has not been implemented yet.")
+          ## Remove Multiple hits
+          ## TODO is that needed since interfeature is TRUE
+          if(all(is.na(mcols(chunk)$NH))){
+            warning(paste("The BAM file:",
+                          basename(bamFile),
+                          "has no NH (number of hit) tag.",
+                          "Multimapping cannot be assessed and reads are considered",
+                          "uniquely mapping."))
+          } else {    
+            sel <- mcols(chunk)$NH == 1
+            message(paste(round(sum(sel)/length(sel)*100,digits=2),
+                          "percent of which are uniquely mapping."))
+            message("Multimapping reads are discarded.")
+            chunk <- chunk[sel]
+          }
+          
+          
+          
+          ## directly get the coverage?  
+          
+          ## stream the bam file
+          
+          ## if paired get the fragments
+          ## TODO is the name match necessary ?? or does the function do it
+          ## TODO valid.names, obj, rL and bp.coverage are not defined, this need to be edited
+          #                        r.sel = match(valid.names,names(reads))
+          #                        s.sel = match(valid.names,names(chrSize(obj)))
+          #                        switch(paste(as.integer(c(length(rL)==1,bp.coverage)),collapse=""),
+          #                               "00" = coverage(reads[r.sel],
+          #                                               width=as.list(chrSize(obj)[s.sel]),
+          #                                               weight=1/width(reads)[r.sel]),
+          #                               "10" = coverage(reads[sel],
+          #                                               width=as.list(chrSize(obj)[s.sel]))/readLength(obj),
+          #                                 {coverage(reads[sel],
+          #                                           width=as.list(chrSize(obj)[s.sel]))})
+        })
+  }
+  
+  ## process it
+  if(paired){
+    while(length(chunk <- readGAlignmentPairs(bamFile,param=ScanBamParam(tag="NH")))){
+      if(verbose){
+        message(paste("Processing",length(chunk),"reads"))
+      }
+      counts <- counts + .local(chunk,param,stranded,mode)
+    }
+  } else {
+    while(length(chunk <- readGAlignments(bamFile,param=ScanBamParam(tag="NH")))){
+      if(verbose){
+        message(paste("Processing",length(chunk),"reads"))
+      }
+      counts <- counts + .local(chunk,param,stranded,mode)
+    }
   }
   
   ## close
+  if(verbose){
+    message(paste("Done with",basename(path(bamFile))))
+  }
   close(bamFile)
   
   ## return
-  return(out)
+  return(counts)
 }
 
 ## stream the aligned reads count
@@ -297,7 +353,12 @@
 }
 
 ## stream the parameter extraction
-".streamForParam" <- function(bamFile,yieldSize=10^6,verbose=TRUE){
+## uses the yield defined by bamFile
+## or 1e6 by default
+".streamForParam" <- function(bamFile,
+                              yieldSize=10^6,
+                              verbose=TRUE,
+                              strandedness.cutoff=0.9){
 
   ## libs
   require(easyRNASeq)
@@ -327,8 +388,11 @@
   rng <- range(params$qwidth)
 
   ## get the genomic ranges separated by strand and extract a tab of occurence
-  grng <- reduce(GRanges(IRanges(start=params$pos,width=params$qwidth),seqnames=params$rname,strand=params$strand))
-  tab <- table(countOverlaps(grng[strand(grng)=="+"],grng[strand(grng)=="-"],ignore.strand=TRUE))
+  grng <- reduce(GRanges(IRanges(start=params$pos,width=params$qwidth),
+                         seqnames=params$rname,strand=params$strand))
+  tab <- table(countOverlaps(grng[strand(grng)=="+"],grng[strand(grng)=="-"],
+                             ignore.strand=TRUE)==0)
+  prop <- tab/sum(tab)
   
   ## Create a DataFrame containing:
   outDF <- DataFrame(
@@ -340,13 +404,22 @@
                        paste(rng,"bp",sep="",collapse="-")),
                      ## c. strandedness
                      Stranded=ifelse(
-                       tab["1"] / sum(tab["1"],tab["0"],na.rm=TRUE) > 0.9,
-                       FALSE,
-                       ifelse(tab["0"] / sum(tab["1"],tab["0"],na.rm=TRUE) > 0.9,
-                              TRUE,NA)),
+                       prop["TRUE"] >= strandedness.cutoff,
+                       TRUE,
+                       ifelse(prop["FALSE"] >= strandedness.cutoff,
+                              FALSE,NA)),
                      ## a Note
-                     Note=paste("Determined using",sum(tab),"regions spanning",sum(width(grng)),"bp on either strand, from a subset of",
-                       sum(tab["0"],tab["1"],na.rm=TRUE),"regions, at a 90% confidence threshold.")
+                     Note=ifelse(any(prop <= 1 - strandedness.cutoff),
+                                 paste("Determined using",sum(tab),
+                                       "regions spanning",
+                                       sum(width(grng)),
+                                       "bp on either strand, at a 90% cutoff."),
+                                 paste("Strandedness could not be determined using",
+                                       sum(tab),"regions spanning",
+                                       sum(width(grng)),
+                                       "bp on either strand at a 90% cutoff;",
+                                       round(prop["TRUE"]*100,digits=2),
+                                       "percent appear to be stranded."))
                      )
   
   ## close
@@ -523,7 +596,6 @@ setReplaceMethod(
 
 ## pretty printing
 ".catn" <- function(...){
-    .Deprecated("message")
     cat(...,"\n")
 }
 

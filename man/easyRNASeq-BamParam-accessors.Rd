@@ -6,14 +6,21 @@
 \alias{paired,BamParam-method}
 \alias{stranded}
 \alias{stranded,BamParam-method}
+\alias{yieldSize}
 \alias{yieldSize,BamParam-method}
 \title{Accessors for BamParam class}
 \usage{
-\S4method{yieldSize}{BamParam}(object)
+yieldSize(object,...)
+paired(object)
+stranded(object)
 }
 \arguments{
   \item{object}{An object derived from class
   \code{BamParam}.}
+
+  \item{...}{Additional parameter inherited from the
+  \code{\link[Rsamtools:RsamtoolsFile-class]{Rsamtools
+  package yieldSize function}}. Ignored here.}
 }
 \value{
 The value of the corresponding slot.

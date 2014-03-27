@@ -423,7 +423,7 @@ setGeneric(name="BamParam",
            def=function(
                         paired=TRUE,
                         stranded=FALSE,
-                        yieldSize=100000L){
+                        yieldSize=1e6L){
              standardGeneric("BamParam")
            })
 
@@ -471,6 +471,7 @@ setGeneric(name="simpleRNASeq",
           bamFiles=BamFileList(),
           param=RnaSeqParam(),
           nnodes=1,
-          verbose=FALSE){
+          verbose=TRUE,
+          override=FALSE){
             standardGeneric("simpleRNASeq")
            })

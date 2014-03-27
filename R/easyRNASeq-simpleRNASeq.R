@@ -6,7 +6,8 @@
 ##' containers meant to hold any Next-Generation Sequencing experiment results and
 ##' metadata. The simpleRNASeq method replaces the 
 ##' \code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq}} function to 
-##' simplify the usability. It does the following: \itemize{
+##' simplify the usability. It does the following:
+##' \itemize{
 ##' \item use \code{\link[GenomicRanges:GRanges-class]{GenomicRanges}} 
 ##' for loading/pre-processing the data.
 ##' \item fetch \code{\link[easyRNASeq:fetchAnnotation]{annotations}}
@@ -18,121 +19,283 @@
 ##' \item returns a \code{\linkS4class{SummarizedExperiment}} object.
 ##' }
 ##' 
-##' @aliases simpleRNASeq simpleRNASeq,BamFileList-method
+##' @aliases simpleRNASeq simpleRNASeq,BamFileList,RnaSeqParam-method
 ##' @rdname easyRNASeq-simpleRNASeq
 ##' @param bamFiles a \code{\linkS4class{BamFileList}} object
 ##' @param nnodes The number of CPU cores to use in parallel
+##' @param override Should the provided parameters override the detected ones
 ##' @param param RnaSeqParam a \code{\linkS4class{RnaSeqParam}} object
 ##' that describes the RNA-Seq experimental setup.
 ##' @param verbose a logical to be report progress or not.
 ##' @return returns a \code{\linkS4class{SummarizedExperiment}} object.
 ##' @author Nicolas Delhomme
-##' @seealso \code{\linkS4class{SummarizedExperiment}}
-##' \code{\linkS4class{RnaSeqParam}}
+##' @seealso 
+##' \itemize{
+##' \item{For the input:
+##' \itemize{
+##' \item \code{\linkS4class{AnnotParam}}
+##' \item \code{\linkS4class{BamParam}}
+##' \item \code{\linkS4class{RnaSeqParam}}
+##' }}
+##' \item{For the output:
+##' \code{\linkS4class{SummarizedExperiment}}
+##' }
+##' \item{For related functions:
+##' \itemize{
+##' \item \code{\linkS4class{BamFile}}
+##' \item \code{\linkS4class{BamFileList}}
 ##' \code{\link[easyRNASeq:easyRNASeq-BamFileList]{getBamFileList}}
+##' }
+##' }}
 ##' @keywords methods
 ##' @examples
 ##' 
 ##'   \dontrun{
-##'   
-##'   ## get the bam files' filename
-##'   filenames <- dir(system.file(
-##'                       package="RnaSeqTutorial",
-##'                       "extdata"),
-##'                   pattern="^[A,T].*.bam$",
-##'                   full.names=TRUE)
-##'   
-##'   ## get a bam file list from it
-##'   bamFiles <- getBamFileList(filenames)
-##'   
-##'   ## create the RnaSeqParam object
-##'   rsp <- RnaSeqParam(annotParam=AnnotParam(
-##'                 datasource=system.file(
-##'                                 "extdata",
-##'                                 "Dmel-mRNA-exon-r5.52.gff3",
-##'                                 package="RnaSeqTutorial")))
+##'   ## the data
+##'   library("RnaSeqTutorial")
 ##' 
-##'   ## call the function
-##'   simpleRNASeq(bamFiles,rsp)
-##' }
+##'   ## get the BamFileList
+##'   bamFiles <- getBamFileList(
+##'             dir(path=system.file("extdata",
+##'                 package="RnaSeqTutorial"),
+##'                 pattern="^[A,T].*\\.bam$",
+##'                 full.names=TRUE))
 ##'
+##'   ## create the AnnotParam
+##'   annotParam <- AnnotParam(system.file(
+##'                    "extdata",
+##'                    "Dmel-mRNA-exon-r5.52.gff3",
+##'                    package="RnaSeqTutorial"))
+##'
+##'   ## create the RnaSeqParam
+##'   rnaSeqParam <- RnaSeqParam(annotParam=annotParam)
+##'
+##'   ## get a SummarizedExperiment containing the counts table
+##'   sexp <- simpleRNASeq(
+##'     bamFiles=bamFiles,
+##'     param=rnaSeqParam,
+##'     verbose=TRUE
+##'   )
+##'  }
+##' 
+## TODO integrate that in the right position in the file
+## \item{groupBy}{One of genes or chromosomes. The default is "genes". It is the
+## prefered way to provide annotation and will results in the use of the Bioconductor
+## \code{\link[GenomicRanges:summarizeOverlaps]{summarizeOverlaps}} function. Using the
+## "chromosomes" value results in the use of specific 
+## \code{\link[easyRNASeq:easyRNASeq-count-methods]{easyRNASeq count functionalities}}.}
+## TODO implement a way to select the chromosomes
 setMethod(f="simpleRNASeq",
-          signature="BamFileList",
+          signature=c("BamFileList","RnaSeqParam"),
           definition=function(
-          bamFiles=BamFileList(),
-          param=RnaSeqParam(),
-          nnodes=1,
-          verbose=FALSE){
-  
-  ## create the output object
-  sexp <- SummarizedExperiment(
-    colData=DataFrame(
-      FilePath=path(bamFiles),
-      FileName=basename(names(bamFiles)),      
-      row.names=basename(names(bamFiles))))
-    
-  ## validate the bams
-  ## 1. the sequence info
-  seqinfos <- lapply(bamFiles,seqinfo)
-  if(length(seqinfos[[1]])==0){
-    stop("It would seem some of your BAM files have no sequence information in their headers. Check these.")
-  }
-  exptData <- SimpleList(SeqInfo=seqinfos[[1]])
-  if(!all(sapply(seqinfos,identical,exptData$SeqInfo))){
-    stop("Your BAM files do not all have the same sequence informations. Check their headers.")
-  }  
-  exptData(sexp) <- exptData
-  
-  ## 2. paired or not and variable length or not  
-  open(bamFiles)
-  extracts <- lapply(lapply(bamFiles,scanBam,
-                     param=ScanBamParam(what=c("qwidth","flag"),
-                                        flag=scanBamFlag(isUnmappedQuery=FALSE))),
-                     "[[",1)
-  
-  ## a. paired 
-  colData(sexp)$Paired <- sapply(lapply(lapply(extracts,"[[","flag"),bamFlagTest,"isPaired"),any)
-  
-  ## b. width
-  colData(sexp)$ReadLength <- sapply(lapply(lapply(extracts,"[[","qwidth"),range),
-                                     function(rng){
-                                       if(rng[1]==rng[2]){
-                                         paste(rng[1],"bp",sep="")
-                                         }else{
-                                           paste(rng,"bp",sep="",collapse="-")
-                                           }})
-  close(bamFiles)
-  
-  ## 3. not a validation but add the read counts
-  open(bamFiles)  
-  colData(sexp)$TotalReads <- unlist(sapply(bamFiles,countBam)["records",])
-  close(bamFiles)
-  
-  ## TODO determine strandedness from a number of non overlapping genes and check read orientation
-  ## anything deviating from .5 would be assumed to be stranded
-  
-  ## TODO add the libSize
-  ## LibSize=librarySize(obj),
-  
-  ## parallelize
-  res <- parallelize(bamFiles,function(bamFile){
+            bamFiles=BamFileList(),
+            param=RnaSeqParam(),
+            nnodes=1,
+            verbose=TRUE,
+            override=FALSE){
+            
+            if(verbose){
+              message("==========================")
+              message("simpleRNASeq version ",package.version("easyRNASeq"))
+              message("==========================")
+              message("Creating a SummarizedExperiment.")
+              message("==========================")
+              message("Processing the alignments.")
+              message("==========================")
+              message("Pre-processing ",length(bamFiles)," BAM files.")
+            }
+            
+            ### =======================
+            ## validate the BAMFileList
+            ### =======================
+            if(verbose){
+              message("Validating the BAM files.")
+            }            
+            validate(bamFiles)
+            
+            ### =======================
+            ## create the output object
+            ### =======================
+            sexp <- SummarizedExperiment(
+              colData=DataFrame(
+                FilePath=path(bamFiles),
+                FileName=basename(names(bamFiles)),      
+                row.names=basename(names(bamFiles))))
+            
+            ### =======================
+            ## process the bams
+            ### =======================
+            ## 1. the sequence info
+            seqinfos <- lapply(bamFiles,seqinfo)
+            if(length(seqinfos[[1]])==0){
+              stop("It would seem some of your BAM files have no sequence information in their headers. Check these.")
+            }
+            exptData <- SimpleList(SeqInfo=seqinfos[[1]])
+            if(!all(sapply(seqinfos,identical,exptData$SeqInfo))){
+              stop("Your BAM files do not all have the same sequence informations. Check their headers.")
+            }  
+            exptData(sexp) <- exptData
+            
+            if(verbose){
+              message("Extracted ",length(exptData$SeqInfo)," reference sequences information.")
+            }
+            
+            ## 2. paired or not and variable length or not
+            ## TODO edit the yieldSize
+            colData(sexp) <- cbind(colData(sexp),
+                                   do.call(rbind,
+                                           parallelize(bamFiles,.streamForParam,
+                                                       nnodes,
+                                                       yieldSize=10^6,
+                                                       verbose=verbose)))
+            ## a. paired 
+            if(verbose){
+              message("Found ",sum(!colData(sexp)$Paired)," single-end BAM files.")
+              message("Found ",sum(colData(sexp)$Paired)," paired-end BAM files.")
+            }
+            
+            ## TODO can we handle both paired and single - end data at the same time?
+            
+            ## b. width
+            if(verbose){
+              sapply(1:length(bamFiles),function(i,rL){
+                message("Bam file: ",rownames(rL)[i]," has reads of length ", rL[i,])
+              },colData(sexp)[,"ReadLength",drop=FALSE])
+            }
+            
+            ## c. strandedness
+            colData(sexp)[,"Stranded"] <- sapply(1:nrow(colData(sexp)),
+                                                 function(i,df){
+              if(is.na(df[i,"Stranded"])){
+                warning(paste("Bam file:",rownames(df)[i],
+                              "is considered unstranded."))
+                warning(paste("Bam file:",rownames(df)[i],df[i,"Note"]))
+                FALSE
+              } else {
+                if(verbose){
+                  message("Bam file: ",rownames(df)[i],
+                          " is ", ifelse(df[i,"Stranded"],
+                                         "stranded","unstranded"),".")
+                  message(df[i,"Note"])
+                }
+                df[i,"Stranded"]
+              }
+            },colData(sexp)[,c("Stranded","Note")])
+            
+            ## reset the note
+            colData(sexp)$Note <- NULL
+            
+            ## TODO WE need to access the presence of multiple mapping reads
+            
+            
+            ## d. compare with BamParam if provided.
+            ## 1. paired
+            if(length(unique(colData(sexp)$Paired))!=1){
+              warning(paste("You have mixed SE and PE data. Every sample will be",
+                            "treated according to the identified characteristic,",
+                            "i.e. the provided parameter will be ignored when necessary."))
+            } else {
+              if(colData(sexp)$Paired[1] != paired(param)){
+                warning(paste("You provided an incorrect BAM parameter; ",
+                              "'paired' should be set to '",
+                              colData(sexp)$Paired[1],
+                              "'.",sep=""))
+              }
+            }
+            
+            ## 2. stranded
+            if(length(unique(colData(sexp)$Stranded))!=1){
+              warning(paste("You have mixed stranded and unstradned data. Every sample will be",
+                            "treated according to the identified characteristic,",
+                            "i.e. the provided parameter will be ignored when necessary."))
+            } else {
+              if(colData(sexp)$Stranded[1] != stranded(param)){
+                warning(paste("You provided an incorrect BAM parameter; ",
+                              "'stranded' should be set to '",
+                              colData(sexp)$Paired[1],
+                              "'.",sep=""))
+              }
+            }
+            
+            ## use the identified parameters or override
+            df <- switch(as.character(override),
+                         "FALSE" = colData(sexp)[,c("Paired","Stranded")],
+                         "TRUE" = DataFrame(
+                           Paired=rep(paired(param),length(bamFiles)),
+                           Stranded=rep(stranded(param),length(bamFiles)),
+                           row.names=basename(bamFiles)))
+            if(override){
+              warning(paste("You have chosen to override the detected parameters.",
+                            "Hope you know what you are doing.",
+                            "Contact me if you think the parameter detection failed."))
+            }
 
-  ## open the bamFile
-  open(bamFile)
-    
-  ## directly get the coverage?  
-    
-  ## stream the bam file
-  .stream(bamFile,yieldSize(param),verbose)
-  
-  ## if paired get the fragments
-  
-  ## get the coverage
-  
-  
-  },nnodes)
-})
-
-
-
-
+            ## 3. not a validation but add the read counts
+            colData(sexp)$TotalReads <- parallelize(bamFiles,
+                                                    .streamForTotalCount,
+                                                    nnodes)
+            
+            if(verbose){
+              sapply(1:length(bamFiles),function(i,tR){
+                message("Bam file: ",names(tR)[i]," has ",tR[i]," reads.")
+              },colData(sexp)$TotalReads)
+            }  
+            
+            ### =======================
+            ## validate the annotation
+            ## and get the annotation
+            ### =======================
+            if(verbose){
+              message("==========================")
+              message("Processing the annotation")
+              message("==========================")
+            }
+            
+            ## split into a GRangesList based on transcripts or chromosomes
+            grngs <- getAnnotation(annotParam(param),verbose=verbose)
+            
+            ## TODO we need to adapt the rda, etc description and the AnnotParam
+            ## to accept a GRanges and not a GRangesList
+            rowData(sexp) <- switch(precision(param),
+                                    "read"={split(grngs,mcols(grngs)[,sub("s$","",countBy(param))])},
+                                    "bp"={split(grngs,grngs$seqnames)})
+            
+            if(verbose){
+              message("==========================")
+              message("Sanity checking")
+              message("==========================")
+            }
+            
+            ## TODO implement sanity check of chromosome vs chromosome
+            ## TODO implement sanity check of annotations
+            
+            ### =======================
+            ## parallelize
+            ### =======================
+            if(verbose){
+              message("==========================")
+              message("Creating the count table")
+              message("==========================")
+              message("Using ",nnodes, ifelse(nnodes==1," CPU core",
+                                              " CPU cores in parallel"))
+            }
+            
+            ## TODO, do as for the HistoneChIPseq package
+            ## to store the data correctly
+            assays(sexp) <- SimpleList(do.call(cbind,
+                                               parallelize(bamFiles,
+                                                           .streamCount,
+                                                           nnodes,
+                                                           rowData(sexp),
+                                                           df,
+                                                           param,verbose)))
+            
+            ## done
+            if(verbose){  
+              message("==========================")
+              message("Returning a")
+              message("      SummarizedExperiment")
+              message("==========================")
+            }
+            return(sexp)
+          })

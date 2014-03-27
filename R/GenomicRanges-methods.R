@@ -80,6 +80,8 @@
 ##' unsafeAppend(GAlignments(),GAlignments())
 ##'
 
+## TODO do we still need that unsafeAppend method?
+
 ## to extend GenomicRanges
 ##' @exportMethod colnames
 setMethod(

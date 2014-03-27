@@ -6,7 +6,7 @@
 ##' \itemize{
 ##' \item paired is TRUE, \emph{i.e.} paired-end sequencing is expected.
 ##' \item stranded is FALSE \emph{i.e.} stranded sequencing is not expected.
-##' \item yieldSize is set to 100,000. This is the amount of reads iteratively 
+##' \item yieldSize is set to 1,000,000. This is the amount of reads iteratively 
 ##' processed from the bam file stream. It is a compromise between speed, 
 ##' process-parallelization and memory usage.
 ##' }
@@ -37,7 +37,7 @@ setMethod(f="BamParam",
           definition=function(
                               paired=TRUE,
                               stranded=FALSE,
-                              yieldSize=100000L){
+                              yieldSize=1e6L){
             new("BamParam",
                 paired=paired,
                 stranded=stranded,

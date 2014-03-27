@@ -3,11 +3,18 @@
 ##' These functions and generics define `accessors` (to get and set values) for
 ##' \code{\linkS4class{BamParam}} objects within the \pkg{easyRNASeq} package.
 ##' 
-##' @aliases BamParam-accessors yieldSize,BamParam-method
+##' @aliases BamParam-accessors yieldSize yieldSize,BamParam-method
 ##' paired stranded paired,BamParam-method stranded,BamParam-method
 ##' @name easyRNASeq BamParam accessors
 ##' @rdname easyRNASeq-BamParam-accessors
 ##' @param object An object derived from class \code{BamParam}.
+##' @param ... Additional parameter inherited from the 
+##' \code{\link[Rsamtools:RsamtoolsFile-class]{Rsamtools package yieldSize function}}.
+##' Ignored here.
+##' @usage
+##' yieldSize(object,...)
+##' paired(object)
+##' stranded(object)
 ##' @return
 ##' The value of the corresponding slot.
 ##' @author Nicolas Delhomme
@@ -23,7 +30,7 @@
 
 setMethod(f="yieldSize",
           signature="BamParam",
-          definition=function(object){
+          definition=function(object,...){
             return(object@yieldSize)
           })
 

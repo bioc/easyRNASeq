@@ -1,17 +1,20 @@
 \docType{methods}
-\name{simpleRNASeq,BamFileList-method}
+\name{simpleRNASeq,BamFileList,RnaSeqParam-method}
 \alias{simpleRNASeq}
-\alias{simpleRNASeq,BamFileList-method}
+\alias{simpleRNASeq,BamFileList,RnaSeqParam-method}
 \title{simpleRNASeq method}
 \usage{
-\S4method{simpleRNASeq}{BamFileList}(bamFiles = BamFileList(),
-  param = RnaSeqParam(), nnodes = 1, verbose = FALSE)
+\S4method{simpleRNASeq}{BamFileList,RnaSeqParam}(bamFiles = BamFileList(),
+  param = RnaSeqParam(), nnodes = 1, verbose = TRUE, override = FALSE)
 }
 \arguments{
   \item{bamFiles}{a \code{\linkS4class{BamFileList}}
   object}
 
   \item{nnodes}{The number of CPU cores to use in parallel}
+
+  \item{override}{Should the provided parameters override
+  the detected ones}
 
   \item{param}{RnaSeqParam a
   \code{\linkS4class{RnaSeqParam}} object that describes
@@ -46,35 +49,47 @@ object. }
 }
 \examples{
 \dontrun{
+  ## the data
+  library("RnaSeqTutorial")
 
-  ## get the bam files' filename
-  filenames <- dir(system.file(
-                      package="RnaSeqTutorial",
-                      "extdata"),
-                  pattern="^[A,T].*.bam$",
-                  full.names=TRUE)
+  ## get the BamFileList
+  bamFiles <- getBamFileList(
+            dir(path=system.file("extdata",
+                package="RnaSeqTutorial"),
+                pattern="^[A,T].*\\\\.bam$",
+                full.names=TRUE))
 
-  ## get a bam file list from it
-  bamFiles <- getBamFileList(filenames)
+  ## create the AnnotParam
+  annotParam <- AnnotParam(system.file(
+                   "extdata",
+                   "Dmel-mRNA-exon-r5.52.gff3",
+                   package="RnaSeqTutorial"))
 
-  ## create the RnaSeqParam object
-  rsp <- RnaSeqParam(annotParam=AnnotParam(
-                datasource=system.file(
-                                "extdata",
-                                "Dmel-mRNA-exon-r5.52.gff3",
-                                package="RnaSeqTutorial")))
+  ## create the RnaSeqParam
+  rnaSeqParam <- RnaSeqParam(annotParam=annotParam)
 
-  ## call the function
-  simpleRNASeq(bamFiles,rsp)
-}
+  ## get a SummarizedExperiment containing the counts table
+  sexp <- simpleRNASeq(
+    bamFiles=bamFiles,
+    param=rnaSeqParam,
+    verbose=TRUE
+  )
+ }
 }
 \author{
 Nicolas Delhomme
 }
 \seealso{
-\code{\linkS4class{SummarizedExperiment}}
-\code{\linkS4class{RnaSeqParam}}
+\itemize{ \item{For the input: \itemize{ \item
+\code{\linkS4class{AnnotParam}} \item
+\code{\linkS4class{BamParam}} \item
+\code{\linkS4class{RnaSeqParam}} }} \item{For the output:
+\code{\linkS4class{SummarizedExperiment}} } \item{For
+related functions: \itemize{ \item
+\code{\linkS4class{BamFile}} \item
+\code{\linkS4class{BamFileList}}
 \code{\link[easyRNASeq:easyRNASeq-BamFileList]{getBamFileList}}
+} }}
 }
 \keyword{methods}
 

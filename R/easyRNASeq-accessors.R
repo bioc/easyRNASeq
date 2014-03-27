@@ -127,6 +127,8 @@ setMethod(
           f="organismName",
           signature="RNAseq",
           definition=function(obj){
+              .Deprecated("datasource,AnnotParam-method",
+                        msg="Getting the organism name is deprecated. Use an AnnotParam object instead and get its datasource.")
             obj@organismName
           })
 
@@ -220,6 +222,8 @@ setReplaceMethod(
                  f="organismName",
                  signature="RNAseq",
                  definition=function(obj,value){
+                     .Deprecated("datasource,AnnotParam-method",
+                                 msg="Setting the organism name is deprecated. Use an AnnotParam object instead and set its datasource.")
                    initialize(obj,organismName=value)
                  })
 

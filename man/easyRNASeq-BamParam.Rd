@@ -6,7 +6,7 @@
 \title{BamParam constructor}
 \usage{
 \S4method{BamParam}{ANY}(paired = TRUE, stranded = FALSE,
-  yieldSize = 100000L)
+  yieldSize = 1000000L)
 }
 \arguments{
   \item{paired}{TODO}
@@ -22,7 +22,7 @@ common RNA-Seq experimental use-case and are detailed
 below: \itemize{ \item paired is TRUE, \emph{i.e.}
 paired-end sequencing is expected. \item stranded is FALSE
 \emph{i.e.} stranded sequencing is not expected. \item
-yieldSize is set to 100,000. This is the amount of reads
+yieldSize is set to 1,000,000. This is the amount of reads
 iteratively processed from the bam file stream. It is a
 compromise between speed, process-parallelization and
 memory usage. }

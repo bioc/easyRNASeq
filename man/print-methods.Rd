@@ -2,27 +2,35 @@
 \name{print methods}
 \alias{print}
 \alias{print methods}
+\alias{print,AnnotParam-method}
+\alias{print,BamParam-method}
 \alias{print,RNAseq-method}
-\title{Method to print a RNAseq object}
+\alias{print,RnaSeqParam-method}
+\title{Pretty print the content of classes from the easyRNASeq package.}
 \usage{
 \S4method{print}{RNAseq}(x, verbose = FALSE, ...)
 }
 \arguments{
-  \item{x}{An object derived from class
-  \code{\linkS4class{RNAseq}}}
+  \item{x}{An object from class
+  \code{\linkS4class{RNAseq}},
+  \code{\linkS4class{AnnotParam}},
+  \code{\linkS4class{BamParam}} or
+  \code{\linkS4class{RnaSeqParam}}}
 
   \item{verbose}{A logical to have a verbose or not output.
-  Default to FALSE}
+  Default to FALSE For object of the
+  \code{\linkS4class{RNAseq}} class only.}
 
   \item{...}{Additional arguments, currently unused.}
 }
 \value{
-Print information about a \code{\linkS4class{RNAseq}}
-object.
+Print information about the provided object.
 }
 \description{
-Print information about a \code{\linkS4class{RNAseq}}
-object.
+Print information about a \code{\linkS4class{RNAseq}},
+\code{\linkS4class{AnnotParam}},
+\code{\linkS4class{BamParam}} or
+\code{\linkS4class{RnaSeqParam}} object.
 }
 \author{
 Nicolas Delhomme

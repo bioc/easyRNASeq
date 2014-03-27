@@ -35,7 +35,6 @@ Describes extensions to the Rsamtools package. \itemize{
 BAI index is present.
 }
 \examples{
-library(Rsamtools)
 filenames <- dir(path=system.file("extdata",
       		                  package="RnaSeqTutorial"),
 					       pattern="[A,C,T,G]{6}\\\\.bam$",

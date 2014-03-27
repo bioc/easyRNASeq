@@ -1,8 +1,11 @@
 \docType{methods}
 \name{show methods}
 \alias{show methods}
+\alias{show,AnnotParam-method}
+\alias{show,BamParam-method}
 \alias{show,RNAseq-method}
-\title{Display the content of a RNAseq object}
+\alias{show,RnaSeqParam-method}
+\title{Display the content of classes from the easyRNASeq package.}
 \usage{
 \S4method{show}{RNAseq}(object)
 }
@@ -10,13 +13,17 @@
   \item{object}{Any R object}
 }
 \description{
-Display the content of a \code{\linkS4class{RNAseq}}
-object.
+Display the content of a \code{\linkS4class{RNAseq}},
+\code{\linkS4class{AnnotParam}},
+\code{\linkS4class{BamParam}} or
+\code{\linkS4class{RnaSeqParam}} object.
 }
 \section{Methods}{
   \describe{ \item{list("signature(object = \"RNAseq\")")}{
   Display the values of the different slots of the
-  \code{\linkS4class{RNAseq}} object.  } }
+  \code{\linkS4class{RNAseq}} object.  }
+  \item{Annot/Bam/RnaSeqParam}{The respective object
+  settings.}}
 }
 \keyword{methods}
 
