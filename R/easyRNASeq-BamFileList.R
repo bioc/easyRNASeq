@@ -55,13 +55,13 @@ setMethod(f="getBamFileList",
                    " do(es) not exist.")
             }            
             
-            ## check that the bai are not part of the filesList
+            ## check that the bai are not part of the filenames
             if(length(grep("\\.bam\\.bai$",filenames))>0){
                 warning(paste("You either have provided BAM index files (.bai) as",
                               "part of the filenames argument or your pattern matched",
                               "BAM index files! Removing these from the files",
                               "list to process."))
-                filesList <- filesList[-grep("\\.bam\\.bai$",names(filesList))]
+                filenames <- filenames[!grepl("\\.bam\\.bai$",filenames)]
             }
 
             ## check if we have index with bai
@@ -69,10 +69,15 @@ setMethod(f="getBamFileList",
             sel <- file.exists(indexes)
             if(any(!sel)){
               stop(paste("Index files (bai) are required. They are missing for the files: ",
-                         paste(filesList[!sel],collapse = " and "),
+                         paste(filenames[!sel],collapse = " and "),
                          ". Use the Rsamtools indexBam function or the samtools index command line utility to create them.",sep=""))
             }
 
+            ## check if we are having any bam files
+            if(length(filenames)==0){
+              stop("There are no file to process.")
+            }
+            
             ## create the BamFileList
             ## as in Rsamtools the index is the filename, i.e. without the .bai extension
             bfl <- BamFileList(filenames,index=filenames)

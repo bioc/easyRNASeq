@@ -167,9 +167,9 @@ setMethod(
     .catn(class(x),
           " object set to count reads per'",
           countBy(x),
-          "' at a '", precision(x), "'precision.",sep="")
+          "' at a '", precision(x), " 'precision.",sep="")
     .catn("Using:")
-    .catn("\tannotation from:")
+    .catn("\tannotation from an:")
     print(annotParam(x))
     .catn("\tand BAM alignments with following characteristics:")
     print(bamParam(x))

@@ -7,7 +7,7 @@
 #                        "DESeq","edgeR","genomeIntervals","GenomicAlignments","GenomicRanges",
 #                        "IRanges","LSD","Rsamtools","ShortRead","BSgenome",
 #                        "BSgenome.Dmelanogaster.UCSC.dm3","GenomicFeatures",
-#                        "RnaSeqTutorial","BiocStyle"),"Version"]
+#                        "RnaSeqTutorial","BiocStyle","RUnit"),"Version"]
 
 ###==========================
 ### package details
@@ -21,8 +21,8 @@
 ##' \tabular{ll}{
 ##' Package: \tab easyRNASeq\cr
 ##' Type: \tab Package\cr
-##' Version: \tab 1.99.0\cr
-##' Date: \tab 2014-03-27\cr
+##' Version: \tab 1.99.1\cr
+##' Date: \tab 2014-03-28\cr
 ##' License: \tab Artistic-2.0\cr
 ##' LazyLoad: \tab yes\cr
 ##' Depends: \tab methods, parallel, biomaRt, edgeR, DESeq, genomeIntervals, LSD, Rsamtools, ShortRead, RnaSeqTutorial\cr

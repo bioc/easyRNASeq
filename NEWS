@@ -1,3 +1,11 @@
+CHANGES IN VERSION 1.99.1
+-------------------------
+
+  o Fixed a bug in the getBamFileList function that prevented reporting
+  accurate error/warning messages.
+
+  o Updated the package dependencies.
+
 CHANGES IN VERSION 1.99.0
 -------------------------
 
