@@ -1,3 +1,9 @@
+CHANGES IN VERSION 1.8.8
+-------------------------
+
+  o Corrected a typo in a function to get the names from a
+  RangedData annotation.
+
 CHANGES IN VERSION 1.8.7
 -------------------------
 
