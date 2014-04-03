@@ -613,7 +613,7 @@ setReplaceMethod(
                                              unlist),
                                       use.names=FALSE)},
                 "RangedData"={
-                  unlist(values(genomicAnnotation(obj)[,sub("s$","",count)])[,1],use.names=FALSE)
+                  unlist(values(genomicAnnotation(obj)[,sub("s$","",count)]),use.names=FALSE)[,1]
                 },
                 stop(paste("No .getName functionality implemented for the class: ",class(genomicAnnotation(obj)),"!",sep=""))
                 ))

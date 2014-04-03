@@ -12,8 +12,12 @@
   ### =======================
   ## biomaRt
   ### =======================
-  annotParam <- AnnotParam(datasource="Dmelanogaster",type="biomaRt")
-  checkTrue(easyRNASeq:::.validate(annotParam))
+  if(Biobase::testBioCConnection()){
+    annotParam <- AnnotParam(datasource="Dmelanogaster",type="biomaRt")
+    checkTrue(easyRNASeq:::.validate(annotParam))
+  } else {
+    warning("No internet connection available for 'test_internal_getAnnotation' type 'BiomaRt'")
+  }
   
   ### =======================
   ### object
@@ -76,20 +80,26 @@
 ## to test the annotation methods
 "test_getAnnotation_BiomaRt" <- function(){
   
-  ## a flybase accession
-  FbAcc <- "FBgn0011656"
+  ## make sure we have connection
+  if(Biobase::testBioCConnection()){
   
-  ## create a biomaRt annot param
-  grngs <- getAnnotation(AnnotParam(
-    datasource="Dmelanogaster",
-    type="biomaRt"),
-                         filters="ensembl_gene_id",
-                         values=FbAcc
-  )
+    ## a flybase accession
+    FbAcc <- "FBgn0011656"
   
-  ## check
-  checkTrue(ncol(elementMetadata(grngs))==3)
-  checkEquals(unique(grngs$gene),FbAcc)
+    ## create a biomaRt annot param
+    grngs <- getAnnotation(AnnotParam(
+      datasource="Dmelanogaster",
+      type="biomaRt"),
+                           filters="ensembl_gene_id",
+                           values=FbAcc
+    )
+    
+    ## check
+    checkTrue(ncol(elementMetadata(grngs))==3)
+    checkEquals(unique(grngs$gene),FbAcc)
+  } else {
+    warning("No internet connection available for 'test_getAnnotation_BiomaRt'")
+  }
 }
 
 "test_getAnnotation_env" <- function(){
