@@ -1,7 +1,7 @@
 CHANGES IN VERSION 1.99.3
 -------------------------
 
-  o Replicated the bug fixing of version 1.8.8
+  o Replicated the bug fixing of version 1.8.8. 
 
 CHANGES IN VERSION 1.99.2
 -------------------------
@@ -76,14 +76,16 @@ CHANGES IN VERSION 1.8.8
 -------------------------
 
   o Corrected a typo in a function to get the names from a
-  RangedData annotation.
+  RangedData annotation. Thanks to Sylvain Foisy for 
+  reporting it and providing feedback to squash it.
 
 CHANGES IN VERSION 1.8.7
 -------------------------
 
   o Fixed a bug in the summarization when using the 
   "genes", "geneModels" paradigm and annotation in the
-  older RangedData format.
+  older RangedData format. Thanks to Kelly Stanton for
+  reporting it and providing data to squash it.
 
 CHANGES IN VERSION 1.8.6
 -------------------------
