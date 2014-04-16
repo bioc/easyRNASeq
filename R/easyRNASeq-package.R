@@ -3,11 +3,11 @@
 ## roxygenize("easyRNASeq/")
 
 ## to update the package versions
-installed.packages()[c("Biobase","BiocGenerics","biomaRt","Biostrings",
-                       "DESeq","edgeR","genomeIntervals","GenomicAlignments","GenomicRanges",
-                       "IRanges","LSD","Rsamtools","ShortRead","BSgenome",
-                       "BSgenome.Dmelanogaster.UCSC.dm3","GenomicFeatures",
-                       "RnaSeqTutorial","BiocStyle","RUnit"),"Version"]
+# installed.packages()[c("Biobase","BiocGenerics","biomaRt","Biostrings",
+#                        "DESeq","edgeR","genomeIntervals","GenomicAlignments","GenomicRanges",
+#                        "IRanges","LSD","Rsamtools","ShortRead","BSgenome",
+#                        "BSgenome.Dmelanogaster.UCSC.dm3","GenomicFeatures",
+#                        "RnaSeqTutorial","BiocStyle","RUnit"),"Version"]
 
 ###==========================
 ### package details
