@@ -7,12 +7,13 @@
 <<style, eval=TRUE, echo=FALSE, results=tex>>=
 BiocStyle::latex()
 @
-% for enabling comments
+% for eanbling comments
 \usepackage{verbatim}
 % for citations
-%\usepackage{natbib}
+\usepackage{natbib}
 
 % new commands
+\newcommand{\BiocComment}[1]{\textsl{\textcolor{Gray}{#1}}}
 \newcommand{\pref}[1]{\ref{#1} (page \pageref{#1})}
 \newcommand{\eg}{\textit{e.g.} }
 \newcommand{\ie}{\textit{i.e.} }
@@ -21,7 +22,7 @@ BiocStyle::latex()
 \newcommand{\etc}{\textit{etc.} }
 
 % Sweave options
-\SweaveOpts{keep.source=TRUE}
+\SweaveOpts{keep.source=TRUE,concordance=TRUE}
 
 % title
 \title{easyRNASeq, an overview}
@@ -29,7 +30,6 @@ BiocStyle::latex()
 
 % Doc
 \begin{document}
-\SweaveOpts{concordance=TRUE}
 
 \maketitle
 
@@ -43,20 +43,10 @@ TRUE.
 
 \newpage
 
-\section{Important Note about this developmental version}
-\warning{
-\Biocpkg{easyRNASeq} is undergoing massive implementation changes. Hence a number
-of function are being deprecated and replaced by better alternatives. As the code
-is still getting pruned that implies that there are many "deprecated" warnings
-currently showing up. These should go away as the re-implementation progresses.
-A new introduced function \Rfunction{simpleRNASeq} meant to replace 
-\Rfunction{easyRNASeq} is still under active development and hence might not be
-fully functional as bugs are still being squashed.}
-
 \section{Before you start}
 
 If you are completely new to the R/Bioconductor
-\cite{Gentleman:2004p2013} packages dealing with Next-Generation
+\citep{Gentleman:2004p2013} packages dealing with Next-Generation
 Sequencing, you might want to start by doing the tutorial available in
 the \Robject{RnaSeqTutorial} vignette in the data package
 \Biocexptpkg{RnaSqTutorial}. The same holds true if you're interested in
@@ -113,7 +103,7 @@ section \ref{ss:usage}, page \pageref{ss:usage}.
 \paragraph{1.3.9}
 Not much change to the vignette, but for the fact that the
 \Biocpkg{easyRNASeq} application note got published in
-\textbf{Bioinformatics} \cite{Delhomme:2012p4678}.
+\textbf{Bioinformatics} \citep{Delhomme:2012p4678}.
 
 \paragraph{1.3.5 - 1.3.8}
 The vignette has been updated to report function call changes to the
@@ -145,7 +135,7 @@ Sections affected are:
 
 The present document describes the use of the \Biocpkg{easyRNASeq} package to ease
 the processing of RNA-seq data in \R{}/\Bioconductor{}. RNA-seq
-\cite{Mortazavi:2008p740} was introduced as a new method to perform
+\citep{Mortazavi:2008p740} was introduced as a new method to perform
 Gene Expression Analysis, using the advantages of the high
 throughput of \emph{Next-Generation Sequencing} (NGS)
 machines. 
@@ -174,7 +164,7 @@ using \emph{RPKM (Reads Per Kilobase of feature per Million
 reads in the library)} counts. Normalization can be performed by using 
 appropriate statistical models implemented \eg in 
 the \Biocpkg{DESeq} or \Biocpkg{edgeR} packages. 
-\bioccomment{For the reasons why I call RPKM a correction and not a normalization,
+\BiocComment{For the reasons why I call RPKM a correction and not a normalization,
 see \cite{Soneson:2013p5778}.}
 \newline
 
@@ -207,7 +197,7 @@ Throughout this vignette, the data present in the \Biocexptpkg{RnaSeqTutorial}
 data package will be used to demonstrate functionalities. Refer to its 
 documentation for more details; but shortly, it contains different \emph{Drosophila melanogaster}
 RNA-Seq dataset saved in different format as well as the related
-annotation retrieved from  FlyBase \cite{Tweedie:2009p2014}. 
+annotation retrieved from  FlyBase \citep{Tweedie:2009p2014}. 
 \newline
 
 The main function of the \Biocpkg{easyRNASeq} package is
@@ -287,7 +277,7 @@ particular case of its ``extdata'' sub-directory. The pattern used to
 retrieve the files is similar to that of the \Rpackage{base} functions
 \Rfunction{dir} and \Rfunction{grep}. Here we look up files, which name
 contains 6 times one of the ``A'', ``C'', ``G'' or ``T'' letter,
-followed by the ``.bam'' extension. \bioccomment{Note the use of the \$ sign at
+followed by the ``.bam'' extension. \BiocComment{Note the use of the \$ sign at
 the end of the regular expression to signify that the filename to be matched has
 to end after '.bam'. This way we prevent fetching the BAI (the BAM index) files.} 
 Additionally, the number of sequencing cycles
@@ -373,11 +363,11 @@ concerning:
 \label{p:input}
 Using the \Rcode{format} argument, reads can be loaded from BAM
 files (default) or any format supported by the \Biocpkg{ShortRead} 
-\cite{Morgan:2009p739} package. The SAM/BAM format
-\cite{Li:2009p1662} is becoming a \emph{de-facto} standard for
+\citep{Morgan:2009p739} package. The SAM/BAM format
+\citep{Li:2009p1662} is becoming a \emph{de-facto} standard for
 storing NGS aligned data. Gapped alignment can be read from BAM files,
 set the \Rcode{gapped} argument to ``TRUE'' for that. 
-\bioccomment{Note that as BAM is now the standard for storing read alignments,
+\BiocComment{Note that as BAM is now the standard for storing read alignments,
 \Biocpkg{easyRNASeq} support of other formats - through the use of 
 \Biocpkg{ShortRead} will be abandoned in a few release cycles.}
 
@@ -420,11 +410,11 @@ use case of this vignette, see section \pref{synth:trx}.
 The \Rfunction{easyRNASeq} function currently accepts the following \Rcode{annotationMethod}s:
 \begin{itemize}
   \item ``biomaRt'' use the \Biocpkg{biomaRt}
-    \cite{Durinck:2005p1990} package to retrieve the annotation 
+    \citep{Durinck:2005p1990} package to retrieve the annotation 
   \item ``env'' use a \Rclass{RangedData} or \Rclass{GRangesList} class object present in the
     environment - see page \pageref{env} for a use case.
   \item ``gff'' reads in a gff version 3 file
-  \item ``gtf'' reads in a gtf file as provided by Ensembl \cite{Flicek:2011p2042}
+  \item ``gtf'' reads in a gtf file as provided by Ensembl \citep{Flicek:2011p2042}
   \item ``rda'' load an RData object. The object needs to be named
     \Robject{gAnnot} and of class \Rclass{RangedData} or
     \Rclass{GRangesList}. See the use case page \pageref{grnglist} to prepare
@@ -480,10 +470,10 @@ is deprecated.
 The results can be exported in five different formats:
 \begin{itemize}
 \item count table (the default, a n (features) x  m (samples) \Robject{matrix}).
-\item a \Biocpkg{DESeq} \cite{Anders:2010p1659}
+\item a \Biocpkg{DESeq} \citep{Anders:2010p1659}
   \Rclass{CountDataSet} class object. Useful to perform further
   analyses using the \Biocpkg{DESeq} package.
-\item an \Biocpkg{edgeR} \cite{Robinson:2010p775} \Rclass{DGEList}
+\item an \Biocpkg{edgeR} \citep{Robinson:2010p775} \Rclass{DGEList}
   class object. Useful to perform further analyses using the 
   \Biocpkg{edgeR} package.
 \item an \Rclass{RNAseq} class object. Useful for performing
@@ -500,7 +490,7 @@ The results can optionally be ``corrected'' as \emph{Reads per Kilobase
   of feature per Million reads in the library} (RPKM,
 \cite{Mortazavi:2008p740}), useful for visualization but not for differential
 expression, see \cite{}. 
-\bioccomment{Note that the \Rcode{vst} and \Rcode{voom} approaches from the 
+\BiocComment{Note that the \Rcode{vst} and \Rcode{voom} approaches from the 
 \Biocpkg{DESeq2} and \Biocpkg{limma} packages, respectively offer more powerful
 approaches for correcting the data prior to visualization. These will be 
 included in future version of the \Biocpkg{easyRNASeq} package.}
@@ -522,7 +512,7 @@ formats through the \Biocpkg{ShortRead} package, but as BAM is nowadays standard
 this support will eventually be phased out in a few release cycles.
 
 In the first example, we read a BAM file containing gapped
-alignments. In that particular case, TopHat \cite{Trapnell:2009p156}
+alignments. In that particular case, TopHat \citep{Trapnell:2009p156}
 was used to look for splicing events. Note the use of the
 \Rcode{gapped} boolean argument.
 
@@ -560,8 +550,6 @@ unlike for the BAM format where the chromosome sizes can be extracted from the
 header.
 
 <<read an export, eval=FALSE>>=
-library(BSgenome.Dmelanogaster.UCSC.dm3)
-library(ShortRead)
 count.table <- easyRNASeq(system.file(
                                       "extdata",
                                       package="RnaSeqTutorial"),
@@ -591,7 +579,7 @@ This sections describes how to use different annotation
 sources to retrieve genic information. It also describes
 the expected format of these annotations.
 
-\bioccomment{Important Note: there are many derivative of the GFF3 and GTF
+\BiocComment{Important Note: there are many derivative of the GFF3 and GTF
 file formats, some of which not strictly applying the convention
 these files should implement. Using incorrectly formatted file is bound to fail,
 but most of the time a relevant error message will be reported. GTF
@@ -609,7 +597,7 @@ system.file(
             package="RnaSeqTutorial")
 @ 
 
-\bioccomment{If you do not manage to identify the issue, please contact the
+\BiocComment{If you do not manage to identify the issue, please contact the
 Bioconductor mailing list for help.}
 
 \paragraph{biomaRt}
@@ -642,7 +630,7 @@ gAnnot <- genomicAnnotation(rnaSeq)
 The \Robject{gAnnot} - of class \Rclass{RangedData} - can then be saved
 in a \file{.rda} file for a faster re-processing using the \Rfunction{easyRNASeq} 
 function with the arguments \Rcode{annotationMethod} and \Rcode{annotationFile} 
-set to "rda" and to the \file{rda} filepath, respectively. \bioccomment{Note, however 
+set to "rda" and to the \file{rda} filepath, respectively. \BiocComment{Note, however 
 that it is necessary to save that object under the name ``gAnnot''.} Finally, it
 would be important to pre-process that new annotation in the manner described
 in section \pref{synth:trx} for reason described in section \pref{p:Ciri}
@@ -655,20 +643,18 @@ formatted file will likely have varying gff attributes (its ninth last column).
 This column contains ``key=value'' pairs separated by semi-colons. We depend on 
 specific keys to be present and these are \textit{ID}, \textit{Parent}, and
 \textit{Name}, all strongly suggested by the gff3 format specification. 
-\warning{For better supporting the gff3 format, both feature of type 'mRNA' and 
-'exon' (the gff3 third column) are considered. The \textit{ID} key is used in 
-both cases to define the transcript and exon IDs, respectively. The 
-\textit{Parent} key for the 'mRNA' type is used to define the gene ID.
+When parsing a gff3 file, we're only considering feature of type 'exon' (the 
+gff3 third column). Then, we expect the \textit{ID} key to have the
+format: \textit{geneID:exonNumber}; both the exon and gene annotation 
+being derived from it. The \textit{Parent} key should contain the transcript ID. 
 If one exon is part of several transcripts, these can be concatenated
 using commas without space. Finally, the \textit{Name} key should
 contain the gene name, but its presence is actually facultative for the
 processing. As we are using the \Rfunction{readGff3} function from the
 \Biocpkg{genomeIntervals} package, it is as well essential that the key=value 
 pairs are separated by semi-colons \textbf{whitout} space. Have a look at the 
-\file{Dmel-mRNA-exon-r5.52.gff3} file used in the next code chunck for an 
-example of a gff3 file formatted as the \Rfunction{easyRNASeq} function now 
-expects it.
-}
+\file{annot.gff} file used in the next code chunck for an example of a gff3 file
+formatted as the \Rfunction{easyRNASeq} expects it.
 
 <<load the annotation from a gff, eval=FALSE>>=
 count.table <- easyRNASeq(system.file(
@@ -679,7 +665,7 @@ count.table <- easyRNASeq(system.file(
                           annotationMethod="gff",
                           annotationFile=system.file(
                             "extdata",
-                            "Dmel-mRNA-exon-r5.52.gff3",
+                            "annot.gff",
                             package="RnaSeqTutorial"),
                           gapped=TRUE,
                           count="exons",
@@ -696,7 +682,6 @@ argument ``env'' or ``rda'' requires that you provide such an object. The
 following example shows the expected structure of that object.
 
 <<RangedData structure>>=
-library(IRanges)
 gAnnot <- RangedData(
                      IRanges(
                              start=c(10,30,100),
@@ -737,7 +722,6 @@ as a \Rclass{GRangesList} class object (from the
 class object into a \Rclass{GRangesList} class object is pretty straightforward.
 
 <<GRangesList coercion>>=
-library(GenomicRanges)
 grngs <- as(gAnnot,"GRanges")
 grngsList<-split(grngs,seqnames(grngs))
 grngsList
@@ -749,7 +733,7 @@ get deprecated in the future. The next advantage is that the
 
 \paragraph{Remember}
 
-\bioccomment{Generating the proper annotation is probably the most important step
+\BiocComment{Generating the proper annotation is probably the most important step
 in processing your RNA-Seq sample. Mind the warnings produced by the
 \Rfunction{easyRNASeq} function, they might be annoying, but there are
 there for a good reason: to help.}
@@ -952,7 +936,7 @@ countDataSet <- easyRNASeq(system.file(
                           )
 @ 
 
-\bioccomment{Note that setting the \Rcode{normalize} argument to \Rcode{TRUE}
+\BiocComment{Note that setting the \Rcode{normalize} argument to \Rcode{TRUE}
 generates diagnostics plots as detailed in the \Biocpkg{DESeq} vignette.
 The plot produced in the present examples are irrelevant as the dataset is
 too small. You can turn the plotting off by setting the \Rcode{plot}
@@ -1032,7 +1016,7 @@ lane of HiSeq results in an approximate 3,000X coverage of the
 \textit{Saccharomyces cerevisiae} genome which is 12Mb large.
 Therefore, techniques to have several samples running as a
 \emph{single} library have been
-created \cite{Lefrancois:2009p778,Smith:2010p777}, using 4-6bp
+created \citep{Lefrancois:2009p778,Smith:2010p777}, using 4-6bp
 barcodes to uniquely identify samples; this is called
 \textbf{multiplexing}. A 30X coverage per sample of 48 yeast samples can hence 
 be obtained froman average Illumina GenomeAnalyzer GAIIx run (105bp read, 
@@ -1044,7 +1028,7 @@ would be fairly straightforward, but for the average 0.1 percent
 sequencing error rate that introduces a lot of multiplicity in the
 actual barcodes present in the samples. A proper design of the
 barcodes, maximizing the Hamming
-distance\cite{Hamming:1950p825,Pilcher:2008p824} is an essential step
+distance\citep{Hamming:1950p825,Pilcher:2008p824} is an essential step
 for a proper de-multiplexing.
 \newline
 There are two kinds of barcoding, the one described in
@@ -1055,7 +1039,7 @@ in a separate sequencing reaction after the first mate sequencing.
 The data used in the following example has been sequenced using the
 Illumina protocol. We'll look at the specificities that this introduce.
 
-\bioccomment{This pre-processing procedure has to be
+\BiocComment{This pre-processing procedure has to be
 applied on the raw reads before any alignment is performed.}
 Most
 often, one would use the ``fastq'' formatted file as input. In the
@@ -1065,7 +1049,7 @@ format is normally the result of aligning the reads with ELAND, the
 Illumina aligner, but it can be generated as well without aligning the
 reads, \ie the export file may not contain any alignment
 information. 
-\bioccomment{The \Biocpkg{ShortRead} package offers a quick functionality to
+\BiocComment{The \Biocpkg{ShortRead} package offers a quick functionality to
 access the barcode field of an export file, which we take advantage of in the
 next example; the \Rcode{withAll} argument of the \Rfunction{readAligned}
 function.}
@@ -1090,7 +1074,6 @@ silent <- sapply(
 @
 
 <<Demultiplexing sample>>=
-library(ShortRead)
 alns <- readAligned(
                     system.file(
                                 "extdata",
@@ -1320,7 +1303,7 @@ library(easyRNASeq)
 \subsection{Creating a set of synthetic transcripts}
 \label{synth:trx}
 
-The gff3 is retrieved from FlyBase \cite{Tweedie:2009p2014}: 
+The gff3 is retrieved from FlyBase \citep{Tweedie:2009p2014}: 
 \url{ftp://ftp.flybase.net/releases/FB2013_06/dmel_r5.54/gff/dmel-all-no-analysis-r5.54.gff.gz}.
 As the file is rather large, only the line containing "gene", "mRNA" and "exon" 
 are kept using an \emph{awk} script.
@@ -1481,7 +1464,7 @@ in R. Note that the \Biocpkg{Rsubread} is only supported on the linux
 platform. You'll need to use your aligner of choice and generate BAM
 files if you're using another platform. However you should still be
 able to download the SRA/ENA files. The files listed in this example
-are from the \cite{Jaager:2012p4708} study, but where simply selected for their
+are from the \citet{Jaager:2012p4708} study, but where simply selected for their
 small size. Still downloading and creating all the necessary file
 requires times and a computer with a sufficient amount of memory to
 index the human genome.
@@ -1978,8 +1961,8 @@ of DE, this is of little significance though.
 
 \section{Session Information}
 
-The version number of R\cite{ref:R} and Bioconductor
-\cite{Gentleman:2004p2013} packages loaded for generating the
+The version number of R\citep{ref:R} and Bioconductor
+\citep{Gentleman:2004p2013} packages loaded for generating the
 vignette were:
 
 <<SessionInfo, echo=FALSE>>=
@@ -2013,7 +1996,7 @@ silent <- reduce(grngs)
 
 \newpage
 
-%\bibliographystyle{plainnat}
+\bibliographystyle{plainnat}
 
 \bibliography{easyRNASeq}
 

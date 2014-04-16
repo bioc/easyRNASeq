@@ -17,7 +17,7 @@ functionalities to normalize the summarized counts using
 }
 \details{
 \tabular{ll}{ Package: \tab easyRNASeq\cr Type: \tab
-Package\cr Version: \tab 1.99.3\cr Date: \tab 2014-04-03\cr
+Package\cr Version: \tab 2.1.1\cr Date: \tab 2014-04-16\cr
 License: \tab Artistic-2.0\cr LazyLoad: \tab yes\cr
 Depends: \tab methods, parallel, biomaRt, edgeR, DESeq,
 genomeIntervals, LSD, Rsamtools, ShortRead,
