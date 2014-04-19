@@ -1,3 +1,5 @@
+import(S4Vectors)
+
 export(BamFileList)
 export(chastityFilter)
 export(naPositionFilter)
@@ -107,7 +109,6 @@ importFrom(IRanges,RangesList)
 importFrom(IRanges,RleList)
 importFrom(IRanges,SimpleList)
 importFrom(IRanges,SplitDataFrameList)
-importFrom(IRanges,isSingleString)
 importFrom(LSD,heatscatter)
 importFrom(Rsamtools,BamFileList)
 importFrom(Rsamtools,bamFlagTest)

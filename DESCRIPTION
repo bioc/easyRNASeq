@@ -1,5 +1,5 @@
 Package: easyRNASeq
-Version: 2.1.1
+Version: 2.1.2
 Date: 2014-04-16
 Type: Package
 Title: Count summarization and normalization for RNA-Seq data.
@@ -13,19 +13,20 @@ Imports:
     Biobase (>= 2.24.0),
     BiocGenerics (>= 0.10.0),
     biomaRt (>= 2.20.0),
-    Biostrings (>= 2.32.0),
+    Biostrings (>= 2.33.3),
     DESeq (>= 1.16.0),
     edgeR (>= 3.6.0),
     genomeIntervals (>= 1.20.0),
-    GenomicAlignments (>= 1.0.0),
-    GenomicRanges (>= 1.16.1),
+    GenomicAlignments (>= 1.1.4),
+    GenomicRanges (>= 1.17.7),
     graphics,
-    IRanges (>= 1.22.2),
+    IRanges (>= 1.99.1),
     LSD (>= 2.5),
     methods,
     parallel,
-    Rsamtools (>= 1.16.0),
-    ShortRead (>= 1.22.0),
+    Rsamtools (>= 1.17.5),
+    S4Vectors (>= 0.0.1),
+    ShortRead (>= 1.23.3),
     utils
 Suggests:
     BiocStyle (>= 1.2.0),

@@ -163,7 +163,7 @@ NULL
 ##' @importFrom GenomicRanges GRanges GRangesList
 ##' @importFrom graphics abline axis axTicks boxplot grid hist legend lines
 ##' mtext par plot rect
-##' @importFrom IRanges IRanges DataFrame IRangesList isSingleString LogicalList
+##' @importFrom IRanges IRanges DataFrame IRangesList LogicalList
 ##' RangedData RangesList SimpleList SplitDataFrameList RleList
 ##' @importFrom LSD heatscatter
 ##' @importFrom methods as extends is new
