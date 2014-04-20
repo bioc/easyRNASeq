@@ -682,6 +682,7 @@ argument ``env'' or ``rda'' requires that you provide such an object. The
 following example shows the expected structure of that object.
 
 <<RangedData structure>>=
+library(IRanges)
 gAnnot <- RangedData(
                      IRanges(
                              start=c(10,30,100),
