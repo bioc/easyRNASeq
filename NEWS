@@ -1,3 +1,13 @@
+CHANGES IN VERSION 2.1.3
+-------------------------
+
+  o Same changes as 2.0.2
+
+CHANGES IN VERSION 2.1.2
+-------------------------
+
+  o Completed the previous commit
+
 CHANGES IN VERSION 2.1.1
 -------------------------
 
@@ -7,6 +17,15 @@ CHANGES IN VERSION 2.1.0
 -------------------------
 
   o None, Bioc new devel branch 
+
+CHANGES IN VERSION 2.0.2
+-------------------------
+
+  o Added the minimal set of exports for the vignette to
+  be built.
+
+  o Fixed some vignette discrepancy with the BiocStyle 
+  style.
 
 CHANGES IN VERSION 2.0.1
 -------------------------
