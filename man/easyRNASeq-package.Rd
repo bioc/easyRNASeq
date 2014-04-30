@@ -2,9 +2,16 @@
 \name{easyRNASeq package}
 \alias{BamFileList}
 \alias{BamFileList-class}
+\alias{IRanges}
+\alias{RangedData}
+\alias{RangedData-class}
+\alias{SRFilterResult}
+\alias{chromosomeFilter}
+\alias{compose}
 \alias{easyRNASeq package}
 \alias{easyRNASeq package-package}
 \alias{easyRNASeq-package}
+\alias{nFilter}
 \alias{type}
 \title{Count summarization and normalization pipeline for Next Generation Sequencing data.}
 \description{
@@ -17,7 +24,7 @@ functionalities to normalize the summarized counts using
 }
 \details{
 \tabular{ll}{ Package: \tab easyRNASeq\cr Type: \tab
-Package\cr Version: \tab 2.0.1\cr Date: \tab 2014-04-16\cr
+Package\cr Version: \tab 2.0.2\cr Date: \tab 2014-04-29\cr
 License: \tab Artistic-2.0\cr LazyLoad: \tab yes\cr
 Depends: \tab methods, parallel, biomaRt, edgeR, DESeq,
 genomeIntervals, LSD, Rsamtools, ShortRead,
@@ -108,10 +115,17 @@ The suggested packages:
 \code{\link[parallel:makeCluster]{parallel}}
 \code{\link[GenomicFeatures:TranscriptDb-class]{GenomicFeatures}}
 
-The following functions and classes that are made available
-from other packages: \code{\linkS4class{BamFileList}}
+The following classes and functionsthat are made available
+from other packages: \itemize{ \item{Classes}{
+\code{\linkS4class{BamFileList}}
+\code{\linkS4class{RangedData}} } \item{Functions/Methods}{
 \code{\link[Rsamtools:BamFileList]{The BamFileList
-constructor}}
+constructor}} \code{\link[IRanges:IRanges-constructor]{The
+IRanges constructor}}
+\code{\link[IRanges:RangedData-class]{The RangedData
+constructor}} \code{\link[ShortRead:srFilter]{For the
+SRFilterResult, chromosomeFilter, compose and nFilter
+methods}} } }
 }
 \keyword{package}
 

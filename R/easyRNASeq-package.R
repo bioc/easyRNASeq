@@ -21,8 +21,8 @@
 ##' \tabular{ll}{
 ##' Package: \tab easyRNASeq\cr
 ##' Type: \tab Package\cr
-##' Version: \tab 2.0.1\cr
-##' Date: \tab 2014-04-16\cr
+##' Version: \tab 2.0.2\cr
+##' Date: \tab 2014-04-29\cr
 ##' License: \tab Artistic-2.0\cr
 ##' LazyLoad: \tab yes\cr
 ##' Depends: \tab methods, parallel, biomaRt, edgeR, DESeq, genomeIntervals, LSD, Rsamtools, ShortRead, RnaSeqTutorial\cr
@@ -53,7 +53,8 @@
 ##' 
 ##' @name easyRNASeq package
 ##' @rdname easyRNASeq-package
-##' @aliases easyRNASeq-package type BamFileList BamFileList-class
+##' @aliases easyRNASeq-package type BamFileList BamFileList-class IRanges
+##' RangedData SRFilterResult chromosomeFilter compose nFilter RangedData-class
 ##' @docType package
 ##' @author Nicolas Delhomme, Bastian Schiffthaler, Ismael Padioleau
 ##' @keywords package
@@ -80,10 +81,21 @@
 ##' 	\code{\link[parallel:makeCluster]{parallel}}
 ##' 	\code{\link[GenomicFeatures:TranscriptDb-class]{GenomicFeatures}}
 ##' 
-##'   The following functions and classes that are made available from
+##'   The following classes and functionsthat are made available from
 ##'   other packages:
-##'   \code{\linkS4class{BamFileList}}
-##'   \code{\link[Rsamtools:BamFileList]{The BamFileList constructor}}
+##'   \itemize{
+##'     \item{Classes}{
+##'       \code{\linkS4class{BamFileList}}
+##'       \code{\linkS4class{RangedData}}
+##'     }
+##'     \item{Functions/Methods}{
+##'       \code{\link[Rsamtools:BamFileList]{The BamFileList constructor}}
+##'       \code{\link[IRanges:IRanges-constructor]{The IRanges constructor}}
+##'       \code{\link[IRanges:RangedData-class]{The RangedData constructor}}
+##'       \code{\link[ShortRead:srFilter]{For the SRFilterResult, 
+##'       chromosomeFilter, compose and nFilter methods}}
+##'     }
+##'   }
 ##'   
 ##' @examples
 ##' 	\dontrun{
@@ -144,14 +156,14 @@ NULL
 ##' @importMethodsFrom IRanges "%in%" aggregate as.list as.matrix as.table
 ##' "colnames<-" countOverlaps coverage elementLengths elementMetadata
 ##' "elementMetadata<-" end "end<-" findOverlaps gsub ifelse levels
-##' mcols mean median na.omit narrow nchar queryHits ranges reduce rev Rle
+##' mcols mean median narrow nchar queryHits ranges reduce rev Rle
 ##' "rownames<-" runLength runsum runValue space split start "start<-"
 ##' sub substr tolower "universe<-" unlist values which width
 ##' @importMethodsFrom methods coerce initialize show
 ##' @importMethodsFrom Rsamtools countBam path scanBam scanBamHeader
 ##' ScanBamParam yieldSize "yieldSize<-"
 ##' @importMethodsFrom ShortRead chromosome id position readAligned
-##' srdistance sread srFilter
+##' srdistance sread srFilter writeFastq
 ## import methods
 ##' @importFrom biomaRt getBM listDatasets useDataset useMart
 ##' @importFrom Biostrings DNAStringSet
@@ -163,17 +175,20 @@ NULL
 ##' @importFrom GenomicRanges GRanges GRangesList
 ##' @importFrom graphics abline axis axTicks boxplot grid hist legend lines
 ##' mtext par plot rect
-##' @importFrom IRanges IRanges DataFrame IRangesList isSingleString LogicalList
+##' @importFrom IRanges IRanges DataFrame IRangesList LogicalList
 ##' RangedData RangesList SimpleList SplitDataFrameList RleList
 ##' @importFrom LSD heatscatter
 ##' @importFrom methods as extends is new
 ##' @importFrom parallel makePSOCKcluster parLapply stopCluster
 ##' @importFrom Rsamtools BamFileList bamFlagTest index scanBamFlag
-##' @importFrom ShortRead alignData
+##' @importFrom ShortRead alignData chromosomeFilter compose nFilter
+##' SRFilterResult
 ##' @importFrom utils combn str
 ## and export!
-##' @exportClass BamFileList
-##' @export BamFileList
+##' @exportClass BamFileList RangedData
+##' @exportMethod seqnames split width writeFastq
+##' @export chromosomeFilter compose BamFileList IRanges nFilter
+##' RangedData readAligned SRFilterResult
 NULL
 
 ###==========================
