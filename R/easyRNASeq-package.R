@@ -5,9 +5,10 @@
 ## to update the package versions
 # installed.packages()[c("Biobase","BiocGenerics","biomaRt","Biostrings",
 #                        "DESeq","edgeR","genomeIntervals","GenomicAlignments","GenomicRanges",
-#                        "IRanges","LSD","Rsamtools","ShortRead","BSgenome",
+#                        "IRanges","LSD","Rsamtools","S4Vectors","ShortRead",
+#                        "BiocStyle","BSgenome",
 #                        "BSgenome.Dmelanogaster.UCSC.dm3","GenomicFeatures",
-#                        "RnaSeqTutorial","BiocStyle","RUnit"),"Version"]
+#                        "RnaSeqTutorial","RUnit"),"Version"]
 
 ###==========================
 ### package details
@@ -21,8 +22,8 @@
 ##' \tabular{ll}{
 ##' Package: \tab easyRNASeq\cr
 ##' Type: \tab Package\cr
-##' Version: \tab 2.0.2\cr
-##' Date: \tab 2014-04-29\cr
+##' Version: \tab 2.1.4\cr
+##' Date: \tab 2014-05-02\cr
 ##' License: \tab Artistic-2.0\cr
 ##' LazyLoad: \tab yes\cr
 ##' Depends: \tab methods, parallel, biomaRt, edgeR, DESeq, genomeIntervals, LSD, Rsamtools, ShortRead, RnaSeqTutorial\cr
@@ -136,7 +137,8 @@ NULL
 ##' @importClassesFrom genomeIntervals Genome_intervals
 ##' @importClassesFrom GenomicAlignments GAlignments GAlignmentPairs
 ##' @importClassesFrom GenomicRanges GRanges GRangesList SummarizedExperiment
-##' @importClassesFrom IRanges RangedData RleList Vector
+##' @importClassesFrom IRanges RangedData RleList
+##' @importClassesFrom S4Vectors Vector
 ##' @importClassesFrom methods ANY character "function" integer
 ##' list matrix missing numeric vector
 ##' @importClassesFrom Rsamtools BamFile BamFileList
@@ -154,11 +156,12 @@ NULL
 ##' "exptData<-" grglist rowData "rowData<-" seqinfo seqlengths "seqlengths<-"
 ##' seqlevels "seqlevels<-" seqnames "seqnames<-" SummarizedExperiment
 ##' @importMethodsFrom IRanges "%in%" aggregate as.list as.matrix as.table
-##' "colnames<-" countOverlaps coverage elementLengths elementMetadata
-##' "elementMetadata<-" end "end<-" findOverlaps gsub ifelse levels
-##' mcols mean median narrow nchar queryHits ranges reduce rev Rle
+##' "colnames<-" countOverlaps coverage elementLengths 
+##' end "end<-" findOverlaps gsub ifelse levels
+##' mean median narrow nchar queryHits ranges reduce rev Rle
 ##' "rownames<-" runLength runsum runValue space split start "start<-"
 ##' sub substr tolower "universe<-" unlist values which width
+##' @importMethodsFrom S4Vectors elementMetadata "elementMetadata<-" mcols
 ##' @importMethodsFrom methods coerce initialize show
 ##' @importMethodsFrom Rsamtools countBam path scanBam scanBamHeader
 ##' ScanBamParam yieldSize "yieldSize<-"
