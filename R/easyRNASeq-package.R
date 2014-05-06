@@ -22,8 +22,8 @@
 ##' \tabular{ll}{
 ##' Package: \tab easyRNASeq\cr
 ##' Type: \tab Package\cr
-##' Version: \tab 2.1.6\cr
-##' Date: \tab 2014-05-02\cr
+##' Version: \tab 2.1.7\cr
+##' Date: \tab 2014-05-06\cr
 ##' License: \tab Artistic-2.0\cr
 ##' LazyLoad: \tab yes\cr
 ##' Depends: \tab methods, parallel, biomaRt, edgeR, DESeq, genomeIntervals, LSD, Rsamtools, ShortRead, RnaSeqTutorial\cr
@@ -190,8 +190,7 @@ NULL
 ## and export!
 ##' @exportClass BamFileList RangedData
 ##' @exportMethod seqnames split width writeFastq
-##' @export chromosomeFilter compose BamFileList IRanges nFilter
-##' RangedData readAligned SRFilterResult
+##' @export chromosomeFilter compose BamFileList IRanges nFilter RangedData readAligned SRFilterResult
 NULL
 
 ###==========================
