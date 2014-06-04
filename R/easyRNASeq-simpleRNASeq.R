@@ -96,7 +96,7 @@ setMethod(f="simpleRNASeq",
             
             if(verbose){
               message("==========================")
-              message("simpleRNASeq version ",package.version("easyRNASeq"))
+              message("simpleRNASeq version ",packageVersion("easyRNASeq"))
               message("==========================")
               message("Creating a SummarizedExperiment.")
               message("==========================")
@@ -268,6 +268,12 @@ setMethod(f="simpleRNASeq",
             
             ## TODO implement sanity check of chromosome vs chromosome
             ## TODO implement sanity check of annotations
+            ## validate the overlap between the BAM header and the annotation
+            ## how to validate? check that chromosomes in the BAM file
+            ## overlap those in the annot
+            ## what to do if not
+            ## stop if no overlap
+            ## stop if not all are present and the option "smth smth" is not set 
             
             ### =======================
             ## parallelize

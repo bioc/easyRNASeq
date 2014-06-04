@@ -162,14 +162,14 @@ setMethod(
             ## get the feature sizes
             ## as the feature can be filtered differently than the annotation, we need to pay attention to it too
             mSize <- switch(from,
-                            "exons"=width(genomicAnnotation(obj))[match(rownames(mCounts),.getName(obj,"exons"))],
-                            "features"=width(genomicAnnotation(obj))[match(rownames(mCounts),.getName(obj,"features"))],
+                            "exons"=.getWidth(obj)[match(rownames(mCounts),.getName(obj,"exons"))],
+                            "features"=.getWidth(obj)[match(rownames(mCounts),.getName(obj,"features"))],
                             "transcripts"= {
                               ## aggregate first
-                              agg <- stats::aggregate(width(genomicAnnotation(obj)),list(transcript=.getName(obj,"transcripts")),sum)
+                              agg <- stats::aggregate(.getWidth(obj),list(transcript=.getName(obj,"transcripts")),sum)
                               ## then sort
                               agg[match(rownames(mCounts),agg[,1]),2]},
-                            "bestExons"= width(genomicAnnotation(obj))[match(rownames(mCounts),.getName(obj,"exons"))],
+                            "bestExons"= .getWidth(obj)[match(rownames(mCounts),.getName(obj,"exons"))],
                             "geneModels"= {
                               ## aggregate
                               agg<-stats::aggregate(width(geneModel(obj)),list(gene=geneModel(obj)$gene),sum)

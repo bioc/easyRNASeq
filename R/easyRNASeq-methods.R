@@ -436,10 +436,16 @@ setMethod(
           }
           if(class(genomicAnnotation(obj))=="GRanges"){
             seqlevels(genomicAnnotation(obj)) <- .convertToUCSC(seqlevels(genomicAnnotation(obj)),organismName(obj),chr.map)
-            seqlengths(genomicAnnotation(obj)) <- chrSize(obj)[match(seqlevels(genomicAnnotation(obj)),names(chrSize(obj)))]
+            sel <- match(seqlevels(genomicAnnotation(obj)),names(chrSize(obj)))
+            seqlengths(genomicAnnotation(obj))[!is.na(sel)] <- na.omit(chrSize(obj)[sel])
           } else {
             warning("FIXME - name convention for RangedData")
           }
+        }
+        
+        ## create 
+        if(!any(names(seqlengths(genomicAnnotation(obj))) %in% seqnames(obj))){
+          stop("There is no common sequence names between your annotation and your BAM!")
         }
         
         ## check if the annotation contains the valid fields for the count method
@@ -512,12 +518,17 @@ setMethod(
         }
 
         ## subset the annotation by chr.sel
-        if (length(chr.sel) >0){
+        if (length(chr.sel) >0){ 
             if(!chr.sel %in% names(genomicAnnotation(obj))){
                 stop(paste("The chromosome name you have given in the 'chr.sel' argument",
                            "does not match any chromosome in your annotation."))
             }
-            genomicAnnotation(obj) <- genomicAnnotation(obj)[space(genomicAnnotation(obj)) %in% chr.sel,]
+            genomicAnnotation(obj) <- switch(class(genomicAnnotation(obj)),
+                                             "GRanges"=genomicAnnotation(obj)[seqnames(genomicAnnotation(obj)) %in% chr.sel], 
+                                             "RangedData"= genomicAnnotation(obj)[space(genomicAnnotation(obj)) %in% chr.sel,])
+            if(class(genomicAnnotation(obj))=="GRanges"){
+              seqlevels(genomicAnnotation(obj)) <- seqlevels(genomicAnnotation(obj))[seqlevels(genomicAnnotation(obj)) %in% chr.sel]
+            }
         }
         
         ## Check if the condition list have the same size as the file list

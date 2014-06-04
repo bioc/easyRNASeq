@@ -22,6 +22,7 @@
 ##' readIslands<- readIslands readIslands,RNAseq-method readIslands<-,RNAseq-method
 ##' readLength<- readLength readLength,RNAseq-method readLength<-,RNAseq-method 
 ##' chrSize<- chrSize<-,RNAseq,integer-method chrSize<-,RNAseq,list-method 
+##' seqnames,RNAseq-method
 ##' @name easyRNASeq accessors
 ##' @rdname easyRNASeq-accessors
 ##' @param obj An object derived from class \code{RNAseq}.
@@ -159,6 +160,14 @@ setMethod(
           definition=function(obj){
             obj@librarySize
           })
+
+##' @exportMethod seqnames
+setMethod(
+  f="seqnames",
+  signature="RNAseq",
+  definition=function(x){
+    names(chrSize(x))
+  })
 
 ## setters
 setReplaceMethod(

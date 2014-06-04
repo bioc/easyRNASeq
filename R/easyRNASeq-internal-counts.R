@@ -143,6 +143,9 @@
                  "RangedData"=names(genomicAnnotation(obj)))
   
   ## counts
+  ## this would need fixing also!
+  ## FIXME
+  ## as integer just is like floor.
   counts=as.integer(unlist(aggregate(
     readCoverage(obj)[match(nams,names(readCoverage(obj)))],
     ranges(obj),
@@ -150,6 +153,8 @@
     )))
 
   ## return value
+  ## FIXME
+  ## ceiling is not needed...
   return(ceiling(counts))
 }
 
@@ -283,7 +288,7 @@
                           gapped=gapped,...)
   
   ## emergency stop
-  if(length(intersect(names(readCoverage(rnaSeq)),names(genomicAnnotation(rnaSeq))))==0
+  if(length(intersect(names(readCoverage(rnaSeq)),seqlevels(genomicAnnotation(rnaSeq))))==0
      & organismName(rnaSeq) == character(1)
      & validity.check == FALSE){
     stop(paste("Emergency stop.",

@@ -41,8 +41,10 @@ setMethod(
           signature="RNAseq",
           definition=function(x){
             switch(class(genomicAnnotation(x)),
-                   "GRanges"=split(ranges(genomicAnnotation(x)),
-                                   seqnames(genomicAnnotation(x))), 
+                   "GRanges"={
+                     split(ranges(genomicAnnotation(x)),
+                           seqnames(genomicAnnotation(x)))
+                   },
                    "RangedData"=ranges(genomicAnnotation(x))
             )
           })

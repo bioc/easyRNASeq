@@ -21,8 +21,8 @@
 ##' \tabular{ll}{
 ##' Package: \tab easyRNASeq\cr
 ##' Type: \tab Package\cr
-##' Version: \tab 2.0.4\cr
-##' Date: \tab 2014-05-02\cr
+##' Version: \tab 2.0.5\cr
+##' Date: \tab 2014-06-04\cr
 ##' License: \tab Artistic-2.0\cr
 ##' LazyLoad: \tab yes\cr
 ##' Depends: \tab methods, parallel, biomaRt, edgeR, DESeq, genomeIntervals, LSD, Rsamtools, ShortRead, RnaSeqTutorial\cr
@@ -186,9 +186,8 @@ NULL
 ##' @importFrom utils combn str
 ## and export!
 ##' @exportClass BamFileList RangedData
-##' @exportMethod seqnames split width writeFastq
-##' @export chromosomeFilter compose BamFileList IRanges nFilter
-##' RangedData readAligned SRFilterResult
+##' @exportMethod seqnames split width writeFastq srFilter
+##' @export chromosomeFilter compose BamFileList IRanges nFilter RangedData readAligned SRFilterResult
 NULL
 
 ###==========================
@@ -251,7 +250,7 @@ NULL
 ##' 
 ##' These objects hold the following information
 ##' \itemize{
-##' \item GTF.FIELDS \code{c("gene_id","transcript_id","exon_number","gene_name")}
+##' \item GTF.FIELDS \code{c("gene_id","transcript_id","exon_id","gene_name")}
 ##' \item ANNOTATION.TYPE \code{c(mRNA="mRNA",exon="exon")}
 ##' }
 ##' and are designed as global variables to expose the
@@ -267,6 +266,9 @@ NULL
 ##' @seealso \code{\link[base:ns-hooks]{.onAttach}} in the \code{base} package.
 ##' @keywords internal
 ".onAttach" <- function(libname,pkgname){
-  assign("GTF.FIELDS",c("gene_id","transcript_id","exon_number","gene_name"),envir=as.environment("package:easyRNASeq"))
-  assign("ANNOTATION.TYPE",c(mRNA="mRNA",exon="exon"),envir=as.environment("package:easyRNASeq"))
+  assign("GTF.FIELDS",c("gene_id","transcript_id","exon_id",
+                        "gene_name"),
+         envir=as.environment("package:easyRNASeq"))
+  assign("ANNOTATION.TYPE",c(mRNA="mRNA",exon="exon"),
+         envir=as.environment("package:easyRNASeq"))
 }

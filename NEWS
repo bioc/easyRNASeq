@@ -1,3 +1,18 @@
+CHANGES IN VERSION 2.0.5
+-------------------------
+
+  o Corrected the handling of gtf files to ensure that exons
+  are correctly identified. This required some low level 
+  functionality changes. A unit test was added to ensure
+  consistency. "exon_number" is no more a required gtf field, but
+  "exon_id" is.
+
+  o Changed the BamFile validation as now the index has the correct
+  .bai extension automatically added in RSamtools. 
+
+  o Fixed a bug that hardcoded the transcript summarization when
+  using simpleRNASeq.
+
 CHANGES IN VERSION 2.0.4
 -------------------------
 
