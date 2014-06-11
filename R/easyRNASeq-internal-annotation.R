@@ -100,12 +100,12 @@
   mRNA.sel <- all.annotation$type %in% ANNOTATION.TYPE["mRNA"]
 
   exons <- all.annotation[exon.sel]
-  exons$exon <- getGffAttribute(all.annotation[exon.sel],"ID")
+  exons$exon <- getGffAttribute(all.annotation[exon.sel],"ID")[,1]
   
   ## get the gene ID
   exons$gene <- getGffAttribute(all.annotation[mRNA.sel],"Parent")[match(
     sapply(strsplit(getGffAttribute(all.annotation[exon.sel],"Parent"),","),"[",1),
-    getGffAttribute(all.annotation[mRNA.sel],"ID"))]    
+    getGffAttribute(all.annotation[mRNA.sel],"ID"))]
   
   ## get the transcript
   transcripts <- getGffAttribute(all.annotation[exon.sel],"Parent")

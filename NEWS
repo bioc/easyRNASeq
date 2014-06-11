@@ -1,3 +1,13 @@
+CHANGES IN VERSION 2.0.6
+-------------------------
+
+  o Export the GenomicRanges SummarizedExperiment class, its
+  constructor and its assay accessor method
+
+  o Reduced the memory requirement of the annotation GRanges
+
+  o Added some redirect to avoid some unneccessary output
+
 CHANGES IN VERSION 2.0.5
 -------------------------
 

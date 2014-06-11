@@ -70,6 +70,9 @@ read counts according to the selected summarization
     param=rnaSeqParam,
     verbose=TRUE
   )
+
+  ## get the counts
+  assay(sexp)$transcripts
  }
 }
 \author{

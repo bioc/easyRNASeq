@@ -76,6 +76,9 @@
 ##'     param=rnaSeqParam,
 ##'     verbose=TRUE
 ##'   )
+##'   
+##'   ## get the counts
+##'   assay(sexp)$transcripts
 ##'  }
 ##' 
 ## TODO integrate that in the right position in the file
@@ -158,12 +161,14 @@ setMethod(f="simpleRNASeq",
             
             ## b. width
             if(verbose){
-              sapply(1:length(bamFiles),function(i,rL){
+              dev.null <- sapply(1:length(bamFiles),function(i,rL){
                 message("Bam file: ",rownames(rL)[i]," has reads of length ", rL[i,])
               },colData(sexp)[,"ReadLength",drop=FALSE])
             }
             
             ## c. strandedness
+            ## TODO check the Bioc April 2014 newletter for a method to determine
+            ## strandedness
             colData(sexp)[,"Stranded"] <- sapply(1:nrow(colData(sexp)),
                                                  function(i,df){
               if(is.na(df[i,"Stranded"])){
@@ -236,7 +241,7 @@ setMethod(f="simpleRNASeq",
                                                     nnodes)
             
             if(verbose){
-              sapply(1:length(bamFiles),function(i,tR){
+              dev.null <- sapply(1:length(bamFiles),function(i,tR){
                 message("Bam file: ",names(tR)[i]," has ",tR[i]," reads.")
               },colData(sexp)$TotalReads)
             }  
@@ -251,7 +256,12 @@ setMethod(f="simpleRNASeq",
               message("==========================")
             }
             
+            ## TODO in the annotation validation, we should make sure that
+            ## the right fields are there and are of the right kind; 
+            ## character or character Rle
+            
             ## split into a GRangesList based on transcripts or chromosomes
+            ## check out why is exon a matrix
             grngs <- getAnnotation(annotParam(param),verbose=verbose)
             
             ## TODO we need to adapt the rda, etc description and the AnnotParam

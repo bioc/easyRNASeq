@@ -50,7 +50,6 @@ setMethod(f="RnaSeqParam",
             bamParam=BamParam(),
             countBy=c("exons","features","genes","transcripts"),
             precision=c("read","bp")){
-            
 
             precision <- match.arg(precision)
             countBy <- match.arg(countBy)

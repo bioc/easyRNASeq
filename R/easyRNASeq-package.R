@@ -21,8 +21,8 @@
 ##' \tabular{ll}{
 ##' Package: \tab easyRNASeq\cr
 ##' Type: \tab Package\cr
-##' Version: \tab 2.0.5\cr
-##' Date: \tab 2014-06-04\cr
+##' Version: \tab 2.0.6\cr
+##' Date: \tab 2014-06-11\cr
 ##' License: \tab Artistic-2.0\cr
 ##' LazyLoad: \tab yes\cr
 ##' Depends: \tab methods, parallel, biomaRt, edgeR, DESeq, genomeIntervals, LSD, Rsamtools, ShortRead, RnaSeqTutorial\cr
@@ -53,8 +53,9 @@
 ##' 
 ##' @name easyRNASeq package
 ##' @rdname easyRNASeq-package
-##' @aliases easyRNASeq-package type BamFileList BamFileList-class IRanges
-##' RangedData SRFilterResult chromosomeFilter compose nFilter RangedData-class
+##' @aliases easyRNASeq-package assay type BamFileList BamFileList-class IRanges
+##' RangedData SRFilterResult SummarizedExperiment-class chromosomeFilter 
+##' compose nFilter RangedData-class
 ##' @docType package
 ##' @author Nicolas Delhomme, Bastian Schiffthaler, Ismael Padioleau
 ##' @keywords package
@@ -81,17 +82,21 @@
 ##' 	\code{\link[parallel:makeCluster]{parallel}}
 ##' 	\code{\link[GenomicFeatures:TranscriptDb-class]{GenomicFeatures}}
 ##' 
-##'   The following classes and functionsthat are made available from
+##'   The following classes and functions that are made available from
 ##'   other packages:
 ##'   \itemize{
 ##'     \item{Classes}{
 ##'       \code{\linkS4class{BamFileList}}
 ##'       \code{\linkS4class{RangedData}}
+##'       \code{\linkS4class{SummarizedExperiment}}
 ##'     }
 ##'     \item{Functions/Methods}{
-##'       \code{\link[Rsamtools:BamFileList]{The BamFileList constructor}}
+##'       \code{\link[GenomicRanges:SummarizedExperiment-class]{
+##'         The SummarizedExperiment assay accessor}
+##'       }
 ##'       \code{\link[IRanges:IRanges-constructor]{The IRanges constructor}}
 ##'       \code{\link[IRanges:RangedData-class]{The RangedData constructor}}
+##'       \code{\link[Rsamtools:BamFileList]{The BamFileList constructor}}
 ##'       \code{\link[ShortRead:srFilter]{For the SRFilterResult, 
 ##'       chromosomeFilter, compose and nFilter methods}}
 ##'     }
@@ -185,8 +190,8 @@ NULL
 ##' SRFilterResult
 ##' @importFrom utils combn str
 ## and export!
-##' @exportClass BamFileList RangedData
-##' @exportMethod seqnames split width writeFastq srFilter
+##' @exportClass BamFileList RangedData SummarizedExperiment
+##' @exportMethod assay seqnames split srFilter SummarizedExperiment width writeFastq
 ##' @export chromosomeFilter compose BamFileList IRanges nFilter RangedData readAligned SRFilterResult
 NULL
 

@@ -7,6 +7,8 @@
 \alias{RangedData}
 \alias{RangedData-class}
 \alias{SRFilterResult}
+\alias{SummarizedExperiment-class}
+\alias{assay}
 \alias{chromosomeFilter}
 \alias{compose}
 \alias{easyRNASeq package}
@@ -24,8 +26,8 @@ or \code{\link[edgeR:DGEList]{edgeR}}.
 \tabular{ll}{
 Package: \tab easyRNASeq\cr
 Type: \tab Package\cr
-Version: \tab 2.0.5\cr
-Date: \tab 2014-06-04\cr
+Version: \tab 2.0.6\cr
+Date: \tab 2014-06-11\cr
 License: \tab Artistic-2.0\cr
 LazyLoad: \tab yes\cr
 Depends: \tab methods, parallel, biomaRt, edgeR, DESeq, genomeIntervals, LSD, Rsamtools, ShortRead, RnaSeqTutorial\cr
@@ -105,17 +107,21 @@ The class RNAseq specification:
 	\code{\link[parallel:makeCluster]{parallel}}
 	\code{\link[GenomicFeatures:TranscriptDb-class]{GenomicFeatures}}
 
-  The following classes and functionsthat are made available from
+  The following classes and functions that are made available from
   other packages:
   \itemize{
     \item{Classes}{
       \code{\linkS4class{BamFileList}}
       \code{\linkS4class{RangedData}}
+      \code{\linkS4class{SummarizedExperiment}}
     }
     \item{Functions/Methods}{
-      \code{\link[Rsamtools:BamFileList]{The BamFileList constructor}}
+      \code{\link[GenomicRanges:SummarizedExperiment-class]{
+        The SummarizedExperiment assay accessor}
+      }
       \code{\link[IRanges:IRanges-constructor]{The IRanges constructor}}
       \code{\link[IRanges:RangedData-class]{The RangedData constructor}}
+      \code{\link[Rsamtools:BamFileList]{The BamFileList constructor}}
       \code{\link[ShortRead:srFilter]{For the SRFilterResult,
       chromosomeFilter, compose and nFilter methods}}
     }
