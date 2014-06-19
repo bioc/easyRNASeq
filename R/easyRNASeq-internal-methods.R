@@ -14,9 +14,13 @@
 ##' \item .getArguments For a given function returns the arguments
 ##' passed as part of the \dots{} that match that function formals.
 ##' \item .getName Get the genomicAnnotation object names. Necessary to deal
-##' with the different possible annotation object: \code{RangedData} or
-##' \code{GRangesList}.
-##' \item .list.files check the arguments passed through the \dots to select only the valid ones (deprecated).
+##' with the different possible annotation object: \code{RangedData}, 
+##' \code{GRanges} or \code{GRangesList}.
+##' \item .getWidth Get the genomicAnnotation withs. Necessary to deal
+##' with the different possible annotation object: \code{RangedData}, 
+##' \code{GRanges} or \code{GRangesList}.
+##' \item .list.files check the arguments passed through the \dots to select 
+##' only the valid ones (deprecated).
 ##' \item .normalizationDispatcher a function to dispatch
 ##' the normalization depending on the 'outputFormat' chosen by the user.
 ##' \item reduce Allow proper dispatch between the
@@ -33,7 +37,7 @@
 ##' 
 ##' @aliases .catn .checkArguments .convertToUCSC 
 ##' .extractIRangesList .getArguments .getName
-##' .list.files .list.files-deprecated
+##' .list.files .list.files-deprecated .getWidth
 ##' .normalizationDispatcher reduce reduce,RNAseq-method strand
 ##' strand,RNAseq-method strand<- strand<-,RNAseq-method
 ##' @name easyRNASeq internal methods
@@ -603,7 +607,11 @@ setReplaceMethod(
 ## NB this is possible, because we order the read object (read coverage) according to the annotations!!!!
 ".getName" <- function(obj,count){
   return(switch(class(genomicAnnotation(obj)),
-                "GRanges"={values(genomicAnnotation(obj)[,sub("s$","",count)])[,1]},
+                "GRanges"={
+                  ## HERE we need to split as we do for the processing!
+                  unlist(split(values(genomicAnnotation(obj)[,sub("s$","",count)]),
+                               seqnames(genomicAnnotation(obj)))[,1],use.names=FALSE)
+                  },
                 "GRangesList"={unlist(
                                       lapply(
                                              lapply(
@@ -617,6 +625,19 @@ setReplaceMethod(
                 },
                 stop(paste("No .getName functionality implemented for the class: ",class(genomicAnnotation(obj)),"!",sep=""))
                 ))
+}
+
+".getWidth" <- function(obj,count){
+  return(switch(class(genomicAnnotation(obj)),
+                "GRanges"={
+                  unlist(split(width(genomicAnnotation(obj)),
+                               seqnames(genomicAnnotation(obj))),use.names=FALSE)
+                },
+                "RangedData"={
+                  width(genomicAnnotation(obj))
+                },
+                stop(paste("No .getWidth functionality implemented for the class: ",class(genomicAnnotation(obj)),"!",sep=""))
+  ))
 }
 
 ## to allow list.files additional parameters

@@ -165,7 +165,7 @@ setMethod(
   signature="RnaSeqParam",
   definition=function(x,...){
     .catn(class(x),
-          " object set to count reads per'",
+          " object set to count reads per '",
           countBy(x),
           "' at a '", precision(x), " 'precision.",sep="")
     .catn("Using:")

@@ -122,8 +122,10 @@ setAs(from="Genome_intervals",to="GRanges",def=function(from){
     seqnames=seq_name(from),
     strand=strand(from),
     cbind(
-      data.frame(annotation(from)[!colnames(annotation(from)) %in% c("seq_name","strand","gffAttributes")]),
-      data.frame(mat,stringsAsFactors=FALSE))
+      DataFrame(apply(
+        annotation(from)[!colnames(annotation(from)) 
+                         %in% c("seq_name","strand","gffAttributes")],2,Rle)),
+      DataFrame(apply(mat,2,Rle)))
   ))  
 })
 

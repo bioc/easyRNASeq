@@ -22,8 +22,8 @@
 ##' \tabular{ll}{
 ##' Package: \tab easyRNASeq\cr
 ##' Type: \tab Package\cr
-##' Version: \tab 2.1.7\cr
-##' Date: \tab 2014-05-06\cr
+##' Version: \tab 2.1.8\cr
+##' Date: \tab 2014-06-18\cr
 ##' License: \tab Artistic-2.0\cr
 ##' LazyLoad: \tab yes\cr
 ##' Depends: \tab methods, parallel, biomaRt, edgeR, DESeq, genomeIntervals, LSD, Rsamtools, ShortRead, RnaSeqTutorial\cr
@@ -54,8 +54,9 @@
 ##' 
 ##' @name easyRNASeq package
 ##' @rdname easyRNASeq-package
-##' @aliases easyRNASeq-package type BamFileList BamFileList-class IRanges
-##' RangedData SRFilterResult chromosomeFilter compose nFilter RangedData-class
+##' @aliases easyRNASeq-package assay type BamFileList BamFileList-class IRanges
+##' RangedData SRFilterResult SummarizedExperiment-class chromosomeFilter 
+##' compose nFilter RangedData-class
 ##' @docType package
 ##' @author Nicolas Delhomme, Bastian Schiffthaler, Ismael Padioleau
 ##' @keywords package
@@ -82,14 +83,18 @@
 ##' 	\code{\link[parallel:makeCluster]{parallel}}
 ##' 	\code{\link[GenomicFeatures:TranscriptDb-class]{GenomicFeatures}}
 ##' 
-##'   The following classes and functionsthat are made available from
+##'   The following classes and functions that are made available from
 ##'   other packages:
 ##'   \itemize{
 ##'     \item{Classes}{
 ##'       \code{\linkS4class{BamFileList}}
 ##'       \code{\linkS4class{RangedData}}
+##'       \code{\linkS4class{SummarizedExperiment}}
 ##'     }
 ##'     \item{Functions/Methods}{
+##'       \code{\link[GenomicRanges:SummarizedExperiment-class]{
+##'         The SummarizedExperiment assay accessor}
+##'       }  
 ##'       \code{\link[Rsamtools:BamFileList]{The BamFileList constructor}}
 ##'       \code{\link[IRanges:IRanges-constructor]{The IRanges constructor}}
 ##'       \code{\link[IRanges:RangedData-class]{The RangedData constructor}}
@@ -165,6 +170,7 @@ NULL
 ##' @importMethodsFrom methods coerce initialize show
 ##' @importMethodsFrom Rsamtools countBam path scanBam scanBamHeader
 ##' ScanBamParam yieldSize "yieldSize<-"
+##' @importMethodsFrom S4Vectors elementMetadata "elementMetadata<-" mcols
 ##' @importMethodsFrom ShortRead chromosome id position readAligned
 ##' srdistance sread srFilter writeFastq
 ## import methods
@@ -188,8 +194,8 @@ NULL
 ##' SRFilterResult
 ##' @importFrom utils combn str
 ## and export!
-##' @exportClass BamFileList RangedData
-##' @exportMethod seqnames split width writeFastq
+##' @exportClass BamFileList RangedData SummarizedExperiment
+##' @exportMethod assay seqnames split srFilter SummarizedExperiment width writeFastq
 ##' @export chromosomeFilter compose BamFileList IRanges nFilter RangedData readAligned SRFilterResult
 NULL
 
@@ -253,7 +259,7 @@ NULL
 ##' 
 ##' These objects hold the following information
 ##' \itemize{
-##' \item GTF.FIELDS \code{c("gene_id","transcript_id","exon_number","gene_name")}
+##' \item GTF.FIELDS \code{c("gene_id","transcript_id","exon_id","gene_name")}
 ##' \item ANNOTATION.TYPE \code{c(mRNA="mRNA",exon="exon")}
 ##' }
 ##' and are designed as global variables to expose the
@@ -269,6 +275,9 @@ NULL
 ##' @seealso \code{\link[base:ns-hooks]{.onAttach}} in the \code{base} package.
 ##' @keywords internal
 ".onAttach" <- function(libname,pkgname){
-  assign("GTF.FIELDS",c("gene_id","transcript_id","exon_number","gene_name"),envir=as.environment("package:easyRNASeq"))
-  assign("ANNOTATION.TYPE",c(mRNA="mRNA",exon="exon"),envir=as.environment("package:easyRNASeq"))
+  assign("GTF.FIELDS",c("gene_id","transcript_id","exon_id",
+                        "gene_name"),
+         envir=as.environment("package:easyRNASeq"))
+  assign("ANNOTATION.TYPE",c(mRNA="mRNA",exon="exon"),
+         envir=as.environment("package:easyRNASeq"))
 }

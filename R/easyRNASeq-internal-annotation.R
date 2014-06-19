@@ -100,12 +100,12 @@
   mRNA.sel <- all.annotation$type %in% ANNOTATION.TYPE["mRNA"]
 
   exons <- all.annotation[exon.sel]
-  exons$exon <- getGffAttribute(all.annotation[exon.sel],"ID")
+  exons$exon <- getGffAttribute(all.annotation[exon.sel],"ID")[,1]
   
   ## get the gene ID
   exons$gene <- getGffAttribute(all.annotation[mRNA.sel],"Parent")[match(
     sapply(strsplit(getGffAttribute(all.annotation[exon.sel],"Parent"),","),"[",1),
-    getGffAttribute(all.annotation[mRNA.sel],"ID"))]    
+    getGffAttribute(all.annotation[mRNA.sel],"ID"))]
   
   ## get the transcript
   transcripts <- getGffAttribute(all.annotation[exon.sel],"Parent")
@@ -130,7 +130,7 @@
   all.annotation <- .readGffGtf(obj)
 
   ## subset for exons
-  all.annotation[all.annotation$type %in% ANNOTATION.TYPE["exon"],]
+  all.annotation <- all.annotation[all.annotation$type %in% ANNOTATION.TYPE["exon"],]
   
   ## extract the attributes
   gffAttr <- do.call(rbind,strsplit(all.annotation$gffAttributes," |;"))
@@ -148,27 +148,29 @@
   ## transcript
   all.annotation$transcript <- gsub(" |\"|;","",substr(gffAttr[,sel[2]],1,last))
   
-  ## exon
-  ## create the exon number if they are missing
-  if(is.na(sel[3])){
-    exonNum <- lapply(runLength(Rle(all.annotation$gene)),":",1)
-    sel <- strand(all.annotation[match(unique(all.annotation$gene),all.annotation$gene)]) == "+"
-    exonNum[sel] <- lapply(exonNum[sel],rev)
-    all.annotation$exon <- paste(all.annotation$gene,unlist(exonNum),sep="_")
-  } else {
-    all.annotation$exon <- paste(all.annotation$genes,gsub(" |\"|;","",gffAttr[,sel[3]]),sep="_")
-  }
+  ## exon ID
+  all.annotation$exon <- gsub(" |\"|;","",substr(gffAttr[,sel[3]],1,last))
   
   ## gene name
   ## we can only have one NA: gene_name, if so, get the gene_id instead
   if(is.na(sel[4])){
     all.annotation$gene.name <- all.annotation$gene
   } else {
-    all.annotation$genes.name <- gsub(" |\"|;","",gffAttr[,sel[4]])
+    all.annotation$gene.name <- gsub(" |\"|;","",gffAttr[,sel[4]])
   }
+  
+  ## edit the attributes to remove the space after the semi-colon
+  ## otherwise genomeIntervals does not parse it accurately  
+  all.annotation$gffAttributes <- .convertGffToGtfAttributes(all.annotation$gffAttributes)
   
   ## done
   return(as(all.annotation,"GRanges"))
+}
+
+".convertGffToGtfAttributes" <- function(attrs){
+  attrs <- gsub("; ",";",attrs)
+  attrs <- gsub(" ","=",attrs)
+  return(attrs)
 }
 
 ### =======================

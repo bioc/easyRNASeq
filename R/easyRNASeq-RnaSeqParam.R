@@ -50,14 +50,16 @@ setMethod(f="RnaSeqParam",
             bamParam=BamParam(),
             countBy=c("exons","features","genes","transcripts"),
             precision=c("read","bp")){
-            
 
             precision <- match.arg(precision)
-            countBy <- switch(precision,
-                              "read"="transcripts",
-                              "bp"="exons"
-                   )
-            
+            countBy <- match.arg(countBy)
+              
+            ## what was that for anyway????
+#             countBy <- switch(precision,
+#                               "read"="transcripts",
+#                               "bp"="exons"
+#                    )
+#             
             new("RnaSeqParam",
                 annotParam=annotParam,
                 bamParam=bamParam,

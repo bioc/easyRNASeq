@@ -50,7 +50,7 @@ setMethod(f="validate",
               stop(paste("The file:",path(obj),"does not exist."))
             }
             
-            if(!file.exists(paste(index(obj),"bai",sep="."))){
+            if(!file.exists(index(obj))){
               stop(paste("The index file: ",path(obj),".bai does not exist.",
                          "Use the Rsamtools indexBam function or the samtools index command line utility to create it.",
                          sep=""))
