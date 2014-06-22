@@ -77,7 +77,7 @@ object. }
   )
 
   ## get the counts
-  assay(sexp)$transcripts
+  assay(sexp)$exons
  }
 }
 \author{

@@ -78,10 +78,10 @@
 ### =======================
 ## get the Annot from a gff / gtf file
 ### =======================
-".readGffGtf" <- function(obj){
+".readGffGtf" <- function(obj,verbose=verbose){
   
   ## read it (genomeIntervals is the fastest)
-  all.annotation <- readGff3(datasource(obj))
+  all.annotation <- readGff3(datasource(obj),quiet=!verbose)
   
   ## keep the annotation.type matching the annotation
   return(all.annotation[all.annotation$type %in% ANNOTATION.TYPE,])  
@@ -90,10 +90,10 @@
 ### =======================
 ## get the annot from a gff file
 ### =======================
-".getGffRange" <- function(obj){
+".getGffRange" <- function(obj,verbose=FALSE){
 	
   ## read the file and do sanity checks
-  all.annotation <- .readGffGtf(obj)
+  all.annotation <- .readGffGtf(obj,verbose=verbose)
   
   ## save the exon info
   exon.sel <- all.annotation$type %in% ANNOTATION.TYPE["exon"]
@@ -124,10 +124,10 @@
 ### =======================
 ## get the annot from a gtf file
 ### =======================
-".getGtfRange" <- function(obj){
+".getGtfRange" <- function(obj,verbose=FALSE){
   
   ## read the file and do sanity checks
-  all.annotation <- .readGffGtf(obj)
+  all.annotation <- .readGffGtf(obj,verbose=verbose)
 
   ## subset for exons
   all.annotation <- all.annotation[all.annotation$type %in% ANNOTATION.TYPE["exon"],]

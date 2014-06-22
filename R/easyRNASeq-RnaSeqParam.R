@@ -1,22 +1,31 @@
 ##' RnaSeqParam constructor
 ##' 
-##' TODO ALL WRONG!!!
-##' This constructs a \code{\linkS4class{RnaSeqParam}} object.
-##' The default parameters are derived from the currently most 
-##' common RNA-Seq experimental use-case and are detailed below:
+##' This constructs a \code{\linkS4class{RnaSeqParam}} object, that combines
+##' all the necessary parameters for the analysis of RNA-Seq data. As much as
+##' possible, these parameters are determined automa-gi/ti-cally. It describes 
+##' three sets of parameters:
 ##' \itemize{
-##' \item paired is TRUE, \emph{i.e.} paired-end sequencing is expected.
-##' \item stranded is FALSE \emph{i.e.} stranded sequencing is not expected.
-##' \item yieldSize is set to 100,000. This is the amount of reads iteratively 
-##' processed from the bam file stream. It is a compromise between speed, 
-##' process-parallelization and memory usage.
+##'   \item parameters describing the annotation
+##'   \item parameters describing the BAM files, \emph{i.e.} the type of
+##'   sequencing that was conducted.
+##'   \item parameters describing how the counting should be done.
 ##' }
-##' 
-##' Calling the constructor without argument result in the
-##' default parameter described above to be returned. Calling
-##' the constructor with any  parameter will affect the value
-##' of the selected parameters, leaving the other parameters
-##' unaffected.
+##' The first two are provided through sepcific objects: \code{\linkS4class{AnnotParam}} and
+##' \code{\linkS4class{BamParam}} respectively. The third one is a set 
+##' constituted of:
+##' \itemize{
+##'   \item countBy: the feature per which the counts should be summarized (
+##'   exon, transcript or gene. A forth possibility - feature - can be used to
+##'   define arbitrary genomic loci)
+##'   \item precision: the precision at which the counts should be performed:
+##'   bp or reads. bp used to be the default in the \code{easyRNASeq} package,
+##'   whereas now reads is, following the Bioconductor main stream development.
+##' }
+##' The default parameters for the \code{\linkS4class{BamParam}} parameter are
+##' derived from the currently most common RNA-Seq experimental use-case: 
+##' strand-specific paired-end Illumina sequencing. See the respective manual
+##' pages of \code{\linkS4class{AnnotParam}} and
+##' \code{\linkS4class{BamParam}} for more details.
 ##' 
 ##' @aliases RnaSeqParam RnaSeqParam,ANY-method
 ##' @name easyRNASeq RnaSeqParam constructor

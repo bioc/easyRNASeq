@@ -167,8 +167,8 @@
             }
             grngs <- switch(type(obj),
                    "biomaRt"={.getBmRange(obj,...)},
-                   "gff3"={.getGffRange(obj)},
-                   "gtf"={.getGtfRange(obj)})
+                   "gff3"={.getGffRange(obj,verbose=verbose)},
+                   "gtf"={.getGtfRange(obj,verbose=verbose)})
           }),
         {
           if(verbose){

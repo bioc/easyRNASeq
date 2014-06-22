@@ -1,3 +1,8 @@
+CHANGES IN VERSION 2.1.9
+-------------------------
+
+  o Ported changes from version 2.0.7
+
 CHANGES IN VERSION 2.1.8
 -------------------------
 
@@ -47,6 +52,15 @@ CHANGES IN VERSION 2.1.0
 -------------------------
 
   o None, Bioc new devel branch 
+
+CHANGES IN VERSION 2.0.7
+-------------------------
+
+  o Made the verbose argument behave as it should
+
+  o Updated/corrected some man pages
+
+  o Added names to the assays SimpleList
 
 CHANGES IN VERSION 2.0.6
 -------------------------
