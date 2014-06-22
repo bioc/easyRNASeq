@@ -1,4 +1,3 @@
-## TODO to allow different readLength, we can simply take a named list as readLength
 ## If we have more than one readLength, return the one coresponding to the filename of the obj
 ## If we have one, return it
 ## In easyRNASeq, check that the names of the readLength are correct if lenhgth >1

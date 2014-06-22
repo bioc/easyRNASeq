@@ -78,7 +78,7 @@
 ##'   )
 ##'   
 ##'   ## get the counts
-##'   assay(sexp)$transcripts
+##'   assay(sexp)$exons
 ##'  }
 ##' 
 ## TODO integrate that in the right position in the file
@@ -215,10 +215,12 @@ setMethod(f="simpleRNASeq",
                             "i.e. the provided parameter will be ignored when necessary."))
             } else {
               if(colData(sexp)$Stranded[1] != stranded(param)){
-                warning(paste("You provided an incorrect BAM parameter; ",
-                              "'stranded' should be set to '",
-                              colData(sexp)$Paired[1],
-                              "'.",sep=""))
+                if(!override){
+                  warning(paste("You provided an incorrect BAM parameter; ",
+                                "'stranded' should be set to '",
+                                colData(sexp)$Paired[1],
+                                "'.",sep=""))
+                }
               }
             }
             
@@ -238,7 +240,7 @@ setMethod(f="simpleRNASeq",
             ## 3. not a validation but add the read counts
             colData(sexp)$TotalReads <- parallelize(bamFiles,
                                                     .streamForTotalCount,
-                                                    nnodes)
+                                                    nnodes,verbose=verbose)
             
             if(verbose){
               dev.null <- sapply(1:length(bamFiles),function(i,tR){
@@ -298,13 +300,15 @@ setMethod(f="simpleRNASeq",
             
             ## TODO, do as for the HistoneChIPseq package
             ## to store the data correctly
-            assays(sexp) <- SimpleList(do.call(cbind,
+             countAssay <- SimpleList(do.call(cbind,
                                                parallelize(bamFiles,
                                                            .streamCount,
                                                            nnodes,
                                                            rowData(sexp),
                                                            df,
                                                            param,verbose)))
+            names(countAssay) <- countBy(param)
+            assays(sexp) <- countAssay
             
             ## done
             if(verbose){  

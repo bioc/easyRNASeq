@@ -1,11 +1,6 @@
-## TODO make sure to provide the possibility to load a gene model
-## test the code: sapply(dir("/Users/delhomme/Documents/EMBL/Projects/HTFGC/NGS/trunk/src/R/packages/easyRNASeq/R",full.names=TRUE),source)
-
 ## TODO we need to unify the exons/features, i.e. make sure they are unique
 ## the easiest way is probably to report the unique only whenever exons or
 ## features are used. for transcripts and genes, we need to ensure that this is the case
-
-## TODO check why the lib size are different when calculated by edgeR and by RNAseq
 
 ## TODO think of using match.arg for default values
 ## match.arg(c("auto", "variableStep", "fixedStep"),c("auto", "variableStep", "fixedStep"))

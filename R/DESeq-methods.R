@@ -1,5 +1,5 @@
 ## this code was extracted from the DESeq vignette
-## Simon Anders et al.
+## by Simon Anders et al.
 
 ## not needed anymore, implemented in DESeq
 ## setMethod(

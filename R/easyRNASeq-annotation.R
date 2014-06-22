@@ -185,12 +185,12 @@ setMethod(
     if(verbose){
       message("Validating the annotation source")
     }
-    .validate(obj,verbose)
+    .validate(obj,verbose=verbose)
     
     ## then extract
     if(verbose){
       message("Fetching the annotation")
     }
-    .extract(obj,...)
+    .extract(obj,verbose=verbose,...)
   }
 )

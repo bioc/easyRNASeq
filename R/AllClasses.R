@@ -1,12 +1,5 @@
 ## Not sure we need a prototype later on
 ## TODO deprecate the RNAseq class and deprecate the IRanges ranges method on it
-## TODO should we have one readAnnotation slot
-## containing all the genomicAnnoation, geneModel, and readIslands info?
-## and have it more dynamic?
-## TODO add a slot section
-## for the parameters
-## TODO do we need sub-class that holds experiment, etc?
-## TODO add a constructor and add setters and getters
 
 ###==========================
 ### RNAseq
