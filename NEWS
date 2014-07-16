@@ -1,3 +1,17 @@
+CHANGES IN VERSION 2.1.11
+-------------------------
+
+  o Fixed more IRanges -> S4Vectors import changes.
+
+  o Relaxed the BAM header validation of the SO field. 
+  Thanks to John (Zang Jianhua) for finding the issue 
+  and providing the fix. Same changes as in release 2.0.9.
+
+CHANGES IN VERSION 2.1.10
+-------------------------
+
+  o Bioconductor core changes Iranges -> S4Vectors
+
 CHANGES IN VERSION 2.1.9
 -------------------------
 

@@ -4,7 +4,8 @@
 
 ## to update the package versions
 # installed.packages()[c("Biobase","BiocGenerics","biomaRt","Biostrings",
-#                        "DESeq","edgeR","genomeIntervals","GenomicAlignments","GenomicRanges",
+#                        "DESeq","edgeR","genomeIntervals","GenomicAlignments",
+#                        "GenomeInfoDb","GenomicRanges",
 #                        "IRanges","LSD","Rsamtools","S4Vectors","ShortRead",
 #                        "BiocStyle","BSgenome",
 #                        "BSgenome.Dmelanogaster.UCSC.dm3","GenomicFeatures",
@@ -22,11 +23,11 @@
 ##' \tabular{ll}{
 ##' Package: \tab easyRNASeq\cr
 ##' Type: \tab Package\cr
-##' Version: \tab 2.1.9\cr
-##' Date: \tab 2014-06-20\cr
+##' Version: \tab 2.1.11\cr
+##' Date: \tab 2014-07-15\cr
 ##' License: \tab Artistic-2.0\cr
 ##' LazyLoad: \tab yes\cr
-##' Depends: \tab methods, parallel, biomaRt, edgeR, DESeq, genomeIntervals, LSD, Rsamtools, ShortRead, RnaSeqTutorial\cr
+##' Depends: \tab methods, parallel, Biobase, BiocGenerics, biomaRt, Biostrings, edgeR, DESeq, genomeIntervals, GenomeInfoDb, GenomicAlignments, GenomicRanges, graphics, IRanges, LSD, Rsamtools, S4Vectors, ShortRead, utils\cr
 ##' Suggests: \tab BSgenome.Dmelanogaster.UCSC.dm3
 ##' }
 ##'
@@ -161,13 +162,12 @@ NULL
 ##' @importMethodsFrom GenomicAlignments cigar summarizeOverlaps
 ##' @importMethodsFrom GenomicRanges assay assays "assays<-" colData "colData<-"
 ##' "exptData<-" grglist rowData "rowData<-" SummarizedExperiment
-##' @importMethodsFrom IRanges "%in%" aggregate as.list as.matrix as.table
-##' "colnames<-" countOverlaps coverage elementLengths 
-##' end "end<-" findOverlaps gsub ifelse levels
-##' mean median narrow nchar queryHits ranges reduce rev Rle
-##' "rownames<-" runLength runsum runValue space split start "start<-"
-##' sub substr tolower "universe<-" unlist values which width
-##' @importMethodsFrom S4Vectors elementMetadata "elementMetadata<-" mcols
+##' @importMethodsFrom IRanges aggregate as.list as.matrix as.table
+##' "colnames<-" countOverlaps coverage elementLengths end "end<-" findOverlaps 
+##' gsub mean median narrow nchar queryHits ranges reduce rev "rownames<-" space
+##' split start "start<-" sub  tolower "universe<-" unlist values which width
+##' @importMethodsFrom S4Vectors "%in%" elementMetadata "elementMetadata<-" 
+##' ifelse levels mcols Rle runLength runsum runValue substr
 ##' @importMethodsFrom methods coerce initialize show
 ##' @importMethodsFrom Rsamtools countBam path scanBam scanBamHeader
 ##' ScanBamParam yieldSize "yieldSize<-"

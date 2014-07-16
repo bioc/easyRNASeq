@@ -62,7 +62,7 @@ setMethod(f="validate",
               }
 
               ## sorted by coordinate
-              if(scanBamHeader(obj)$text$`@HD`[2] != "SO:coordinate"){
+              if(all(!grepl("SO:coordinate",scanBamHeader(obj)$text$`@HD`))){
                 stop("Your BAM file needs to be sorted by coordinate; see (R)samtools sort.")
               }              
             }
