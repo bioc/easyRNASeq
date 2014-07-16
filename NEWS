@@ -1,3 +1,10 @@
+CHANGES IN VERSION 2.0.8
+-------------------------
+
+  o Relaxed the BAM header validation of the SO field. 
+  Thanks to John (Zang Jianhua) for finding the issue 
+  and providing the fix.
+
 CHANGES IN VERSION 2.0.7
 -------------------------
 
