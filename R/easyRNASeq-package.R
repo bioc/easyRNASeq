@@ -82,7 +82,7 @@
 ##' 
 ##' 	The suggested packages:
 ##' 	\code{\link[parallel:makeCluster]{parallel}}
-##' 	\code{\link[GenomicFeatures:TranscriptDb-class]{GenomicFeatures}}
+##' 	\code{\link[GenomicFeatures:TxDb-class]{GenomicFeatures}}
 ##' 
 ##'   The following classes and functions that are made available from
 ##'   other packages:
