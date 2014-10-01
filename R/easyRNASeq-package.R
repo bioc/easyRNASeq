@@ -23,8 +23,8 @@
 ##' \tabular{ll}{
 ##' Package: \tab easyRNASeq\cr
 ##' Type: \tab Package\cr
-##' Version: \tab 2.1.11\cr
-##' Date: \tab 2014-07-15\cr
+##' Version: \tab 2.1.14\cr
+##' Date: \tab 2014-10-01\cr
 ##' License: \tab Artistic-2.0\cr
 ##' LazyLoad: \tab yes\cr
 ##' Depends: \tab methods, parallel, Biobase, BiocGenerics, biomaRt, Biostrings, edgeR, DESeq, genomeIntervals, GenomeInfoDb, GenomicAlignments, GenomicRanges, graphics, IRanges, LSD, Rsamtools, S4Vectors, ShortRead, utils\cr
@@ -144,7 +144,7 @@ NULL
 ##' @importClassesFrom GenomicAlignments GAlignments GAlignmentPairs
 ##' @importClassesFrom GenomicRanges GRanges GRangesList SummarizedExperiment
 ##' @importClassesFrom IRanges RangedData RleList
-##' @importClassesFrom S4Vectors Vector
+##' @importClassesFrom S4Vectors Vector DataFrame SimpleList
 ##' @importClassesFrom methods ANY character "function" integer
 ##' list matrix missing numeric vector
 ##' @importClassesFrom Rsamtools BamFile BamFileList
@@ -185,8 +185,8 @@ NULL
 ##' @importFrom GenomicRanges GRanges GRangesList
 ##' @importFrom graphics abline axis axTicks boxplot grid hist legend lines
 ##' mtext par plot rect
-##' @importFrom IRanges IRanges DataFrame IRangesList LogicalList
-##' RangedData RangesList SimpleList SplitDataFrameList RleList
+##' @importFrom IRanges IRanges IRangesList LogicalList
+##' RangedData RangesList SplitDataFrameList RleList
 ##' @importFrom LSD heatscatter
 ##' @importFrom methods as extends is new
 ##' @importFrom parallel makePSOCKcluster parLapply stopCluster

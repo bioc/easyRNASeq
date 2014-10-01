@@ -40,6 +40,7 @@
 ##' .list.files .list.files-deprecated .getWidth
 ##' .normalizationDispatcher reduce reduce,RNAseq-method strand
 ##' strand,RNAseq-method strand<- strand<-,RNAseq-method
+##' strand<-,RNAseq,ANY-method
 ##' @name easyRNASeq internal methods
 ##' @rdname easyRNASeq-internal-methods
 ##' @param arg The argument name to check for.

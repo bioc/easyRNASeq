@@ -9,6 +9,9 @@
 ##' @rdname show-methods
 ##' @aliases show,RNAseq-method show,AnnotParam-method show,BamParam-method
 ##' show,RnaSeqParam-method
+##' @param object An object of the \code{\linkS4class{AnnotParam}}, 
+##' \code{\linkS4class{BamParam}}, \code{\linkS4class{RnaSeqParam}} or 
+##' \code{\linkS4class{RNAseq}} class
 ##' @docType methods
 ##' @section Methods: \describe{ 
 ##' \item{list("signature(object = \"RNAseq\")")}{
