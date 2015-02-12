@@ -3,13 +3,15 @@
 ## roxygenize("easyRNASeq/")
 
 ## to update the package versions
-# installed.packages()[c("Biobase","BiocGenerics","biomaRt","Biostrings",
-#                        "DESeq","edgeR","genomeIntervals","GenomicAlignments",
-#                        "GenomeInfoDb","GenomicRanges",
-#                        "IRanges","LSD","Rsamtools","S4Vectors","ShortRead",
-#                        "BiocStyle","BSgenome",
-#                        "BSgenome.Dmelanogaster.UCSC.dm3","GenomicFeatures",
-#                        "RnaSeqTutorial","RUnit"),"Version"]
+# pkg <- c("Biobase","BiocGenerics","biomaRt","Biostrings",
+#          "DESeq","edgeR","GenomeInfoDb","genomeIntervals",
+#          "GenomicAlignments","GenomicRanges",
+#          "IRanges","LSD","Rsamtools","S4Vectors","ShortRead",
+#          "BiocStyle","BSgenome",
+#          "BSgenome.Dmelanogaster.UCSC.dm3","GenomicFeatures",
+#          "RnaSeqTutorial","RUnit")
+# pkg[! pkg %in% rownames(installed.packages())]
+# installed.packages()[pkg,"Version"]
 
 ###==========================
 ### package details
@@ -23,8 +25,8 @@
 ##' \tabular{ll}{
 ##' Package: \tab easyRNASeq\cr
 ##' Type: \tab Package\cr
-##' Version: \tab 2.1.15\cr
-##' Date: \tab 2014-10-07\cr
+##' Version: \tab 2.3.1\cr
+##' Date: \tab 2015-02-11\cr
 ##' License: \tab Artistic-2.0\cr
 ##' LazyLoad: \tab yes\cr
 ##' Depends: \tab methods, parallel, Biobase, BiocGenerics, biomaRt, Biostrings, edgeR, DESeq, genomeIntervals, GenomeInfoDb, GenomicAlignments, GenomicRanges, graphics, IRanges, LSD, Rsamtools, S4Vectors, ShortRead, utils\cr
@@ -52,11 +54,11 @@
 ##' 	\code{\link[easyRNASeq:edgeR-methods]{edgeR methods}} for post-processing the data.
 ##' 	\code{\link[easyRNASeq:DESeq-methods]{DESeq methods}} for post-processing the data.
 ##' 	}
-##' 
+##'
 ##' @name easyRNASeq package
 ##' @rdname easyRNASeq-package
 ##' @aliases easyRNASeq-package assay type BamFileList BamFileList-class IRanges
-##' RangedData SRFilterResult SummarizedExperiment-class chromosomeFilter 
+##' RangedData SRFilterResult SummarizedExperiment-class chromosomeFilter
 ##' compose nFilter RangedData-class
 ##' @docType package
 ##' @author Nicolas Delhomme, Bastian Schiffthaler, Ismael Padioleau
@@ -67,7 +69,7 @@
 ##'
 ##'   The default output class specification:
 ##'   \code{\linkS4class{SummarizedExperiment}}
-##' 
+##'
 ##' 	The imported packages:
 ##' 	\code{\link[biomaRt:useMart]{biomaRt}}
 ##' 	\code{\link[edgeR:DGEList]{edgeR}}
@@ -75,15 +77,15 @@
 ##' 	\code{\link[Biostrings:XString-class]{Biostrings}}
 ##' 	\code{\link[BSgenome:BSgenome-class]{BSgenome}}
 ##' 	\code{\link[DESeq:newCountDataSet]{DESeq}}
-##' 	\code{\link[GenomicRanges:GRanges-class]{GenomicRanges}}	
+##' 	\code{\link[GenomicRanges:GRanges-class]{GenomicRanges}}
 ##' 	\code{\link[IRanges:IRanges-constructor]{IRanges}}
 ##' 	\code{\link[Rsamtools:scanBam]{Rsamtools}}
 ##' 	\code{\link[ShortRead:readAligned]{ShortRead}}
-##' 
+##'
 ##' 	The suggested packages:
 ##' 	\code{\link[parallel:makeCluster]{parallel}}
 ##' 	\code{\link[GenomicFeatures:TxDb-class]{GenomicFeatures}}
-##' 
+##'
 ##'   The following classes and functions that are made available from
 ##'   other packages:
 ##'   \itemize{
@@ -95,20 +97,20 @@
 ##'     \item{Functions/Methods}{
 ##'       \code{\link[GenomicRanges:SummarizedExperiment-class]{
 ##'         The SummarizedExperiment assay accessor}
-##'       }  
+##'       }
 ##'       \code{\link[Rsamtools:BamFileList]{The BamFileList constructor}}
 ##'       \code{\link[IRanges:IRanges-constructor]{The IRanges constructor}}
 ##'       \code{\link[IRanges:RangedData-class]{The RangedData constructor}}
-##'       \code{\link[ShortRead:srFilter]{For the SRFilterResult, 
+##'       \code{\link[ShortRead:srFilter]{For the SRFilterResult,
 ##'       chromosomeFilter, compose and nFilter methods}}
 ##'     }
 ##'   }
-##'   
+##'
 ##' @examples
 ##' 	\dontrun{
 ##' 	library("RnaSeqTutorial")
 ##' 	library(BSgenome.Dmelanogaster.UCSC.dm3)
-##' 
+##'
 ##' 	## creating a count table from 4 bam files
 ##' 	count.table <- easyRNASeq(filesDirectory=
 ##' 		    			system.file(
@@ -125,9 +127,9 @@
 ##' 							    "gAnnot.rda",
 ##' 							    package="RnaSeqTutorial"),
 ##' 				count="exons")
-##' 
+##'
 ##' 	}
-##' 
+##'
 NULL
 
 ###==========================
@@ -158,15 +160,15 @@ NULL
 ##' @importMethodsFrom Biostrings type
 ##' @importMethodsFrom genomeIntervals seq_name
 ##' @importMethodsFrom GenomeInfoDb seqinfo seqlengths "seqlengths<-"
-##' seqlevels "seqlevels<-" seqnames "seqnames<-" 
+##' seqlevels "seqlevels<-" seqnames "seqnames<-"
 ##' @importMethodsFrom GenomicAlignments cigar summarizeOverlaps
 ##' @importMethodsFrom GenomicRanges assay assays "assays<-" colData "colData<-"
 ##' "exptData<-" grglist rowData "rowData<-" SummarizedExperiment
 ##' @importMethodsFrom IRanges aggregate as.list as.matrix as.table
-##' "colnames<-" countOverlaps coverage elementLengths end "end<-" findOverlaps 
+##' "colnames<-" countOverlaps coverage elementLengths end "end<-" findOverlaps
 ##' gsub mean median narrow nchar queryHits ranges reduce rev "rownames<-" space
 ##' split start "start<-" sub  tolower "universe<-" unlist values which width
-##' @importMethodsFrom S4Vectors "%in%" elementMetadata "elementMetadata<-" 
+##' @importMethodsFrom S4Vectors "%in%" elementMetadata "elementMetadata<-"
 ##' ifelse levels mcols Rle runLength runsum runValue substr
 ##' @importMethodsFrom methods coerce initialize show
 ##' @importMethodsFrom Rsamtools countBam path scanBam scanBamHeader
@@ -191,6 +193,7 @@ NULL
 ##' @importFrom methods as extends is new
 ##' @importFrom parallel makePSOCKcluster parLapply stopCluster
 ##' @importFrom Rsamtools BamFileList bamFlagTest index scanBamFlag
+##' @importFrom S4Vectors DataFrame SimpleList
 ##' @importFrom ShortRead alignData chromosomeFilter compose nFilter
 ##' SRFilterResult
 ##' @importFrom utils combn str
@@ -210,15 +213,15 @@ NULL
 ##' \item \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{fetchAnnotation}}
 ##' \item \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{knownOrganisms}}
 ##' }
-##' 
+##'
 ##' \itemize{
 ##' \item The \code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq}} function is superseded by the
-##' \code{\link[easyRNASeq:easyRNASeq-simpleRNASeq]{simpleRNASeq}} function to consolidate and 
+##' \code{\link[easyRNASeq:easyRNASeq-simpleRNASeq]{simpleRNASeq}} function to consolidate and
 ##' prune the overall package. The changes are based on user comments and on the
 ##' general standardization occuring in the field.
 ##' \item The \code{\link[easyRNASeq:easyRNASeq-coverage-methods]{fetchCoverage}} function only had two
 ##' parameters deprecated as the consequence of the package consolidation. As the scanBam
-##' function is not called directly anymore but through higher level functions (from the 
+##' function is not called directly anymore but through higher level functions (from the
 ##' GenomicRanges package), the 'what' and 'isUnmappedQuery' parameters were obsolete.
 ##' }
 ##' @aliases easyRNASeq easyRNASeq,RNAseq-method
@@ -226,7 +229,7 @@ NULL
 ##' knownOrganisms knownOrganisms,missing-method
 ##' fetchAnnotation fetchAnnotation,RNAseq-method
 ##' @name Deprecated functions
-##' @rdname easyRNASeq-deprecated 
+##' @rdname easyRNASeq-deprecated
 NULL
 
 ###==========================
@@ -236,15 +239,15 @@ NULL
 ##' \itemize{
 ##' \item \code{lotDispersionEstimates,DGEList-method}
 ##' }
-##' 
+##'
 ##' \itemize{
 ##' \item The \code{plotDispersionEstimates,DGEList-method}
-##' function is superseded by the \code{\link[edgeR:plotBCV]{plotBCV}} function 
+##' function is superseded by the \code{\link[edgeR:plotBCV]{plotBCV}} function
 ##' as the \pkg{edgeR} DGEList object structure changed
 ##' }
 ##' @aliases plotDispersionEstimates,DGEList-method
 ##' @name Defunct functions
-##' @rdname easyRNASeq-defunct 
+##' @rdname easyRNASeq-defunct
 NULL
 
 ###==========================
@@ -257,7 +260,7 @@ NULL
 ##' \item GTF.FIELDS
 ##' \item ANNOTATION.TYPE
 ##' }
-##' 
+##'
 ##' These objects hold the following information
 ##' \itemize{
 ##' \item GTF.FIELDS \code{c("gene_id","transcript_id","exon_id","gene_name")}
@@ -265,9 +268,9 @@ NULL
 ##' }
 ##' and are designed as global variables to expose the
 ##' fact that they are hardcoded. There exist as
-##' placeholder in case a user would require different 
+##' placeholder in case a user would require different
 ##' values for these.
-##' 
+##'
 ##' @aliases easyRNASeq-global-variables .onAttach ANNOTATION.TYPE GTF.FIELDS
 ##' @name easyRNASeq-global-variables
 ##' @rdname easyRNASeq-global-variables

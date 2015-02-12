@@ -1,3 +1,23 @@
+CHANGES IN VERSION 2.3.1
+-------------------------
+
+  o Same as release 2.2.1
+
+CHANGES IN VERSION 2.3.0
+-------------------------
+
+  o Bioconductor devel 3.1
+
+CHANGES IN VERSION 2.2.1
+-------------------------
+
+  o Added (now) missing S4Vectors function imports.
+
+CHANGES IN VERSION 2.2.0
+-------------------------
+
+  o Bioconductor release 3.0
+
 CHANGES IN VERSION 2.1.15
 -------------------------
 
@@ -25,8 +45,8 @@ CHANGES IN VERSION 2.1.11
 
   o Fixed more IRanges -> S4Vectors import changes.
 
-  o Relaxed the BAM header validation of the SO field. 
-  Thanks to John (Zang Jianhua) for finding the issue 
+  o Relaxed the BAM header validation of the SO field.
+  Thanks to John (Zang Jianhua) for finding the issue
   and providing the fix. Same changes as in release 2.0.9.
 
 CHANGES IN VERSION 2.1.10
@@ -50,7 +70,7 @@ CHANGES IN VERSION 2.1.7
 
   o Changed to use roxygen 4.0.0
 
-  o Corrected a dependency mismatch. 
+  o Corrected a dependency mismatch.
   Beats me why it did not work in v2.1.6...
 
 CHANGES IN VERSION 2.1.6
@@ -87,7 +107,7 @@ CHANGES IN VERSION 2.1.1
 CHANGES IN VERSION 2.1.0
 -------------------------
 
-  o None, Bioc new devel branch 
+  o None, Bioc new devel branch
 
 CHANGES IN VERSION 2.0.7
 -------------------------
@@ -112,13 +132,13 @@ CHANGES IN VERSION 2.0.5
 -------------------------
 
   o Corrected the handling of gtf files to ensure that exons
-  are correctly identified. This required some low level 
+  are correctly identified. This required some low level
   functionality changes. A unit test was added to ensure
   consistency. "exon_number" is no more a required gtf field, but
   "exon_id" is.
 
   o Changed the BamFile validation as now the index has the correct
-  .bai extension automatically added in RSamtools. 
+  .bai extension automatically added in RSamtools.
 
   o Fixed a bug that hardcoded the transcript summarization when
   using simpleRNASeq.
@@ -142,7 +162,7 @@ CHANGES IN VERSION 2.0.2
   o Added the minimal set of exports for the vignette to
   be built.
 
-  o Fixed some vignette discrepancy with the BiocStyle 
+  o Fixed some vignette discrepancy with the BiocStyle
   style.
 
 CHANGES IN VERSION 2.0.1
@@ -150,7 +170,7 @@ CHANGES IN VERSION 2.0.1
 
   o Moved the vignette from 1.8.8 to 2.0.1; it was
   overlooked in the 1.99.3 version.
-  
+
   o Corrected the dependencies to be Bioc 2.14
 
 CHANGES IN VERSION 2.0.0
@@ -161,7 +181,7 @@ CHANGES IN VERSION 2.0.0
 CHANGES IN VERSION 1.99.3
 -------------------------
 
-  o Replicated the bug fixing of version 1.8.8. 
+  o Replicated the bug fixing of version 1.8.8.
 
 CHANGES IN VERSION 1.99.2
 -------------------------
@@ -181,10 +201,10 @@ CHANGES IN VERSION 1.99.0
 
   o Ported the final changes from the Git
   repository that make the simpleRNASeq function
-  functional. 
+  functional.
 
   o Bumped the version number to 1.99 as these are
-  major changes and hence next Bioc release will 
+  major changes and hence next Bioc release will
   have easyRNASeq 2.0.0.
 
 CHANGES IN VERSION 1.9.7
@@ -236,13 +256,13 @@ CHANGES IN VERSION 1.8.8
 -------------------------
 
   o Corrected a typo in a function to get the names from a
-  RangedData annotation. Thanks to Sylvain Foisy for 
+  RangedData annotation. Thanks to Sylvain Foisy for
   reporting it and providing feedback to squash it.
 
 CHANGES IN VERSION 1.8.7
 -------------------------
 
-  o Fixed a bug in the summarization when using the 
+  o Fixed a bug in the summarization when using the
   "genes", "geneModels" paradigm and annotation in the
   older RangedData format. Thanks to Kelly Stanton for
   reporting it and providing data to squash it.
@@ -250,7 +270,7 @@ CHANGES IN VERSION 1.8.7
 CHANGES IN VERSION 1.8.6
 -------------------------
 
-  o Fixed an issue where RPKM values were all set to NAs. Thanks to Vijaya 
+  o Fixed an issue where RPKM values were all set to NAs. Thanks to Vijaya
   Mahalingam Shanmugiah for reporting that issue.
 
   o Fixed a number of warnings introduced by changes to the underlying IRanges
@@ -296,10 +316,10 @@ CHANGES IN VERSION 1.8.2
 
   o Reworked the parsing of gtf formatted files.
 
-  o Added a few more sanity checks in the easyRNASeq 
+  o Added a few more sanity checks in the easyRNASeq
   function.
 
-  o Added a use case to the vignette to show how to 
+  o Added a use case to the vignette to show how to
   generate and use synthetic transcripts rather than
   "gene models".
 
@@ -314,7 +334,7 @@ CHANGES IN VERSION 1.8.1
 	o Adapted the dependencies version to match the
 	Bioconductor release version 2.13
 
-	o Switched to use GAlignments instead of 
+	o Switched to use GAlignments instead of
 	GappedAlignments
 
 	o Corrected 2 Notes occuring during R CMD check that
@@ -348,7 +368,7 @@ CHANGES IN VERSION 1.6.3
 CHANGES IN VERSION 1.6.2
 -------------------------
 
-  o Released the constraint on the gtf annotation file 
+  o Released the constraint on the gtf annotation file
   parsing to allow for gtf file without the "exon_number"
   attribute such as those retrieved from UCSC.
 
@@ -357,7 +377,7 @@ CHANGES IN VERSION 1.6.1
 
   o Adapted the package dependency
 
-  o Added a check to stop processing whenever 
+  o Added a check to stop processing whenever
   annotation are outside of the chromosomes.
 
 CHANGES IN VERSION 1.6.0
@@ -404,11 +424,11 @@ CHANGES IN VERSION 1.3.14
 NEW FEATURES
 
     o easyRNASeq now returns a SummarizedExperiment in
-    an effort to consolidate the objects used for Next 
+    an effort to consolidate the objects used for Next
     Generation Sequencing in Bioconductor. This is the
     new default of the count function. The count function
-    is a new function to supersed easyRNASeq in the coming 
-    development version (1.5.x) to consolidate the 
+    is a new function to supersed easyRNASeq in the coming
+    development version (1.5.x) to consolidate the
     parameters and output of the easyRNASeq function.
 
 BUG FIXES
@@ -423,7 +443,7 @@ CHANGES IN VERSION 1.3.13
 
 BUG FIXES
 
-    o Same correction as in the stable version 1.2.5, 
+    o Same correction as in the stable version 1.2.5,
     but for those already corrected in version 1.3.3.
 
 CHANGES IN VERSION 1.3.12
@@ -436,7 +456,7 @@ CHANGES IN VERSION 1.3.12
     o Relaxed the gtf file checking. If the gene_name is
     absent, the gene_id is used instead.
 
-    o Improved some reporting and remove a bottle-neck 
+    o Improved some reporting and remove a bottle-neck
     occuring when there are many sequences in the reference.
 
 BUG FIXES
@@ -444,11 +464,11 @@ BUG FIXES
     o Ensure that only the matched ranges are returned when
     reading gapped alignments.
 
-    o The library size is more exactly calculated and is the 
+    o The library size is more exactly calculated and is the
     number of aligned reads.
 
     o Corrected a bug in the validity checking that prevented
-    bam files created by different aligners using the same 
+    bam files created by different aligners using the same
     reference to be processed as the reference sequences were
     not ordered in the same fashion.
 
@@ -463,11 +483,11 @@ BUG FIXES
 CHANGES IN VERSION 1.3.10
 -------------------------
 
-    o Some vignette discrepancies have been corrected. 
+    o Some vignette discrepancies have been corrected.
     Thanks to Richard Friedman for spotting them.
 
     o Providing the 'filesDirectory' argument is not
-    necessary anymore, if the files to proceed are 
+    necessary anymore, if the files to proceed are
     present in the current directory. Indeed, this parameter
     now defaults to the current directory as can be found out
     using 'getwd()'.
@@ -488,12 +508,12 @@ BUG FIXES
 
     o Improved the support for reads of different lengths.
 
-    o A cosmetic change to report read lengths as well when 
+    o A cosmetic change to report read lengths as well when
     read files with variable read length are processed.
 
     o Corrected a bug and enhanced the loading of gtf annotation
-    files. Thanks to Tomasz Kulinski for spotting the issue and 
-    providing the dataset to reproduce it.    
+    files. Thanks to Tomasz Kulinski for spotting the issue and
+    providing the dataset to reproduce it.
 
 CHANGES IN VERSION 1.3.8
 -------------------------
@@ -502,8 +522,8 @@ NEW FEATURES
     o Now bam files can be processed in parallel (long time
     request from Wade Davis). If the easyRNASeq argument 'nbCore'
     is greater than 1 (1 being the default), then that many core
-    will be used to process the read files in parallel. 
-    Pay attention not to use too many cores and have enough 
+    will be used to process the read files in parallel.
+    Pay attention not to use too many cores and have enough
     memory available. The memory load scales up linearly with
     the number of files processed.
 
@@ -517,7 +537,7 @@ NEW FEATURES
     o Added a function that lists existing organism conversion
     when applying the validity checks.
 
-    o Added a bp.coverage to the fetchCoverage function that 
+    o Added a bp.coverage to the fetchCoverage function that
     defaults to FALSE. To allow for variable length reads, it
     now returns read coverage proportion per bp by default.
 
@@ -530,7 +550,7 @@ BUG FIXES
     unknown and no custom.map is provided, then the validity checks
     are turned off and a warning is emitted.
 
-    o Providing the chr.sizes as as list has been deprecated. 
+    o Providing the chr.sizes as as list has been deprecated.
     Only named numeric vector are supported.
 
     o Removed a now useless warning in the .readGffGtf function.
@@ -541,8 +561,8 @@ BUG FIXES
 CHANGES IN VERSION 1.3.6
 -------------------------
 NEW FEATURES
-    
-    o It is now possible to pass arguments to list files through the 
+
+    o It is now possible to pass arguments to list files through the
     three dots. I.e. setting recursive=TRUE is now possible.
 
 BUG FIXES
@@ -555,13 +575,13 @@ CHANGES IN VERSION 1.3.5
 NEW FEATURES
 
     o bam is now the default format for the easyRNASeq method.
-    o chromosome sizes are now extracted from the BAM header 
+    o chromosome sizes are now extracted from the BAM header
     when the 'chr.sizes' argument is set to "auto". Thanks to
     Simon Anders for pushing that off my TODO list and the nice
     implementation.
 
 BUG FIXES
-    
+
     o Adapted to an API change of the edgeR package for estimating
     the tagwise dispersion.
 
@@ -581,7 +601,7 @@ CHANGES IN VERSION 1.3.3
 -------------------------
 
     o Converted the package to use Roxygen2, a Doxygen like in-source
-    documentation system for generating the RD and NAMESPACE. The 
+    documentation system for generating the RD and NAMESPACE. The
     original man page were converted using the Rd2roxygen package and
     the resulting in-source documentation manually edited.
 
@@ -627,10 +647,10 @@ BUG FIXES
     o When using edgeR, it was not possible to de-activate
     the drawing of the quality assessment plots.
     o Some edgeR changes to the API have been ported to the
-    stable R version, should not have occured... The following 
-    are changes that adapt to that new API, changes ported from 
+    stable R version, should not have occured... The following
+    are changes that adapt to that new API, changes ported from
     version the easyRNASeq development version 1.3.3...
-    o Adapted to the new arguments of the edgeR 
+    o Adapted to the new arguments of the edgeR
     estimateTagwiseDisp function
     o Removed the dispersion.method argument from the plotMeanVar
     edgeR method call as this argument is defunct.
@@ -682,14 +702,14 @@ BUG FIXES
 
     o Worked on Wade Davis case with 3 different sets of chromosome
     names in the three different input (reads, annotation, chromosome
-    sizes) 
+    sizes)
 
     o Worked on smoother error handling when not using bam
-    files. Again through Wade Davis example 
+    files. Again through Wade Davis example
 
     o Ensured that chromosome names conversion occurs whether provided
-    with a factor or a character vector 
-    
+    with a factor or a character vector
+
     o extended the NAMESPACE
 
 CHANGES IN VERSION 1.1.9
@@ -698,10 +718,10 @@ CHANGES IN VERSION 1.1.9
 BUG FIXES
 
     o Added an \alias{RNAseq} to ease the class documentation access;
-    an H.Pages suggestion 
+    an H.Pages suggestion
 
     o Changed the DESCRIPTION file to make sure that the latest
-    ShortRead (1.13.13) and BiocGenerics (0.1.11) package are required 
+    ShortRead (1.13.13) and BiocGenerics (0.1.11) package are required
 
 CHANGES IN VERSION 1.1.8
 ------------------------
@@ -711,7 +731,7 @@ BUG FIXES
     o Corrected the last occurence of the deprecated matchMatrix call
 
     o Corrected an issue on windows raised by the parallel
-    package. Thanks to Wade Davis for pointing that one out. 
+    package. Thanks to Wade Davis for pointing that one out.
 
 CHANGES IN VERSION 1.1.7
 ------------------------
@@ -730,14 +750,14 @@ BUG FIXES
     chromosome name lists to be two different set with a common
     intersect. I always consider that one would be the subset of the
     other one. Now, when such situation occurs only the common set is
-    kept and used for the calculations. 
+    kept and used for the calculations.
 
     o Herve Pages changed the findOverlaps value. It is now an object
     of the Hits class that does not support the matchMatrix accessor
-    anymore. The code was adapted to the new accessor queryHits. 
+    anymore. The code was adapted to the new accessor queryHits.
 
     o Corrected the package structure to add a vignettes
-    sub-directory. Moved the relevant files there 
+    sub-directory. Moved the relevant files there
 
 CHANGES IN VERSION 1.1.5
 ------------------------
@@ -745,12 +765,12 @@ CHANGES IN VERSION 1.1.5
 BUG FIXES
 
     o Removed the fitInfo method extension to the DESeq package as it
-    as been implemented in that package 
+    as been implemented in that package
 
     o Reworked the plotDispersionEstimates and
     .normalizationDispatcher function to deal with the new fitInfo
     function (the information is stored in an environment rather than
-    in a list) 
+    in a list)
 
 CHANGES IN VERSION 1.1.4
 ------------------------
