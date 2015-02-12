@@ -80,10 +80,10 @@ setMethod(
   definition=function(obj, name = NULL, ymin, 
                       linecol = "#00000080", xlab = "mean of normalized counts", 
                       ylab = "dispersion", log = "xy", cex = 0.45, ...) {
-    px = rowMeans(counts(cds, normalized = TRUE))
+    px = rowMeans(counts(obj, normalized = TRUE))
     sel = (px > 0)
     px = px[sel]
-    py = fitInfo(cds, name = name)$perGeneDispEsts[sel]
+    py = fitInfo(obj, name = name)$perGeneDispEsts[sel]
     if (missing(ymin)) 
       ymin = 10^floor(log10(min(py[py > 0], na.rm = TRUE)) - 
                         0.1)
@@ -103,7 +103,7 @@ setMethod(
     axis(1, at=atx, labels=xlabels)
     axis(2, at=aty, labels=ylabels)
     xg = 10^seq(-0.5, 5, length.out = 100)
-    lines(log10(xg), log10(fitInfo(cds, name = name)$dispFun(xg)), col = linecol, 
+    lines(log10(xg), log10(fitInfo(obj, name = name)$dispFun(xg)), col = linecol, 
           lwd = 4, lty = 1
     )
   })

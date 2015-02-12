@@ -1,6 +1,6 @@
 ## to re-build the documentation and namespace
 ## library(roxygen2)
-## roxygenize("easyRNASeq/")
+## roxygenize("../easyrnaseq-devel/")
 
 ## to update the package versions
 # pkg <- c("Biobase","BiocGenerics","biomaRt","Biostrings",
@@ -26,7 +26,7 @@
 ##' Package: \tab easyRNASeq\cr
 ##' Type: \tab Package\cr
 ##' Version: \tab 2.3.1\cr
-##' Date: \tab 2015-02-11\cr
+##' Date: \tab 2015-02-12\cr
 ##' License: \tab Artistic-2.0\cr
 ##' LazyLoad: \tab yes\cr
 ##' Depends: \tab methods, parallel, Biobase, BiocGenerics, biomaRt, Biostrings, edgeR, DESeq, genomeIntervals, GenomeInfoDb, GenomicAlignments, GenomicRanges, graphics, IRanges, LSD, Rsamtools, S4Vectors, ShortRead, utils\cr
@@ -278,6 +278,8 @@ NULL
 ##' @param pkgname a character string giving the name of the package.
 ##' @seealso \code{\link[base:ns-hooks]{.onAttach}} in the \code{base} package.
 ##' @keywords internal
+globalVariables("GTF.FIELDS")
+globalVariables("ANNOTATION.TYPE")  
 ".onAttach" <- function(libname,pkgname){
   assign("GTF.FIELDS",c("gene_id","transcript_id","exon_id",
                         "gene_name"),
