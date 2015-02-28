@@ -11,7 +11,7 @@ Description: Calculates the coverage of high-throughput short-reads against
     or 'edgeR' package.
 Imports:
     Biobase (>= 2.27.1),
-    BiocGenerics (>= 0.13.1),
+    BiocGenerics (>= 0.13.5),
     biomaRt (>= 2.23.5),
     Biostrings (>= 2.35.7),
     DESeq (>= 1.19.0),
