@@ -1,5 +1,5 @@
 Package: easyRNASeq
-Version: 2.3.1
+Version: 2.3.2
 Date: 2015-02-12
 Type: Package
 Title: Count summarization and normalization for RNA-Seq data
@@ -11,7 +11,7 @@ Description: Calculates the coverage of high-throughput short-reads against
     or 'edgeR' package.
 Imports:
     Biobase (>= 2.27.1),
-    BiocGenerics (>= 0.13.4),
+    BiocGenerics (>= 0.13.1),
     biomaRt (>= 2.23.5),
     Biostrings (>= 2.35.7),
     DESeq (>= 1.19.0),

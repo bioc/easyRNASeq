@@ -59,12 +59,6 @@ setGeneric(
            def=function(obj){
              standardGeneric("chrSize")
            })
-##' @exportMethod fileName
-setGeneric(
-           name="fileName",
-           def=function(obj){
-             standardGeneric("fileName")
-           })
 
 ###==========================
 ## 2. setters
