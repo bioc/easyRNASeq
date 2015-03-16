@@ -268,7 +268,7 @@ setMethod(f="simpleRNASeq",
             
             ## TODO we need to adapt the rda, etc description and the AnnotParam
             ## to accept a GRanges and not a GRangesList
-            rowData(sexp) <- switch(precision(param),
+            rowRanges(sexp) <- switch(precision(param),
                                     "read"={split(grngs,mcols(grngs)[,sub("s$","",countBy(param))])},
                                     "bp"={split(grngs,grngs$seqnames)})
             
@@ -304,7 +304,7 @@ setMethod(f="simpleRNASeq",
                                                parallelize(bamFiles,
                                                            .streamCount,
                                                            nnodes,
-                                                           rowData(sexp),
+                                                           rowRanges(sexp),
                                                            df,
                                                            param,verbose)))
             names(countAssay) <- countBy(param)

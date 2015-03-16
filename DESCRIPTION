@@ -1,6 +1,6 @@
 Package: easyRNASeq
-Version: 2.3.1
-Date: 2015-02-12
+Version: 2.3.4
+Date: 2015-03-16
 Type: Package
 Title: Count summarization and normalization for RNA-Seq data
 Author: Nicolas Delhomme, Ismael Padioleau, Bastian Schiffthaler
@@ -9,6 +9,8 @@ Description: Calculates the coverage of high-throughput short-reads against
     a genome of reference and summarizes it per feature of interest (e.g. exon,
     gene, transcript). The data can be normalized as 'RPKM' or by the 'DESeq'
     or 'edgeR' package.
+Depends: 
+    locfit
 Imports:
     Biobase (>= 2.27.1),
     BiocGenerics (>= 0.13.6),

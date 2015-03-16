@@ -25,8 +25,8 @@
 ##' \tabular{ll}{
 ##' Package: \tab easyRNASeq\cr
 ##' Type: \tab Package\cr
-##' Version: \tab 2.3.1\cr
-##' Date: \tab 2015-02-12\cr
+##' Version: \tab 2.3.4\cr
+##' Date: \tab 2015-03-16\cr
 ##' License: \tab Artistic-2.0\cr
 ##' LazyLoad: \tab yes\cr
 ##' Depends: \tab methods, parallel, Biobase, BiocGenerics, biomaRt, Biostrings, edgeR, DESeq, genomeIntervals, GenomeInfoDb, GenomicAlignments, GenomicRanges, graphics, IRanges, LSD, Rsamtools, S4Vectors, ShortRead, utils\cr
@@ -57,7 +57,7 @@
 ##'
 ##' @name easyRNASeq package
 ##' @rdname easyRNASeq-package
-##' @aliases easyRNASeq-package assay type BamFileList BamFileList-class IRanges
+##' @aliases easyRNASeq-package alignData assay type BamFileList BamFileList-class IRanges
 ##' RangedData SRFilterResult SummarizedExperiment-class chromosomeFilter
 ##' compose nFilter RangedData-class
 ##' @docType package
@@ -155,15 +155,15 @@ NULL
 ##' @importMethodsFrom Biobase fData varMetadata
 ##' @importMethodsFrom BiocGenerics annotation cbind clusterApply
 ##' colnames counts duplicated estimateDispersions estimateSizeFactors
-##' eval get intersect lapply match order paste pmax rbind rownames sapply
-##' strand "strand<-" table unique
+##' eval fileName get intersect lapply match order paste pmax rbind rownames
+##' sapply strand "strand<-" table unique
 ##' @importMethodsFrom Biostrings type
 ##' @importMethodsFrom genomeIntervals seq_name
 ##' @importMethodsFrom GenomeInfoDb seqinfo seqlengths "seqlengths<-"
 ##' seqlevels "seqlevels<-" seqnames "seqnames<-"
 ##' @importMethodsFrom GenomicAlignments cigar summarizeOverlaps
 ##' @importMethodsFrom GenomicRanges assay assays "assays<-" colData "colData<-"
-##' "exptData<-" grglist rowData "rowData<-" SummarizedExperiment
+##' "exptData<-" grglist rowRanges SummarizedExperiment
 ##' @importMethodsFrom IRanges aggregate as.list as.matrix as.table
 ##' "colnames<-" countOverlaps coverage elementLengths end "end<-" findOverlaps
 ##' gsub mean median narrow nchar queryHits ranges reduce rev "rownames<-" space
@@ -199,8 +199,8 @@ NULL
 ##' @importFrom utils combn str
 ## and export!
 ##' @exportClass BamFileList RangedData SummarizedExperiment
-##' @exportMethod assay seqnames split srFilter SummarizedExperiment width writeFastq
-##' @export chromosomeFilter compose BamFileList IRanges nFilter RangedData readAligned SRFilterResult
+##' @exportMethod assay fileName seqlengths seqnames split srFilter SummarizedExperiment width writeFastq
+##' @export alignData chromosomeFilter compose BamFileList IRanges nFilter RangedData readAligned SRFilterResult
 NULL
 
 ###==========================
