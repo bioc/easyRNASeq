@@ -163,7 +163,7 @@ NULL
 ##' seqlevels "seqlevels<-" seqnames "seqnames<-"
 ##' @importMethodsFrom GenomicAlignments cigar summarizeOverlaps
 ##' @importMethodsFrom GenomicRanges assay assays "assays<-" colData "colData<-"
-##' "exptData<-" grglist rowRanges SummarizedExperiment
+##' "exptData<-" grglist rowRanges "rowRanges<-" SummarizedExperiment
 ##' @importMethodsFrom IRanges aggregate as.list as.matrix as.table
 ##' "colnames<-" countOverlaps coverage elementLengths end "end<-" findOverlaps
 ##' gsub mean median narrow nchar queryHits ranges reduce rev "rownames<-" space
@@ -174,6 +174,7 @@ NULL
 ##' @importMethodsFrom Rsamtools countBam path scanBam scanBamHeader
 ##' ScanBamParam yieldSize "yieldSize<-"
 ##' @importMethodsFrom S4Vectors elementMetadata "elementMetadata<-" mcols
+##' endoapply
 ##' @importMethodsFrom ShortRead chromosome id position readAligned
 ##' srdistance sread srFilter writeFastq
 ## import methods
