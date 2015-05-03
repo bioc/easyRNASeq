@@ -1634,9 +1634,7 @@ and then the object needs to be converted into a \Robject{GRangesList}.
 
 <<using different annotation, eval=FALSE>>=
 library(GenomicFeatures)
-hg19.tx <- makeTranscriptDbFromUCSC(
-                                   genome="hg19",
-                                   tablename="refGene")
+hg19.tx <- makeTxDbFromUCSC(genome="hg19", tablename="refGene")
 
 gAnnot <- exons(hg19.tx)
 
