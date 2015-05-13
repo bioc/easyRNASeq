@@ -25,14 +25,14 @@
   the detected ones}
 }
 \value{
-returns a \code{\linkS4class{SummarizedExperiment}} object.
+returns a \code{\linkS4class{RangedSummarizedExperiment}} object.
 }
 \description{
 This function is a wrapper around the more low level
 functionalities of the package. It is the simplest way to
-get a \code{\linkS4class{SummarizedExperiment}} object from
+get a \code{\linkS4class{RangedSummarizedExperiment}} object from
 a set of bam files.
-\code{\linkS4class{SummarizedExperiment}} are containers
+\code{\linkS4class{RangedSummarizedExperiment}} are containers
 meant to hold any Next-Generation Sequencing experiment
 results and metadata. The simpleRNASeq method replaces the
 \code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq}}
@@ -46,7 +46,7 @@ reads \code{\link[easyRNASeq:fetchCoverage]{coverage}} from
 the provided file(s) \item
 \code{\link[easyRNASeq:easyRNASeq-summarization-methods]{summarizes}}
 the read counts according to the selected summarization
-\item returns a \code{\linkS4class{SummarizedExperiment}}
+\item returns a \code{\linkS4class{RangedSummarizedExperiment}}
 object. }
 }
 \examples{
@@ -70,7 +70,7 @@ object. }
   ## create the RnaSeqParam
   rnaSeqParam <- RnaSeqParam(annotParam=annotParam)
 
-  ## get a SummarizedExperiment containing the counts table
+  ## get a RangedSummarizedExperiment containing the counts table
   sexp <- simpleRNASeq(
     bamFiles=bamFiles,
     param=rnaSeqParam,
@@ -89,7 +89,7 @@ Nicolas Delhomme
 \code{\linkS4class{AnnotParam}} \item
 \code{\linkS4class{BamParam}} \item
 \code{\linkS4class{RnaSeqParam}} }} \item{For the output:
-\code{\linkS4class{SummarizedExperiment}} } \item{For
+\code{\linkS4class{RangedSummarizedExperiment}} } \item{For
 related functions: \itemize{ \item
 \code{\linkS4class{BamFile}} \item
 \code{\linkS4class{BamFileList}}

@@ -134,7 +134,7 @@
 Returns a count table (a matrix of m features x n samples).
 If the \code{outputFormat} option has been set, a
 corresponding object is returned: a
-\code{\linkS4class{SummarizedExperiment}}, a
+\code{\linkS4class{RangedSummarizedExperiment}}, a
 \code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}},
 a \code{\link[edgeR:DGEList]{edgeR:DGEList}} or
 \code{\linkS4class{RNAseq}}.
@@ -250,7 +250,7 @@ Nicolas Delhomme
 }
 \seealso{
 \code{\linkS4class{RNAseq}}
-\code{\linkS4class{SummarizedExperiment}}
+\code{\linkS4class{RangedSummarizedExperiment}}
 \code{\link[edgeR:DGEList]{edgeR:DGEList}}
 \code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}}
 \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq:knownOrganisms}}

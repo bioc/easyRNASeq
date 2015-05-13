@@ -8,7 +8,7 @@
 \alias{RangedData}
 \alias{RangedData-class}
 \alias{SRFilterResult}
-\alias{SummarizedExperiment-class}
+\alias{RangedSummarizedExperiment-class}
 \alias{alignData}
 \alias{assay}
 \alias{chromosomeFilter}
@@ -46,7 +46,7 @@ Suggests: \tab BSgenome.Dmelanogaster.UCSC.dm3 }
   data can be corrected to \pkg{RPKM} in which case a
   matrix of corrected value is returned instead, with the
   same dimensions. Alternatively a
-  \code{\linkS4class{SummarizedExperiment}} can be returned
+  \code{\linkS4class{RangedSummarizedExperiment}} can be returned
   and this is expected to be the default in the upcoming
   version of easyRNASeq (as of 1.5.x). If the necessary
   sample information are provided, the data can be
@@ -103,7 +103,7 @@ Nicolas Delhomme, Bastian Schiffthaler, Ismael Padioleau
 The class RNAseq specification: \code{\linkS4class{RNAseq}}
 
 The default output class specification:
-\code{\linkS4class{SummarizedExperiment}}
+\code{\linkS4class{RangedSummarizedExperiment}}
 
 The imported packages:
 \code{\link[biomaRt:useMart]{biomaRt}}
@@ -125,10 +125,10 @@ The following classes and functions that are made available
 from other packages: \itemize{ \item{Classes}{
 \code{\linkS4class{BamFileList}}
 \code{\linkS4class{RangedData}}
-\code{\linkS4class{SummarizedExperiment}} }
+\code{\linkS4class{RangedSummarizedExperiment}} }
 \item{Functions/Methods}{
-\code{\link[GenomicRanges:SummarizedExperiment-class]{ The
-SummarizedExperiment assay accessor} }
+\code{\link[SummarizedExperiment:RangedSummarizedExperiment-class]{ The
+RangedSummarizedExperiment assay accessor} }
 \code{\link[Rsamtools:BamFileList]{The BamFileList
 constructor}} \code{\link[IRanges:IRanges-constructor]{The
 IRanges constructor}}

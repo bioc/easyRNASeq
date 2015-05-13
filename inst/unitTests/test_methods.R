@@ -33,7 +33,7 @@
   ## create the RnaSeqParam
   param <- RnaSeqParam(annotParam=annotParam)
   
-  ## get a SummarizedExperiment containing the counts table
+  ## get a RangedSummarizedExperiment containing the counts table
   sexp <- simpleRNASeq(
     bamFiles=bamFiles,
     param=param,

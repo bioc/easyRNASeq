@@ -476,9 +476,8 @@ The results can be exported in five different formats:
 \item an \Rclass{RNAseq} class object. Useful for performing
   additional pre-processing without re-loading the reads and
   annotations.
-  \item as an instance of the \Biocpkg{GenomicRanges} 
-  \Rclass{SummarizedExperiment} class. See section \pref{s:ytc} for additional
-  details.
+\item as an instance of the \Rclass{RangedSummarizedExperiment} class.
+  See section \pref{s:ytc} for additional details.
 \end{itemize}
 
 \paragraph{Correction}
@@ -768,7 +767,7 @@ rnaSeq <- easyRNASeq(system.file(
                      outputFormat="RNAseq")
 @
 
-\paragraph{CountDataSet, DGEList, SummarizedExperiment}
+\paragraph{CountDataSet, DGEList, RangedSummarizedExperiment}
 
 More details on how to generate \Rclass{CountDataSet}
 (\Biocpkg{DESeq}) or \Rclass{DGEList} (\Biocpkg{edgeR}) are given in 
@@ -1223,14 +1222,14 @@ function as described in the first part of the present vignette! Enjoy.
 \section{Yet to come}
 \label{s:ytc}
 The \Rfunction{easyRNASeq} can now return a
-\Rclass{SummarizedExperiment} object. The aim is to have it be the
+\Rclass{RangedSummarizedExperiment} object. The aim is to have it be the
 only output in the next development version of the
 \Biocpkg{easyRNASeq} package (version $1.9.x$). This in order to
 consolidate the kind of objects used for Next-Generation Sequencing in
 the Bioconductor repository.
 
 <<count function example, eval=FALSE>>=
-## creating a SummarizedExperiment from 4 bam files
+## creating a RangedSummarizedExperiment from 4 bam files
 sumExp <- easyRNASeq(filesDirectory=system.file(
                   "extdata",
                   package="RnaSeqTutorial"),
@@ -1250,11 +1249,12 @@ assays(sumExp)
 ## the sample info
 colData(sumExp)
 ## the 'features' info
-rowData(sumExp)
+rowRanges(sumExp)
 @
 
-See the \Biocpkg{GenomicRange} package \Rclass{SummarizedExperiment}
-class for more details on last three accessors used in the example.
+See the \Rclass{RangedSummarizedExperiment} class defined in the
+\Biocpkg{SummarizedExperiment} package for more details on last
+three accessors used in the example.
 \paragraph{}
 Support for \Biocpkg{DESeq2} is also planned for version $1.10.x$ as well as
 additional visualization taking advantage of the voom/vst transformations.
@@ -1437,18 +1437,18 @@ countings. Adequate warnings would be emitted. A refinement of the method above
 would be to restrict these genes to their non-overlapping intervals. Commonly
 the overlaps encompass UTRs and can be safely ignored. In a few case however,
 it might be difficult to decide wheter to keep or drop them. Note that if the 
-result is returned as an \Rclass{RNAseq} or \Rclass{SummarizedExperiment} class 
-object, the overlapping genes are flagged by a boolean. To access this 
+result is returned as an \Rclass{RNAseq} or \Rclass{RangedSummarizedExperiment}
+class object, the overlapping genes are flagged by a boolean. To access this 
 information in an \Rclass{RNAseq} object, do:
 
 <<Access the overlap flag, eval=FALSE>>=
 genomicAnnotation(rnaSeq)$overlap
 @
 
-and from a \Rclass{SummarizedExperiment} object:
+and from a \Rclass{RangedSummarizedExperiment} object:
 
 <<Access the overlap flag from an SE, eval=FALSE>>=
-rowData(sumExp)$overlap
+rowRanges(sumExp)$overlap
 @
 
 \subsection{Processing a set of human samples}
@@ -1669,7 +1669,7 @@ Note that in the previous call, we removed the
   setting it to its default value: 'auto'
 
 Alternatively, one can use the \Rcode{outputFormat} argument
-function to get a \Rclass{SummarizedExperiment} object back. Mind the
+function to get a \Rclass{RangedSummarizedExperiment} object back. Mind the
 comments in section \ref{s:ytc}, page \pageref{s:ytc} though.
 
 <<using the count function, eval=FALSE>>=

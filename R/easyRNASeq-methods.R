@@ -110,7 +110,7 @@
 ##' @param organism A character string describing the organism
 ##' @param outputFormat By default, easyRNASeq returns a matrix.
 ##' If one of \code{DESeq},\code{edgeR},\code{RNAseq},
-##' \code{\linkS4class{SummarizedExperiment}} is provided then
+##' \code{SummarizedExperiment} is provided then
 ##' the respective object is returned.
 ##' @param pattern For easyRNASeq, the pattern of file to look for, e.g. "bam$"
 ##' @param plot Whether or not to plot assessment graphs.
@@ -127,12 +127,12 @@
 ##' @param ... additional arguments. See details
 ##' @return Returns a count table (a matrix of m features x n samples). If the
 ##' \code{outputFormat} option has been set, a corresponding object is returned:
-##' a \code{\linkS4class{SummarizedExperiment}}, a
+##' a \code{\linkS4class{RangedSummarizedExperiment}}, a
 ##' \code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}}, a
 ##' \code{\link[edgeR:DGEList]{edgeR:DGEList}} or \code{\linkS4class{RNAseq}}.
 ##' @author Nicolas Delhomme
 ##' @seealso \code{\linkS4class{RNAseq}}
-##' \code{\linkS4class{SummarizedExperiment}}
+##' \code{\linkS4class{RangedSummarizedExperiment}}
 ##' \code{\link[edgeR:DGEList]{edgeR:DGEList}}
 ##' \code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}}
 ##' \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq:knownOrganisms}}
@@ -291,7 +291,7 @@ setMethod(
             stop("You want to use a 'custom' organism, but do not provide a 'chr.map'. Aborting.")
         }
         
-        ## check the output formats, default to SummarizedExperiments
+        ## check the output formats, default to SummarizedExperiment
         outputFormat <- match.arg(outputFormat)
 
         ## check the files
@@ -658,9 +658,9 @@ setMethod(
                           ## TODO think that for exons/features the count might be redundant
                           if(normalize){
                               if(!ignoreWarnings){
-                                  warning(paste("Since you want a 'SummarizedExperiment' object,",
+                                  warning(paste("Since you want a 'RangedSummarizedExperiment' object,",
                                                 "the normalization was not applied to the 'readCounts'",
-                                                "slots. Use the RPKM methods on your 'SummarizedExperiment'",
+                                                "slots. Use the RPKM methods on your 'RangedSummarizedExperiment'",
                                                 "object to do so."))
                               }
                           }
@@ -684,7 +684,7 @@ setMethod(
 
                           ## create the "gene" annotation
                           ## TODO this probably need refactoring...
-                          rowData <- switch(count,
+                          rowRanges <- switch(count,
                                             "genes"= {
                                                 switch(summarization,
                                                        "geneModels"= as(geneModel(obj),"GRanges"),
@@ -735,18 +735,18 @@ setMethod(
                                             )
 
                           ## correct the seq lengths if we have any NA (occurs when we use a RangedData)
-                          if(any(is.na(seqlengths(rowData)))){
-                              common.names <- intersect(names(chrSize(obj)),names(seqlengths(rowData)))
+                          if(any(is.na(seqlengths(rowRanges)))){
+                              common.names <- intersect(names(chrSize(obj)),names(seqlengths(rowRanges)))
                               ## no need to check that we have a common set, it was done before so we must have one
-                              seqlengths(rowData)[match(common.names,
-                                                        names(seqlengths(rowData)))] <- chrSize(obj)[match(common.names,
+                              seqlengths(rowRanges)[match(common.names,
+                                                        names(seqlengths(rowRanges)))] <- chrSize(obj)[match(common.names,
                                                                                                            names(chrSize(obj)))]
                           }
                           
                           ## the assay contains the data
                           sexp <- SummarizedExperiment(
                               assays=SimpleList(counts=counts),
-                              rowData=rowData,
+                              rowRanges=rowRanges,
                               colData=colData)
 
                           ## add the rownames
@@ -767,25 +767,25 @@ setMethod(
 ##' 
 ##' This function is to supersed the easyRNASeq function in order to
 ##' consolidate the option parameters as well as the option output.
-##' Ideally, the only output would be a SummarizedExperiment.
+##' Ideally, the only output would be a RangedSummarizedExperiment object.
 ##' 
 ##' @aliases count count,character-method
 ##' @rdname easyRNASeq-count
 ##' @param filesDirectory The directory where the files to be used are located.
 ##' @param outputFormat By default, easyRNASeq returns a
-##' \code{\linkS4class{SummarizedExperiment}}. If one
+##' \code{\linkS4class{RangedSummarizedExperiment}} object. If one
 ##' of \code{DESeq},\code{edgeR},\code{RNAseq}, \code{matrix} is provided then
 ##' the respective object is returned. Ideally, this option should get deprecated
-##' and only a SummarizedExperiment returned.
+##' and only a RangedSummarizedExperiment object returned.
 ##' @param ... currently additional arguments to the easyRNASeq function.
-##' @return Returns a  \code{\linkS4class{SummarizedExperiment}}. If the
+##' @return Returns a  \code{\linkS4class{RangedSummarizedExperiment}}. If the
 ##' \code{outputFormat} option has been set, a corresponding object is returned:
 ##' a count table (a matrix of m features x n samples), a
 ##' \code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}}, a
 ##' \code{\link[edgeR:DGEList]{edgeR:DGEList}} or \code{\linkS4class{RNAseq}}.
 ##' @author Nicolas Delhomme
 ##' @seealso \code{\linkS4class{RNAseq}}
-##' \code{\linkS4class{SummarizedExperiment}}
+##' \code{\linkS4class{RangedSummarizedExperiment}}
 ##' \code{\link[edgeR:DGEList]{edgeR:DGEList}}
 ##' \code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}}
 ##' \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq:knownOrganisms}}
@@ -817,7 +817,7 @@ setMethod(
 ##'     ## the sample info
 ##'     colData(sumExp)
 ##'     ## the 'features' info
-##'     rowData(sumExp)
+##'     rowRanges(sumExp)
 ##' }
 ##' 
 setMethod(f="count",

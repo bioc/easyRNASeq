@@ -14,17 +14,17 @@
   used are located.}
 
   \item{outputFormat}{By default, easyRNASeq returns a
-  \code{\linkS4class{SummarizedExperiment}}. If one of
+  \code{\linkS4class{RangedSummarizedExperiment}} object. If one of
   \code{DESeq},\code{edgeR},\code{RNAseq}, \code{matrix} is
   provided then the respective object is returned. Ideally,
   this option should get deprecated and only a
-  SummarizedExperiment returned.}
+  RangedSummarizedExperiment object returned.}
 
   \item{...}{currently additional arguments to the
   easyRNASeq function.}
 }
 \value{
-Returns a \code{\linkS4class{SummarizedExperiment}}. If the
+Returns a \code{\linkS4class{RangedSummarizedExperiment}} object. If the
 \code{outputFormat} option has been set, a corresponding
 object is returned: a count table (a matrix of m features x
 n samples), a
@@ -36,7 +36,7 @@ a \code{\link[edgeR:DGEList]{edgeR:DGEList}} or
 This function is to supersed the easyRNASeq function in
 order to consolidate the option parameters as well as the
 option output. Ideally, the only output would be a
-SummarizedExperiment.
+RangedSummarizedExperiment object.
 }
 \examples{
 \dontrun{
@@ -63,7 +63,7 @@ SummarizedExperiment.
     ## the sample info
     colData(sumExp)
     ## the 'features' info
-    rowData(sumExp)
+    rowRanges(sumExp)
 }
 }
 \author{
@@ -71,7 +71,7 @@ Nicolas Delhomme
 }
 \seealso{
 \code{\linkS4class{RNAseq}}
-\code{\linkS4class{SummarizedExperiment}}
+\code{\linkS4class{RangedSummarizedExperiment}}
 \code{\link[edgeR:DGEList]{edgeR:DGEList}}
 \code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}}
 \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq:knownOrganisms}}

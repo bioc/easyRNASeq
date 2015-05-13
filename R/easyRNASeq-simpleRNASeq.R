@@ -1,8 +1,8 @@
 ##' simpleRNASeq method
 ##' 
 ##' This function is a wrapper around the more low level functionalities of the
-##' package. It is the simplest way to get a \code{\linkS4class{SummarizedExperiment}}
-##' object from a set of bam files. \code{\linkS4class{SummarizedExperiment}} are
+##' package. It is the simplest way to get a \code{\linkS4class{RangedSummarizedExperiment}}
+##' object from a set of bam files. \code{\linkS4class{RangedSummarizedExperiment}} are
 ##' containers meant to hold any Next-Generation Sequencing experiment results and
 ##' metadata. The simpleRNASeq method replaces the 
 ##' \code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq}} function to 
@@ -16,7 +16,7 @@
 ##' the provided file(s)
 ##' \item \code{\link[easyRNASeq:easyRNASeq-summarization-methods]{summarizes}} the
 ##' read counts according to the selected summarization
-##' \item returns a \code{\linkS4class{SummarizedExperiment}} object.
+##' \item returns a \code{\linkS4class{RangedSummarizedExperiment}} object.
 ##' }
 ##' 
 ##' @aliases simpleRNASeq simpleRNASeq,BamFileList,RnaSeqParam-method
@@ -27,7 +27,7 @@
 ##' @param param RnaSeqParam a \code{\linkS4class{RnaSeqParam}} object
 ##' that describes the RNA-Seq experimental setup.
 ##' @param verbose a logical to be report progress or not.
-##' @return returns a \code{\linkS4class{SummarizedExperiment}} object.
+##' @return returns a \code{\linkS4class{RangedSummarizedExperiment}} object.
 ##' @author Nicolas Delhomme
 ##' @seealso 
 ##' \itemize{
@@ -38,7 +38,7 @@
 ##' \item \code{\linkS4class{RnaSeqParam}}
 ##' }}
 ##' \item{For the output:
-##' \code{\linkS4class{SummarizedExperiment}}
+##' \code{\linkS4class{RangedSummarizedExperiment}}
 ##' }
 ##' \item{For related functions:
 ##' \itemize{
@@ -70,7 +70,7 @@
 ##'   ## create the RnaSeqParam
 ##'   rnaSeqParam <- RnaSeqParam(annotParam=annotParam)
 ##'
-##'   ## get a SummarizedExperiment containing the counts table
+##'   ## get a RangedSummarizedExperiment containing the counts table
 ##'   sexp <- simpleRNASeq(
 ##'     bamFiles=bamFiles,
 ##'     param=rnaSeqParam,
@@ -101,7 +101,7 @@ setMethod(f="simpleRNASeq",
               message("==========================")
               message("simpleRNASeq version ",packageVersion("easyRNASeq"))
               message("==========================")
-              message("Creating a SummarizedExperiment.")
+              message("Creating a RangedSummarizedExperiment.")
               message("==========================")
               message("Processing the alignments.")
               message("==========================")
@@ -133,14 +133,14 @@ setMethod(f="simpleRNASeq",
             if(length(seqinfos[[1]])==0){
               stop("It would seem some of your BAM files have no sequence information in their headers. Check these.")
             }
-            exptData <- SimpleList(SeqInfo=seqinfos[[1]])
-            if(!all(sapply(seqinfos,identical,exptData$SeqInfo))){
+            metadata <- list(SeqInfo=seqinfos[[1]])
+            if(!all(sapply(seqinfos,identical,metadata$SeqInfo))){
               stop("Your BAM files do not all have the same sequence informations. Check their headers.")
             }  
-            exptData(sexp) <- exptData
+            metadata(sexp) <- metadata
             
             if(verbose){
-              message("Extracted ",length(exptData$SeqInfo)," reference sequences information.")
+              message("Extracted ",length(metadata$SeqInfo)," reference sequences information.")
             }
             
             ## 2. paired or not and variable length or not
@@ -314,7 +314,7 @@ setMethod(f="simpleRNASeq",
             if(verbose){  
               message("==========================")
               message("Returning a")
-              message("      SummarizedExperiment")
+              message("      RangedSummarizedExperiment")
               message("==========================")
             }
             return(sexp)

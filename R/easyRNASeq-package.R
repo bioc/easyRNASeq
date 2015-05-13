@@ -25,11 +25,11 @@
 ##' \tabular{ll}{
 ##' Package: \tab easyRNASeq\cr
 ##' Type: \tab Package\cr
-##' Version: \tab 2.3.4\cr
-##' Date: \tab 2015-03-16\cr
+##' Version: \tab 2.5.2\cr
+##' Date: \tab 2015-05-13\cr
 ##' License: \tab Artistic-2.0\cr
 ##' LazyLoad: \tab yes\cr
-##' Depends: \tab methods, parallel, Biobase, BiocGenerics, biomaRt, Biostrings, edgeR, DESeq, genomeIntervals, GenomeInfoDb, GenomicAlignments, GenomicRanges, graphics, IRanges, LSD, Rsamtools, S4Vectors, ShortRead, utils\cr
+##' Depends: \tab methods, parallel, Biobase, BiocGenerics, biomaRt, Biostrings, edgeR, DESeq, genomeIntervals, GenomeInfoDb, GenomicAlignments, GenomicRanges, SummarizedExperiment, graphics, IRanges, LSD, Rsamtools, S4Vectors, ShortRead, utils\cr
 ##' Suggests: \tab BSgenome.Dmelanogaster.UCSC.dm3
 ##' }
 ##'
@@ -39,7 +39,7 @@
 ##' count matrix (N*M) where N are the features and M the samples.
 ##' This data can be corrected to \pkg{RPKM} in which case
 ##' a matrix of corrected value is returned instead, with the same dimensions.
-##' Alternatively a \code{\linkS4class{SummarizedExperiment}} can be returned and this
+##' Alternatively a \code{\linkS4class{RangedSummarizedExperiment}} can be returned and this
 ##' is expected to be the default in the upcoming version of easyRNASeq (as of 1.5.x).
 ##' If the necessary sample
 ##' information are provided, the data can be normalized using either \code{\link[DESeq:newCountDataSet]{DESeq}}
@@ -58,7 +58,7 @@
 ##' @name easyRNASeq package
 ##' @rdname easyRNASeq-package
 ##' @aliases easyRNASeq-package alignData assay type BamFileList BamFileList-class IRanges
-##' RangedData SRFilterResult SummarizedExperiment-class chromosomeFilter
+##' RangedData SRFilterResult RangedSummarizedExperiment-class chromosomeFilter
 ##' compose nFilter RangedData-class
 ##' @docType package
 ##' @author Nicolas Delhomme, Bastian Schiffthaler, Ismael Padioleau
@@ -68,7 +68,7 @@
 ##' 	\code{\linkS4class{RNAseq}}
 ##'
 ##'   The default output class specification:
-##'   \code{\linkS4class{SummarizedExperiment}}
+##'   \code{\linkS4class{RangedSummarizedExperiment}}
 ##'
 ##' 	The imported packages:
 ##' 	\code{\link[biomaRt:useMart]{biomaRt}}
@@ -92,11 +92,11 @@
 ##'     \item{Classes}{
 ##'       \code{\linkS4class{BamFileList}}
 ##'       \code{\linkS4class{RangedData}}
-##'       \code{\linkS4class{SummarizedExperiment}}
+##'       \code{\linkS4class{RangedSummarizedExperiment}}
 ##'     }
 ##'     \item{Functions/Methods}{
-##'       \code{\link[GenomicRanges:SummarizedExperiment-class]{
-##'         The SummarizedExperiment assay accessor}
+##'       \code{\link[SummarizedExperiment:RangedSummarizedExperiment-class]{
+##'         The RangedSummarizedExperiment assay accessor}
 ##'       }
 ##'       \code{\link[Rsamtools:BamFileList]{The BamFileList constructor}}
 ##'       \code{\link[IRanges:IRanges-constructor]{The IRanges constructor}}
@@ -144,9 +144,10 @@ NULL
 ##' @importClassesFrom edgeR DGEList
 ##' @importClassesFrom genomeIntervals Genome_intervals
 ##' @importClassesFrom GenomicAlignments GAlignments GAlignmentPairs
-##' @importClassesFrom GenomicRanges GRanges GRangesList SummarizedExperiment
+##' @importClassesFrom GenomicRanges GRanges GRangesList
+##' @importClassesFrom SummarizedExperiment RangedSummarizedExperiment
 ##' @importClassesFrom IRanges RangedData RleList
-##' @importClassesFrom S4Vectors Vector DataFrame SimpleList
+##' @importClassesFrom S4Vectors Annotated Vector DataFrame SimpleList
 ##' @importClassesFrom methods ANY character "function" integer
 ##' list matrix missing numeric vector
 ##' @importClassesFrom Rsamtools BamFile BamFileList
@@ -163,18 +164,18 @@ NULL
 ##' seqlevels "seqlevels<-" seqnames "seqnames<-"
 ##' @importMethodsFrom GenomicAlignments cigar summarizeOverlaps
 ##' @importMethodsFrom GenomicRanges assay assays "assays<-" colData "colData<-"
-##' "exptData<-" grglist rowRanges "rowRanges<-" SummarizedExperiment
+##' grglist rowRanges "rowRanges<-"
+##' @importMethodsFrom SummarizedExperiment SummarizedExperiment
 ##' @importMethodsFrom IRanges aggregate as.list as.matrix as.table
 ##' "colnames<-" countOverlaps coverage elementLengths end "end<-" findOverlaps
 ##' gsub mean median narrow nchar queryHits ranges reduce rev "rownames<-" space
 ##' split start "start<-" sub  tolower "universe<-" unlist values which width
 ##' @importMethodsFrom S4Vectors "%in%" elementMetadata "elementMetadata<-"
-##' ifelse levels mcols Rle runLength runsum runValue substr
+##' endoapply ifelse levels mcols metadata "metadata<-" Rle runLength runsum
+##' runValue substr
 ##' @importMethodsFrom methods coerce initialize show
 ##' @importMethodsFrom Rsamtools countBam path scanBam scanBamHeader
 ##' ScanBamParam yieldSize "yieldSize<-"
-##' @importMethodsFrom S4Vectors elementMetadata "elementMetadata<-" mcols
-##' endoapply
 ##' @importMethodsFrom ShortRead chromosome id position readAligned
 ##' srdistance sread srFilter writeFastq
 ## import methods
@@ -199,7 +200,7 @@ NULL
 ##' SRFilterResult
 ##' @importFrom utils combn str
 ## and export!
-##' @exportClass BamFileList RangedData SummarizedExperiment
+##' @exportClass BamFileList RangedData RangedSummarizedExperiment
 ##' @exportMethod assay fileName seqlengths seqnames split srFilter SummarizedExperiment width writeFastq
 ##' @export alignData chromosomeFilter compose BamFileList IRanges nFilter RangedData readAligned SRFilterResult
 NULL
