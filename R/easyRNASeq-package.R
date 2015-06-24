@@ -281,7 +281,7 @@ NULL
 ##' @seealso \code{\link[base:ns-hooks]{.onAttach}} in the \code{base} package.
 ##' @keywords internal
 globalVariables("GTF.FIELDS")
-globalVariables("ANNOTATION.TYPE")  
+globalVariables("ANNOTATION.TYPE")
 ".onAttach" <- function(libname,pkgname){
   assign("GTF.FIELDS",c("gene_id","transcript_id","exon_id",
                         "gene_name"),

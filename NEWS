@@ -1,7 +1,7 @@
 CHANGES IN VERSION 2.3.4
 -------------------------
 
-  o Bioc. API changes: added missing imports, removed unneeded imports, 
+  o Bioc. API changes: added missing imports, removed unneeded imports,
   added a missing package dependency
 
   o Removed generics now defined in BiocGenerics
