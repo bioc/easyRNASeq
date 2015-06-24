@@ -166,6 +166,7 @@ NULL
 ##' @importMethodsFrom GenomicRanges assay assays "assays<-" colData "colData<-"
 ##' grglist rowRanges "rowRanges<-"
 ##' @importMethodsFrom SummarizedExperiment SummarizedExperiment
+##' "exptData<-" grglist rowRanges "rowRanges<-" SummarizedExperiment
 ##' @importMethodsFrom IRanges aggregate as.list as.matrix as.table
 ##' "colnames<-" countOverlaps coverage elementLengths end "end<-" findOverlaps
 ##' gsub mean median narrow nchar queryHits ranges reduce rev "rownames<-" space

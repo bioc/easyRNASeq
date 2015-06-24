@@ -30,7 +30,6 @@ functionalities to normalize the summarized counts using
 \details{
 \tabular{ll}{ Package: \tab easyRNASeq\cr Type: \tab
 Package\cr Version: \tab 2.5.2\cr Date: \tab 2015-05-13\cr
-function, which scope had changed (not being exported from its package anymore) and the last 2 were global variables, now defined as such using globalVariables.
 License: \tab Artistic-2.0\cr LazyLoad: \tab yes\cr
 Depends: \tab methods, parallel, Biobase, BiocGenerics,
 biomaRt, Biostrings, edgeR, DESeq, genomeIntervals,
