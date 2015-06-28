@@ -87,7 +87,7 @@ setAs(from="Genome_intervals",to="RangedData",def=function(from){
     names(values) <- names(ranges)
   }
       
-  if (!is.null(universe) && !S4Vectors::isSingleString(universe))
+  if (!is.null(universe) && !isSingleString(universe))
     stop("'universe' must be a single string")
   universe(ranges) <- universe
   return(new(

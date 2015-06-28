@@ -1,17 +1,15 @@
 ## to re-build the documentation and namespace
 ## library(roxygen2)
-## roxygenize("../easyrnaseq-devel/")
+## roxygenize("easyRNASeq/")
 
 ## to update the package versions
-# pkg <- c("Biobase","BiocGenerics","biomaRt","Biostrings",
-#          "DESeq","edgeR","GenomeInfoDb","genomeIntervals",
-#          "GenomicAlignments","GenomicRanges",
-#          "IRanges","LSD","Rsamtools","S4Vectors","ShortRead",
-#          "BiocStyle","BSgenome",
-#          "BSgenome.Dmelanogaster.UCSC.dm3","GenomicFeatures",
-#          "RnaSeqTutorial","RUnit")
-# pkg[! pkg %in% rownames(installed.packages())]
-# installed.packages()[pkg,"Version"]
+# installed.packages()[c("Biobase","BiocGenerics","biomaRt","Biostrings",
+#                        "DESeq","edgeR","genomeIntervals","GenomicAlignments",
+#                        "GenomeInfoDb","GenomicRanges",
+#                        "IRanges","LSD","Rsamtools","S4Vectors","ShortRead",
+#                        "BiocStyle","BSgenome",
+#                        "BSgenome.Dmelanogaster.UCSC.dm3","GenomicFeatures",
+#                        "RnaSeqTutorial","RUnit"),"Version"]
 
 ###==========================
 ### package details
@@ -25,8 +23,8 @@
 ##' \tabular{ll}{
 ##' Package: \tab easyRNASeq\cr
 ##' Type: \tab Package\cr
-##' Version: \tab 2.3.4\cr
-##' Date: \tab 2015-03-16\cr
+##' Version: \tab 2.4.1\cr
+##' Date: \tab 2015-06-26\cr
 ##' License: \tab Artistic-2.0\cr
 ##' LazyLoad: \tab yes\cr
 ##' Depends: \tab methods, parallel, Biobase, BiocGenerics, biomaRt, Biostrings, edgeR, DESeq, genomeIntervals, GenomeInfoDb, GenomicAlignments, GenomicRanges, graphics, IRanges, LSD, Rsamtools, S4Vectors, ShortRead, utils\cr
@@ -57,7 +55,7 @@
 ##'
 ##' @name easyRNASeq package
 ##' @rdname easyRNASeq-package
-##' @aliases easyRNASeq-package alignData assay type BamFileList BamFileList-class IRanges
+##' @aliases easyRNASeq-package assay type BamFileList BamFileList-class IRanges
 ##' RangedData SRFilterResult SummarizedExperiment-class chromosomeFilter
 ##' compose nFilter RangedData-class
 ##' @docType package
@@ -155,8 +153,8 @@ NULL
 ##' @importMethodsFrom Biobase fData varMetadata
 ##' @importMethodsFrom BiocGenerics annotation cbind clusterApply
 ##' colnames counts duplicated estimateDispersions estimateSizeFactors
-##' eval fileName get intersect lapply match order paste pmax rbind rownames
-##' sapply strand "strand<-" table unique
+##' eval get intersect lapply match order paste pmax rbind rownames sapply
+##' strand "strand<-" table unique
 ##' @importMethodsFrom Biostrings type
 ##' @importMethodsFrom genomeIntervals seq_name
 ##' @importMethodsFrom GenomeInfoDb seqinfo seqlengths "seqlengths<-"
@@ -174,7 +172,6 @@ NULL
 ##' @importMethodsFrom Rsamtools countBam path scanBam scanBamHeader
 ##' ScanBamParam yieldSize "yieldSize<-"
 ##' @importMethodsFrom S4Vectors elementMetadata "elementMetadata<-" mcols
-##' endoapply
 ##' @importMethodsFrom ShortRead chromosome id position readAligned
 ##' srdistance sread srFilter writeFastq
 ## import methods
@@ -200,8 +197,8 @@ NULL
 ##' @importFrom utils combn str
 ## and export!
 ##' @exportClass BamFileList RangedData SummarizedExperiment
-##' @exportMethod assay fileName seqlengths seqnames split srFilter SummarizedExperiment width writeFastq
-##' @export alignData chromosomeFilter compose BamFileList IRanges nFilter RangedData readAligned SRFilterResult
+##' @exportMethod assay seqnames split srFilter SummarizedExperiment width writeFastq
+##' @export chromosomeFilter compose BamFileList IRanges nFilter RangedData readAligned SRFilterResult
 NULL
 
 ###==========================
@@ -279,8 +276,6 @@ NULL
 ##' @param pkgname a character string giving the name of the package.
 ##' @seealso \code{\link[base:ns-hooks]{.onAttach}} in the \code{base} package.
 ##' @keywords internal
-globalVariables("GTF.FIELDS")
-globalVariables("ANNOTATION.TYPE")  
 ".onAttach" <- function(libname,pkgname){
   assign("GTF.FIELDS",c("gene_id","transcript_id","exon_id",
                         "gene_name"),

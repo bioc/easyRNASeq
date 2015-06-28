@@ -1,7 +1,22 @@
+CHANGES IN VERSION 2.4.1
+-------------------------
+
+  o Uses rowRanges instead of rowData
+
+  o Fixed issues in the deprecated gene+geneModel counting approach of
+  the easyRNASeq function.
+
+  o Updated the package dependencies
+
+CHANGES IN VERSION 2.4.0
+-------------------------
+
+  o Bioc. Release 3.1
+
 CHANGES IN VERSION 2.3.4
 -------------------------
 
-  o Bioc. API changes: added missing imports, removed unneeded imports, 
+  o Bioc. API changes: added missing imports, removed unneeded imports,
   added a missing package dependency
 
   o Removed generics now defined in BiocGenerics
@@ -29,7 +44,7 @@ CHANGES IN VERSION 2.3.0
 CHANGES IN VERSION 2.2.1
 -------------------------
 
-  o Added (now) missing S4Vectors function imports.
+  o Added (now) missing S4Vectors imports
 
 CHANGES IN VERSION 2.2.0
 -------------------------

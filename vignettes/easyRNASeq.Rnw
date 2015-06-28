@@ -590,7 +590,7 @@ following gives you that gff file path on your machine:}
 <<GFF3, eval=FALSE>>=
 system.file(
             "extdata",
-            "Dmel-mRNA-exon-r5.52.gff3",
+            "annot.gff",
             package="RnaSeqTutorial")
 @ 
 
@@ -662,7 +662,7 @@ count.table <- easyRNASeq(system.file(
                           annotationMethod="gff",
                           annotationFile=system.file(
                             "extdata",
-                            "Dmel-mRNA-exon-r5.52.gff3",
+                            "annot.gff",
                             package="RnaSeqTutorial"),
                           gapped=TRUE,
                           count="exons",

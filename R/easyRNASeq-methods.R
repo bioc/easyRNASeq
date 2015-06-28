@@ -8,7 +8,7 @@
 
 ## easy call
 ##' easyRNASeq method
-##' 
+##'
 ##' This function is a wrapper around the more low level functionalities of the
 ##' package.  Is the easiest way to get a count matrix from a set of read
 ##' files.  It does the following: \itemize{
@@ -27,7 +27,7 @@
 ##' \item{\code{\link[easyRNASeq:DESeq-methods]{use
 ##' DESeq methods}} for post-processing the data (either of them being
 ##' recommended over RPKM).}  }
-##' 
+##'
 ##' \itemize{ \item{\dots{} Additional arguments for different functions:
 ##' \itemize{
 ##' \item{For the \pkg{biomaRt} \code{\link[biomaRt:getBM]{getBM}} function}
@@ -64,7 +64,7 @@
 ##' \item{chr.sizes If set to "auto", then the format has to be "bam", in which
 ##' case the chromosome names and size are extracted from the BAM header}
 ##' }
-##' 
+##'
 ##' @aliases easyRNASeq-deprecated easyRNASeq,character-method
 ##' @rdname easyRNASeq-easyRNASeq
 ##' @param annotationFile The location (full path) of the annotation file
@@ -139,11 +139,11 @@
 ##' \code{\link[ShortRead:readAligned]{ShortRead:readAligned}}
 ##' @keywords methods
 ##' @examples
-##' 
+##'
 ##' 	\dontrun{
 ##' 	library("RnaSeqTutorial")
 ##' 	library(BSgenome.Dmelanogaster.UCSC.dm3)
-##' 
+##'
 ##' 	## creating a count table from 4 bam files
 ##' 	count.table <- easyRNASeq(filesDirectory=
 ##' 		    			system.file(
@@ -160,10 +160,10 @@
 ##' 							    "gAnnot.rda",
 ##' 							    package="RnaSeqTutorial"),
 ##' 				count="exons")
-##' 
+##'
 ##' 	## an example of a chr.map
 ##' 	chr.map <- data.frame(from=c("2L","2R","MT"),to=c("chr2L","chr2R","chrMT"))
-##' 
+##'
 ##' 	## an example of a RangedData annotation
 ##' 	gAnnot <- RangedData(
 ##'                      IRanges(
@@ -176,12 +176,12 @@
 ##'                           exon=c("e1","e2","e3"),
 ##'                           universe = "Hs19"
 ##'                           )
-##' 
+##'
 ##' 	## an example of a GRangesList annotation
 ##' 	grngs <- as(gAnnot,"GRanges")
 ##' 	grngsList<-split(grngs,seqnames(grngs))
 ##' }
-##' 
+##'
 ## TODO if the summarization ever get changed, modify the if statement
 ## when validating the annotation object for no overlapping features
 setMethod(
@@ -211,7 +211,7 @@ setMethod(
 
         ## deprecation
         .Deprecated("simpleRNASeq")
-        
+
         ## sanity check
         if(!silent){
             .catn("Checking arguments...")
@@ -236,7 +236,7 @@ setMethod(
                            "formatted files and needs to be a named integer vector."))
             }
         }
-        
+
         ## test the counts
         if(length(count)!=1){
             if(!ignoreWarnings){
@@ -245,17 +245,17 @@ setMethod(
             count <- "features"
         }
         .checkArguments("easyRNASeq","count",count)
-        
+
         ## test the summarization
         if(count == "genes" & length(summarization)>1){
             stop(paste("A 'summarization' method is necessary if you choose the 'genes' count method!"))
         }
-        
+
         if(length(summarization)==1){
             .checkArguments("easyRNASeq","summarization",summarization)
             if(summarization=="bestExons"){
                 .Deprecated(NULL,msg=paste(
-                                     "The bestExons summarization is deprecated as its relevance", 
+                                     "The bestExons summarization is deprecated as its relevance",
                                      "for RNA-Seq counting is unconvincing."))
             } else {
                 .Deprecated(NULL,msg=paste(
@@ -265,19 +265,19 @@ setMethod(
             }
         }
 
-        ## check the annotationMethod            
+        ## check the annotationMethod
         if(count != "islands"){
             .checkArguments("easyRNASeq","annotationMethod",annotationMethod)
         }
-        
+
         ## check the organism
         if(organism==character(1)){
             if(annotationMethod=="biomaRt"){
                 stop("A valid organism name is necessary for the 'organism' arguments when using the 'biomaRt' annotation method.")
-            }              
+            }
             if(!ignoreWarnings){
                 warning("No organism was provided. No validity check for the UCSC compliance of the chromosome name will be applied.")
-            }                           
+            }
             validity.check=FALSE
         }
         if(!tolower(organism) %in% c(tolower(knownOrganisms()),"custom") & nrow(chr.map) ==0){
@@ -290,7 +290,7 @@ setMethod(
         if(organism=="custom" & nrow(chr.map) ==0){
             stop("You want to use a 'custom' organism, but do not provide a 'chr.map'. Aborting.")
         }
-        
+
         ## check the output formats, default to SummarizedExperiments
         outputFormat <- match.arg(outputFormat)
 
@@ -303,11 +303,11 @@ setMethod(
         if(length(filenames) > 0){
             pattern <- paste(filenames, '$',sep="",collapse="|")
         }
-        
+
         ## get source files from the given directory
         filesList <- .list.files(path=path.expand(filesDirectory),pattern=pattern,...)
         names(filesList) <- basename(filesList)
-        
+
         ## check the list of file
         if(length(filesList) == 0 ){
             stop(
@@ -321,13 +321,13 @@ setMethod(
                     )
                 )
         }
-        
+
         ## check if we have index with bai
         ## actually create a BamFileList
         if(format=="bam"){
             filesList <- getBamFileList(filesList)
         }
-        
+
         ## check the conditions
         if(length(conditions)>0){
             if(is.null(names(conditions)) | length(filesList) != length(conditions) | !all(names(filesList) %in% names(conditions))){
@@ -343,17 +343,17 @@ setMethod(
                 filesList <- filesList[match(names(conditions),names(filesList))]
             }
         }
-        
+
         ## create the object and fill the fileName
         obj <- new('RNAseq',organismName=organism,readLength=readLength,fileName=names(filesList))
-        
+
         ## Set chromosome size
         if(length(chr.sizes)==1){
             if(chr.sizes == "auto"){
-                
+
                 ## read the headers
                 headers <- lapply(filesList,scanBamHeader)
-                
+
                 ## Two sanity checks
                 if(!all(sapply(headers,
                                function(header,expected){
@@ -388,7 +388,7 @@ setMethod(
 
         ## store them
         chrSize(obj) <- chr.sizes
-        
+
         ## check if the chromosome size are valid
         if(validity.check){
             if(organismName(obj) != "custom"){
@@ -401,12 +401,12 @@ setMethod(
             }
             names(chrSize(obj)) <- .convertToUCSC(names(chrSize(obj)),organismName(obj),chr.map)
         }
-        
+
         ## fetch annotation
         if(!silent){
             .catn("Fetching annotations...")
         }
-        
+
         ## validate and get them
         annotParam <- switch(annotationMethod,
                              "biomaRt"=AnnotParam(
@@ -418,7 +418,7 @@ setMethod(
                                  datasource=annotationFile,
                                  type=annotationMethod))
         genomicAnnotation(obj)<-getAnnotation(annotParam)
-        
+
         ## check if the chromosome names in the annotation are valid
         if(validity.check){
           if(organismName(obj) != "custom"){
@@ -437,12 +437,12 @@ setMethod(
             warning("FIXME - name convention for RangedData")
           }
         }
-        
-        ## create 
+
+        ## create
         if(!any(names(seqlengths(genomicAnnotation(obj))) %in% seqnames(obj))){
           stop("There is no common sequence names between your annotation and your BAM!")
         }
-        
+
         ## check if the annotation contains the valid fields for the count method
         ## check if the annotation are valid
         if(count != "islands"){
@@ -463,7 +463,7 @@ setMethod(
                            "Some annotation lie outside the sequences range reported",
                            "in your BAM file. You may be using two different genome versions."))
             }
-            
+
             ## check for overlaps
             ## TODO this is a bit fishy as it depends on the order of the summarization argument...
             if(!(count == "genes" & summarization[1] == "geneModels")){
@@ -497,7 +497,7 @@ setMethod(
                 }
             }
         }
-        
+
         ## check if the chromosome names are valid
         if(validity.check){
           if (annotationMethod != "biomaRt" & organismName(obj) != "custom") {
@@ -506,26 +506,26 @@ setMethod(
               if (!ignoreWarnings) {
                 warning("You enforce UCSC chromosome conventions, however the provided annotation is not compliant. Correcting it.")
               }
-              names(genomicAnnotation(obj)) <- easyRNASeq:::.convertToUCSC(names(genomicAnnotation(obj)), 
+              names(genomicAnnotation(obj)) <- easyRNASeq:::.convertToUCSC(names(genomicAnnotation(obj)),
                                                                            organismName(obj), chr.map)
             }
           }
         }
 
         ## subset the annotation by chr.sel
-        if (length(chr.sel) >0){ 
+        if (length(chr.sel) >0){
             if(!chr.sel %in% names(genomicAnnotation(obj))){
                 stop(paste("The chromosome name you have given in the 'chr.sel' argument",
                            "does not match any chromosome in your annotation."))
             }
             genomicAnnotation(obj) <- switch(class(genomicAnnotation(obj)),
-                                             "GRanges"=genomicAnnotation(obj)[seqnames(genomicAnnotation(obj)) %in% chr.sel], 
+                                             "GRanges"=genomicAnnotation(obj)[seqnames(genomicAnnotation(obj)) %in% chr.sel],
                                              "RangedData"= genomicAnnotation(obj)[space(genomicAnnotation(obj)) %in% chr.sel,])
             if(class(genomicAnnotation(obj))=="GRanges"){
               seqlevels(genomicAnnotation(obj)) <- seqlevels(genomicAnnotation(obj))[seqlevels(genomicAnnotation(obj)) %in% chr.sel]
             }
         }
-        
+
         ## Check if the condition list have the same size as the file list
         if(outputFormat=="DESeq"|outputFormat=="edgeR" ){
             if(length(conditions)!=length(filesList)){
@@ -550,7 +550,7 @@ setMethod(
                 ## check the gene model
                 ovl <- findOverlaps(geneModel(obj),ignoreSelf=TRUE,ignoreRedundant=TRUE)
                 ovl.number <- sum(sapply(ovl,function(hits){length(unique(queryHits(hits)))}))
-                if(ovl.number > 0){ 
+                if(ovl.number > 0){
                     if(! ignoreWarnings){
                         warning(paste("There are",ovl.number,"synthetic exons as",
                                       "determined from your annotation that overlap!",
@@ -561,7 +561,7 @@ setMethod(
                 }
             }
         }
-        
+
         ## Do count
         ## Changed from sapply to lapply to make sure that the rownames are conserved!
         if(!silent){
@@ -591,20 +591,20 @@ setMethod(
         librarySize(obj) <- do.call("c",lapply(countData,function(cData){
             cData$size
         }))
-        
+
         ## we shouldn't get back a list
         if(is.list(listOfCount)){
-            warning("Something unexpected happened while calculating the coverage and summarizing it. Aborting and returning the current objects. Check the readCounts slot for more details.")             
+            warning("Something unexpected happened while calculating the coverage and summarizing it. Aborting and returning the current objects. Check the readCounts slot for more details.")
             return(list(RNAseq=obj,readCounts=listOfCount))
         }
-        
+
         ## we want proper names!
         colnames(listOfCount) <- fileName(obj)
         if(!all(rownames(listOfCount) %in% .getName(obj,count))){
             warning("Something unexpected happened while calculating the coverage and summarizing it. Aborting and returning the current object. Check the readCounts slot for more details.")
             return(list(RNAseq=obj,readCounts=listOfCount))
         }
-        
+
         ## islands or not
         if( count == 'islands'){
             readCounts(obj)<- .extendCountList(readCounts(obj),listOfCount,count)
@@ -615,7 +615,7 @@ setMethod(
                 .extendCountList(readCounts(obj),listOfCount,count)
                 )
         }
-        
+
         ## Return object asked by user
         if(!silent){
             .catn("Preparing output")
@@ -667,7 +667,7 @@ setMethod(
 
                           ## get the counts
                           counts <- readCounts(obj,count,summarization)
-                          
+
                           ## create the sample annotation
                           ## TODO should we return the range if we have many reads?
                           ## TODO and at the moment the ReadLength will be 0 if it is not set
@@ -698,7 +698,7 @@ setMethod(
                                                                   grng <- grng[sel,-match("exon",colnames(grng))]
                                                                   start(grng) <- mins[match(grng$gene,names(mins))]
                                                                   end(grng) <- maxs[match(grng$gene,names(maxs))]
-                                                                  if(length(chr.sel)>0){ 
+                                                                  if(length(chr.sel)>0){
                                                                       seqlevels(grng) <- chr.sel
                                                                       seqnames(grng) <- factor(as.character(seqnames(grng)))
                                                                   }
@@ -718,7 +718,7 @@ setMethod(
                                                            grng <- grng[sel,-match("exon",colnames(grng))]
                                                            start(grng) <- mins[match(grng$transcript,names(mins))]
                                                            end(grng) <- maxs[match(grng$transcript,names(maxs))]
-                                                           if(length(chr.sel)>0){ 
+                                                           if(length(chr.sel)>0){
                                                                seqlevels(grng) <- chr.sel
                                                                seqnames(grng) <- factor(as.character(seqnames(grng)))
                                                            }
@@ -742,11 +742,11 @@ setMethod(
                                                         names(seqlengths(rowData)))] <- chrSize(obj)[match(common.names,
                                                                                                            names(chrSize(obj)))]
                           }
-                          
+
                           ## the assay contains the data
                           sexp <- SummarizedExperiment(
                               assays=SimpleList(counts=counts),
-                              rowData=rowData,
+                              rowRanges=rowData,
                               colData=colData)
 
                           ## add the rownames
@@ -756,19 +756,19 @@ setMethod(
                           if(any(duplicated(rownames(sexp)))){
                               warning(paste("As you are counting by ",count,", your assay contains redundant entries.",sep=""))
                           }
-                          
+
                           ## report
-                          return(sexp)                            
+                          return(sexp)
                       }
                       ))
     })
 
 ##' count method
-##' 
+##'
 ##' This function is to supersed the easyRNASeq function in order to
 ##' consolidate the option parameters as well as the option output.
 ##' Ideally, the only output would be a SummarizedExperiment.
-##' 
+##'
 ##' @aliases count count,character-method
 ##' @rdname easyRNASeq-count
 ##' @param filesDirectory The directory where the files to be used are located.
@@ -792,11 +792,11 @@ setMethod(
 ##' \code{\link[ShortRead:readAligned]{ShortRead:readAligned}}
 ##' @keywords methods
 ##' @examples
-##' 
+##'
 ##' 	\dontrun{
 ##' 	library("RnaSeqTutorial")
 ##' 	library(BSgenome.Dmelanogaster.UCSC.dm3)
-##' 
+##'
 ##' 	## creating a count table from 4 bam files
 ##' 	sumExp <- count(filesDirectory=system.file(
 ##'                            "extdata",
@@ -819,7 +819,7 @@ setMethod(
 ##'     ## the 'features' info
 ##'     rowData(sumExp)
 ##' }
-##' 
+##'
 setMethod(f="count",
           signature="character",
           definition=function(
