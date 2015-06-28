@@ -226,4 +226,3 @@
                             unlist(sapply(RL,
                                           function(gene){c(1:length(gene))})),sep="_")))
 }
-

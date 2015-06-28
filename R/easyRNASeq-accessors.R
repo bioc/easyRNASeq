@@ -3,24 +3,24 @@
 ## In easyRNASeq, check that the names of the readLength are correct if lenhgth >1
 
 ##' Accessors for RNAseq class
-##' 
-##' 
+##'
+##'
 ##' These functions and generics define `accessors` (to get and set values) for
 ##' objects in the \pkg{easyRNASeq} package.
-##' 
-##' 
+##'
+##'
 ##' @aliases accessors chrSize chrSize,RNAseq-method
 ##' fileName<- fileName fileName,RNAseq-method fileName<-,RNAseq-method
 ##' geneModel geneModel<- geneModel,RNAseq-method geneModel<-,RNAseq-method
 ##' genomicAnnotation<- genomicAnnotation<-,RNAseq-method
 ##' genomicAnnotation genomicAnnotation,RNAseq-method
 ##' librarySize librarySize<- librarySize,RNAseq-method librarySize<-,RNAseq-method
-##' organismName<- organismName organismName,RNAseq-method organismName<-,RNAseq-method 
+##' organismName<- organismName organismName,RNAseq-method organismName<-,RNAseq-method
 ##' readCounts<- readCounts readCounts,RNAseq-method readCounts<-,RNAseq-method
 ##' readCoverage<- readCoverage readCoverage,RNAseq-method readCoverage<-,RNAseq-method
 ##' readIslands<- readIslands readIslands,RNAseq-method readIslands<-,RNAseq-method
-##' readLength<- readLength readLength,RNAseq-method readLength<-,RNAseq-method 
-##' chrSize<- chrSize<-,RNAseq,integer-method chrSize<-,RNAseq,list-method 
+##' readLength<- readLength readLength,RNAseq-method readLength<-,RNAseq-method
+##' chrSize<- chrSize<-,RNAseq,integer-method chrSize<-,RNAseq,list-method
 ##' seqnames,RNAseq-method
 ##' @name easyRNASeq accessors
 ##' @rdname easyRNASeq-accessors
@@ -42,13 +42,13 @@
 ##' @author Nicolas Delhomme
 ##' @keywords manip
 ##' @examples
-##' 
+##'
 ##' rnaSeq<-new("RNAseq")
 ##' ##set organisme name of an RNAseq object
 ##' organismName(rnaSeq) <- "Dmelanogaster"
 ##' ##get organisme name of an RNAseq object
 ##' orgName<-organismName(rnaSeq)
-##' 
+##'
 
 ## getters
 setMethod(
@@ -86,14 +86,14 @@ setMethod(
             count=c("exons","features","genes","islands","transcripts"),
             summarization=c("bestExons","geneModels"),
             unique=FALSE){
-            
+
             ## If no count is given return the complete liste of count
             if(!length(count)==1){
               return(obj@readCounts)
             } else {
               .checkArguments("readCounts","count",count)
               return(switch(count,
-                            "genes"= {                              
+                            "genes"= {
                               ## check that the summarization was provided
                               if(!length(summarization)==1){
                                 stop(paste(
@@ -117,7 +117,7 @@ setMethod(
                               }
                               return(tmp)
                             }
-                            ## "islands"= obj@readCounts[count][[1]],                            
+                            ## "islands"= obj@readCounts[count][[1]],
                             ## "transcripts"= obj@readCounts[count][[1]],
                             ))
             }
@@ -202,7 +202,7 @@ setReplaceMethod(
                    ## deprecated
                    .Deprecated("chrSize<-,RNAseq,numeric-methods",
                                msg="The use of the list for providing chromosome sizes has been deprecated. Use a named numeric vector instead.")
-                                      
+
                    ## init
                    initialize(obj,chrSize=unlist(value))
                  })
@@ -253,12 +253,12 @@ setReplaceMethod(
                  f="fileName",
                  signature="RNAseq",
                  definition=function(obj,value){
-                   initialize(obj,fileName=value)                   
+                   initialize(obj,fileName=value)
                  })
 
 setReplaceMethod(
                  f="librarySize",
                  signature="RNAseq",
                  definition=function(obj,value){
-                   initialize(obj,librarySize=value)                   
+                   initialize(obj,librarySize=value)
                  })

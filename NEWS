@@ -8,6 +8,20 @@ CHANGES IN VERSION 2.4.1
 
   o Updated the package dependencies
 
+  o Adapted the demultiplex function to handle multicore. It is using the
+  Shortread srdistance function under the hood, who internally uses bplapply,
+  without ever detailing so (?!). As a consequence, it would spawn as many
+  jobs as cores are detected and this breaks the vignette processing during
+  R CMD check... As a consequence demultiplex got an mc.cores=1L new arguments
+  that preserve its former serial approach but enables parallel processing,
+  controlled by the user (as it should be!! and not invisibly in the code!)
+
+  o Removed the dependency on locfit (importing what is necessary)
+
+  o Exporting more functions, mostly locfit and DESeq functions
+
+  o Adapted the parameters for the DESeq dispersion plot
+
 CHANGES IN VERSION 2.4.0
 -------------------------
 
@@ -44,7 +58,15 @@ CHANGES IN VERSION 2.3.0
 CHANGES IN VERSION 2.2.1
 -------------------------
 
+<<<<<<< HEAD
   o Added (now) missing S4Vectors imports
+=======
+<<<<<<< HEAD
+  o Added (now) missing S4Vectors imports
+=======
+  o Added (now) missing S4Vectors function imports.
+>>>>>>> remotes/hedgehog
+>>>>>>> master
 
 CHANGES IN VERSION 2.2.0
 -------------------------

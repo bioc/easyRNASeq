@@ -3,8 +3,11 @@
 \docType{methods}
 \name{DESeq additional methods}
 \alias{DESeq additional methods}
+\alias{locfit}
+\alias{lp}
 \alias{multivariateConditions}
 \alias{multivariateConditions,CountDataSet-method}
+\alias{newCountDataSet}
 \alias{plotDispLSD}
 \alias{plotDispLSD,CountDataSet-method}
 \alias{plotDispersionEstimates}

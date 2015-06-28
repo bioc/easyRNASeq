@@ -11,29 +11,29 @@
 
 
 ##' Extension for the DESeq package
-##' 
+##'
 ##' \itemize{
 ##' \item{\code{multivariateConditions} is simply an accessor for the
 ##' \code{multivariateConditions} slot of a \code{\linkS4class{CountDataSet}}
 ##' object}
-##' \item{\code{plotDispLSD} is a function silimar to 
+##' \item{\code{plotDispLSD} is a function silimar to
 ##' \code{\link[DESeq:plotDispEsts]{plotDispEsts}}
 ##' that adds a density estimate as a colored heatmap from grey (few) to yellow
 ##' (many).}
-##' \item{\code{plotDispersionEstimates} offers the functionality to plot 
+##' \item{\code{plotDispersionEstimates} offers the functionality to plot
 ##' the dispersion estimate as described in the \pkg{DESeq} vignette.}
 ##' }
 ##'
 ##' @aliases multivariateConditions multivariateConditions,CountDataSet-method
 ##' plotDispLSD plotDispLSD,CountDataSet-method plotDispersionEstimates
-##' plotDispersionEstimates,CountDataSet-method
+##' plotDispersionEstimates,CountDataSet-method locfit lp newCountDataSet
 ##' @name DESeq additional methods
 ##' @rdname DESeq-methods
 ##' @param obj An object of class \code{\linkS4class{CountDataSet}}
 ##' @param cex standard \code{\link[graphics:plot.default]{plot.default}} parameter
 ##' @param cond A character string describing the first condition
 ##' @param linecol defines the line color
-##' @param log A character string passed onto 
+##' @param log A character string passed onto
 ##' \code{\link[graphics:plot.default]{plot.default}}
 ##' @param name argument passed to the \pkg{DESeq} \code{\link[DESeq:fitInfo]{fitInfo}}
 ##' function.
@@ -42,8 +42,8 @@
 ##' @param ymin numeric value defining the lower limit for the y axis
 ##' @param ... Additional plotting parameters
 ##' @usage multivariateConditions(obj)
-##' plotDispLSD(obj, name = NULL, ymin, 
-##' linecol = "#00000080", xlab = "mean of normalized counts", 
+##' plotDispLSD(obj, name = NULL, ymin,
+##' linecol = "#00000080", xlab = "mean of normalized counts",
 ##' ylab = "dispersion", log = "xy", cex = 0.45, ...)
 ##' plotDispersionEstimates(obj,cond,log,...)
 ##' @return \itemize{
@@ -56,7 +56,7 @@
 ##' \code{\link[DESeq:plotDispEsts]{plotDispEsts}}
 ##' @keywords methods
 ##' @examples
-##' 
+##'
 ##' 	\dontrun{
 ##' 	## these are helper function for the DESeq package
 ##' 	## refer to its vignette first
@@ -66,7 +66,7 @@
 ##' 	mVar <- multivariateConditions(cds)
 ##' 	plotDispersionEstimates(cds,conditions[1])
 ##' 	}
-##' 
+##'
 setMethod(
           f="multivariateConditions",
           signature="CountDataSet",
@@ -77,20 +77,20 @@ setMethod(
 setMethod(
   f="plotDispLSD",
   signature="CountDataSet",
-  definition=function(obj, name = NULL, ymin, 
-                      linecol = "#00000080", xlab = "mean of normalized counts", 
+  definition=function(obj, name = NULL, ymin,
+                      linecol = "#00000080", xlab = "mean of normalized counts",
                       ylab = "dispersion", log = "xy", cex = 0.45, ...) {
-    px = rowMeans(counts(cds, normalized = TRUE))
+    px = rowMeans(counts(obj, normalized = TRUE))
     sel = (px > 0)
     px = px[sel]
-    py = fitInfo(cds, name = name)$perGeneDispEsts[sel]
-    if (missing(ymin)) 
-      ymin = 10^floor(log10(min(py[py > 0], na.rm = TRUE)) - 
+    py = fitInfo(obj, name = name)$perGeneDispEsts[sel]
+    if (missing(ymin))
+      ymin = 10^floor(log10(min(py[py > 0], na.rm = TRUE)) -
                         0.1)
-    heatscatter(log10(px), log10(pmax(py, ymin)), xlab = xlab, ylab = ylab, 
-                pch = ifelse(py < ymin, 6, 16), cexplot = cex, 
+    heatscatter(log10(px), log10(pmax(py, ymin)), xlab = xlab, ylab = ylab,
+                pch = ifelse(py < ymin, 6, 16), cexplot = cex,
                 xaxt='n', yaxt='n', ...)
-    
+
     # Fix logged axes labels
     atx <- axTicks(1)
     aty <- axTicks(2)
@@ -103,7 +103,7 @@ setMethod(
     axis(1, at=atx, labels=xlabels)
     axis(2, at=aty, labels=ylabels)
     xg = 10^seq(-0.5, 5, length.out = 100)
-    lines(log10(xg), log10(fitInfo(cds, name = name)$dispFun(xg)), col = linecol, 
+    lines(log10(xg), log10(fitInfo(obj, name = name)$dispFun(xg)), col = linecol,
           lwd = 4, lty = 1
     )
   })
@@ -111,29 +111,12 @@ setMethod(
 setMethod(
           f="plotDispersionEstimates",
           signature=c("CountDataSet"),
-          definition=function(obj,cond=character(1),log="xy",...){
-            
+          definition=function(obj,cond=NULL,log="xy",...){
+
             ## check
             if(! class(obj) == "CountDataSet"){
               stop("This function: 'plotDispersionEstimates' only accepts a 'countDataSet' object.")
             }
-
-            ## check the conditions
-            ## check if we are pooled, blind or per-condition
-            stopifnot(length(cond)==1)
-
-            ## should work without now
-            ## if(multivariateConditions(obj)){
-            ##   ## TODO other steps are necessary before that to get the proper DESeq object at that point
-            ##   ## make sure we can read a data.frame as conditions, that the rownames are the files and that the estimates are calc with pooled-CR
-            ##   if(cond != "pooled"){
-            ##     stop("The provided condition can only have the value: 'pooled', as your conditions is multivariate")
-            ##   }
-            ## } else {
-            ##   if(!cond %in% sub("disp_",names(fData(obj)))){
-            ##     stop("The provided condition is not present in the 'conditions' slot of your object.")
-            ##   }
-            ## }
 
             ## plot
             plot(
@@ -142,7 +125,9 @@ setMethod(
                  pch = '.', log=log,
                  xlab="gene mean normalized expression",
                  ylab="per gene dispersion estimate",
-                 main = paste("Gene dispersion estimate for condition:",cond),
+                 main = paste("Gene dispersion estimate for",
+                              ifelse(is.null(cond),"all conditions",
+                                     paste("condition:",cond))),
                  ...)
             xg <- 10^seq( -.5, 5, length.out=300 )
             lines( xg, fitInfo(obj,cond)$dispFun( xg ), col="red" )

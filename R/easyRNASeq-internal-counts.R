@@ -312,5 +312,3 @@
 
   return(list(counts=readCounts(rnaSeq,count,summarization),size=librarySize(rnaSeq)))
 }
-
-

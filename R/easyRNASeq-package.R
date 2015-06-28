@@ -72,6 +72,7 @@
 ##' 	\code{\link[biomaRt:useMart]{biomaRt}}
 ##' 	\code{\link[edgeR:DGEList]{edgeR}}
 ##' 	\code{\link[genomeIntervals:Genome_intervals_stranded-class]{genomeIntervals}}
+##'   \code{\link[BiocParallel:BiocParallel-package]{BiocParallel}}
 ##' 	\code{\link[Biostrings:XString-class]{Biostrings}}
 ##' 	\code{\link[BSgenome:BSgenome-class]{BSgenome}}
 ##' 	\code{\link[DESeq:newCountDataSet]{DESeq}}
@@ -89,6 +90,7 @@
 ##'   \itemize{
 ##'     \item{Classes}{
 ##'       \code{\linkS4class{BamFileList}}
+##'       \code{\linkS4class{CountDataSet}}
 ##'       \code{\linkS4class{RangedData}}
 ##'       \code{\linkS4class{SummarizedExperiment}}
 ##'     }
@@ -96,9 +98,12 @@
 ##'       \code{\link[GenomicRanges:SummarizedExperiment-class]{
 ##'         The SummarizedExperiment assay accessor}
 ##'       }
-##'       \code{\link[Rsamtools:BamFileList]{The BamFileList constructor}}
+##'       \code{\link[DESeq:estimateDispersions]{DESeq estimate size factor and
+##'       estimate dispersion functions}}
 ##'       \code{\link[IRanges:IRanges-constructor]{The IRanges constructor}}
 ##'       \code{\link[IRanges:RangedData-class]{The RangedData constructor}}
+##'       \code{\link[locfit:locfit]{The locfit function}}
+##'       \code{\link[Rsamtools:BamFileList]{The BamFileList constructor}}
 ##'       \code{\link[ShortRead:srFilter]{For the SRFilterResult,
 ##'       chromosomeFilter, compose and nFilter methods}}
 ##'     }
@@ -156,6 +161,7 @@ NULL
 ##' eval get intersect lapply match order paste pmax rbind rownames sapply
 ##' strand "strand<-" table unique
 ##' @importMethodsFrom Biostrings type
+##' @importMethodsFrom DESeq estimateSizeFactors estimateDispersions
 ##' @importMethodsFrom genomeIntervals seq_name
 ##' @importMethodsFrom GenomeInfoDb seqinfo seqlengths "seqlengths<-"
 ##' seqlevels "seqlevels<-" seqnames "seqnames<-"
@@ -166,7 +172,7 @@ NULL
 ##' "colnames<-" countOverlaps coverage elementLengths end "end<-" findOverlaps
 ##' gsub mean median narrow nchar queryHits ranges reduce rev "rownames<-" space
 ##' split start "start<-" sub  tolower "universe<-" unlist values which width
-##' @importMethodsFrom S4Vectors "%in%" elementMetadata "elementMetadata<-"
+##' @importMethodsFrom S4Vectors "%in%" endoapply elementMetadata "elementMetadata<-"
 ##' ifelse levels mcols Rle runLength runsum runValue substr
 ##' @importMethodsFrom methods coerce initialize show
 ##' @importMethodsFrom Rsamtools countBam path scanBam scanBamHeader
@@ -177,6 +183,7 @@ NULL
 ## import methods
 ##' @importFrom biomaRt getBM listDatasets useDataset useMart
 ##' @importFrom Biostrings DNAStringSet
+##' @importFrom BiocParallel MulticoreParam SerialParam
 ##' @importFrom DESeq fitInfo newCountDataSet
 ##' @importFrom edgeR calcNormFactors DGEList estimateCommonDisp
 ##' estimateTagwiseDisp maPlot plotMDS.DGEList plotMeanVar plotBCV
@@ -188,6 +195,7 @@ NULL
 ##' @importFrom IRanges IRanges IRangesList LogicalList
 ##' RangedData RangesList SplitDataFrameList RleList
 ##' @importFrom LSD heatscatter
+##' @importFrom locfit locfit lp
 ##' @importFrom methods as extends is new
 ##' @importFrom parallel makePSOCKcluster parLapply stopCluster
 ##' @importFrom Rsamtools BamFileList bamFlagTest index scanBamFlag
@@ -197,8 +205,8 @@ NULL
 ##' @importFrom utils combn str
 ## and export!
 ##' @exportClass BamFileList RangedData SummarizedExperiment
-##' @exportMethod assay seqnames split srFilter SummarizedExperiment width writeFastq
-##' @export chromosomeFilter compose BamFileList IRanges nFilter RangedData readAligned SRFilterResult
+##' @exportMethod assay estimateDispersions estimateSizeFactors fileName seqlengths seqnames split srFilter SummarizedExperiment width writeFastq
+##' @export alignData chromosomeFilter compose BamFileList IRanges locfit lp newCountDataSet nFilter RangedData readAligned SRFilterResult
 NULL
 
 ###==========================
@@ -276,6 +284,8 @@ NULL
 ##' @param pkgname a character string giving the name of the package.
 ##' @seealso \code{\link[base:ns-hooks]{.onAttach}} in the \code{base} package.
 ##' @keywords internal
+globalVariables("GTF.FIELDS")
+globalVariables("ANNOTATION.TYPE")
 ".onAttach" <- function(libname,pkgname){
   assign("GTF.FIELDS",c("gene_id","transcript_id","exon_id",
                         "gene_name"),

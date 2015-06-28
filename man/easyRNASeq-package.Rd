@@ -96,6 +96,7 @@ The class RNAseq specification:
 	\code{\link[biomaRt:useMart]{biomaRt}}
 	\code{\link[edgeR:DGEList]{edgeR}}
 	\code{\link[genomeIntervals:Genome_intervals_stranded-class]{genomeIntervals}}
+  \code{\link[BiocParallel:BiocParallel-package]{BiocParallel}}
 	\code{\link[Biostrings:XString-class]{Biostrings}}
 	\code{\link[BSgenome:BSgenome-class]{BSgenome}}
 	\code{\link[DESeq:newCountDataSet]{DESeq}}
@@ -113,6 +114,7 @@ The class RNAseq specification:
   \itemize{
     \item{Classes}{
       \code{\linkS4class{BamFileList}}
+      \code{\linkS4class{CountDataSet}}
       \code{\linkS4class{RangedData}}
       \code{\linkS4class{SummarizedExperiment}}
     }
@@ -120,9 +122,12 @@ The class RNAseq specification:
       \code{\link[GenomicRanges:SummarizedExperiment-class]{
         The SummarizedExperiment assay accessor}
       }
-      \code{\link[Rsamtools:BamFileList]{The BamFileList constructor}}
+      \code{\link[DESeq:estimateDispersions]{DESeq estimate size factor and
+      estimate dispersion functions}}
       \code{\link[IRanges:IRanges-constructor]{The IRanges constructor}}
       \code{\link[IRanges:RangedData-class]{The RangedData constructor}}
+      \code{\link[locfit:locfit]{The locfit function}}
+      \code{\link[Rsamtools:BamFileList]{The BamFileList constructor}}
       \code{\link[ShortRead:srFilter]{For the SRFilterResult,
       chromosomeFilter, compose and nFilter methods}}
     }

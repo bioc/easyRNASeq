@@ -12,6 +12,7 @@ Description: Calculates the coverage of high-throughput short-reads against
 Imports:
     Biobase (>= 2.28.0),
     BiocGenerics (>= 0.14.0),
+    BiocParallel (>= 1.2.6),
     biomaRt (>= 2.24.0),
     Biostrings (>= 2.36.1),
     DESeq (>= 1.20.0),
@@ -28,6 +29,7 @@ Imports:
     Rsamtools (>= 1.20.4),
     S4Vectors (>= 0.6.0),
     ShortRead (>= 1.26.0),
+    locfit,
     utils
 Suggests:
     BiocStyle (>= 1.6.0),

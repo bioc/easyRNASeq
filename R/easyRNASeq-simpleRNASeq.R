@@ -192,7 +192,6 @@ setMethod(f="simpleRNASeq",
 
             ## TODO WE need to assess the presence of multiple mapping reads
 
-
             ## d. compare with BamParam if provided.
             ## 1. paired
             if(length(unique(colData(sexp)$Paired))!=1){
@@ -308,8 +307,10 @@ setMethod(f="simpleRNASeq",
                                                            df,
                                                            param,verbose)))
             names(countAssay) <- countBy(param)
-            colnames(countAssay[[countBy(param)]]) <- colnames(sexp)
-            assays(sexp) <- countAssay
+
+            # This would have worked
+            # colnames(countAssay[[countBy(param)]]) <- colnames(sexp)
+            assays(sexp) <- endoapply(countAssay, unname)
 
             ## done
             if(verbose){

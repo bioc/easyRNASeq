@@ -1,5 +1,5 @@
 ##' Extension for the genomeIntervals package
-##' 
+##'
 ##' \describe{
 ##' \item{coerce}{ This method extends the genomeIntervals package
 ##' by offering the functionality to coerce a
@@ -8,7 +8,7 @@
 ##' \code{\linkS4class{GRangesList}} object.}
 ##' \item{type}{ Another way to access the content of the gff type
 ##' column.  } }
-##' 
+##'
 ##' @aliases coerce,Genome_intervals,RangedData-method
 ##' coerce,Genome_intervals,GRangesList-method
 ##' as,Genome_intervals,RangedData-method
@@ -56,10 +56,10 @@ setMethod(
 ## or at least warn they would be ignored
 setAs(from="Genome_intervals",to="RangedData",def=function(from){
   universe="intervals"
-  
+
   # first check
   if (!is(from, "Genome_intervals")){stop("'from' must be a Genome_intervals object")}
-  
+
   # create the ranges
   ranges<-IRanges(start=from[,1],end=from[,2])
 
@@ -67,7 +67,7 @@ setAs(from="Genome_intervals",to="RangedData",def=function(from){
   ## drop the original levels
   space = as.character(seq_name(from))
   names(ranges) <- seq(along=ranges)
-  
+
   # create the values
   slotToKeep<-na.omit(match(c("strand","exon","feature","intron","transcript","transcript.name","gene","gene.name"),names(from@annotation)))
   values <- as(data.frame(from@annotation[slotToKeep]),"DataFrame")
@@ -75,7 +75,7 @@ setAs(from="Genome_intervals",to="RangedData",def=function(from){
 
   # important before splitting
   rownames(values) <- names(ranges)
-  
+
   # now split properly
   if (length(unique(space)) > 1) {
     ranges <- split(ranges, space)
@@ -86,22 +86,21 @@ setAs(from="Genome_intervals",to="RangedData",def=function(from){
     names(ranges) <- unique(space)
     names(values) <- names(ranges)
   }
-      
-  if (!is.null(universe) && !isSingleString(universe))
+  if (!is.null(universe) && !S4Vectors::isSingleString(universe))
     stop("'universe' must be a single string")
   universe(ranges) <- universe
   return(new(
       "RangedData",
-      ranges = ranges,      
+      ranges = ranges,
       values = values))
 })
 
 ## coerce into GRanges/List
 setAs(from="Genome_intervals",to="GRanges",def=function(from){
-  
+
   ## first check
   if (!is(from, "Genome_intervals")){stop("'from' must be a Genome_intervals object")}
-  
+
   ## get all possible gff attributes
   ## to be quick
   ## we expect the types to have the same annotation
@@ -114,7 +113,7 @@ setAs(from="Genome_intervals",to="GRanges",def=function(from){
     names))),function(attr,from){
       getGffAttribute(from,attr)
     },from))
-  
+
   ## create the object
   return(GRanges(ranges=IRanges(
     start=from[,1],
@@ -123,14 +122,14 @@ setAs(from="Genome_intervals",to="GRanges",def=function(from){
     strand=strand(from),
     cbind(
       DataFrame(apply(
-        annotation(from)[!colnames(annotation(from)) 
+        annotation(from)[!colnames(annotation(from))
                          %in% c("seq_name","strand","gffAttributes")],2,Rle)),
       DataFrame(apply(mat,2,Rle)))
-  ))  
+  ))
 })
 
 
-## coerce into 
+## coerce into
 setAs(from="Genome_intervals",to="GRangesList",def=function(from){
   ## create the object
   return(split(as(from,"GRanges"),seq_name(from)))

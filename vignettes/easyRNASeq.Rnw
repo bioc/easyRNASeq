@@ -64,11 +64,11 @@ Bioinformatics 2012; doi: 10.1093/bioinformatics/bts477\\
 The last changes are reported in red.
 
 \paragraph{1.8.4}
-Converted an existing paragraph on annotation warning(s) into a section to add 
-additional details - see section \pref{p:W}. Extended the first use case on 
-synthetic transcript generation - see section \pref{synth:trx} - to introduce 
+Converted an existing paragraph on annotation warning(s) into a section to add
+additional details - see section \pref{p:W}. Extended the first use case on
+synthetic transcript generation - see section \pref{synth:trx} - to introduce
 how to check for annotation overlaps. Added another section detailing input file
-characteristics and their impact on counting - see section \pref{p:Ciri}. 
+characteristics and their impact on counting - see section \pref{p:Ciri}.
 Finally, started a FAQ section - see section \pref{FAQ}.
 
 \paragraph{1.8.2}
@@ -76,9 +76,9 @@ Added a use case that describes how to create a set of "gene models"
 in a manner more efficient than the current implementation within the
 package. As "gene model" can actually have different meanings depending
 on the context, I switched to call these \textbf{synthetic transcripts}; \ie what
-we create really are synthetic transcripts combining all exons of their 
+we create really are synthetic transcripts combining all exons of their
 corresponding gene. See the use case in section \pref{synth:trx} for how this
-is performed. This example was first introduced at the EMBO 2013 
+is performed. This example was first introduced at the EMBO 2013
 Practical Course: Analysis of High Throughput Sequencing Data, see
 \url{http://www.ebi.ac.uk/training/course/embo-practical-course-analysis-high-throughput-sequencing-data-1}
 for the lectures (there are links in the time-table) and here for
@@ -112,7 +112,7 @@ The vignette has been updated to report function call changes to the
   \item support for variable length reads
   \item read files can be processed in parallel
 \end{itemize}
-Sections affected are: 
+Sections affected are:
 \pref{ss:usage}, \pref{p:args}, \pref{p:input}, \pref{ss:diffInput},
 \pref{perf},\pref{p:pasohs},\pref{p:dwai}
 
@@ -135,7 +135,7 @@ the processing of RNA-seq data in \R{}/\Bioconductor{}. RNA-seq
 \cite{Mortazavi:2008p740} was introduced as a new method to perform
 Gene Expression Analysis, using the advantages of the high
 throughput of \emph{Next-Generation Sequencing} (NGS)
-machines. 
+machines.
 \newline
 
 The goal of this vignette is, first, to show an example of the
@@ -148,19 +148,19 @@ genic annotation will be retrieved from the selected/preferred source
 and converted into a \Rclass{RangedData} object. In parallel, the
 sequenced reads' information (\textit{e.g.} chromosome, position,
 strand, \textit{etc.}) will be retrieved from the alignment file and,
-similarly, converted to a \Rclass{GRanges} object. Then, 
+similarly, converted to a \Rclass{GRanges} object. Then,
 reads contained in the \Robject{reads} \Rclass{GRanges} object are summarized
-per genic annotation contained in the \Robject{annotation} \Rclass{RangedData} 
-object, which give raise to a count table that, finally, can be corrected or 
+per genic annotation contained in the \Robject{annotation} \Rclass{RangedData}
+object, which give raise to a count table that, finally, can be corrected or
 normalized using additional R packages.
 \newline
 
 Second, the \Rfunction{easyRNASeq} function arguments are detailed
 and additional information given on how to correct data for visualization,
 using \emph{RPKM (Reads Per Kilobase of feature per Million
-reads in the library)} counts. Normalization can be performed by using 
-appropriate statistical models implemented \eg in 
-the \Biocpkg{DESeq} or \Biocpkg{edgeR} packages. 
+reads in the library)} counts. Normalization can be performed by using
+appropriate statistical models implemented \eg in
+the \Biocpkg{DESeq} or \Biocpkg{edgeR} packages.
 \bioccomment{For the reasons why I call RPKM a correction and not a normalization,
 see \cite{Soneson:2013p5778}.}
 \newline
@@ -169,14 +169,14 @@ In a third part, more advanced pre-processing is described,
 \ie \emph{de-multiplexing}. Note that this step has become a standard procedure
 in most sequencing facilities and hence is bound to be deprecated as a function
 in the \Biocpkg{easyRNASeq} package in a few release cycles.
-\newline 
+\newline
 
 Finally, additional post-processing such as exporting the count table as bed
 and wig formatted file, to be visualized into the UCSC genome browser
 or a stand alone genome browser are described in the vignette of the
 companion data package \Biocexptpkg{RnaSqTutorial}. Note that the information in
 this tutorial is getting quickly outdated given the pace of evolution of the NGS
-field in general. The basic information it contains are perfectly correct 
+field in general. The basic information it contains are perfectly correct
 though. A newer version of that tutorial is in preparation.
 
 \begin{figure}[htpb]
@@ -190,11 +190,11 @@ though. A newer version of that tutorial is in preparation.
 \section{easyRNASeq}
 \label{s:eRS}
 
-Throughout this vignette, the data present in the \Biocexptpkg{RnaSeqTutorial} 
-data package will be used to demonstrate functionalities. Refer to its 
+Throughout this vignette, the data present in the \Biocexptpkg{RnaSeqTutorial}
+data package will be used to demonstrate functionalities. Refer to its
 documentation for more details; but shortly, it contains different \emph{Drosophila melanogaster}
 RNA-Seq dataset saved in different format as well as the related
-annotation retrieved from  FlyBase \cite{Tweedie:2009p2014}. 
+annotation retrieved from  FlyBase \cite{Tweedie:2009p2014}.
 \newline
 
 The main function of the \Biocpkg{easyRNASeq} package is
@@ -207,13 +207,13 @@ to have a look at them. The \Biocpkg{easyRNASeq} package defines an
 during the processing. The \Rfunction{easyRNASeq} function instantiates
 an object of that class and although most arguments to this
 function are optional, it is advised to set them - especially
-the \emph{readLength} and the \emph{organismName} - to document your analysis. 
+the \emph{readLength} and the \emph{organismName} - to document your analysis.
 The \Rcode{organismName} argument is
 actually mandatory if you want to retrieve genomic annotation using
 \Biocpkg{biomaRt}; in which case, you need to provide the name as
 specified in the corresponding \Biocpkg{BSgenome} package,
 \emph{i.e.} ``Dmelanogaster'' for the
-\Biocpkg{BSgenome.Dmelanogaster.UCSC.dm3} package. 
+\Biocpkg{BSgenome.Dmelanogaster.UCSC.dm3} package.
 \newline
 
 \warning{As there are numerous RNA-Seq protocol,
@@ -231,10 +231,10 @@ if the purpose of some argument were still unclear.}
 \paragraph{Initial example}
 In the following, the \Rfunction{easyRNASeq} function is called with
 an almost minimal set of parameters - a few optional ones too\dots The
-sequencing reads' excerpts used here were obtained from $4$ fruit-fly samples 
+sequencing reads' excerpts used here were obtained from $4$ fruit-fly samples
 subjected to a 36 cycles sequencing on an Illumina GAIIx
 machine. The annotation were retrieved from FlyBase and
-converted into an ``Rdata'' object. 
+converted into an ``Rdata'' object.
 \newline
 Here, we're interested in retrieving the
 count table of these $4$ samples for every exon in the genome.
@@ -256,16 +256,16 @@ count.table <- easyRNASeq(filesDirectory=system.file(
                             package="RnaSeqTutorial"),
                           count="exons"
                           )
-@ 
+@
 
 <<Show the results>>=
 head(count.table)
 dim(count.table)
-@ 
+@
 
-In this usage of the \Rfunction{easyRNASeq} function, we're reading bam files 
+In this usage of the \Rfunction{easyRNASeq} function, we're reading bam files
 (the default \Rcode{format} argument), present
-in the directory passed as first argument to the function (the 
+in the directory passed as first argument to the function (the
 \Rcode{filesDirectory} argument) using
 a regular expression to match the file names (\Rcode{pattern} argument). The
 \Rcode{system.file} function retrieves the actual path on your file system
@@ -276,10 +276,10 @@ retrieve the files is similar to that of the \Rpackage{base} functions
 contains 6 times one of the ``A'', ``C'', ``G'' or ``T'' letter,
 followed by the ``.bam'' extension. \bioccomment{Note the use of the \$ sign at
 the end of the regular expression to signify that the filename to be matched has
-to end after '.bam'. This way we prevent fetching the BAI (the BAM index) files.} 
+to end after '.bam'. This way we prevent fetching the BAI (the BAM index) files.}
 Additionally, the number of sequencing cycles
 (\Rcode{readLength}) and the \Rcode{organism} that sample
-originates from, both optional here are detailed. Then the genomic and genic 
+originates from, both optional here are detailed. Then the genomic and genic
 information is provided: the exons' annotation
 (\Rcode{annotationFile} argument), which were already processed into an ``RData''
 file (the \Rcode{annotationMethod} argument). Finally, we precise that we want
@@ -293,29 +293,29 @@ your 4 samples!
 \label{p:W}
 \warning{
 As you could see when running the previous example,  warnings were
-emitted and quite rightly so. 
+emitted and quite rightly so.
 \begin{enumerate}
 \item about the annotation:
-The annotation used here is redundant at two levels. First, some exons overlap; 
+The annotation used here is redundant at two levels. First, some exons overlap;
 these are alternative exons from splice variants. Second, the
 annotation contains every splice variants, hence some exons are
 duplicated. Therefore counting by exons or transcripts using this
 annotation results in counting several reads many
-times and for that reason a warning is emitted, as multiple countingmay be a 
+times and for that reason a warning is emitted, as multiple countingmay be a
 very significant source of error. The ideal
 solution is to provide an annotation object that contains no
-overlapping features, see the use case in section \pref{synth:trx} for an 
-approach to reduce/control these annotation related issues. Consult as well the 
+overlapping features, see the use case in section \pref{synth:trx} for an
+approach to reduce/control these annotation related issues. Consult as well the
 section \pref{p:Ciri} for related counting issues.
 \item about potential naming issue in the input file:
 It is not infrequent that sequencing facilities use
-variable naming conventions for chromosomes in comparison to those generally 
-globally accepted for the corresponding organism. Therefore, is it not 
-infrequent that the globally available annotation uses different chromosome 
-names than those reported in the alignment files. 
+variable naming conventions for chromosomes in comparison to those generally
+globally accepted for the corresponding organism. Therefore, is it not
+infrequent that the globally available annotation uses different chromosome
+names than those reported in the alignment files.
 \end{enumerate}
-These warnings are there to inform you about these potential issues, as they 
-affect the accuracy of associating reads with genic or genomic features. As 
+These warnings are there to inform you about these potential issues, as they
+affect the accuracy of associating reads with genic or genomic features. As
 often misconceived, read count is not an easy task; see section \pref{p:Ciri} and
 \cite{Liao:2013p5892} for more details.
 }
@@ -327,8 +327,8 @@ be set to fine tune it, depending on the input at hand, the desired
 output, etc. Most will be detailed in the following, but not all, so check
 out \Rcode{?easyRNASeq} for more. One such argument is: \Rcode{filenames},
 that offers the possibility to give actual filenames rather than using
-a pattern matching approach to find the alignment files. For example, if you're 
-only interested in two samples out of the four previously used ones, you could do: 
+a pattern matching approach to find the alignment files. For example, if you're
+only interested in two samples out of the four previously used ones, you could do:
 
 << Create the object with only 2 files, eval=FALSE>>=
 count.table <- easyRNASeq(system.file(
@@ -346,7 +346,7 @@ count.table <- easyRNASeq(system.file(
 @
 
 Several arguments  influence the
-\Rfunction{easyRNASeq} function. These can be grouped in $5$ categories 
+\Rfunction{easyRNASeq} function. These can be grouped in $5$ categories
 concerning:
 \begin{itemize}
   \item the input
@@ -359,13 +359,13 @@ concerning:
 \paragraph{Input}
 \label{p:input}
 Using the \Rcode{format} argument, reads can be loaded from BAM
-files (default) or any format supported by the \Biocpkg{ShortRead} 
+files (default) or any format supported by the \Biocpkg{ShortRead}
 \cite{Morgan:2009p739} package. The SAM/BAM format
 \cite{Li:2009p1662} is becoming a \emph{de-facto} standard for
 storing NGS aligned data. Gapped alignment can be read from BAM files,
-set the \Rcode{gapped} argument to ``TRUE'' for that. 
+set the \Rcode{gapped} argument to ``TRUE'' for that.
 \bioccomment{Note that as BAM is now the standard for storing read alignments,
-\Biocpkg{easyRNASeq} support of other formats - through the use of 
+\Biocpkg{easyRNASeq} support of other formats - through the use of
 \Biocpkg{ShortRead} will be abandoned in a few release cycles.}
 
 \subsection{Critical information regarding the input}
@@ -373,31 +373,31 @@ set the \Rcode{gapped} argument to ``TRUE'' for that.
 \warning{
 As previously mentioned, associating reads with features is not straightforward,
 and numerous factors have to be taken into account that affect the counting
-accuracy. First, it is critical to know what alignments where reported by 
+accuracy. First, it is critical to know what alignments where reported by
 the aligner used. Does the alignment file contains multi-mapping reads; \ie are
-reads aligning to numerous loci reported? 
+reads aligning to numerous loci reported?
 Second, it is also critical to understand the gene's annotation in detail. Is it
 from a well-established model organism? Are there many splicing isoforms reported
 per gene? How do these differ; do they have different exons, different UTRs, \etc?
-Understanding pitfalls and caveats from both will help you decide what settings 
-are required within the frame of your experiment. In most common RNA-Seq 
-experiment, the goal is to look for differential expression between 2 conditions 
+Understanding pitfalls and caveats from both will help you decide what settings
+are required within the frame of your experiment. In most common RNA-Seq
+experiment, the goal is to look for differential expression between 2 conditions
 within one organism. The most stringent approach to that is:
 \begin{enumerate}
 \item to use only uniquely mapping reads and discarding others - this is the
 approach taken by e.g. HTSeq; see \url{http://www-huber.embl.de/users/anders/HTSeq/doc/overview.html}.
-\item to ensure that reads can be assigned to a single feature only - \ie when a 
+\item to ensure that reads can be assigned to a single feature only - \ie when a
 read cannot be confidently assign to a feature; \eg if a read locus overlap
-two genes either neighbouring or on opposite strand - discard them. This can be 
-achieved by 2 means, either by assigning reads to features first and then 
+two genes either neighbouring or on opposite strand - discard them. This can be
+achieved by 2 means, either by assigning reads to features first and then
 filtering the results or filtering the annotation prior to assigning the reads
 to prevent any such feature overlap.
 \end{enumerate}
-As of now, it is important to know that \Biocpkg{easyRNASeq} just reports 
-warnings if these conditions are unmet. Obtaining the correct set of alignments 
-for your analysis is specific to your aligner of choice and hence cannot be 
+As of now, it is important to know that \Biocpkg{easyRNASeq} just reports
+warnings if these conditions are unmet. Obtaining the correct set of alignments
+for your analysis is specific to your aligner of choice and hence cannot be
 described here. Obtaining a set of synthetic transcripts that would fully remove
-or diminish the occurence of ambiguous read assignment is detailed in the first 
+or diminish the occurence of ambiguous read assignment is detailed in the first
 use case of this vignette, see section \pref{synth:trx}.
 }
 
@@ -407,7 +407,7 @@ use case of this vignette, see section \pref{synth:trx}.
 The \Rfunction{easyRNASeq} function currently accepts the following \Rcode{annotationMethod}s:
 \begin{itemize}
   \item ``biomaRt'' use the \Biocpkg{biomaRt}
-    \cite{Durinck:2005p1990} package to retrieve the annotation 
+    \cite{Durinck:2005p1990} package to retrieve the annotation
   \item ``env'' use a \Rclass{RangedData} or \Rclass{GRangesList} class object present in the
     environment - see page \pageref{env} for a use case.
   \item ``gff'' reads in a gff version 3 file
@@ -442,7 +442,7 @@ its exons and transcripts.
 
 The reads can be counted/summarized by:
 \begin{itemize}
-  \item exons 
+  \item exons
   \item features (any features such as introns, enhancers, \emph{etc.})
   \item transcripts
   \item geneModels: they consists of the set of disjoint ``synthetic''
@@ -456,10 +456,10 @@ When you use the ``geneModels'' summarization, no reads will be
 counted twice at the exception of those mapping overlapping exons of
 different genes, whether on the same strand or not. The
 \Rfunction{easyRNASeq} function does not deal with these situation as it does
-not yet support stranded reads, hence as previously a warning will be emitted 
+not yet support stranded reads, hence as previously a warning will be emitted
 if this occurs. The implementation of the geneModel generation is actually
-outdated - it is rather slow - and is being re-implemented as described in 
-section \pref{synth:trx}. Note that the geneModel summarization as it is now, 
+outdated - it is rather slow - and is being re-implemented as described in
+section \pref{synth:trx}. Note that the geneModel summarization as it is now,
 is deprecated.
 
 \paragraph{Output}
@@ -471,12 +471,12 @@ The results can be exported in five different formats:
   \Rclass{CountDataSet} class object. Useful to perform further
   analyses using the \Biocpkg{DESeq} package.
 \item an \Biocpkg{edgeR} \cite{Robinson:2010p775} \Rclass{DGEList}
-  class object. Useful to perform further analyses using the 
+  class object. Useful to perform further analyses using the
   \Biocpkg{edgeR} package.
 \item an \Rclass{RNAseq} class object. Useful for performing
   additional pre-processing without re-loading the reads and
   annotations.
-  \item as an instance of the \Biocpkg{GenomicRanges} 
+  \item as an instance of the \Biocpkg{GenomicRanges}
   \Rclass{SummarizedExperiment} class. See section \pref{s:ytc} for additional
   details.
 \end{itemize}
@@ -486,10 +486,10 @@ The results can be exported in five different formats:
 The results can optionally be ``corrected'' as \emph{Reads per Kilobase
   of feature per Million reads in the library} (RPKM,
 \cite{Mortazavi:2008p740}), useful for visualization but not for differential
-expression, see \cite{}. 
-\bioccomment{Note that the \Rcode{vst} and \Rcode{voom} approaches from the 
+expression, see \cite{}.
+\bioccomment{Note that the \Rcode{vst} and \Rcode{voom} approaches from the
 \Biocpkg{DESeq2} and \Biocpkg{limma} packages, respectively offer more powerful
-approaches for correcting the data prior to visualization. These will be 
+approaches for correcting the data prior to visualization. These will be
 included in future version of the \Biocpkg{easyRNASeq} package.}
 
 \paragraph{Normalization}
@@ -503,8 +503,8 @@ any downstream analysis.
 \subsection{different input}
 \label{ss:diffInput}
 
-The default input format of the \Rfunction{easyRNASeq} function is the 
-BAM format, as exemplified before. It does at the moment support older 
+The default input format of the \Rfunction{easyRNASeq} function is the
+BAM format, as exemplified before. It does at the moment support older
 formats through the \Biocpkg{ShortRead} package, but as BAM is nowadays standard,
 this support will eventually be phased out in a few release cycles.
 
@@ -527,23 +527,23 @@ count.table <- easyRNASeq(system.file(
                           gapped=TRUE,
                           count="exons",
                           filenames="gapped.bam")
-@ 
+@
 
-The next example show how to load an Illumina 'export' file, which was 
+The next example show how to load an Illumina 'export' file, which was
 Illumina's default output before the CASAVA v1.8 release in spring
 2011. The \Rcode{format} argument is set to ``aln'' and an additional
 argument: \Rcode{type} is provided that precise the input file
 format. See the \Biocpkg{ShortRead} \Rfunction{readAligned} help page
 for all available formats. A final argument: the \Rcode{filter}
-argument, essential to filter usable reads is also given. This argument is 
+argument, essential to filter usable reads is also given. This argument is
 crucial as export files contain every read, including those
 not aligning and those not passing the original quality filter
 performed during the Illumina Base Calling, a.k.a. the
 chastity filter. For more details, see the section ``Filtering the
-Data'' in the \Biocexptpkg{RnaSqTutorial} vignette. Finally, also note the 
-\Rcode{chr.sizes} argument; it precises the sizes of the chromosomes using a 
-named integer vector.Indeed, these cannot be determined programatically 
-unlike for the BAM format where the chromosome sizes can be extracted from the 
+Data'' in the \Biocexptpkg{RnaSqTutorial} vignette. Finally, also note the
+\Rcode{chr.sizes} argument; it precises the sizes of the chromosomes using a
+named integer vector.Indeed, these cannot be determined programatically
+unlike for the BAM format where the chromosome sizes can be extracted from the
 header.
 
 <<read an export, eval=FALSE>>=
@@ -565,7 +565,7 @@ count.table <- easyRNASeq(system.file(
                           filter=compose(
                             chromosomeFilter(regex="chr"),
                             chastityFilter()))
-@ 
+@
 
 \newpage
 
@@ -581,10 +581,10 @@ file formats, some of which not strictly applying the convention
 these files should implement. Using incorrectly formatted file is bound to fail,
 but most of the time a relevant error message will be reported. GTF
 files as produced by \eg Ensembl and GFF3 files as produced by \eg Flybase are
-correct implementation of these formats. If you encounter problems with an 
+correct implementation of these formats. If you encounter problems with an
 annotation file, please try first to locate and correct them. For the GFF
 format, the example file present in the \Biocexptpkg{RnaSqTutorial}
-package can be used as a reference. If you have installed this package the 
+package can be used as a reference. If you have installed this package the
 following gives you that gff file path on your machine:}
 
 <<GFF3, eval=FALSE>>=
@@ -592,7 +592,7 @@ system.file(
             "extdata",
             "annot.gff",
             package="RnaSeqTutorial")
-@ 
+@
 
 \bioccomment{If you do not manage to identify the issue, please contact the
 Bioconductor mailing list for help.}
@@ -611,11 +611,11 @@ rnaSeq <- easyRNASeq(system.file(
                           count="exons",
                           filenames="gapped.bam",
                           outputFormat="RNAseq")
-@ 
+@
 
-Once the annotation is fetched, it can be retrieved provided that the 
-\Rcode{outputFormat} argument was set to \Rclass{RNAseq}. This implies 
-a complete S4 object of class \Rclass{RNAseq} is returned and not only 
+Once the annotation is fetched, it can be retrieved provided that the
+\Rcode{outputFormat} argument was set to \Rclass{RNAseq}. This implies
+a complete S4 object of class \Rclass{RNAseq} is returned and not only
 the count table (see \pref{subsec:diffOut} for details on the different output).
 The \Rfunction{genomicAnnotation} accessor allows then to access the annotation
 stored in the \Rclass{RNAseq} object.
@@ -625,9 +625,9 @@ gAnnot <- genomicAnnotation(rnaSeq)
 @
 
 The \Robject{gAnnot} - of class \Rclass{RangedData} - can then be saved
-in a \file{.rda} file for a faster re-processing using the \Rfunction{easyRNASeq} 
-function with the arguments \Rcode{annotationMethod} and \Rcode{annotationFile} 
-set to "rda" and to the \file{rda} filepath, respectively. \bioccomment{Note, however 
+in a \file{.rda} file for a faster re-processing using the \Rfunction{easyRNASeq}
+function with the arguments \Rcode{annotationMethod} and \Rcode{annotationFile}
+set to "rda" and to the \file{rda} filepath, respectively. \bioccomment{Note, however
 that it is necessary to save that object under the name ``gAnnot''.} Finally, it
 would be important to pre-process that new annotation in the manner described
 in section \pref{synth:trx} for reason described in section \pref{p:Ciri}
@@ -635,21 +635,21 @@ in section \pref{synth:trx} for reason described in section \pref{p:Ciri}
 \paragraph{genomeIntervals}
 \label{p:gI}
 The next example shows how to perform the same provided that you have a gtf or
-gff3 formatted file at hand. While the gtf format is more constrained, gff 
-formatted file will likely have varying gff attributes (its ninth last column). 
-This column contains ``key=value'' pairs separated by semi-colons. We depend on 
+gff3 formatted file at hand. While the gtf format is more constrained, gff
+formatted file will likely have varying gff attributes (its ninth last column).
+This column contains ``key=value'' pairs separated by semi-colons. We depend on
 specific keys to be present and these are \textit{ID}, \textit{Parent}, and
-\textit{Name}, all strongly suggested by the gff3 format specification. 
-When parsing a gff3 file, we're only considering feature of type 'exon' (the 
+\textit{Name}, all strongly suggested by the gff3 format specification.
+When parsing a gff3 file, we're only considering feature of type 'exon' (the
 gff3 third column). Then, we expect the \textit{ID} key to have the
-format: \textit{geneID:exonNumber}; both the exon and gene annotation 
-being derived from it. The \textit{Parent} key should contain the transcript ID. 
+format: \textit{geneID:exonNumber}; both the exon and gene annotation
+being derived from it. The \textit{Parent} key should contain the transcript ID.
 If one exon is part of several transcripts, these can be concatenated
 using commas without space. Finally, the \textit{Name} key should
 contain the gene name, but its presence is actually facultative for the
 processing. As we are using the \Rfunction{readGff3} function from the
-\Biocpkg{genomeIntervals} package, it is as well essential that the key=value 
-pairs are separated by semi-colons \textbf{whitout} space. Have a look at the 
+\Biocpkg{genomeIntervals} package, it is as well essential that the key=value
+pairs are separated by semi-colons \textbf{whitout} space. Have a look at the
 \file{annot.gff} file used in the next code chunck for an example of a gff3 file
 formatted as the \Rfunction{easyRNASeq} expects it.
 
@@ -667,15 +667,15 @@ count.table <- easyRNASeq(system.file(
                           gapped=TRUE,
                           count="exons",
                           filenames="gapped.bam")
-@ 
+@
 
 \paragraph{RangedData}
 
-Internally, the \Rfunction{easyRNAseq} function converts the 
+Internally, the \Rfunction{easyRNAseq} function converts the
 retrieved annotation - when executed with the
-\Rcode{annotationMethod} argument ``gff'', ``gtf'', or ``biomaRt'' - into an 
+\Rcode{annotationMethod} argument ``gff'', ``gtf'', or ``biomaRt'' - into an
 object of the \Rclass{RangedData} class. Using the \Rcode{annotationMethod}
-argument ``env'' or ``rda'' requires that you provide such an object. The 
+argument ``env'' or ``rda'' requires that you provide such an object. The
 following example shows the expected structure of that object.
 
 <<RangedData structure>>=
@@ -692,7 +692,7 @@ gAnnot <- RangedData(
                           universe = "Hs19"
                           )
 gAnnot
-@ 
+@
 
 In that object, we describe the genomic location of three exons
 (chromosome, position and strand) as well as their transcript and gene
@@ -710,7 +710,7 @@ object used in the \Biocpkg{RnaSeqTutorial} tutorial, do:
 library(RnaSeqTutorial)
 data(gAnnot)
 gAnnot
-@ 
+@
 
 \paragraph{GRangesList}
 
@@ -723,11 +723,11 @@ class object into a \Rclass{GRangesList} class object is pretty straightforward.
 grngs <- as(gAnnot,"GRanges")
 grngsList<-split(grngs,seqnames(grngs))
 grngsList
-@ 
+@
 
 The advantage of doing so is that the \Rclass{RangedData} class might
 get deprecated in the future. The next advantage is that the
-\Rclass{GRangesList} class is strand-aware. 
+\Rclass{GRangesList} class is strand-aware.
 
 \paragraph{Remember}
 
@@ -743,13 +743,13 @@ there for a good reason: to help.}
 
 \paragraph{matrix}
 
-This is the default output - a matrix of m features by n samples - that has been 
+This is the default output - a matrix of m features by n samples - that has been
 exemplified throughout the beginning of this vignette.
 
 \paragraph{RNAseq}
 
-This has also been introduced previously, see section \pref{p:biomaRt}, but 
-shortly - as shown below - the only change that need doing is to use the 
+This has also been introduced previously, see section \pref{p:biomaRt}, but
+shortly - as shown below - the only change that need doing is to use the
 \Rclass{RNAseq} value of the \Rfunction{outputFormat} argument.
 
 <<easyRNASeq output>>=
@@ -771,10 +771,10 @@ rnaSeq <- easyRNASeq(system.file(
 \paragraph{CountDataSet, DGEList, SummarizedExperiment}
 
 More details on how to generate \Rclass{CountDataSet}
-(\Biocpkg{DESeq}) or \Rclass{DGEList} (\Biocpkg{edgeR}) are given in 
+(\Biocpkg{DESeq}) or \Rclass{DGEList} (\Biocpkg{edgeR}) are given in
 section \pref{subsec:optNorm}.
 \newline
-The integration of the \Rclass{SummarizedExperiment} \Rcode{outputFormat} in 
+The integration of the \Rclass{SummarizedExperiment} \Rcode{outputFormat} in
 the \Biocpkg{easyRNASeq} package is recent, but at term it will be the new
 \Rcode{outputFormat} default. See section \pref{s:ytc} for details.
 
@@ -793,10 +793,10 @@ be processed twice. To avoid this, specific functions are available, which are
 applicable to an object of class \Rclass{RNAseq}, see details about that class in
 section \pref{subsec:diffOut}. These functions are:
 \begin{enumerate}
-  \item \Rfunction{exonCounts} 
-  \item \Rfunction{featureCounts} 
+  \item \Rfunction{exonCounts}
+  \item \Rfunction{featureCounts}
   \item \Rfunction{transcriptCounts}
-  \item \Rfunction{geneCounts} This function takes an additional parameter 
+  \item \Rfunction{geneCounts} This function takes an additional parameter
   defining the kind of gene
     summarization, either \Rcode{bestExons} or
     \Rcode{geneModels}. The \Rcode{bestExons}
@@ -808,19 +808,19 @@ section \pref{subsec:diffOut}. These functions are:
   \item \Rfunction{readCounts} a function to access the different count
     tables stored in the \Rclass{RNAseq} object.
 \end{enumerate}
-  
+
 For example, to summarize the reads per transcripts, apply the
 \Rfunction{transcriptCounts} function on the previously generated
-\Robject{rnaSeq} object - see section \pref{subsec:diffOut} - and use 
+\Robject{rnaSeq} object - see section \pref{subsec:diffOut} - and use
 the \Rfunction{readCounts} function to access the transcript count table.
 
 <<Transcript counts>>=
 rnaSeq <- transcriptCounts(rnaSeq)
 head(readCounts(rnaSeq,'transcripts'))
-@ 
+@
 
 Summarizing by transcript is frequently inherently biased as exons are often
-part of different splicing variants. For that reason, it might be better to 
+part of different splicing variants. For that reason, it might be better to
 summarize the data per genes - or synthetic transcripts- as described in section
 \pref{synth:trx}.
 \newpage
@@ -831,14 +831,14 @@ summarize the data per genes - or synthetic transcripts- as described in section
 In this section, different count \emph{correction} and \emph{normalization} are
 described. First the RPKM, a common sense correction that take the genic
 feature size (exon, transcript, gene model,...) and the total
-number of reads sequenced in the library into account. Its use is not 
-recommended for doing any kind of differential expression analysis - 
+number of reads sequenced in the library into account. Its use is not
+recommended for doing any kind of differential expression analysis -
 see \cite{Soneson:2013p5778} - but
 is adequate for visualization; \eg to create tracks to be displayed
-in a genome browser. 
-Actually for state of the art visualization, one can use a \Rfunction{voom} 
-(from the \Biocpkg{limma} package) or \Rfunction{vst} (from the \Biocpkg{DESeq2} 
-package) approach. 
+in a genome browser.
+Actually for state of the art visualization, one can use a \Rfunction{voom}
+(from the \Biocpkg{limma} package) or \Rfunction{vst} (from the \Biocpkg{DESeq2}
+package) approach.
 
 Here is an example on how to get a RPKM count table:
 <<RPKM normalization, eval=FALSE>>=
@@ -853,13 +853,13 @@ count.table <- easyRNASeq(system.file(
                             "gAnnot.rda",
                             package="RnaSeqTutorial"),
                           count="exons",
-                          filenames=c("ACACTG.bam", "ACTAGC.bam", 
+                          filenames=c("ACACTG.bam", "ACTAGC.bam",
                             "ATGGCT.bam", "TTGCGA.bam"),
                           normalize=TRUE
                           )
-@ 
+@
 
-In addition, \Rfunction{easyRNASeq} generated raw count tables can be 
+In addition, \Rfunction{easyRNASeq} generated raw count tables can be
 post-corrected using the \Rfunction{RPKM} method:
 
 <<RPKM counts>>=
@@ -874,16 +874,16 @@ head(RPKM(readCounts(rnaSeq,summarization="exons")$exons,
           NULL,
           lib.size=lib.size,
           feature.size=feature.size))
-@ 
+@
 
 The same can be directly done on \Rclass{RNAseq} class objects.
 
 <<RPKM on RNAseq>>=
 head(RPKM(rnaSeq,from="transcripts"))
-@ 
+@
 
-For normalizing the data, numerous solution are available in \Bioconductor{}, 
-see \cite{Soneson:2013p5778} for details. Only the \Biocpkg{edgeR} and 
+For normalizing the data, numerous solution are available in \Bioconductor{},
+see \cite{Soneson:2013p5778} for details. Only the \Biocpkg{edgeR} and
 \Biocpkg{DESeq} packages are currently imported by \Biocpkg{easyRNASeq}.
 
 \paragraph{DESeq}
@@ -893,13 +893,13 @@ To be able to normalize the data using \Biocpkg{DESeq} (or
 samples' ``conditions'', \textit{e.g.} ``disease'' vs. ``healthy''. To
 ensure traceability, the \Biocpkg{easyRNASeq} package require the
 conditions to be a \emph{named vector} where the names are the raw
-data filenames. 
+data filenames.
 
 <<define the conditions>>=
 conditions=c("A","A","B","B")
-names(conditions) <- c("ACACTG.bam", "ACTAGC.bam", 
+names(conditions) <- c("ACACTG.bam", "ACTAGC.bam",
                        "ATGGCT.bam", "TTGCGA.bam")
-@ 
+@
 
 Once the \Robject{conditions} has been defined, pass it to the \Rcode{conditions}
 argument of the \Rfunction{easyRNASeq} function and set the \Rcode{outputFormat}
@@ -908,10 +908,10 @@ trigger or not the count normalization implemented in the
 \Biocpkg{DESeq} package. In either case, a \Robject{CountDataSet} object is
 returned. Additional argument to the \Biocpkg{DESeq} function can be provided
 through the \dots arguments of the \Rfunction{easyRNASeq} function. \eg in the
-following example, we precise the kind of fit (\textit{local}) that needs to be 
+following example, we precise the kind of fit (\textit{local}) that needs to be
 performed by the \Rfunction{estimateDispersion} function of the \Biocpkg{DESeq}
-package. Since we have few data, the default fit fails and reports an error 
-telling us to change the \Rcode{fitType} argument. 
+package. Since we have few data, the default fit fails and reports an error
+telling us to change the \Rcode{fitType} argument.
 
 <<DESeq normalization, eval=FALSE>>=
 countDataSet <- easyRNASeq(system.file(
@@ -925,14 +925,14 @@ countDataSet <- easyRNASeq(system.file(
                             "gAnnot.rda",
                             package="RnaSeqTutorial"),
                           count="exons",
-                          filenames=c("ACACTG.bam", "ACTAGC.bam", 
+                          filenames=c("ACACTG.bam", "ACTAGC.bam",
                             "ATGGCT.bam", "TTGCGA.bam"),
                           normalize=TRUE,
                           outputFormat="DESeq",
                           conditions=conditions,
                           fitType="local"
                           )
-@ 
+@
 
 \bioccomment{Note that setting the \Rcode{normalize} argument to \Rcode{TRUE}
 generates diagnostics plots as detailed in the \Biocpkg{DESeq} vignette.
@@ -964,10 +964,10 @@ dgeList <- easyRNASeq(system.file(
                       outputFormat="edgeR",
                       conditions=conditions
                       )
-@ 
+@
 
-As for the former paragraph about \Biocpkg{DESeq} (see section \pref{par:DESeq}), 
-the diagnostics plots generated are only semi-relevant. Check out the 
+As for the former paragraph about \Biocpkg{DESeq} (see section \pref{par:DESeq}),
+the diagnostics plots generated are only semi-relevant. Check out the
 \Biocpkg{edgeR} manual for more details about these plots. Note that producing
 the plots is rather slow.
 
@@ -988,7 +988,7 @@ the \Biocpkg{rtracklayer} package.
 The geneModel generation, the read counting and
 summarization can be parallelized. Use the \Rcode{nbCore}
 argument to set the number of CPU cores to
-use. There are a number of word of caution: 
+use. There are a number of word of caution:
 \begin{enumerate}
 \item CPU cores means CPU cores, \textit{i.e.} located on the same
   physical machine. Do not expect it to work across machines.
@@ -1016,8 +1016,8 @@ Therefore, techniques to have several samples running as a
 \emph{single} library have been
 created \cite{Lefrancois:2009p778,Smith:2010p777}, using 4-6bp
 barcodes to uniquely identify samples; this is called
-\textbf{multiplexing}. A 30X coverage per sample of 48 yeast samples can hence 
-be obtained froman average Illumina GenomeAnalyzer GAIIx run (105bp read, 
+\textbf{multiplexing}. A 30X coverage per sample of 48 yeast samples can hence
+be obtained froman average Illumina GenomeAnalyzer GAIIx run (105bp read,
 single end). This
 approach is very advantageous to researchers, especially in term of
 costs, but it adds an additional layer of pre-processing that is not
@@ -1046,7 +1046,7 @@ from the fastq ID lines or from the Illumina export format. The export
 format is normally the result of aligning the reads with ELAND, the
 Illumina aligner, but it can be generated as well without aligning the
 reads, \ie the export file may not contain any alignment
-information. 
+information.
 \bioccomment{The \Biocpkg{ShortRead} package offers a quick functionality to
 access the barcode field of an export file, which we take advantage of in the
 next example; the \Rcode{withAll} argument of the \Rfunction{readAligned}
@@ -1083,7 +1083,7 @@ alns <- readAligned(
                       chromosomeFilter(regex="chr")),
                     type="SolexaExport",
                     withAll=TRUE)
-@ 
+@
 
 Note the use of the \Rcode{withAll} argument. It is essential to get
 the barcode, since this data was multiplexed using the
@@ -1105,11 +1105,11 @@ where \Robject{alns} is the object of the \Biocpkg{ShortRead} \Rclass{AlignedRea
 
 In the following, we will look at the other kind of barcoding, where
 the barcode is part of the sequenced sequence. First, we will create
-some plots to evaluate the barcoding efficiency. 
+some plots to evaluate the barcoding efficiency.
 
 <<barcodes>>=
 barcodes=c("ACACTG","ACTAGC","ATGGCT","TTGCGA")
-@ 
+@
 <<barcodePlot, fig=TRUE, height=6, eps=FALSE>>=
 barcodePlot(alns,
             barcodes=barcodes,
@@ -1118,7 +1118,7 @@ barcodePlot(alns,
             show.barcode=20,
             main="All samples",
             xlim=c(0,0.5))
-@ 
+@
 
 % \begin{figure}[htbp]
 % \begin{center}
@@ -1142,7 +1142,7 @@ dem.alns <- demultiplex(alns,
                         edition.dist=2,
                         barcodes.qty=4,
                         type="within")
-@ 
+@
 
 <<check the objects, eval=FALSE>>=
 dem.alns$reads[[1]]
@@ -1157,7 +1157,7 @@ the \emph{de-multiplexing} process succeeded.
 par(mfrow=c(2,2))
 barcode.frequencies <- lapply(
                               names(dem.alns$barcodes),
-                              function(barcode,alns){                                
+                              function(barcode,alns){
                                 barcodePlot(
                                             alns$barcodes[[barcode]],
                                             barcodes=barcode,
@@ -1167,7 +1167,7 @@ barcode.frequencies <- lapply(
                                               "Expected barcode:",
                                               barcode))
                               },dem.alns)
-@ 
+@
 
 % \begin{figure}[htbp]
 % \begin{center}
@@ -1177,7 +1177,7 @@ barcode.frequencies <- lapply(
 % \label{fig:demPlot}
 % \end{figure}
 
-In the previous figure, we can observe the demultiplexed barcodes. 
+In the previous figure, we can observe the demultiplexed barcodes.
 It is important to assess wether
 within a given sample there was a barcode bias. Generally, visually
 assessing the data is important to make sure that the raw data you are
@@ -1189,14 +1189,14 @@ Finally, we can save the demultiplexed files to disk.
 <<write the file>>=
 status <- lapply(
                  names(dem.alns$barcodes),
-                 function(barcode,alns){         
+                 function(barcode,alns){
                    writeFastq(
                               alns$reads[[barcode]],
                               file=paste(
                                 barcode,
                                 "fastq",sep="."))
                  },dem.alns)
-@ 
+@
 
 <<cleanup, echo=FALSE>>=
 file2clean=c(
@@ -1210,11 +1210,11 @@ silent <- sapply(
                  function(f2c){
                    if(file.exists(f2c)){file.remove(f2c)}
                  })
-@ 
+@
 
-The fastq files are now ready to be aligned with your preferred aligner - 
+The fastq files are now ready to be aligned with your preferred aligner -
 alternatively, other R packages
-such as \Biocpkg{Rsubread}, \Biocpkg{gmapR}, \Biocpkg{QuasR} can be used 
+such as \Biocpkg{Rsubread}, \Biocpkg{gmapR}, \Biocpkg{QuasR} can be used
 to align them -
 and the resulting bam files processed with the \Rfunction{easyRNASeq}
 function as described in the first part of the present vignette! Enjoy.
@@ -1271,10 +1271,10 @@ helped us make this vignette better.
 The first use case shows how to create an annotation that contains
 synthetic transcripts; \emph{i.e.} a transcript combining every single
 exons of a gene into a single abiological splice-variant. The aim is to
-mesure expression at the gene level, while avoiding counting biases 
+mesure expression at the gene level, while avoiding counting biases
 that may be introduced when working with multiple splice variants sharing
 common exons. If you are interested in such splice variants expression, you
-need to look for more appropriate analysis expression pipeline (RSEM, MMSEQ, BitSeq, 
+need to look for more appropriate analysis expression pipeline (RSEM, MMSEQ, BitSeq,
 \emph{etc.})
 \textcolor{red}{}
 \newline
@@ -1301,12 +1301,12 @@ library(easyRNASeq)
 \subsection{Creating a set of synthetic transcripts}
 \label{synth:trx}
 
-The gff3 is retrieved from FlyBase \cite{Tweedie:2009p2014}: 
+The gff3 is retrieved from FlyBase \cite{Tweedie:2009p2014}:
 \url{ftp://ftp.flybase.net/releases/FB2013_06/dmel_r5.54/gff/dmel-all-no-analysis-r5.54.gff.gz}.
-As the file is rather large, only the line containing "gene", "mRNA" and "exon" 
+As the file is rather large, only the line containing "gene", "mRNA" and "exon"
 are kept using an \emph{awk} script.
 \begin{verbatim}
-awk '{if($3=="gene"){print}; if($3=="mRNA"){print}; if($3=="exon"){print}}' 
+awk '{if($3=="gene"){print}; if($3=="mRNA"){print}; if($3=="exon"){print}}'
                         < dmel-all-no-analysis-r5.54.gff > dmel_r5-54.gff3
 \end{verbatim}
 
@@ -1355,7 +1355,7 @@ rev(names(table(elementLengths(rngList))))[1]
 
 ## create the gff
 ## get the gff information; here we simply duplicate the
-## first exon of every gene by the number of synthetic 
+## first exon of every gene by the number of synthetic
 ## exons per gene. The content will be updated afterwards.
 exons <- gff[sel,]
 syntheticGeneModel<- exons[rep(
@@ -1404,9 +1404,9 @@ writeGff3(syntheticGeneModel,file="dmel_synthetic_transcript_r5-54.gff3")
 %## finally save an rda object
 %save(annot,file="dmel_synthetic_transcript_r5-52.rda")
 
-Now we can use the 'gff3' file as our annotation. As we have created synthetic 
-transcripts, we can directly use the 'transcripts' value for the \Rclass{count} 
-argument of the \Rfunction{easyRNASeq} function 
+Now we can use the 'gff3' file as our annotation. As we have created synthetic
+transcripts, we can directly use the 'transcripts' value for the \Rclass{count}
+argument of the \Rfunction{easyRNASeq} function
 as follows:
 
 <<easyTrx, eval=FALSE>>=
@@ -1417,7 +1417,7 @@ sumExp <- easyRNASeq(
   pattern="[A,C,T,G]{6}\\.bam$",
   readLength=30L,
   chr.sel="chr2L",
-  organism="Dmelanogaster",                
+  organism="Dmelanogaster",
   annotationMethod="gff",
   annotationFile="dmel_synthetic_transcript_r5-54.gff3",
   count="transcripts",
@@ -1426,19 +1426,19 @@ sumExp <- easyRNASeq(
 @
 
 %% NOTE THAT THE chr.sel is necessary as the length of the ranges
-%% is larger than those in the BAM file. I.e. the coordinates have 
+%% is larger than those in the BAM file. I.e. the coordinates have
 %%  changed in that version of Flybase.
 
-That's it. Done much faster than using the 'geneModels' \Rclass{summarization} 
-argument. This approach is currently being ported to the development version of 
+That's it. Done much faster than using the 'geneModels' \Rclass{summarization}
+argument. This approach is currently being ported to the development version of
 \Biocpkg{easyRNASeq}. There remains a caveat not addressed by this procedure:
 genes overlapping on the same or opposite strands will still generate double-
 countings. Adequate warnings would be emitted. A refinement of the method above
 would be to restrict these genes to their non-overlapping intervals. Commonly
 the overlaps encompass UTRs and can be safely ignored. In a few case however,
-it might be difficult to decide wheter to keep or drop them. Note that if the 
-result is returned as an \Rclass{RNAseq} or \Rclass{SummarizedExperiment} class 
-object, the overlapping genes are flagged by a boolean. To access this 
+it might be difficult to decide wheter to keep or drop them. Note that if the
+result is returned as an \Rclass{RNAseq} or \Rclass{SummarizedExperiment} class
+object, the overlapping genes are flagged by a boolean. To access this
 information in an \Rclass{RNAseq} object, do:
 
 <<Access the overlap flag, eval=FALSE>>=
@@ -1515,21 +1515,21 @@ buildindex(basename=file.path("indexes","hg19"),
 sapply(dir(pattern="*\\.gz$"),function(fil){
   ## decompress the files
   gunzip(fil)
-  
+
   ## align
   align(index=file.path("indexes","hg19"),
         readfile1=sub("\\.gz$","",fil),
         nsubreads=2,TH1=1,
         output_file=sub("\\.fastq\\.gz$","\\.sam",fil)
         )
-  
+
   ## create bam files
   asBam(file=sub("\\.fastq\\.gz$","\\.sam",fil),
         destination=sub("\\.fastq\\.gz$","",fil),
         indexDestination=TRUE)
 })
 
-@ 
+@
 
 Note that this has generated a number of files that
   you should clean up afterwards, i.e. delete the ``tmp1234'' folder,
@@ -1569,9 +1569,9 @@ As of version $1.3.5$, when using the 'bam' format, it
 <<chromosome size, eval=FALSE>>=
 library(BSgenome.Hsapiens.UCSC.hg19)
 chr.sizes=seqlengths(Hsapiens)
-@ 
+@
 
-Then, we list the BAM files. 
+Then, we list the BAM files.
 
 <<bam files name, eval=FALSE>>=
 bamfiles=dir(getwd(),pattern="*\\.bam$")
@@ -1582,7 +1582,7 @@ annotation using \Biocpkg{biomaRt}. As this is time consuming (about
 10 minutes from an average network) and
 since we might want to work on these annotation to avoid
 double-counting, we first ask the function to return an instance of the
-\Rclass{RNAseq} class. Then, using the genomicAnnotation accessor, we 
+\Rclass{RNAseq} class. Then, using the genomicAnnotation accessor, we
 extract the retrieved annotation.
 
 <<Fetching with biomaRt, eval=FALSE>>=
@@ -1607,7 +1607,7 @@ identifies a serialized R data file.
 <<filtering the annot, eval=FALSE>>=
 gAnnot <- gAnnot[space(gAnnot) %in% paste("chr",c(1:22,"X","Y","M"),sep=""),]
 save(gAnnot,file="gAnnot.rda")
-@ 
+@
 
 Now using the modified, saved annotation, we can get a count table as follows:
 
@@ -1620,7 +1620,7 @@ countTable <- easyRNASeq(filesDirectory=getwd(),
                         count="exons",
                         filenames=bamfiles[1]
                         )
-@ 
+@
 
 Another way to retrieve the annotation is to use the
 \Biocpkg{GenomicFeatures} library. \Biocpkg{easyRNASeq} does not yet supports
@@ -1643,9 +1643,9 @@ gAnnot <- exons(hg19.tx)
 colnames(elementMetadata(gAnnot)) <- "exon"
 
 gAnnot <- split(gAnnot,seqnames(gAnnot))
-@ 
+@
 
-As previously, this annotation can either be saved to disk or 
+As previously, this annotation can either be saved to disk or
 be used directly, using the \Rcode{annotationMethod} "env" and
 \Rcode{annotationObject} arguments. Additionaly, one can select chromosome of
 interest using the \Rcode{chr.sel} argument. It accepts a vector of
@@ -1653,7 +1653,7 @@ chromosome names. In the following, we subset for the chromosome ``chr1'' only.
 \label{env}
 \label{chr.sel}
 
-<<sub setting, eval=FALSE>>= 
+<<sub setting, eval=FALSE>>=
 countTable <- easyRNASeq(filesDirectory=getwd(),
                         organism="Hsapiens",
                         readLength=58L,
@@ -1685,7 +1685,7 @@ sumExp <- easyRNASeq(filesDirectory=getwd(),
                     chr.sel="chr1",
                      outputFormat="SummarizedExperiment"
                     )
-@ 
+@
 
 Finally, instead of returning a count table, we can get a
 \Robject{CountDataSet} instance from the \Biocpkg{DESeq}
@@ -1719,7 +1719,7 @@ countDataSet <- easyRNASeq(filesDirectory=getwd(),
                           fitType="local",
                           method="blind"
                         )
-@ 
+@
 
 Note that as the read length differs between the two
 files: $58$ and $76$, the \Rcode{readLength} argument was removed
@@ -1731,7 +1731,7 @@ automatically.
 This use case shows how to deal with inconsistent annotations,
 \textit{e.g.} when the chromosome names present in the aligned file
 are different from those that can be retrieved from an annotation
-source such as \Biocpkg{biomaRt}. 
+source such as \Biocpkg{biomaRt}.
 \newline
 First, we have a look at the data, in this case some Illumina export
 files. Reading in the data using the \Biocpkg{ShortRead} package is
@@ -1743,11 +1743,11 @@ expect - UCSC standards - as they have an additional ``.fa'' extension.
 aln <- readAligned("data",type="SolexaExport",pattern="*.txt.gz")
 gc()
 levels(chromosome(aln))
-@ 
+@
 
 <<fake the data, echo=FALSE>>=
 c("chr1.fa","chr10.fa","...","chrY.fa")
-@ 
+@
 
 They are different from what \Biocpkg{biomaRt} will return as well:
 \textit{i.e.} 1:19, X, Y and MT plus others. This triple inconsistency will
@@ -1772,11 +1772,11 @@ gAnnot <- genomicAnnotation(obj)
 
 length(grep("NT_",space(gAnnot)))
 
-@ 
+@
 
 <<fake number 2, echo=FALSE>>=
 1181
-@ 
+@
 
 <<modify the annotation, eval=FALSE>>=
 names(gAnnot) <- paste("chr",names(gAnnot),".fa",sep="")
@@ -1787,7 +1787,7 @@ annotation to a file or use it directly, using the
 \Rcode{AnnotationMethod} ``env'' argument. In that later case,
 since we did not process the annotation, numerous warnings concerning
 possible multiple countings of reads will be raised. Double counting
-reads is not what ones want, see section \pref{synth:trx} on how to adress that. 
+reads is not what ones want, see section \pref{synth:trx} on how to adress that.
 \newline
 Note that \Biocpkg{easyRNASeq} does support some chromosome names
 conversion by default. The list of organism for which this is possible
@@ -1799,7 +1799,7 @@ generated take large amounts of memory.
 <<clean, eval=FALSE>>=
 rm(aln,obj)
 gc()
-@ 
+@
 
 As on page \pageref{chrsize} we get the chromosome sizes.
 Again, note that the use of the BSgenome is not mandatory. It's just
@@ -1809,7 +1809,7 @@ chromosome sizes named vector is as valid.
 <<chrsize, eval=FALSE>>=
 library(BSgenome.Mmusculus.UCSC.mm9)
 chr.sizes<- seqlengths(Mmusculus)
-@ 
+@
 
 We can now create the chromosome name mapping.
 
@@ -1817,7 +1817,7 @@ We can now create the chromosome name mapping.
 chr.map <- data.frame(
                       from=paste("chr",c(1:19,"X","Y"),".fa",sep=""),
                       to=paste("chr",c(1:19,"X","Y"),sep=""))
-@ 
+@
 
 Using this chromosome map, we can now summarize the reads per feature
 of interest. Here we want to look for gene models, so we set the
@@ -1828,18 +1828,18 @@ described in section \pref{synth:trx} is a faster way to achieve the same.
 \newline
 Asking to get back an \Rclass{RNAseq} instance allows us to look at the gene
 models defined by \Biocpkg{easyRNASeq}. This offers the possibility
-to clean them to avoid multiple counting. 
+to clean them to avoid multiple counting.
 \newline
 As we have Illumina export data at hand, we need to define a set
 of Filter to ensure that the data is read properly. Indeed, the export
 file contains all the reads, so the one that do not pass the chastity
 filter have to be removed. In addition, some of the other reads are
 for internal QC, and they have no position. For that reason, we need
-to filter those too out. 
+to filter those too out.
 \newline
 Reading in export data is more resource exhausting that reading in bam
 files, as we are loading in the sequence and quality information as
-well, whereas we do not need them. 
+well, whereas we do not need them.
 \newline
 We will now look through three different set of parameters that will
 stepwise reduce the number of warnings emitted. These warnings are
@@ -1848,13 +1848,13 @@ there to help you understand the different pitfalls that the
 data. The first approach generates a lot of warnings, because of the
 differing annotations, since we are using the entire set of annotation
 we got. As we do not want to generate all these warnings, these code
-lines are not evaluated. To get a feel about these warnings, they 
+lines are not evaluated. To get a feel about these warnings, they
 will look as the follows:
 
 \begin{verbatim}
 Warning messages:
 1: In .convertToUCSC(names(genomicAnnotation(obj)), organismName(obj),  :
-Your custom map does not define a mapping for the following 
+Your custom map does not define a mapping for the following
 chromosome names: chrMT.fa
 2: In easyRNASeq(filesDirectory = headDir, organism = "custom", chr.map = chr.map,  :
 There are 6096 synthetic exons as determined from your annotation that overlap!
@@ -1882,7 +1882,7 @@ rnaSeq <- easyRNASeq(filesDirectory="data",
                     outputFormat="RNAseq",
                     nbCore=2
                     )
-@ 
+@
 
 To reduce the number of warnings emitted, we can select for the
 chromosome we are interested in as previously done on page \pageref{chr.sel}.
@@ -1915,7 +1915,7 @@ Finally, to further reduce the warnings, we can manipulate the
 sel <- grep("NT_",names(gAnnot))
 gAnnot <- RangedData(ranges=ranges(gAnnot)[-sel,],values=values(gAnnot)[-sel,])
 colnames(gAnnot) <- gsub("values\\.","",colnames(gAnnot))
-@ 
+@
 
 This last call will only generate two warnings, one that could be
 easily dealt with (a complaint about the chrMT). The other one is
@@ -1986,11 +1986,11 @@ nicolas.delhomme \emph{at} umu \emph{dot} se.
 
 <<some test, echo=FALSE>>=
 grngs = GRanges(seqnames=c("chr1", "chr2"),
-  ranges=IRanges(start=1:2, end=2:3), 
+  ranges=IRanges(start=1:2, end=2:3),
   strand=c("+","-"))
 silent <- strand(grngs)
 silent <- reduce(grngs)
-@ 
+@
 
 \newpage
 
