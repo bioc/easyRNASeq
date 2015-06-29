@@ -268,6 +268,7 @@ setMethod(f="simpleRNASeq",
             
             ## TODO we need to adapt the rda, etc description and the AnnotParam
             ## to accept a GRanges and not a GRangesList
+            sexp <- as(sexp,"RangedSummarizedExperiment")
             rowRanges(sexp) <- switch(precision(param),
                                     "read"={split(grngs,mcols(grngs)[,sub("s$","",countBy(param))])},
                                     "bp"={split(grngs,grngs$seqnames)})
