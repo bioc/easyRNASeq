@@ -9,17 +9,15 @@
 \S4method{getBamFileList}{character}(filenames = character(0))
 }
 \arguments{
-  \item{filenames}{a character vector containing fully
-  defined filenames}
+\item{filenames}{a character vector containing fully defined filenames}
 }
 \value{
 a \code{linkS4class{BamFileList-class}}{BamFileList}
 }
 \description{
-A utility function to create a
-\code{linkS4class{BamFileList-class}}{BamFileList} object
-from a set of filenames. The filenames need to contain the
-file path if they are not in the working directory.
+A utility function to create a \code{linkS4class{BamFileList-class}}{BamFileList}
+object from a set of filenames. The filenames need to contain the file path if they
+are not in the working directory.
 }
 \examples{
 library("RnaSeqTutorial")

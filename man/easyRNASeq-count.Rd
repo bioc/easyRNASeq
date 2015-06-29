@@ -10,33 +10,27 @@
   outputFormat = "SummarizedExperiment", ...)
 }
 \arguments{
-  \item{filesDirectory}{The directory where the files to be
-  used are located.}
+\item{filesDirectory}{The directory where the files to be used are located.}
 
-  \item{outputFormat}{By default, easyRNASeq returns a
-  \code{\linkS4class{RangedSummarizedExperiment}} object. If one of
-  \code{DESeq},\code{edgeR},\code{RNAseq}, \code{matrix} is
-  provided then the respective object is returned. Ideally,
-  this option should get deprecated and only a
-  RangedSummarizedExperiment object returned.}
+\item{outputFormat}{By default, easyRNASeq returns a
+\code{\linkS4class{RangedSummarizedExperiment}} object. If one
+of \code{DESeq},\code{edgeR},\code{RNAseq}, \code{matrix} is provided then
+the respective object is returned. Ideally, this option should get deprecated
+and only a RangedSummarizedExperiment object returned.}
 
-  \item{...}{currently additional arguments to the
-  easyRNASeq function.}
+\item{...}{currently additional arguments to the easyRNASeq function.}
 }
 \value{
-Returns a \code{\linkS4class{RangedSummarizedExperiment}} object. If the
-\code{outputFormat} option has been set, a corresponding
-object is returned: a count table (a matrix of m features x
-n samples), a
-\code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}},
-a \code{\link[edgeR:DGEList]{edgeR:DGEList}} or
-\code{\linkS4class{RNAseq}}.
+Returns a  \code{\linkS4class{RangedSummarizedExperiment}}. If the
+\code{outputFormat} option has been set, a corresponding object is returned:
+a count table (a matrix of m features x n samples), a
+\code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}}, a
+\code{\link[edgeR:DGEList]{edgeR:DGEList}} or \code{\linkS4class{RNAseq}}.
 }
 \description{
-This function is to supersed the easyRNASeq function in
-order to consolidate the option parameters as well as the
-option output. Ideally, the only output would be a
-RangedSummarizedExperiment object.
+This function is to supersed the easyRNASeq function in order to
+consolidate the option parameters as well as the option output.
+Ideally, the only output would be a RangedSummarizedExperiment object.
 }
 \examples{
 \dontrun{

@@ -12,44 +12,43 @@
   "transcripts"), precision = c("read", "bp"))
 }
 \arguments{
-  \item{annotParam}{An object derived from class
-  \code{AnnotParam}.}
+\item{annotParam}{An object derived from class \code{AnnotParam}.}
 
-  \item{bamParam}{An object derived from class
-  \code{BamParam}.}
+\item{bamParam}{An object derived from class \code{BamParam}.}
 
-  \item{countBy}{TODO}
+\item{countBy}{TODO}
 
-  \item{precision}{A character value, either 'read' or 'bp'
-  that defines the precision at which counting is done,
-  either per read or per covered bp. 'read' is the
-  default.}
+\item{precision}{A character value, either 'read' or 'bp' that
+defines the precision at which counting is done, either per read
+or per covered bp. 'read' is the default.}
 }
 \description{
-This constructs a \code{\linkS4class{RnaSeqParam}} object,
-that combines all the necessary parameters for the analysis
-of RNA-Seq data. As much as possible, these parameters are
-determined automa-gi/ti-cally. It describes three sets of
-parameters: \itemize{ \item parameters describing the
-annotation \item parameters describing the BAM files,
-\emph{i.e.} the type of sequencing that was conducted.
-\item parameters describing how the counting should be
-done. } The first two are provided through sepcific
-objects: \code{\linkS4class{AnnotParam}} and
-\code{\linkS4class{BamParam}} respectively. The third one
-is a set constituted of: \itemize{ \item countBy: the
-feature per which the counts should be summarized ( exon,
-transcript or gene. A forth possibility - feature - can be
-used to define arbitrary genomic loci) \item precision: the
-precision at which the counts should be performed: bp or
-reads. bp used to be the default in the \code{easyRNASeq}
-package, whereas now reads is, following the Bioconductor
-main stream development. } The default parameters for the
-\code{\linkS4class{BamParam}} parameter are derived from
-the currently most common RNA-Seq experimental use-case:
-strand-specific paired-end Illumina sequencing. See the
-respective manual pages of \code{\linkS4class{AnnotParam}}
-and \code{\linkS4class{BamParam}} for more details.
+This constructs a \code{\linkS4class{RnaSeqParam}} object, that combines
+all the necessary parameters for the analysis of RNA-Seq data. As much as
+possible, these parameters are determined automa-gi/ti-cally. It describes
+three sets of parameters:
+\itemize{
+  \item parameters describing the annotation
+  \item parameters describing the BAM files, \emph{i.e.} the type of
+  sequencing that was conducted.
+  \item parameters describing how the counting should be done.
+}
+The first two are provided through sepcific objects: \code{\linkS4class{AnnotParam}} and
+\code{\linkS4class{BamParam}} respectively. The third one is a set
+constituted of:
+\itemize{
+  \item countBy: the feature per which the counts should be summarized (
+  exon, transcript or gene. A forth possibility - feature - can be used to
+  define arbitrary genomic loci)
+  \item precision: the precision at which the counts should be performed:
+  bp or reads. bp used to be the default in the \code{easyRNASeq} package,
+  whereas now reads is, following the Bioconductor main stream development.
+}
+The default parameters for the \code{\linkS4class{BamParam}} parameter are
+derived from the currently most common RNA-Seq experimental use-case:
+strand-specific paired-end Illumina sequencing. See the respective manual
+pages of \code{\linkS4class{AnnotParam}} and
+\code{\linkS4class{BamParam}} for more details.
 }
 \examples{
 annotParam <- AnnotParam(

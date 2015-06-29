@@ -12,22 +12,18 @@
   cond1 = character(1), cond2 = character(1))
 }
 \arguments{
-  \item{obj}{An object of class
-  \code{\linkS4class{DGEList}}}
+\item{obj}{An object of class \code{\linkS4class{DGEList}}}
 
-  \item{cond1}{A character string describing the first
-  condition}
+\item{cond1}{A character string describing the first condition}
 
-  \item{cond2}{A character string describing the second
-  condition}
+\item{cond2}{A character string describing the second condition}
 }
 \value{
 none
 }
 \description{
-This method extends the edgeR package by offering the
-functionality to plot the effect of the normalization
-factor.
+This method extends the edgeR package by offering the functionality to plot
+the effect of the normalization factor.
 }
 \examples{
 \dontrun{

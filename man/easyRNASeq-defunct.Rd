@@ -8,10 +8,10 @@
 \item \code{lotDispersionEstimates,DGEList-method}
 }}
 \description{
-\itemize{ \item The
-\code{plotDispersionEstimates,DGEList-method} function is
-superseded by the \code{\link[edgeR:plotBCV]{plotBCV}}
-function as the \pkg{edgeR} DGEList object structure
-changed }
+\itemize{
+\item The \code{plotDispersionEstimates,DGEList-method}
+function is superseded by the \code{\link[edgeR:plotBCV]{plotBCV}} function
+as the \pkg{edgeR} DGEList object structure changed
+}
 }
 

@@ -21,19 +21,25 @@
 \S4method{yieldSize}{RnaSeqParam}(object)
 }
 \arguments{
-  \item{object}{An object derived from class
-  \code{RnaSeqParam}.}
+\item{object}{An object derived from class \code{RnaSeqParam}.}
 }
 \value{
 The value of the corresponding slot.
 }
 \description{
-These functions and generics define `accessors` (to get and
-set values) for \code{\linkS4class{RnaSeqParam}} objects
-within the \pkg{easyRNASeq} package. Implemented are:
-\itemize{ \item annotParam \item bamParam \item countBy
-\item datasource \item paired \item precision \item
-stranded \item yieldSize }
+These functions and generics define `accessors` (to get and set values) for
+\code{\linkS4class{RnaSeqParam}} objects within the \pkg{easyRNASeq} package.
+Implemented are:
+\itemize{
+\item annotParam
+\item bamParam
+\item countBy
+\item datasource
+\item paired
+\item precision
+\item stranded
+\item yieldSize
+}
 }
 \examples{
 ## create the necessary AnnotParam
@@ -52,15 +58,12 @@ ysize <-yieldSize(rsp)
 Nicolas Delhomme
 }
 \seealso{
-\itemize{ \item The
-\code{\link[easyRNASeq:easyRNASeq-AnnotParam-class]{AnnotParam}}
-class \item The
-\code{\link[easyRNASeq:easyRNASeq-BamParam-class]{BamParam}}
-class \item The
-\code{\link[easyRNASeq:easyRNASeq-RnaSeqParam-class]{RnaSeqParam}}
-class } The
-\code{\link[easyRNASeq:easyRNASeq-BamParam-accessors]{BamParam
-yieldSize}} accessor
+\itemize{
+  \item The \code{\link[easyRNASeq:easyRNASeq-AnnotParam-class]{AnnotParam}} class
+  \item The \code{\link[easyRNASeq:easyRNASeq-BamParam-class]{BamParam}} class
+  \item The \code{\link[easyRNASeq:easyRNASeq-RnaSeqParam-class]{RnaSeqParam}} class
+}
+The \code{\link[easyRNASeq:easyRNASeq-BamParam-accessors]{BamParam yieldSize}} accessor
 }
 \keyword{manip}
 

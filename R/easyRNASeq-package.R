@@ -1,11 +1,11 @@
 ## to re-build the documentation and namespace
 ## library(roxygen2)
-## roxygenize("../easyrnaseq-devel/")
+## roxygenize("../easyrnaseq-devel/",roclets=c('rd', 'collate', 'namespace'),clean=TRUE)
 
 ## to update the package versions
 # pkg <- c("Biobase","BiocGenerics","biomaRt","Biostrings",
 #          "DESeq","edgeR","GenomeInfoDb","genomeIntervals",
-#          "GenomicAlignments","GenomicRanges",
+#          "GenomicAlignments","GenomicRanges","SummarizedExperiment",
 #          "IRanges","LSD","Rsamtools","S4Vectors","ShortRead",
 #          "BiocStyle","BSgenome",
 #          "BSgenome.Dmelanogaster.UCSC.dm3","GenomicFeatures",

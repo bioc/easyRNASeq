@@ -13,19 +13,21 @@ datasource(object)
 \S4method{type}{AnnotParam}(x)
 }
 \arguments{
-  \item{object}{An object derived from class
-  \code{AnnotParam}.}
+\item{object}{An object derived from class \code{AnnotParam}.}
 
-  \item{x}{An object derived from class \code{AnnotParam}.}
+\item{x}{An object derived from class \code{AnnotParam}.}
 }
 \value{
 The value of the corresponding slot.
 }
 \description{
-These functions and generics define `accessors` (to get and
-set values) for \code{\linkS4class{AnnotParam}} objects
-within the \pkg{easyRNASeq} package. Implemented are:
-\itemize{ \item datasource \item type }
+These functions and generics define `accessors` (to get and set values) for
+\code{\linkS4class{AnnotParam}} objects within the \pkg{easyRNASeq} package.
+Implemented are:
+\itemize{
+\item datasource
+\item type
+}
 }
 \examples{
 annot <- AnnotParam(
@@ -40,12 +42,9 @@ datasource(annot)
 Nicolas Delhomme
 }
 \seealso{
-The
-\code{\link[easyRNASeq:easyRNASeq-AnnotParam-class]{AnnotParam}}
-class. The type and organism generics are imported from the
-\code{\link[BSgenome:BSgenome-class]{BSgenome}} and
-\code{\link[Biostrings:XString-class]{Biostrings}} package,
-respectively.
+The \code{\link[easyRNASeq:easyRNASeq-AnnotParam-class]{AnnotParam}} class.
+The type and organism generics are imported from the \code{\link[BSgenome:BSgenome-class]{BSgenome}} and
+\code{\link[Biostrings:XString-class]{Biostrings}} package, respectively.
 }
 \keyword{manip}
 

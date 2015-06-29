@@ -13,25 +13,21 @@
 \S4method{print}{RNAseq}(x, verbose = FALSE, ...)
 }
 \arguments{
-  \item{x}{An object from class
-  \code{\linkS4class{RNAseq}},
-  \code{\linkS4class{AnnotParam}},
-  \code{\linkS4class{BamParam}} or
-  \code{\linkS4class{RnaSeqParam}}}
+\item{x}{An object from class \code{\linkS4class{RNAseq}},
+\code{\linkS4class{AnnotParam}},
+\code{\linkS4class{BamParam}} or \code{\linkS4class{RnaSeqParam}}}
 
-  \item{verbose}{A logical to have a verbose or not output.
-  Default to FALSE For object of the
-  \code{\linkS4class{RNAseq}} class only.}
+\item{verbose}{A logical to have a verbose or not output. Default to FALSE
+For object of the \code{\linkS4class{RNAseq}} class only.}
 
-  \item{...}{Additional arguments, currently unused.}
+\item{...}{Additional arguments, currently unused.}
 }
 \value{
 Print information about the provided object.
 }
 \description{
 Print information about a \code{\linkS4class{RNAseq}},
-\code{\linkS4class{AnnotParam}},
-\code{\linkS4class{BamParam}} or
+\code{\linkS4class{AnnotParam}}, \code{\linkS4class{BamParam}} or
 \code{\linkS4class{RnaSeqParam}} object.
 }
 \author{

@@ -1,72 +1,77 @@
-## this code was extracted from the DESeq vignette
-## by Simon Anders et al.
+# this code was extracted from the DESeq vignette
+# by Simon Anders et al.
 
-## not needed anymore, implemented in DESeq
-## setMethod(
-##           f="fitInfo",
-##           signature="CountDataSet",
-##           definition=function(obj){
-##             obj@fitInfo
-##           })
+# not needed anymore, implemented in DESeq
+# setMethod(
+#           f="fitInfo",
+#           signature="CountDataSet",
+#           definition=function(obj){
+#             obj@fitInfo
+#           })
 
 
-##' Extension for the DESeq package
-##' 
-##' \itemize{
-##' \item{\code{multivariateConditions} is simply an accessor for the
-##' \code{multivariateConditions} slot of a \code{\linkS4class{CountDataSet}}
-##' object}
-##' \item{\code{plotDispLSD} is a function silimar to 
-##' \code{\link[DESeq:plotDispEsts]{plotDispEsts}}
-##' that adds a density estimate as a colored heatmap from grey (few) to yellow
-##' (many).}
-##' \item{\code{plotDispersionEstimates} offers the functionality to plot 
-##' the dispersion estimate as described in the \pkg{DESeq} vignette.}
-##' }
-##'
-##' @aliases multivariateConditions multivariateConditions,CountDataSet-method
-##' plotDispLSD plotDispLSD,CountDataSet-method plotDispersionEstimates
-##' plotDispersionEstimates,CountDataSet-method
-##' @name DESeq additional methods
-##' @rdname DESeq-methods
-##' @param obj An object of class \code{\linkS4class{CountDataSet}}
-##' @param cex standard \code{\link[graphics:plot.default]{plot.default}} parameter
-##' @param cond A character string describing the first condition
-##' @param linecol defines the line color
-##' @param log A character string passed onto 
-##' \code{\link[graphics:plot.default]{plot.default}}
-##' @param name argument passed to the \pkg{DESeq} \code{\link[DESeq:fitInfo]{fitInfo}}
-##' function.
-##' @param xlab standard \code{\link[graphics:plot.default]{plot.default}} parameter
-##' @param ylab standard \code{\link[graphics:plot.default]{plot.default}} parameter
-##' @param ymin numeric value defining the lower limit for the y axis
-##' @param ... Additional plotting parameters
-##' @usage multivariateConditions(obj)
-##' plotDispLSD(obj, name = NULL, ymin, 
-##' linecol = "#00000080", xlab = "mean of normalized counts", 
-##' ylab = "dispersion", log = "xy", cex = 0.45, ...)
-##' plotDispersionEstimates(obj,cond,log,...)
-##' @return \itemize{
-##' \item{\code{multivariateConditions} returns a boolean describing
-##' whether the data to analyze is multivariate or not}
-##' \item{\code{plotDispLSD} and \code{plotDispersionEstimates}} returns nothing
-##' }
-##' @author Nicolas Delhomme, Bastian Schiffthaler
-##' @seealso \code{\linkS4class{CountDataSet}}
-##' \code{\link[DESeq:plotDispEsts]{plotDispEsts}}
-##' @keywords methods
-##' @examples
-##' 
-##' 	\dontrun{
-##' 	## these are helper function for the DESeq package
-##' 	## refer to its vignette first
-##' 	cds <- newCountDataSet(countData,conditions)
-##' 	cds <- estimateSizeFactors(cds)
-##' 	cds <- estimateDispersions(cds)
-##' 	mVar <- multivariateConditions(cds)
-##' 	plotDispersionEstimates(cds,conditions[1])
-##' 	}
-##' 
+#' Extension for the DESeq package
+#' 
+#' \itemize{
+#' \item{
+#' \code{multivariateConditions} is simply an accessor for the 
+#' \code{multivariateConditions} slot of a 
+#' \code{\linkS4class{CountDataSet}} object}
+#' \item{\code{plotDispLSD} is a function silimar to 
+#' \code{\link[DESeq:plotDispEsts]{plotDispEsts}} 
+#' that adds a density estimate as a colored heatmap from grey (few) to yellow 
+#' (many).}
+#' \item{
+#' \code{plotDispersionEstimates} offers the functionality to plot 
+#' the dispersion estimate as described in the \pkg{DESeq} vignette.}
+#' }
+#'
+#' @aliases multivariateConditions multivariateConditions,CountDataSet-method
+#' plotDispLSD plotDispLSD,CountDataSet-method plotDispersionEstimates
+#' plotDispersionEstimates,CountDataSet-method
+#' @name DESeq additional methods
+#' @rdname DESeq-methods
+#' @param obj An object of class \code{\linkS4class{CountDataSet}}.
+#' @param cex The standard \code{\link[graphics:plot.default]{plot.default}} 
+#' parameter.
+#' @param cond A character string describing the first condition.
+#' @param linecol Defines the line color.
+#' @param log A character string passed onto 
+#' \code{\link[graphics:plot.default]{plot.default}}.
+#' @param name Argument passed to the \pkg{DESeq} 
+#' \code{\link[DESeq:fitInfo]{fitInfo}} function.
+#' @param xlab The standard 
+#' \code{\link[graphics:plot.default]{plot.default}} parameter.
+#' @param ylab The standard 
+#' \code{\link[graphics:plot.default]{plot.default}} parameter.
+#' @param ymin A numeric value defining the lower limit for the y axis.
+#' @param ... Additional plotting parameters.
+#' @usage multivariateConditions(obj)
+#' plotDispLSD(obj, name = NULL, ymin, 
+#' linecol = "#00000080", xlab = "mean of normalized counts", 
+#' ylab = "dispersion", log = "xy", cex = 0.45, ...)
+#' plotDispersionEstimates(obj,cond,log,...)
+#' @return \itemize{
+#' \item{\code{multivariateConditions} returns a boolean describing
+#' whether the data to analyze is multivariate or not}
+#' \item{\code{plotDispLSD} and \code{plotDispersionEstimates}} returns nothing
+#' }
+#' @author Nicolas Delhomme, Bastian Schiffthaler
+#' @seealso \code{\linkS4class{CountDataSet}}
+#' \code{\link[DESeq:plotDispEsts]{plotDispEsts}}
+#' @keywords methods
+#' @examples
+#' 
+#' 	\dontrun{
+#' 	# these are helper function for the DESeq package
+#' 	# refer to its vignette first
+#' 	cds <- newCountDataSet(countData,conditions)
+#' 	cds <- estimateSizeFactors(cds)
+#' 	cds <- estimateDispersions(cds)
+#' 	mVar <- multivariateConditions(cds)
+#' 	plotDispersionEstimates(cds,conditions[1])
+#' 	}
+#' 
 setMethod(
           f="multivariateConditions",
           signature="CountDataSet",
@@ -113,29 +118,29 @@ setMethod(
           signature=c("CountDataSet"),
           definition=function(obj,cond=character(1),log="xy",...){
             
-            ## check
+            # check
             if(! class(obj) == "CountDataSet"){
               stop("This function: 'plotDispersionEstimates' only accepts a 'countDataSet' object.")
             }
 
-            ## check the conditions
-            ## check if we are pooled, blind or per-condition
+            # check the conditions
+            # check if we are pooled, blind or per-condition
             stopifnot(length(cond)==1)
 
-            ## should work without now
-            ## if(multivariateConditions(obj)){
-            ##   ## TODO other steps are necessary before that to get the proper DESeq object at that point
-            ##   ## make sure we can read a data.frame as conditions, that the rownames are the files and that the estimates are calc with pooled-CR
-            ##   if(cond != "pooled"){
-            ##     stop("The provided condition can only have the value: 'pooled', as your conditions is multivariate")
-            ##   }
-            ## } else {
-            ##   if(!cond %in% sub("disp_",names(fData(obj)))){
-            ##     stop("The provided condition is not present in the 'conditions' slot of your object.")
-            ##   }
-            ## }
+            # should work without now
+            # if(multivariateConditions(obj)){
+            #   # TODO other steps are necessary before that to get the proper DESeq object at that point
+            #   # make sure we can read a data.frame as conditions, that the rownames are the files and that the estimates are calc with pooled-CR
+            #   if(cond != "pooled"){
+            #     stop("The provided condition can only have the value: 'pooled', as your conditions is multivariate")
+            #   }
+            # } else {
+            #   if(!cond %in% sub("disp_",names(fData(obj)))){
+            #     stop("The provided condition is not present in the 'conditions' slot of your object.")
+            #   }
+            # }
 
-            ## plot
+            # plot
             plot(
                  rowMeans( counts( obj, normalized=TRUE ) ),
                  fitInfo(obj,cond)$perGeneDispEsts,

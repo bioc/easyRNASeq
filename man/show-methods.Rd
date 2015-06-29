@@ -12,24 +12,21 @@
 \S4method{show}{RNAseq}(object)
 }
 \arguments{
-  \item{object}{An object of the
-  \code{\linkS4class{AnnotParam}},
-  \code{\linkS4class{BamParam}},
-  \code{\linkS4class{RnaSeqParam}} or
-  \code{\linkS4class{RNAseq}} class}
+\item{object}{An object of the \code{\linkS4class{AnnotParam}},
+\code{\linkS4class{BamParam}}, \code{\linkS4class{RnaSeqParam}} or
+\code{\linkS4class{RNAseq}} class}
 }
 \description{
 Display the content of a \code{\linkS4class{RNAseq}},
-\code{\linkS4class{AnnotParam}},
-\code{\linkS4class{BamParam}} or
+\code{\linkS4class{AnnotParam}}, \code{\linkS4class{BamParam}} or
 \code{\linkS4class{RnaSeqParam}} object.
 }
 \section{Methods}{
-  \describe{ \item{list("signature(object = \"RNAseq\")")}{
-  Display the values of the different slots of the
-  \code{\linkS4class{RNAseq}} object.  }
-  \item{Annot/Bam/RnaSeqParam}{The respective object
-  settings.}}
+ \describe{
+\item{list("signature(object = \"RNAseq\")")}{
+Display the values of the different slots of the
+\code{\linkS4class{RNAseq}} object.  }
+\item{Annot/Bam/RnaSeqParam}{The respective object settings.}}
 }
 \keyword{methods}
 

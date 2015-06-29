@@ -10,16 +10,15 @@
 \S4method{file.exists}{BamFile}(...)
 }
 \arguments{
-  \item{...}{a \code{\linkS4class{BamFile}} object}
+\item{...}{a \code{\linkS4class{BamFile}} object}
 }
 \description{
-Check if the bam file represented by a
-\code{\linkS4class{BamFile}} object exists.
+Check if the bam file represented by a \code{\linkS4class{BamFile}} object exists.
 }
 \section{Methods}{
-  \describe{ \item{list("signature(object =
-  \"BamFile\")")}{ Checkk if the bam file linked to by a
-  \code{\linkS4class{BamFile}} object exists.  } }
+ \describe{ \item{list("signature(object = \"BamFile\")")}{
+Checkk if the bam file linked to by a
+\code{\linkS4class{BamFile}} object exists.  } }
 }
 \keyword{methods}
 
