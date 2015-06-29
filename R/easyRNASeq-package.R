@@ -209,7 +209,7 @@ NULL
 ##' @importFrom utils combn str
 ## and export!
 ##' @exportClass BamFileList RangedData RangedSummarizedExperiment
-##' @exportMethod assay fileName seqlengths seqnames split srFilter SummarizedExperiment width writeFastq
+##' @exportMethod assay estimateDispersions estimateSizeFactors fileName seqlengths seqnames split srFilter SummarizedExperiment width writeFastq
 ##' @export alignData chromosomeFilter compose BamFileList IRanges locfit lp newCountDataSet nFilter RangedData readAligned SRFilterResult
 NULL
 
