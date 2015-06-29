@@ -129,12 +129,24 @@ setGeneric(
 ## ShortRead
 ##' @exportMethod demultiplex
 setGeneric(name="demultiplex",
-           def=function(obj,barcodes=c(),barcodes.qty=12,barcode.length=6, edition.dist=2, type=c("independant","within"),index.only=FALSE){
+           def=function(obj,
+                        barcodes=c(),
+                        barcodes.qty=12,
+                        barcode.length=6,
+                        edition.dist=2,
+                        type=c("independant","within"),
+                        index.only=FALSE,
+                        mc.cores=1L){
              standardGeneric("demultiplex")
            })
 ##' @exportMethod barcodePlot
 setGeneric(name="barcodePlot",
-           def=function(obj,barcodes=c(),type=c("independant","within"),barcode.length=6,show.barcode=20,...){
+           def=function(obj,
+                        barcodes=c(),
+                        type=c("independant","within"),
+                        barcode.length=6,
+                        show.barcode=20,
+                        ...){
              standardGeneric("barcodePlot")
            })
 
@@ -276,16 +288,6 @@ setGeneric(
              standardGeneric("easyRNASeq")
            })
 
-## TODO we should remove it
-##' @exportMethod count
-setGeneric(
-           name="count",
-           def=function(filesDirectory=character(1),
-             outputFormat=c("SummarizedExperiment","matrix","DESeq","edgeR","RNAseq"),
-             ...){
-             standardGeneric("count")
-           })
-
 ###==========================
 ## edgeR extension
 ###==========================
@@ -306,17 +308,9 @@ setGeneric(
 ##' @exportMethod plotDispersionEstimates
 setGeneric(
            name="plotDispersionEstimates",
-           def=function(obj,cond=character(1),log="xy",...){
+           def=function(obj,cond=NULL,log="xy",...){
              standardGeneric("plotDispersionEstimates")
            })
-
-## DESeq extension
-## accessor
-## setGeneric(
-##            name="fitInfo",
-##            def=function(obj){
-##              standardGeneric("fitInfo")
-##            })
 
 ##' @exportMethod multivariateConditions
 setGeneric(
@@ -328,8 +322,8 @@ setGeneric(
 ##' @exportMethod plotDispLSD
 setGeneric(
     name="plotDispLSD",
-    def=function(obj, name = NULL, ymin, 
-        linecol = "#00000080", xlab = "mean of normalized counts", 
+    def=function(obj, name = NULL, ymin,
+        linecol = "#00000080", xlab = "mean of normalized counts",
         ylab = "dispersion", log = "xy", cex = 0.45,...){
         standardGeneric("plotDispLSD")
     })
@@ -441,7 +435,7 @@ setGeneric(name="stranded",
 ###==========================
 ##' @exportMethod AnnotParam
 setGeneric(name="AnnotParam",
-           def=function(             
+           def=function(
              datasource=character(0),
              ...){
              standardGeneric("AnnotParam")

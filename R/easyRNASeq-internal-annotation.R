@@ -185,12 +185,29 @@
     cluster <- makePSOCKcluster(nbCore)
     
     ## get the gene ranges
-    RL_list <- do.call("c",parLapply(cluster,names(gAnnot),function(chr,gAnnot){coverage(split(IRanges(start=start(gAnnot[chr]),end=end(gAnnot[chr])),gAnnot[chr]$genes))},gAnnot))
+    RL_list <- do.call(
+      "c",
+      parLapply(cluster,
+                seqlevels(gAnnot),
+                function(chr,gAnnot){
+                  sel <- seqnames(gAnnot) %in% chr
+                  coverage(split(IRanges(start=start(gAnnot[sel]),
+                                         end=end(gAnnot[sel])),
+                                 gAnnot[sel]$gene))},gAnnot))
     
     ## stop the cluster
     stopCluster(cl=cluster)
   } else {
-    RL_list <- do.call("c",lapply(names(gAnnot),function(chr,gAnnot){coverage(split(IRanges(start=start(gAnnot[chr]),end=end(gAnnot[chr])),gAnnot[chr]$genes))},gAnnot))
+    RL_list <- do.call(
+      "c",
+      lapply(
+        seqlevels(gAnnot),
+        function(chr,gAnnot){
+          sel <- seqnames(gAnnot) %in% chr
+          coverage(split(
+            IRanges(start=start(gAnnot[sel]),
+                    end=end(gAnnot[sel])),
+            gAnnot[sel]$gene))},gAnnot))
   }
 
   ## let's help free memory
@@ -199,14 +216,14 @@
   ## TODO THIS TAKES TOO LONG
   ## get the synthetic exons
   RL<-(IRangesList(RL_list>0))
-  sel<-rep(match(names(RL),gAnnot$genes),sapply(RL,length))
-  return(RangedData(
-                    IRanges(start=unlist(start(RL)),end=unlist(end(RL))),
-                    space=gAnnot$space[sel],
+  sel<-rep(match(names(RL),gAnnot$gene),sapply(RL,length))
+  return(RangedData(space = seqnames(gAnnot)[sel],
+                 ranges = IRanges(start=unlist(start(RL)),end=unlist(end(RL))),
+                 strand=strand(gAnnot)[sel],
                     gene=gAnnot$gene[sel],
-                    strand=gAnnot$strand[sel],
                     transcript=paste(gAnnot$gene[sel],"transcript",sep="_"),
-                    exon=paste(gAnnot$gene[sel],unlist(sapply(RL,function(gene){c(1:length(gene))})),sep="_")
-                    ))
+                 exon=paste(gAnnot$gene[sel],
+                            unlist(sapply(RL,
+                                          function(gene){c(1:length(gene))})),sep="_")))
 }
 

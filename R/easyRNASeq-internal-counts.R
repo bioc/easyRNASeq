@@ -117,7 +117,7 @@
                                                         sum)
                                               )
                                        ),
-                            list(gene=geneModel(obj)[gm.sel]$gene),
+                            list(gene=as.character(geneModel(obj)[gm.sel]$gene)),
                             sum)
   gCounts <- ceiling(gAgg[,2])
   names(gCounts)<-gAgg$gene

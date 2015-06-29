@@ -25,8 +25,8 @@
 ##' \tabular{ll}{
 ##' Package: \tab easyRNASeq\cr
 ##' Type: \tab Package\cr
-##' Version: \tab 2.5.2\cr
-##' Date: \tab 2015-05-13\cr
+##' Version: \tab 2.5.3\cr
+##' Date: \tab 2015-06-24\cr
 ##' License: \tab Artistic-2.0\cr
 ##' LazyLoad: \tab yes\cr
 ##' Depends: \tab methods, parallel, Biobase, BiocGenerics, biomaRt, Biostrings, edgeR, DESeq, genomeIntervals, GenomeInfoDb, GenomicAlignments, GenomicRanges, SummarizedExperiment, graphics, IRanges, LSD, Rsamtools, S4Vectors, ShortRead, utils\cr
@@ -57,7 +57,7 @@
 ##'
 ##' @name easyRNASeq package
 ##' @rdname easyRNASeq-package
-##' @aliases easyRNASeq-package alignData assay type BamFileList BamFileList-class IRanges
+##' @aliases easyRNASeq-package assay type BamFileList BamFileList-class IRanges
 ##' RangedData SRFilterResult RangedSummarizedExperiment-class chromosomeFilter
 ##' compose nFilter RangedData-class
 ##' @docType package
@@ -72,6 +72,7 @@
 ##'
 ##' 	The imported packages:
 ##' 	\code{\link[biomaRt:useMart]{biomaRt}}
+##'   \code{\link[BiocParallel:BiocParallel-package]{BiocParallel}}
 ##' 	\code{\link[edgeR:DGEList]{edgeR}}
 ##' 	\code{\link[genomeIntervals:Genome_intervals_stranded-class]{genomeIntervals}}
 ##' 	\code{\link[Biostrings:XString-class]{Biostrings}}
@@ -91,13 +92,17 @@
 ##'   \itemize{
 ##'     \item{Classes}{
 ##'       \code{\linkS4class{BamFileList}}
+##'       \code{\linkS4class{CountDataSet}}
 ##'       \code{\linkS4class{RangedData}}
 ##'       \code{\linkS4class{RangedSummarizedExperiment}}
 ##'     }
 ##'     \item{Functions/Methods}{
+##'       \code{\link[DESeq:estimateDispersions]{DESeq estimate size factor and
+##'       estimate dispersion functions}}
 ##'       \code{\link[SummarizedExperiment:RangedSummarizedExperiment-class]{
 ##'         The RangedSummarizedExperiment assay accessor}
 ##'       }
+##'       \code{\link[locfit:locfit]{The locfit function}}
 ##'       \code{\link[Rsamtools:BamFileList]{The BamFileList constructor}}
 ##'       \code{\link[IRanges:IRanges-constructor]{The IRanges constructor}}
 ##'       \code{\link[IRanges:RangedData-class]{The RangedData constructor}}
@@ -159,28 +164,30 @@ NULL
 ##' eval fileName get intersect lapply match order paste pmax rbind rownames
 ##' sapply strand "strand<-" table unique
 ##' @importMethodsFrom Biostrings type
+##' @importMethodsFrom DESeq estimateSizeFactors estimateDispersions
 ##' @importMethodsFrom genomeIntervals seq_name
 ##' @importMethodsFrom GenomeInfoDb seqinfo seqlengths "seqlengths<-"
 ##' seqlevels "seqlevels<-" seqnames "seqnames<-"
 ##' @importMethodsFrom GenomicAlignments cigar summarizeOverlaps
 ##' @importMethodsFrom GenomicRanges assay assays "assays<-" colData "colData<-"
 ##' grglist rowRanges "rowRanges<-"
-##' @importMethodsFrom SummarizedExperiment SummarizedExperiment
 ##' "exptData<-" grglist rowRanges "rowRanges<-" SummarizedExperiment
 ##' @importMethodsFrom IRanges aggregate as.list as.matrix as.table
 ##' "colnames<-" countOverlaps coverage elementLengths end "end<-" findOverlaps
 ##' gsub mean median narrow nchar queryHits ranges reduce rev "rownames<-" space
 ##' split start "start<-" sub  tolower "universe<-" unlist values which width
-##' @importMethodsFrom S4Vectors "%in%" elementMetadata "elementMetadata<-"
-##' endoapply ifelse levels mcols metadata "metadata<-" Rle runLength runsum
-##' runValue substr
 ##' @importMethodsFrom methods coerce initialize show
 ##' @importMethodsFrom Rsamtools countBam path scanBam scanBamHeader
 ##' ScanBamParam yieldSize "yieldSize<-"
+##' @importMethodsFrom S4Vectors "%in%" elementMetadata "elementMetadata<-"
+##' endoapply ifelse levels mcols metadata "metadata<-" Rle runLength runsum
+##' runValue substr
 ##' @importMethodsFrom ShortRead chromosome id position readAligned
 ##' srdistance sread srFilter writeFastq
+##' @importMethodsFrom SummarizedExperiment SummarizedExperiment
 ## import methods
 ##' @importFrom biomaRt getBM listDatasets useDataset useMart
+##' @importFrom BiocParallel MulticoreParam SerialParam
 ##' @importFrom Biostrings DNAStringSet
 ##' @importFrom DESeq fitInfo newCountDataSet
 ##' @importFrom edgeR calcNormFactors DGEList estimateCommonDisp
@@ -192,6 +199,7 @@ NULL
 ##' mtext par plot rect
 ##' @importFrom IRanges IRanges IRangesList LogicalList
 ##' RangedData RangesList SplitDataFrameList RleList
+##' @importFrom locfit locfit lp
 ##' @importFrom LSD heatscatter
 ##' @importFrom methods as extends is new
 ##' @importFrom parallel makePSOCKcluster parLapply stopCluster
@@ -203,7 +211,7 @@ NULL
 ## and export!
 ##' @exportClass BamFileList RangedData RangedSummarizedExperiment
 ##' @exportMethod assay fileName seqlengths seqnames split srFilter SummarizedExperiment width writeFastq
-##' @export alignData chromosomeFilter compose BamFileList IRanges nFilter RangedData readAligned SRFilterResult
+##' @export alignData chromosomeFilter compose BamFileList IRanges locfit lp newCountDataSet nFilter RangedData readAligned SRFilterResult
 NULL
 
 ###==========================

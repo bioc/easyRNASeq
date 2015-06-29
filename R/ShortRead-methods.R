@@ -1,34 +1,37 @@
 ##' Methods extending the ShortRead package functionalities
-##' 
+##'
 ##' These are functions extending the ShortRead packages capabilities:
-##' 
-##' \itemize{ \item\code{barcodePlot} Creates a plot showing the barcode
+##'
+##' \itemize{
+##' \item\code{barcodePlot} Creates a plot showing the barcode
 ##' distribution of a multiplexed sequencing library.
 ##' \item\code{chastityFilter} Creates a \code{\linkS4class{SRFilter}} instance
 ##' that filters SolexaExport read according to the chastity filtering value.
 ##' \item\code{demultiplex} Split a single \code{\linkS4class{AlignedRead}}
 ##' object into a list of \code{\linkS4class{AlignedRead}} objects according to
-##' the barcodes provided by the user.  \item\code{naPositionFilter} Creates a
+##' the barcodes provided by the user. It supports multicore processing
+##' but has a default serial behaviour.
+##' \item\code{naPositionFilter} Creates a
 ##' \code{\linkS4class{SRFilter}} instance that filters SolexaExport read
 ##' having an NA position.  }
-##' 
+##'
 ##' When demultiplexing, the function if provided with just the
 ##' \code{\linkS4class{AlignedRead}} will try to find out how many barcodes
 ##' were used and what they are. This is unwise to do as many barcodes will get
 ##' wrongly sequenced and not always the most frequent ones are the one you
 ##' used! It's therefore strongly advised to specify the barcodes' sequences
 ##' that were used.
-##' 
+##'
 ##' @name ShortRead additional methods
 ##' @rdname ShortRead-methods
 ##' @aliases barcodePlot barcodePlot,AlignedRead-method
 ##' barcodePlot,DNAStringSet-method barcodePlot,ShortReadQ-method
 ##' chastityFilter chastityFilter,SRFilter-method naPositionFilter
 ##' naPositionFilter,SRFilter-method demultiplex demultiplex,AlignedRead-method
-##' demultiplex,DNAStringSet-method demultiplex,ShortReadQ-method
+##' demultiplex,DNAStringSet-method demultiplex,ShortReadQ-method alignData
 ##' @docType methods
 ##' @usage demultiplex(obj,barcodes=c(),barcodes.qty=12,barcode.length=6,
-##' edition.dist=2,type=c("independant","within"),index.only=FALSE)
+##' edition.dist=2,type=c("independant","within"),index.only=FALSE,mc.cores=1L)
 ##' barcodePlot(obj,barcodes=c(),type=c("independant","within"),
 ##' barcode.length=6,show.barcode=20,...)
 ##' chastityFilter(.name="Illumina Chastity Filter")
@@ -42,6 +45,9 @@
 ##' @param edition.dist The maximal edition distance (i.e. the number of
 ##' changes to apply), to accept an incorrectly sequenced barcode.
 ##' @param index.only simply return the index and not the barcode themselves.
+##' @param mc.cores A parameter ultimately passed to srdistance to enable
+##' parallel processing on mc.cores. On linux and Mac only, windows task remain
+##' serially processed.
 ##' @param show.barcode An integer specifying how many barcodes should be
 ##' displayed in the final output.
 ##' @param type The type of barcode used. \code{independent} represents
@@ -60,11 +66,11 @@
 ##' @seealso \code{\linkS4class{SRFilter}} \code{\linkS4class{AlignedRead}}
 ##' @keywords methods
 ##' @examples
-##' 
+##'
 ##' 	\dontrun{
 ##' 	## the barcode
 ##' 	barcodes=c("ACACTG","ACTAGC","ATGGCT","TTGCGA")
-##' 
+##'
 ##' 	## the multiplexed data
 ##' 	alns <- readAligned(
 ##'                     system.file(
@@ -77,7 +83,7 @@
 ##'                       chromosomeFilter(regex="chr")),
 ##'                     type="SolexaExport",
 ##'                     withAll=TRUE)
-##' 	
+##'
 ##' 	## barcode plot
 ##' 	barcodePlot(alns,
 ##'             barcodes=barcodes,
@@ -86,19 +92,19 @@
 ##'             show.barcode=20,
 ##'             main="All samples",
 ##'             xlim=c(0,0.5))
-##' 
+##'
 ##' 	## demultiplexing
 ##' 	dem.alns <- demultiplex(alns,
 ##'                         barcodes=barcodes,
 ##'                         edition.dist=2,
 ##'                         barcodes.qty=4,
 ##'                         type="within")
-##' 	
+##'
 ##' 	## plotting again
 ##' 	par(mfrow=c(2,2))
 ##' 	barcode.frequencies <- lapply(
 ##'                               names(dem.alns$barcodes),
-##'                               function(barcode,alns){                                
+##'                               function(barcode,alns){
 ##'                                 barcodePlot(
 ##'                                             alns$barcodes[[barcode]],
 ##'                                             barcodes=barcode,
@@ -109,19 +115,22 @@
 ##'                                               barcode))
 ##'                               },dem.alns)
 ##' 	}
-##' 
+##'
 ## de-multiplex multiplexed libs
 setMethod(
           f="demultiplex",
           signature="AlignedRead",
-          definition=function(obj,barcodes=c(),barcodes.qty=12,
-                              barcode.length=6, edition.dist=2, 
+          definition=function(obj,barcodes=c(),
+                              barcodes.qty=12,
+                              barcode.length=6,
+                              edition.dist=2,
                               type=c("independant","within"),
-                              index.only=FALSE){
+                              index.only=FALSE,
+                              mc.cores=1L){
 
             ## TODO we only want one type!!
             ## default to independant
-            
+
             ## check the input
             types <- eval(formals("demultiplex")$type)
             if(!type %in% types){
@@ -131,7 +140,7 @@ setMethod(
                          "is not part of the supported types:",
                          paste(types,collapse=", ")))
             }
-            
+
             ## do we have barcodes
             if(length(barcodes)==0){
               barcodes <- switch(type,
@@ -150,7 +159,7 @@ setMethod(
                 barcode.length=nchar(barcodes[1])
               }
             }
-            
+
             ## get the barcodes, according to a certain size
             all.barcodes <- switch(type,
                                independant=DNAStringSet(
@@ -163,7 +172,7 @@ setMethod(
             if(type=="independant" & nchar(all.barcodes)[1] > barcode.length){
               all.barcodes <- narrow(all.barcodes,start=1,width=barcode.length)
             }
-            
+
             ## calculate the edition distance
             ## dist<-do.call(cbind,srdistance(barcodes,barcodes))
             ## or this to speed up
@@ -178,9 +187,13 @@ setMethod(
                     paste(rep("c('A','C','G','T','N')",barcode.length),collapse=","),
                     ",stringsAsFactors=FALSE)")
                 ))),1,paste,collapse=""))
-            
-            dist <- do.call(cbind,srdistance(unique.barcodes,barcodes))[match(all.barcodes,unique.barcodes),]
-            
+
+            dist <- do.call(cbind,
+                            srdistance(unique.barcodes,
+                                       barcodes,
+                                       BPPARAM=.getBpParam(mc.cores)))[match(all.barcodes,
+                                                                             unique.barcodes),]
+
             ## create a selector per barcode
             sels <- lapply(barcodes,
                            function(barcode,dist,edition.dist){
@@ -201,16 +214,16 @@ setMethod(
             ## either the alns or the sels are returned
             if(index.only){
               return(sels)
-            } else {              
+            } else {
               ## original read length
               read.length <- width(obj)[1]
-              
+
               ## return a lists of aln
               alns <- lapply(barcodes,function(barcode,obj,sels){
                 reads <- narrow(obj[sels[[barcode]]],start=barcode.length+1,width=read.length-barcode.length)
                 bars <- narrow(obj[sels[[barcode]]],start=1,width=barcode.length)
                 return(list(reads=reads,bars=bars))
-              },obj,sels)                       
+              },obj,sels)
               names(alns) <- colnames(dist)
               alns <- list(reads=lapply(alns,function(x){x[[1]]}),barcodes=lapply(alns,function(x){sread(x[[2]])}))
               return(alns)
@@ -220,16 +233,20 @@ setMethod(
 setMethod(
           f="demultiplex",
           signature="DNAStringSet",
-          definition=function(obj,barcodes=c(),barcodes.qty=12,
-                              barcode.length=6, edition.dist=2, 
-                              type=c("independant","within"),index.only=FALSE){
+          definition=function(obj,barcodes=c(),
+                              barcodes.qty=12,
+                              barcode.length=6,
+                              edition.dist=2,
+                              type=c("independant","within"),
+                              index.only=FALSE,
+                              mc.cores=1L){
 
             ## There's only one possible type!!
             ## TODO extract this error to share it with other methods that go for a DNAStringSet
             if(type=="independant"){
               stop(paste("We cannot accept the independant argument for a ",class(obj),", since we miss the barcode sequences",sep=""))
             }
-            
+
             ## check the input
             types <- eval(formals("demultiplex")$type)[-1]
             if(!type %in% types){
@@ -239,7 +256,7 @@ setMethod(
                          "is not part of the supported types:",
                          paste(types,collapse=", ")))
             }
-            
+
             ## do we have barcodes
             if(length(barcodes)==0){
               barcodes <- sort(table(as.character(narrow(obj,start=1,width=barcode.length))),decreasing=TRUE)[1:barcodes.qty]
@@ -252,10 +269,10 @@ setMethod(
                 barcode.length=nchar(barcodes[1])
               }
             }
-            
+
             ## get the barcodes, according to a certain size
             all.barcodes <-narrow(obj,start=1,width=barcode.length)
-            
+
             ## calculate the edition distance
             ## dist<-do.call(cbind,srdistance(barcodes,barcodes))
             ## or this to speed up
@@ -270,9 +287,13 @@ setMethod(
                                                                          paste(rep("c('A','C','G','T','N')",barcode.length),collapse=","),
                                                                          ",stringsAsFactors=FALSE)")
                                                                        ))),1,paste,collapse=""))
-            
-            dist <- do.call(cbind,srdistance(unique.barcodes,barcodes))[match(all.barcodes,unique.barcodes),]
-            
+
+            dist <- do.call(cbind,
+                            srdistance(
+                              unique.barcodes,
+                              barcodes,
+                              BPPARAM=.getBpParam(mc.cores)))[match(all.barcodes,unique.barcodes),]
+
             ## create a selector per barcode
             sels <- lapply(barcodes,
                            function(barcode,dist,edition.dist){
@@ -293,16 +314,16 @@ setMethod(
             ## either the alns or the sels are returned
             if(index.only){
               return(sels)
-            } else {              
+            } else {
               ## original read length
               read.length <- width(obj)[1]
-              
+
               ## return a lists of aln
               alns <- lapply(barcodes,function(barcode,obj,sels){
                 reads <- narrow(obj[sels[[barcode]]],start=barcode.length+1,width=read.length-barcode.length)
                 bars <- narrow(obj[sels[[barcode]]],start=1,width=barcode.length)
                 return(list(reads=reads,bars=bars))
-              },obj,sels)                       
+              },obj,sels)
               names(alns) <- colnames(dist)
               alns <- list(reads=lapply(alns,function(x){x[[1]]}),barcodes=lapply(alns,function(x){x[[2]]}))
               return(alns)
@@ -312,9 +333,13 @@ setMethod(
 setMethod(
           f="demultiplex",
           signature="ShortReadQ",
-          definition=function(obj,barcodes=c(),barcodes.qty=12,
-                              barcode.length=6, edition.dist=2, 
-                              type=c("independant","within"),index.only=FALSE){
+          definition=function(obj,barcodes=c(),
+                              barcodes.qty=12,
+                              barcode.length=6,
+                              edition.dist=2,
+                              type=c("independant","within"),
+                              index.only=FALSE,
+                              mc.cores=1L){
             return(
                    demultiplex(sread(obj),barcodes=barcodes,barcodes.qty=barcodes.qty,barcode.length=barcode.length, edition.dist=edition.dist, type=type,index.only=index.only)
                    )
@@ -327,7 +352,7 @@ setMethod(
                               barcode.length=6,show.barcode=20,...){
 
             ## TODO check that we got barcodes
-            
+
             ## check the input
             types <- eval(formals("barcodePlot")$type)
             if(!type %in% types){
@@ -337,7 +362,7 @@ setMethod(
                          "is not part of the supported types:",
                          paste(types,collapse=", ")))
             }
-            
+
             ## get the barcodes
             barcodes <- switch(type,
                                independant=DNAStringSet(as.character(alignData(obj)$multiplexIndex)),
@@ -355,14 +380,14 @@ setMethod(
             x.lim=c(0,1)
             y.lim=c(0,show.barcode)
             p.main=""
-            
+
             ## upd defaults
             if(length(args)>=1){
               ## check if xlim was provided
               if("xlim" %in% names(args)){
                 x.lim=rev(1-args$xlim)
               }
-              
+
               ## check if ylim was provided
               if("ylim" %in% names(args)){
                 y.lim=args$ylim
@@ -373,7 +398,7 @@ setMethod(
                 p.main=args$main
               }
             }
-            
+
             ## get remaining args
             args <- args[!names(args)%in%c("xlim","ylim","main")]
 
@@ -388,7 +413,7 @@ setMethod(
             axis(3,labels=rev(seq(0,1,0.5)),at=seq(0,1,0.5))
             mtext("barcodes frequency",side=3,at=0.5,line=3)
             mtext(p.main,side=1,cex=par("cex.main"))
-            
+
             ## return
             invisible(freqs)
           })
@@ -402,7 +427,7 @@ setMethod(
                               barcode.length=6,show.barcode=20,...){
 
             ## TODO check that we got barcodes
-            
+
             ## check the input
             types <- eval(formals("barcodePlot")$type)
             if(!type %in% types){
@@ -412,7 +437,7 @@ setMethod(
                          "is not part of the supported types:",
                          paste(types,collapse=", ")))
             }
-            
+
             ## get the barcodes
             barcodes <- narrow(obj,start=1,width=barcode.length)
 
@@ -427,14 +452,14 @@ setMethod(
             x.lim=c(0,1)
             y.lim=c(0,show.barcode)
             p.main=""
-            
+
             ## upd defaults
             if(length(args)>=1){
               ## check if xlim was provided
               if("xlim" %in% names(args)){
                 x.lim=rev(1-args$xlim)
               }
-              
+
               ## check if ylim was provided
               if("ylim" %in% names(args)){
                 y.lim=args$ylim
@@ -445,7 +470,7 @@ setMethod(
                 p.main=args$main
               }
             }
-            
+
             ## get remaining args
             args <- args[!names(args)%in%c("xlim","ylim","main")]
 
@@ -460,7 +485,7 @@ setMethod(
             axis(3,labels=rev(seq(0,1,0.5)),at=seq(0,1,0.5))
             mtext("barcodes frequency",side=3,at=0.5,line=3)
             mtext(p.main,side=1,cex=par("cex.main"))
-            
+
             ## return
             invisible(freqs)
           })
@@ -482,7 +507,7 @@ setMethod(
 
 ## additional filters
 ##' @export chastityFilter
-chastityFilter <- function(.name="Illumina Chastity Filter") 
+chastityFilter <- function(.name="Illumina Chastity Filter")
 {
   srFilter(function(x){
     if(any(rownames(varMetadata(alignData(x))) == "filtering")){
@@ -500,4 +525,11 @@ naPositionFilter <- function(.name="NA Position Filter"){
   srFilter(function(x){
     !is.na(position(x))
   },name=.name)
+}
+
+##' an internal function
+".getBpParam" <- function(mc.cores=1L){
+  return(switch(as.character(mc.cores),
+                "1"=SerialParam(),
+                MulticoreParam(workers=mc.cores)))
 }
