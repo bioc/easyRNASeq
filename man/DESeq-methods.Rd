@@ -3,8 +3,11 @@
 \docType{methods}
 \name{DESeq additional methods}
 \alias{DESeq additional methods}
+\alias{locfit}
+\alias{lp}
 \alias{multivariateConditions}
 \alias{multivariateConditions,CountDataSet-method}
+\alias{newCountDataSet}
 \alias{plotDispLSD}
 \alias{plotDispLSD,CountDataSet-method}
 \alias{plotDispersionEstimates}
@@ -56,7 +59,7 @@ whether the data to analyze is multivariate or not}
 \code{multivariateConditions} is simply an accessor for the
 \code{multivariateConditions} slot of a
 \code{\linkS4class{CountDataSet}} object}
-\item{\code{plotDispLSD} is a function silimar to
+\item{\code{plotDispLSD} is a function similar to
 \code{\link[DESeq:plotDispEsts]{plotDispEsts}}
 that adds a density estimate as a colored heatmap from grey (few) to yellow
 (many).}

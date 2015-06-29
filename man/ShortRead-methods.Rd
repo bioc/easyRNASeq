@@ -3,6 +3,7 @@
 \docType{methods}
 \name{ShortRead additional methods}
 \alias{ShortRead additional methods}
+\alias{alignData}
 \alias{barcodePlot}
 \alias{barcodePlot,AlignedRead-method}
 \alias{barcodePlot,DNAStringSet-method}
@@ -18,7 +19,7 @@
 \title{Methods extending the ShortRead package functionalities}
 \usage{
 demultiplex(obj,barcodes=c(),barcodes.qty=12,barcode.length=6,
-edition.dist=2,type=c("independant","within"),index.only=FALSE)
+edition.dist=2,type=c("independant","within"),index.only=FALSE,mc.cores=1L)
 barcodePlot(obj,barcodes=c(),type=c("independant","within"),
 barcode.length=6,show.barcode=20,...)
 chastityFilter(.name="Illumina Chastity Filter")
@@ -45,6 +46,10 @@ established by Lefrancois P et al., BMC Genomics, 2009}
 
 \item{index.only}{simply return the index and not the barcode themselves.}
 
+\item{mc.cores}{A parameter ultimately passed to srdistance to enable
+parallel processing on mc.cores. On linux and Mac only, windows task remain
+serially processed.}
+
 \item{.name}{An internal string describing the filter}
 
 \item{show.barcode}{An integer specifying how many barcodes should be
@@ -64,13 +69,16 @@ instance.  }
 These are functions extending the ShortRead packages capabilities:
 }
 \details{
-\itemize{ \item\code{barcodePlot} Creates a plot showing the barcode
+\itemize{
+\item\code{barcodePlot} Creates a plot showing the barcode
 distribution of a multiplexed sequencing library.
 \item\code{chastityFilter} Creates a \code{\linkS4class{SRFilter}} instance
 that filters SolexaExport read according to the chastity filtering value.
 \item\code{demultiplex} Split a single \code{\linkS4class{AlignedRead}}
 object into a list of \code{\linkS4class{AlignedRead}} objects according to
-the barcodes provided by the user.  \item\code{naPositionFilter} Creates a
+the barcodes provided by the user. It supports multicore processing
+but has a default serial behaviour.
+\item\code{naPositionFilter} Creates a
 \code{\linkS4class{SRFilter}} instance that filters SolexaExport read
 having an NA position.  }
 

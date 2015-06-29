@@ -165,7 +165,7 @@ NULL
 ##' sapply strand "strand<-" table unique
 ##' @importMethodsFrom Biostrings type
 ##' @importMethodsFrom DESeq estimateSizeFactors estimateDispersions
-##' @importMethodsFrom genomeIntervals seq_name
+##' @importMethodsFrom genomeIntervals
 ##' @importMethodsFrom GenomeInfoDb seqinfo seqlengths "seqlengths<-"
 ##' seqlevels "seqlevels<-" seqnames "seqnames<-"
 ##' @importMethodsFrom GenomicAlignments cigar summarizeOverlaps

@@ -9,7 +9,6 @@
 \alias{RangedData-class}
 \alias{RangedSummarizedExperiment-class}
 \alias{SRFilterResult}
-\alias{alignData}
 \alias{assay}
 \alias{chromosomeFilter}
 \alias{compose}
@@ -95,6 +94,7 @@ The class RNAseq specification:
 
 	The imported packages:
 	\code{\link[biomaRt:useMart]{biomaRt}}
+  \code{\link[BiocParallel:BiocParallel-package]{BiocParallel}}
 	\code{\link[edgeR:DGEList]{edgeR}}
 	\code{\link[genomeIntervals:Genome_intervals_stranded-class]{genomeIntervals}}
 	\code{\link[Biostrings:XString-class]{Biostrings}}
@@ -114,13 +114,17 @@ The class RNAseq specification:
   \itemize{
     \item{Classes}{
       \code{\linkS4class{BamFileList}}
+      \code{\linkS4class{CountDataSet}}
       \code{\linkS4class{RangedData}}
       \code{\linkS4class{RangedSummarizedExperiment}}
     }
     \item{Functions/Methods}{
+      \code{\link[DESeq:estimateDispersions]{DESeq estimate size factor and
+      estimate dispersion functions}}
       \code{\link[SummarizedExperiment:RangedSummarizedExperiment-class]{
         The RangedSummarizedExperiment assay accessor}
       }
+      \code{\link[locfit:locfit]{The locfit function}}
       \code{\link[Rsamtools:BamFileList]{The BamFileList constructor}}
       \code{\link[IRanges:IRanges-constructor]{The IRanges constructor}}
       \code{\link[IRanges:RangedData-class]{The RangedData constructor}}

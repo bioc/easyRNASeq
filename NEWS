@@ -3,6 +3,9 @@ CHANGES IN VERSION 2.5.3
 
   o Ported changed from release version 2.4.1
 
+  o Adapted to the genomeIntervals API changes (change from seq_name to seqnames and
+  addition of the coercion methods to GRanges and consort).
+
 CHANGES IN VERSION 2.5.2
 -------------------------
 
