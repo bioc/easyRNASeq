@@ -27,8 +27,8 @@ or \code{\link[edgeR:DGEList]{edgeR}}.
 \tabular{ll}{
 Package: \tab easyRNASeq\cr
 Type: \tab Package\cr
-Version: \tab 2.4.1\cr
-Date: \tab 2015-06-26\cr
+Version: \tab 2.4.2\cr
+Date: \tab 2015-06-30\cr
 License: \tab Artistic-2.0\cr
 LazyLoad: \tab yes\cr
 Depends: \tab methods, parallel, Biobase, BiocGenerics, biomaRt, Biostrings, edgeR, DESeq, genomeIntervals, GenomeInfoDb, GenomicAlignments, GenomicRanges, graphics, IRanges, LSD, Rsamtools, S4Vectors, ShortRead, utils\cr
