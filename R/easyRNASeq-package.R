@@ -158,7 +158,7 @@ NULL
 ##' @importMethodsFrom Biobase fData varMetadata
 ##' @importMethodsFrom BiocGenerics annotation cbind clusterApply
 ##' colnames counts duplicated estimateDispersions estimateSizeFactors
-##' eval get intersect lapply match order paste pmax rbind rownames sapply
+##' eval fileName get intersect lapply match order paste pmax rbind rownames sapply
 ##' strand "strand<-" table unique
 ##' @importMethodsFrom Biostrings type
 ##' @importMethodsFrom DESeq estimateSizeFactors estimateDispersions

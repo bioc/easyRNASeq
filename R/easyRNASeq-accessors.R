@@ -149,8 +149,8 @@ setMethod(
 setMethod(
           f="fileName",
           signature="RNAseq",
-          definition=function(obj){
-            obj@fileName
+          definition=function(object,...){
+            object@fileName
           })
 
 setMethod(
