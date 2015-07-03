@@ -1,5 +1,5 @@
 ##' Count methods for RNAseq object
-##' 
+##'
 ##' Summarize the read counts per exon, feature, gene, transcript or island.
 ##' \itemize{
 ##' \item{\code{exonCounts}: for that summarization, reads are
@@ -26,15 +26,15 @@
 ##' annotation object need to have both the "feature" and "transcript" fields
 ##' defined.  }
 ##' }
-##' 
+##'
 ##' \dots{} for \itemize{
 ##' \item{geneCounts: additional options for the
 ##' \code{\link[easyRNASeq:easyRNASeq-summarization-internal-methods]{.geneModelSummarization}}}
 ##' \item{islandCounts: additional options for
 ##' \code{\link[easyRNASeq:easyRNASeq-island-methods]{findIslands}} }}
-##' 
+##'
 ##' @aliases exonCounts exonCounts,RNAseq-method
-##' featureCounts featureCounts,RNAseq-method 
+##' featureCounts featureCounts,RNAseq-method
 ##' geneCounts geneCounts,RNAseq-method
 ##' islandCounts islandCounts,RNAseq-method
 ##' transcriptCounts transcriptCounts,RNAseq-method
@@ -61,7 +61,7 @@
 ##' \code{\link[easyRNASeq:easyRNASeq-island-methods]{findIslands}}
 ##' @keywords methods
 ##' @examples
-##' 
+##'
 ##' 	\dontrun{
 ##' 	## create an RNAseq object
 ##' 	## summarizing 4 bam files by exons
@@ -112,7 +112,7 @@ setMethod(
               seqlevels(genomicAnnotation(obj)) <- seqlevels(genomicAnnotation(obj))[seqlevels(genomicAnnotation(obj)) %in% names(readCoverage(obj))]
             }
             exCounts <- .doBasicCount(obj)
-            
+
             ## FIXME - names are not ordered in the right way!!!
             names(exCounts) <- .getName(obj,"exons")
             readCounts(obj)<-.extendCountList(readCounts(obj),exCounts,"exons",filename=fileName(obj))
@@ -154,7 +154,7 @@ setMethod(
             if(! from %in% c("exons","features")){
               stop("To work, the 'from' arguments should be one of 'exons', 'features'")
             }
-            
+
             ## check if we have the exons summary already
             if(is.null(readCounts(obj,from))){
               obj <- switch(from,
@@ -162,9 +162,9 @@ setMethod(
                             "features" = featureCounts(obj)
                             )
             }
-            
+
             ## summarize these counts
-            tAgg <- stats::aggregate(readCounts(obj,from),list(transcript=.getName(obj,"transcripts")),sum)
+            tAgg <- aggregate(readCounts(obj,from),list(transcript=.getName(obj,"transcripts")),sum)
             tCounts<-tAgg[,-1,drop=FALSE]
             rownames(tCounts)<-tAgg$transcript
             readCounts(obj)<-.extendCountList(readCounts(obj),tCounts,"transcripts",filename=fileName(obj))
@@ -178,7 +178,7 @@ setMethod(
           f="geneCounts",
           signature="RNAseq",
           definition=function(obj,summarization=c("bestExons","geneModels"),...){
-            
+
             ## check the summarization methods
             summarizations <- eval(formals("geneCounts")$summarization)
             if(!summarization %in% summarizations){
@@ -188,7 +188,7 @@ setMethod(
                          "is not part of the supported summarizations:",
                          paste(summarizations,collapse=", ")))
             }
-            
+
             ## switch
             gCounts <- switch(EXPR=summarization,
                               "bestExons"={.bestExonSummarization(obj)},
@@ -200,7 +200,7 @@ setMethod(
                                     stop("Cannot execute the 'geneCounts' on a multiple sample 'RNAseq' object yet. Re-run the 'easyRNASeq' function with the 'count' argument 'genes' and the 'summarization' argument 'geneModels'.")
                                   } else {
                                     stop("No coverage information available. Use either the 'easyRNASeq' or 'fetchCoverage' methods first.")
-                                  }    
+                                  }
                                 }
 
                                 ## TODO do we need that?
@@ -213,7 +213,7 @@ setMethod(
                                 .geneModelSummarization(obj)
                               })
             readCounts(obj)<-.extendCountList(readCounts(obj),gCounts,"genes",subType=summarization,filename=fileName(obj))
-            
+
             ## return
             return(obj)
           })
@@ -223,12 +223,12 @@ setMethod(
           f="islandCounts",
           signature="RNAseq",
           definition=function(obj,force=FALSE,...){
-            
+
             ## check if readIsland exists, otherwise compute it
             if(is.null(readIslands(obj)$names)|force){
               obj <- findIslands(obj,...)
             }
-            
+
             ## summarize using it
             islands=as.integer(unlist(
               aggregate(
@@ -236,10 +236,10 @@ setMethod(
                         ranges(readIslands(obj)),
                         sum
                         )))
-            
+
             iCounts <- ceiling(islands/readLength(obj))
             names(iCounts) <- readIslands(obj)$names
-            readCounts(obj)<-.extendCountList(readCounts(obj),iCounts,"islands",filename=fileName(obj))		
+            readCounts(obj)<-.extendCountList(readCounts(obj),iCounts,"islands",filename=fileName(obj))
 
             ## return
             return(obj)

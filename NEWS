@@ -1,3 +1,16 @@
+CHANGES IN VERSION 2.4.3
+-------------------------
+
+ o Removed an unnecessary IRanges import (aggregate), which has been merged
+  with the stats package one.
+
+
+CHANGES IN VERSION 2.4.2
+-------------------------
+
+  o Removed a re-defined fileName generic overwriting a BiocGeneric one that
+  broke the build on SnowLeopard
+
 CHANGES IN VERSION 2.4.1
 -------------------------
 
