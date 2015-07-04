@@ -3,7 +3,7 @@
 ## roxygenize("../easyrnaseq-devel/",roclets=c('rd', 'collate', 'namespace'),clean=TRUE)
 
 ## to update the package versions
-# pkg <- c("Biobase","BiocGenerics","biomaRt","Biostrings",
+# pkg <- c("Biobase","BiocGenerics","BiocParallel","biomaRt","Biostrings",
 #          "DESeq","edgeR","GenomeInfoDb","genomeIntervals",
 #          "GenomicAlignments","GenomicRanges","SummarizedExperiment",
 #          "IRanges","LSD","Rsamtools","S4Vectors","ShortRead",
@@ -25,8 +25,8 @@
 ##' \tabular{ll}{
 ##' Package: \tab easyRNASeq\cr
 ##' Type: \tab Package\cr
-##' Version: \tab 2.5.3\cr
-##' Date: \tab 2015-06-24\cr
+##' Version: \tab 2.5.4\cr
+##' Date: \tab 2015-07-03\cr
 ##' License: \tab Artistic-2.0\cr
 ##' LazyLoad: \tab yes\cr
 ##' Depends: \tab methods, parallel, Biobase, BiocGenerics, biomaRt, Biostrings, edgeR, DESeq, genomeIntervals, GenomeInfoDb, GenomicAlignments, GenomicRanges, SummarizedExperiment, graphics, IRanges, LSD, Rsamtools, S4Vectors, ShortRead, utils\cr
@@ -170,8 +170,7 @@ NULL
 ##' @importMethodsFrom GenomicAlignments cigar summarizeOverlaps
 ##' @importMethodsFrom GenomicRanges assay assays "assays<-" colData "colData<-"
 ##' grglist rowRanges "rowRanges<-"
-##' "exptData<-" grglist rowRanges "rowRanges<-" SummarizedExperiment
-##' @importMethodsFrom IRanges aggregate as.list as.matrix as.table
+##' @importMethodsFrom IRanges as.list as.matrix as.table
 ##' "colnames<-" countOverlaps coverage elementLengths end "end<-" findOverlaps
 ##' gsub mean median narrow nchar queryHits ranges reduce rev "rownames<-" space
 ##' split start "start<-" sub  tolower "universe<-" unlist values which width

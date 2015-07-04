@@ -108,7 +108,7 @@
   ## select for the proper spaces
   gm.sel <- na.omit(match(names(readCoverage(obj)),names(geneModel(obj))))
   
-  gAgg <- stats::aggregate(
+  gAgg <- aggregate(
                             as.integer(
                                        unlist(
                                               aggregate(

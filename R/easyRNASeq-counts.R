@@ -164,7 +164,7 @@ setMethod(
             }
             
             ## summarize these counts
-            tAgg <- stats::aggregate(readCounts(obj,from),list(transcript=.getName(obj,"transcripts")),sum)
+            tAgg <- aggregate(readCounts(obj,from),list(transcript=.getName(obj,"transcripts")),sum)
             tCounts<-tAgg[,-1,drop=FALSE]
             rownames(tCounts)<-tAgg$transcript
             readCounts(obj)<-.extendCountList(readCounts(obj),tCounts,"transcripts",filename=fileName(obj))

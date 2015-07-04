@@ -166,13 +166,13 @@ setMethod(
                             "features"=.getWidth(obj)[match(rownames(mCounts),.getName(obj,"features"))],
                             "transcripts"= {
                               ## aggregate first
-                              agg <- stats::aggregate(.getWidth(obj),list(transcript=.getName(obj,"transcripts")),sum)
+                              agg <- aggregate(.getWidth(obj),list(transcript=.getName(obj,"transcripts")),sum)
                               ## then sort
                               agg[match(rownames(mCounts),agg[,1]),2]},
                             "bestExons"= .getWidth(obj)[match(rownames(mCounts),.getName(obj,"exons"))],
                             "geneModels"= {
                               ## aggregate
-                              agg<-stats::aggregate(width(geneModel(obj)),list(gene=geneModel(obj)$gene),sum)
+                              agg<- aggregate(width(geneModel(obj)),list(gene=geneModel(obj)$gene),sum)
                               ## sort
                               agg[match(rownames(mCounts),agg[,1]),2]},
                             ## same as that: as(by(width(geneModel(obj)),geneModel(obj)$gene,sum),"vector") but faster
