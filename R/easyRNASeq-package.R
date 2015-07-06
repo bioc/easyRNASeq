@@ -25,8 +25,8 @@
 ##' \tabular{ll}{
 ##' Package: \tab easyRNASeq\cr
 ##' Type: \tab Package\cr
-##' Version: \tab 2.5.4\cr
-##' Date: \tab 2015-07-03\cr
+##' Version: \tab 2.5.5\cr
+##' Date: \tab 2015-07-06\cr
 ##' License: \tab Artistic-2.0\cr
 ##' LazyLoad: \tab yes\cr
 ##' Depends: \tab methods, parallel, Biobase, BiocGenerics, biomaRt, Biostrings, edgeR, DESeq, genomeIntervals, GenomeInfoDb, GenomicAlignments, GenomicRanges, SummarizedExperiment, graphics, IRanges, LSD, Rsamtools, S4Vectors, ShortRead, utils\cr
