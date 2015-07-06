@@ -1,5 +1,5 @@
 ##' Fetch genic annotation from a gff/gtf file or using biomaRt
-##' 
+##'
 ##' The annotation can be retrieved in two ways
 ##' \itemize{
 ##' \item{biomaRt}{Use biomaRt and Ensembl to get organism specific annotation.}
@@ -19,14 +19,14 @@
 ##' to be clever in this case and guess the correspondance. However, it is
 ##' not always obvious. Organisms were this has been checked can be listed with
 ##' the \emph{knownOrganisms} function.
-##' 
+##'
 ##' \dots{} are for additional arguments, passed to the \pkg{biomaRt}
 ##' \code{\link[biomaRt:getBM]{getBM}} function or to the
 ##' \code{\link[easyRNASeq:easyRNASeq-annotation-internal-methods]{readGffGtf}}
 ##' internal function that takes an optional arguments: annotation.type that
 ##' default to "exon". This is used to select the proper rows of the gff or gtf
 ##' file.
-##' 
+##'
 ##' @aliases fetchAnnotation-deprecated knownOrganisms-deprecated
 ##' @name easyRNASeq deprecated annotation methods
 ##' @rdname easyRNASeq-deprecated-annotation-methods
@@ -36,7 +36,7 @@
 ##' @param ignoreWarnings set to TRUE (bad idea! they have a good reason to be
 ##' there) if you do not want warning messages.
 ##' @param ... See details
-## TODO complain to roxygen2 about \dots 
+## TODO complain to roxygen2 about \dots
 ##' @return \itemize{
 ##' \item For fetchAnnotation: A \code{\linkS4class{RangedData}} containing the fetched
 ##' annotations.
@@ -45,7 +45,7 @@
 ##' @author Nicolas Delhomme
 ##' @keywords connection data methods
 ##' @examples
-##' 
+##'
 ##' 	\dontrun{
 ##' 	library("RnaSeqTutorial")
 ##' 	obj <- new('RNAseq',
@@ -53,7 +53,7 @@
 ##' 		readLength=36L,
 ##' 		chrSize=as.list(seqlengths(Dmelanogaster))
 ##' 		)
-##' 
+##'
 ##' 	obj <- fetchAnnotation(obj,
 ##' 				annotationMethod="gff",
 ##'                                 filename=system.file(
@@ -63,7 +63,7 @@
 ##' 	}
 ##'
 ##' knownOrganisms()
-##' 
+##'
 setMethod(
           f="fetchAnnotation",
           signature="RNAseq",
@@ -74,21 +74,21 @@ setMethod(
 
             ## deprecated
             .Deprecated("getAnnotation")
-              
+
             ## check if method was provided
             annotationMethod <- match.arg(annotationMethod)
-            
+
             ## check if method was provided the old way
             dots <- list(...)
             if ("method" %in% names(dots)){
-              
+
                 ## warn
                 warning(
                     "The 'method' argument to fetchAnnotation is deprecated. Use 'annotationMethod' instead.")
-                
+
                 ## get the methods
                 methods <- eval(formals("fetchAnnotation")$annotationMethod)
-                
+
                 ## check the provided one
                 if(! dots$method %in% methods){
                     stop(paste(
@@ -99,7 +99,7 @@ setMethod(
                 }
                 annotationMethod <- dots$method
             }
-            
+
             ## switch depending on the annotationMethod
                         exon.range <- switch(EXPR=annotationMethod,
                                  "biomaRt"={.getBmRange(AnnotParam(datasource=organismName(obj)),...)},
@@ -108,11 +108,11 @@ setMethod(
                                  )
 
             ## convert it to a GRangesList
-            exon.range <- split(exon.range,exon.range$seqnames)
-            
+            exon.range <- split(exon.range,seqnames(exon.range))
+
             ## update the obj
             genomicAnnotation(obj)<-exon.range
-            
+
             ## return
             return(obj)
           })
@@ -125,7 +125,7 @@ setMethod(
           })
 
 ##' Get genic annotation from a gff3/gtf file or using biomaRt
-##' 
+##'
 ##' The annotation can be retrieved in two ways
 ##' \itemize{
 ##' \item{biomaRt}{Use biomaRt and Ensembl to get organism specific annotation.}
@@ -143,14 +143,14 @@ setMethod(
 ##' \pkg{genomeIntervals} \code{\link[genomeIntervals:readGff3]{readGff3}} is
 ##' used to import the data.}
 ##' }
-##' 
+##'
 ##' \dots{} are for additional arguments, passed to the \pkg{biomaRt}
 ##' \code{\link[biomaRt:getBM]{getBM}} function or to the
 ##' \code{\link[easyRNASeq:easyRNASeq-annotation-internal-methods]{readGffGtf}}
 ##' internal function that takes an optional arguments: annotation.type that
 ##' default to "exon". This is used to select the proper rows of the gff or gtf
 ##' file.
-##' 
+##'
 ##' @aliases getAnnotation getAnnotation,AnnotParam-method
 ##' @name easyRNASeq annotation methods
 ##' @rdname easyRNASeq-annotation-methods
@@ -162,7 +162,7 @@ setMethod(
 ##' @author Nicolas Delhomme
 ##' @keywords connection data methods
 ##' @examples
-##' 
+##'
 ##'   \dontrun{
 ##' 	library("RnaSeqTutorial")
 ##'   getAnnotation(
@@ -175,18 +175,18 @@ setMethod(
 ##'   		type="gff3"
 ##'   ))
 ##' }
-##' 
+##'
 setMethod(
   f="getAnnotation",
   signature="AnnotParam",
   definition=function(obj,verbose=FALSE,...){
-    
+
     ## first validate
     if(verbose){
       message("Validating the annotation source")
     }
     .validate(obj,verbose=verbose)
-    
+
     ## then extract
     if(verbose){
       message("Fetching the annotation")

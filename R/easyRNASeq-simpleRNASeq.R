@@ -269,7 +269,7 @@ setMethod(f="simpleRNASeq",
             ## to accept a GRanges and not a GRangesList
             rowRanges(sexp) <- switch(precision(param),
                                     "read"={split(grngs,mcols(grngs)[,sub("s$","",countBy(param))])},
-                                    "bp"={split(grngs,grngs$seqnames)})
+                                    "bp"={split(grngs,seqnames(grngs))})
 
             if(verbose){
               message("==========================")

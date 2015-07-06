@@ -1,6 +1,6 @@
 ## TODO update the returned values in the Roxygen doc
 ##' Internal methods of RNAseq objects
-##' 
+##'
 ##' These are generic internal methods:
 ##' \itemize{
 ##' \item .catn Just some pretty printing.
@@ -14,12 +14,12 @@
 ##' \item .getArguments For a given function returns the arguments
 ##' passed as part of the \dots{} that match that function formals.
 ##' \item .getName Get the genomicAnnotation object names. Necessary to deal
-##' with the different possible annotation object: \code{RangedData}, 
+##' with the different possible annotation object: \code{RangedData},
 ##' \code{GRanges} or \code{GRangesList}.
 ##' \item .getWidth Get the genomicAnnotation withs. Necessary to deal
-##' with the different possible annotation object: \code{RangedData}, 
+##' with the different possible annotation object: \code{RangedData},
 ##' \code{GRanges} or \code{GRangesList}.
-##' \item .list.files check the arguments passed through the \dots to select 
+##' \item .list.files check the arguments passed through the \dots to select
 ##' only the valid ones (deprecated).
 ##' \item .normalizationDispatcher a function to dispatch
 ##' the normalization depending on the 'outputFormat' chosen by the user.
@@ -34,8 +34,8 @@
 ##' the \link[GenomicRanges:GRanges-class]{GenomicRanges} strand replace
 ##' function
 ##' }
-##' 
-##' @aliases .catn .checkArguments .convertToUCSC 
+##'
+##' @aliases .catn .checkArguments .convertToUCSC
 ##' .extractIRangesList .getArguments .getName
 ##' .list.files .list.files-deprecated .getWidth
 ##' .normalizationDispatcher reduce reduce,RNAseq-method strand
@@ -82,7 +82,7 @@
 ".extractIRangesList" <- function(obj,chr.sel=c()){
   ## the default is bam (easy, it has no class, just a list)
   ## and only the aligned reads are kept at this point
-  
+
   ## pre-filter
   if(!length(chr.sel)==0){
     obj <- switch(class(obj),
@@ -96,18 +96,18 @@
                     sel <- obj$rname %in% chr.sel
                     lapply(obj,"[",sel)
                   }
-                  )      
+                  )
   }
 
   ## TODO check if countBam is not faster for both bam and GAlignments
-  
+
   ## get the ranges and lib sizes
   return(switch(class(obj),
                 "AlignedRead" = {
                   if(any(is.na(position(obj)))){
                     stop("Your read file contains NA position, please filter for them. Check '?naPositionFilter'.")
                   }
-                  
+
                   ## warn for multiple mapping
                   if(sum(duplicated(id(obj)))>0){
                       warning("Your alignment file potentially contains multi-mapping reads. This would bias the counting.")
@@ -118,18 +118,18 @@
                        lib.size=length(obj))
                 },
                 "GAlignments" = {
-                  
+
                   ## we want only the mapped regions
                   grnglist <- grglist(obj,drop.D.range=TRUE)
-                  
+
                   if(! "NH" %in% colnames(mcols(grnglist[[1]]))){
                     warning("Your alignment file misses the NH tag. It may contains multi-mapping reads, which would bias the counting.")
-                  } else {                  
+                  } else {
                     if(any(as.data.frame(grnglist)$NH)>1){
                       warning("Your alignment file potentially contains multi-mapping reads. This would bias the counting.")
                     }
                   }
-                  
+
                   list(rng.list=split(unlist(ranges(grnglist),use.names=FALSE),unlist(seqnames(grnglist),use.names=FALSE)),
                        lib.size=length(unique(names(obj))))
                 },
@@ -146,24 +146,24 @@
 ## old arguments for fetchCoverage
 ## stream the bam reading
 ".stream" <- function(bamFile,yieldSize=100000,verbose=FALSE){
-    
+
   ## create a stream
   stopifnot(is(bamFile,"BamFile"))
-  
+
   ## set the yieldSize if it is not set already
   yieldSize(bamFile) <- yieldSize
-  
+
   ## open it
   open(bamFile)
-  
+
   ## verb
   if(verbose){
     message(paste("Streaming",basename(path(bamFile))))
   }
-  
+
   ## create the output
   out <- GAlignments()
-  
+
   ## process it
   while(length(chunk <- readGAlignments(bamFile,param=ScanBamParam(tag="NH")))){
     if(verbose){
@@ -171,10 +171,10 @@
     }
     out <- c(out,chunk)
   }
-  
+
   ## close
   close(bamFile)
-  
+
   ## return
   return(out)
 }
@@ -183,27 +183,27 @@
 ## stream the bam reading for counting
 ### ===================================
 ".streamCount" <- function(bamFile,features,df,param,verbose=TRUE){
-  
+
   ## libs
   require(easyRNASeq)
-  
+
   ## create a stream
   stopifnot(is(bamFile,"BamFile"))
-  
+
   ## set the yieldSize if it is not set already
   if(is.na(yieldSize(bamFile))){
     yieldSize(bamFile) <- yieldSize(param)
   }
-  
+
   ## get the param
   stranded <- df[basename(bamFile),"Stranded"]
   paired <- df[basename(bamFile),"Paired"]
-  
+
   ## set the mode
   mode <- ifelse(stranded,
                  "IntersectionNotEmpty",
                  "Union")
-  
+
   ### ===================================
   ## open it
   open(bamFile)
@@ -219,24 +219,24 @@
                   ifelse(stranded,
                          "stranded; only correct strand alignments will be considered.",
                          "unstranded; overlapping features will be ignored.")))
-    
+
     ## precision and mode
     message(paste("The summarization is by '",
                   precision(param),
                   "' and the mode is: ",
                   mode,".",sep=""))
   }
-  
+
   ### ===================================
   ## create the output
   ## we want a vector of known length
   counts <- vector(mode="integer",length=length(features))
-  
+
   ### ===================================
   ## an internal function
   ### ===================================
   ".local" <- function(chunk,param,stranded,mode){
-    
+
     ## switch based on precision
     switch(
       precision(param),
@@ -248,7 +248,7 @@
                                  mode=mode))$counts
       },
       "bp"={
-          stop("This method has not been implemented yet.")
+          stop("The resolution method 'bp' has not been implemented yet.")
           ## Remove Multiple hits
           ## TODO is that needed since interfeature is TRUE
           if(all(is.na(mcols(chunk)$NH))){
@@ -257,20 +257,20 @@
                           "has no NH (number of hit) tag.",
                           "Multimapping cannot be assessed and reads are considered",
                           "uniquely mapping."))
-          } else {    
+          } else {
             sel <- mcols(chunk)$NH == 1
             message(paste(round(sum(sel)/length(sel)*100,digits=2),
                           "percent of which are uniquely mapping."))
             message("Multimapping reads are discarded.")
             chunk <- chunk[sel]
           }
-          
-          
-          
-          ## directly get the coverage?  
-          
+
+
+
+          ## directly get the coverage?
+
           ## stream the bam file
-          
+
           ## if paired get the fragments
           ## TODO is the name match necessary ?? or does the function do it
           ## TODO valid.names, obj, rL and bp.coverage are not defined, this need to be edited
@@ -286,7 +286,7 @@
           #                                           width=as.list(chrSize(obj)[s.sel]))})
         })
   }
-  
+
   ## process it
   if(paired){
     while(length(chunk <- readGAlignmentPairs(bamFile,param=ScanBamParam(tag="NH")))){
@@ -303,13 +303,13 @@
       counts <- counts + .local(chunk,param,stranded,mode)
     }
   }
-  
+
   ## close
   if(verbose){
     message(paste("Done with",basename(path(bamFile))))
   }
   close(bamFile)
-  
+
   ## return
   return(counts)
 }
@@ -319,10 +319,10 @@
 
   ## libs
   require(easyRNASeq)
-  
+
   ## create a stream
   stopifnot(is(bamFile,"BamFile"))
-  
+
   ## set the yieldSize if it is not set already
   if(is.na(yieldSize(bamFile))){
     yieldSize(bamFile) <- yieldSize
@@ -332,13 +332,13 @@
   if(verbose){
     message(paste("Streaming",basename(path(bamFile))))
   }
-  
+
   ## open it
   open(bamFile)
 
   ## create the output
   out <- 0
-  
+
   ## process it
   ## the parameter are minimized to optimize the reading speed
   while(length(chunk <- scanBam(bamFile,param=ScanBamParam(flag=scanBamFlag(isUnmappedQuery=FALSE),
@@ -348,13 +348,13 @@
     }
     out <- out+length(chunk)
   }
-  
+
   ## close
   close(bamFile)
-  
+
   ## return
   return(out)
-  
+
 }
 
 ## stream the parameter extraction
@@ -367,18 +367,18 @@
 
   ## libs
   require(easyRNASeq)
-  
+
   ## create a stream
   stopifnot(is(bamFile,"BamFile"))
-  
+
   ## set the yieldSize if it is not set already
   if(is.na(yieldSize(bamFile))){
     yieldSize(bamFile) <- yieldSize
   }
-  
+
   ## open it
   open(bamFile)
-  
+
   ## verbose
   if(verbose){
     message(paste("Extracting parameter from",basename(path(bamFile))))
@@ -398,7 +398,7 @@
   tab <- table(countOverlaps(grng[strand(grng)=="+"],grng[strand(grng)=="-"],
                              ignore.strand=TRUE)==0)
   prop <- tab/sum(tab)
-  
+
   ## Create a DataFrame containing:
   outDF <- DataFrame(
                      ## a. paired
@@ -426,10 +426,10 @@
                                        round(prop["TRUE"]*100,digits=2),
                                        "percent appear to be stranded."))
                      )
-  
+
   ## close
   close(bamFile)
-  
+
   ## return
   return(outDF)
 }
@@ -444,17 +444,17 @@
   if(is.factor(chr.names)){
     chr.names <- as.character(chr.names)
   }
-  
+
   if(organism!="custom"){
     ## TODO preprocess the names
     ## e.g. remove the .fa extension
 
     ## check that we do not already have valid names
     if(length(grep("chr",chr.names))==length(chr.names) & length(grep("MT|dmel_mitochondrion_genome",chr.names))==0){
-      return(chr.names)			
+      return(chr.names)
     }
   }
-  
+
   return(switch(tolower(organism),
                 "dmelanogaster"={
                   paste(
@@ -484,13 +484,13 @@
 
                   ## sanity checks
                   if(!is.data.frame(custom.map)){
-                    stop("Your custom map is not a data.frame as expected")                    
+                    stop("Your custom map is not a data.frame as expected")
                   }
 
                   if(length(colnames(custom.map)) != 2){
                     stop("Your custom map does not have the expected number (2) of columns")
                   }
-                  
+
                   if(!all(colnames(custom.map) %in% c("from","to"))){
                     stop("Your custom map does not follow the column names convention. They should be named 'from' and 'to'.")
                   }
@@ -499,7 +499,7 @@
                   if(is.factor(custom.map$from) | is.factor(custom.map$to)){
                     custom.map <- data.frame(apply(custom.map,2,as.character),stringsAsFactors=FALSE)
                   }
-                    
+
                   ## in case there are already valid
                   if(length(na.omit(match(chr.names,custom.map$to))) != length(custom.map$to)){
                     ## if not convert them
@@ -648,7 +648,7 @@ setReplaceMethod(
   dots <- dots[names(dots) %in% names(formals(fun=list.files))]
   dots <- dots[!names(dots) %in% c("path","pattern","full.names")]
   l.args <- c(list(path=path,pattern=pattern,full.names=TRUE),dots)
-  
+
   eval(parse(text=
              gsub("[\\]","\\\\\\\\",
                   paste("list.files(",
