@@ -1,18 +1,18 @@
 ##' Pretty print the content of classes from the easyRNASeq package.
-##' 
-##' Print information about a \code{\linkS4class{RNAseq}}, 
-##' \code{\linkS4class{AnnotParam}}, \code{\linkS4class{BamParam}} or 
+##'
+##' Print information about a \code{\linkS4class{RNAseq}},
+##' \code{\linkS4class{AnnotParam}}, \code{\linkS4class{BamParam}} or
 ##' \code{\linkS4class{RnaSeqParam}} object.
-##' 
-##' 
+##'
+##'
 ##' @name print methods
 ##' @rdname print-methods
 ##' @aliases print print,RNAseq-method print,AnnotParam-method print,BamParam-method
 ##' print,RnaSeqParam-method
 ##' @docType methods
-##' @param x An object from class \code{\linkS4class{RNAseq}}, 
+##' @param x An object from class \code{\linkS4class{RNAseq}},
 ##' \code{\linkS4class{AnnotParam}},
-##' \code{\linkS4class{BamParam}} or \code{\linkS4class{RnaSeqParam}} 
+##' \code{\linkS4class{BamParam}} or \code{\linkS4class{RnaSeqParam}}
 ##' @param verbose A logical to have a verbose or not output. Default to FALSE
 ##' For object of the \code{\linkS4class{RNAseq}} class only.
 ##' @param ... Additional arguments, currently unused.
@@ -27,8 +27,8 @@ setMethod(
             .catn(class(x), "annotation and data for", organismName(x), "containing:\n")
             ## annotations
             .catn("1) Annotations:\n")
-            
-            
+
+
             ## chromosomes
             if(verbose){
               .catn("\ta) Chromosome sizes:\n")
@@ -45,7 +45,7 @@ setMethod(
             } else {
               .catn("\ta)",length(chrSize(x)),"chromosomes\n")
             }
-            
+
             ## genomic Annotations (inc. geneModel and readIslands)
             if(verbose){
               .catn("\n\tb) Genomic annotations:\n")
@@ -59,7 +59,7 @@ setMethod(
               .catn("\n\tc)",length(geneModel(x)),"gene models\n")
               .catn("\n\td)",length(readIslands(x)),"read islands\n")
             }
-            
+
             ## data
             .catn("\n\n2) Data:")
             if(length(readLength(x))>1){
@@ -82,8 +82,8 @@ setMethod(
                                           ##                                          sum(readCoverage(x))/ unlist(chrSize(x)[sel])
                                           sapply(readCoverage(x),function(rC){sum(as.numeric(runLength(rC) * runValue(rC)))}
                                                  )/ unlist(chrSize(x)[sel])
-                                          
-                                          
+
+
                                           ),
                                    digits=2),
                             "X coverage.\n",
@@ -91,7 +91,7 @@ setMethod(
                 }
               }
             }
-            
+
             ## results
             if(length(readCounts(x))>0){
               .catn("\n3) Results:")
@@ -133,18 +133,22 @@ setMethod(
                        })
                 i<-i+1
               }
-            }            
+            }
           })
 
 setMethod(
   f="print",
   signature="AnnotParam",
   definition=function(x,...){
-    .catn(class(x),
-          " object set to retrieve '",
-          type(x),
-          "' formatted annotation from:",sep="")
-    .catn("\t",datasource(x))
+    switch(class(x),
+           "AnnotParamObject"=.catn("Annotation provided manually"),
+           "AnnotParamCharacter"={
+             .catn(class(x),
+                   " object set to retrieve '",
+                   type(x),
+                   "' formatted annotation from:",sep="")
+             .catn("\t",datasource(x))
+           })
   })
 
 setMethod(
