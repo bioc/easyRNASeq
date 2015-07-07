@@ -1,3 +1,9 @@
+CHANGES IN VERSION 2.4.5
+-------------------------
+
+  o Corrected a wrong signature for the AnnotParam constructor.
+
+
 CHANGES IN VERSION 2.4.4
 -------------------------
 
