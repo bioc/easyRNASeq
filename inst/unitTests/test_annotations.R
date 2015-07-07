@@ -22,8 +22,7 @@
   ### =======================
   ### object
   ### =======================
-  grngList <- split(
-    GRanges(
+  grngs <- GRanges(
       ranges=IRanges(
       start=c(10,30,100),
       end=c(21,53,123)),
@@ -31,10 +30,9 @@
       strand=c("+","+","-"),
       transcript=c("trA1","trA2","trB"),
       gene=c("gA","gA","gB"),
-      exon=c("e1","e2","e3")),
-    c("chr01","chr01","chr02"))
+      exon=c("e1","e2","e3"))
 
-  annotParam <- AnnotParam(datasource=grngList)
+  annotParam <- AnnotParam(datasource=grngs)
   checkTrue(easyRNASeq:::.validate(annotParam))
 
   ### =======================
