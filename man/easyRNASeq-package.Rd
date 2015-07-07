@@ -27,7 +27,7 @@ or \code{\link[edgeR:DGEList]{edgeR}}.
 \tabular{ll}{
 Package: \tab easyRNASeq\cr
 Type: \tab Package\cr
-Version: \tab 2.4.5\cr
+Version: \tab 2.4.6\cr
 Date: \tab 2015-07-07\cr
 License: \tab Artistic-2.0\cr
 LazyLoad: \tab yes\cr

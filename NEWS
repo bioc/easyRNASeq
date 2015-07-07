@@ -1,3 +1,10 @@
+CHANGES IN VERSION 2.4.6
+-------------------------
+
+  o Corrected a bug when asserting strandedness. Monotypic situations (all
+  stranded or all unstranded) were not handled properly. Another catch by
+  Michael Dondrup. Thanks again!
+
 CHANGES IN VERSION 2.4.5
 -------------------------
 
