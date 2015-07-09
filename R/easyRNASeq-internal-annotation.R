@@ -132,36 +132,24 @@
   ## subset for exons
   all.annotation <- all.annotation[all.annotation$type %in% ANNOTATION.TYPE["exon"],]
 
-  ## extract the attributes
-  gffAttr <- do.call(rbind,strsplit(all.annotation$gffAttributes," |;"))
+  ## transform the attrs into gff3 like attrs
+  all.annotation$gffAttributes <- .convertGffToGtfAttributes(all.annotation$gffAttributes)
 
-  ## identify the columns we need
-  sel <- match(GTF.FIELDS,gffAttr[1,]) + 1
+  ## get the attributes we require
+  attrs <- getGffAttribute(all.annotation,GTF.FIELDS)
 
-  ## gene
-  ## if we have no "ENSG"
-  last <- ifelse(length(grep("ENSG",gffAttr[,sel[1]]))==0,1000000L,19L)
-
-  ## remove possible annoyance
-  all.annotation$gene <- gsub(" |\"|;","",substr(gffAttr[,sel[1]],1,last))
-
-  ## transcript
-  all.annotation$transcript <- gsub(" |\"|;","",substr(gffAttr[,sel[2]],1,last))
-
-  ## exon ID
-  all.annotation$exon <- gsub(" |\"|;","",substr(gffAttr[,sel[3]],1,last))
+  ## process the mandatory fields - the first three GTF.FIELDS
+  all.annotation$gene <- attrs[,1]
+  all.annotation$transcript <- attrs[,2]
+  all.annotation$exon <- attrs[,3]
 
   ## gene name
   ## we can only have one NA: gene_name, if so, get the gene_id instead
-  if(is.na(sel[4])){
+  if(all(is.na(attrs[,4]))){
     all.annotation$gene.name <- all.annotation$gene
   } else {
-    all.annotation$gene.name <- gsub(" |\"|;","",gffAttr[,sel[4]])
+    all.annotation$gene.name <- attrs[,4]
   }
-
-  ## edit the attributes to remove the space after the semi-colon
-  ## otherwise genomeIntervals does not parse it accurately
-  all.annotation$gffAttributes <- .convertGffToGtfAttributes(all.annotation$gffAttributes)
 
   ## done
   return(as(all.annotation,"GRanges"))
@@ -170,6 +158,7 @@
 ".convertGffToGtfAttributes" <- function(attrs){
   attrs <- gsub("; ",";",attrs)
   attrs <- gsub(" ","=",attrs)
+  attrs <- gsub("\"","",attrs)
   return(attrs)
 }
 

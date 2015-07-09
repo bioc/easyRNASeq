@@ -3,13 +3,14 @@
 ## roxygenize("easyRNASeq/")
 
 ## to update the package versions
-# installed.packages()[c("Biobase","BiocGenerics","biomaRt","Biostrings",
-#                        "DESeq","edgeR","genomeIntervals","GenomicAlignments",
-#                        "GenomeInfoDb","GenomicRanges",
-#                        "IRanges","LSD","Rsamtools","S4Vectors","ShortRead",
-#                        "BiocStyle","BSgenome",
-#                        "BSgenome.Dmelanogaster.UCSC.dm3","GenomicFeatures",
-#                        "RnaSeqTutorial","RUnit"),"Version"]
+#  installed.packages()[c("Biobase","BiocGenerics","BiocParallel",
+#                         "biomaRt","Biostrings",
+#                         "DESeq","edgeR","genomeIntervals","GenomicAlignments",
+#                         "GenomeInfoDb","GenomicRanges",
+#                         "IRanges","LSD","Rsamtools","S4Vectors","ShortRead",
+#                         "BiocStyle","BSgenome",
+#                         "BSgenome.Dmelanogaster.UCSC.dm3","GenomicFeatures",
+#                         "RnaSeqTutorial","RUnit"),"Version"]
 
 ###==========================
 ### package details
@@ -23,8 +24,8 @@
 ##' \tabular{ll}{
 ##' Package: \tab easyRNASeq\cr
 ##' Type: \tab Package\cr
-##' Version: \tab 2.4.6\cr
-##' Date: \tab 2015-07-07\cr
+##' Version: \tab 2.4.7\cr
+##' Date: \tab 2015-07-09\cr
 ##' License: \tab Artistic-2.0\cr
 ##' LazyLoad: \tab yes\cr
 ##' Depends: \tab methods, parallel, Biobase, BiocGenerics, biomaRt, Biostrings, edgeR, DESeq, genomeIntervals, GenomeInfoDb, GenomicAlignments, GenomicRanges, graphics, IRanges, LSD, Rsamtools, S4Vectors, ShortRead, utils\cr
@@ -167,7 +168,7 @@ NULL
 ##' seqlevels "seqlevels<-" seqnames "seqnames<-"
 ##' @importMethodsFrom GenomicAlignments cigar summarizeOverlaps
 ##' @importMethodsFrom GenomicRanges assay assays "assays<-" colData "colData<-"
-##' "exptData<-" grglist rowRanges "rowRanges<-" SummarizedExperiment
+##' exptData "exptData<-" grglist rowRanges "rowRanges<-" SummarizedExperiment
 ##' @importMethodsFrom IRanges as.list as.matrix as.table
 ##' "colnames<-" countOverlaps coverage elementLengths end "end<-" findOverlaps
 ##' gsub mean median narrow nchar queryHits ranges reduce rev "rownames<-" space
@@ -205,7 +206,7 @@ NULL
 ##' @importFrom utils combn str
 ## and export!
 ##' @exportClass BamFileList RangedData SummarizedExperiment
-##' @exportMethod assay estimateDispersions estimateSizeFactors fileName seqlengths seqnames split srFilter SummarizedExperiment width writeFastq
+##' @exportMethod assay assays colData estimateDispersions estimateSizeFactors exptData fileName rowRanges seqinfo seqlengths seqnames split srFilter SummarizedExperiment width writeFastq
 ##' @export alignData chromosomeFilter compose BamFileList IRanges locfit lp newCountDataSet nFilter RangedData readAligned SRFilterResult
 NULL
 

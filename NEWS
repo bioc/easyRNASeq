@@ -1,3 +1,14 @@
+CHANGES IN VERSION 2.4.7
+-------------------------
+
+  o Export the SummarizedExperiment accessors: 'colData', 'exptData',
+  'rowRanges' and 'seqinfo'
+
+  o Fixed an issue with Ensembl gtf file parsing reported by Elie Antoun.
+
+  o Implemented a minimal sanity check to ensure that at least one genomic
+  reference is shared between the BAM and the annotation
+
 CHANGES IN VERSION 2.4.6
 -------------------------
 

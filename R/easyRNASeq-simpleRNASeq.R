@@ -277,6 +277,12 @@ setMethod(f="simpleRNASeq",
               message("==========================")
             }
 
+            if(length(intersect(seqnames(exptData(sexp)[[1]]),
+                             seqnames(seqinfo(sexp))))==0){
+              stop("There is no common genomic references between your BAM
+                   files and the provided annotation. Fix one or the other.")
+            }
+
             ## TODO implement sanity check of chromosome vs chromosome
             ## TODO implement sanity check of annotations
             ## validate the overlap between the BAM header and the annotation
