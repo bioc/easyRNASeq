@@ -278,6 +278,14 @@ setMethod(f="simpleRNASeq",
               message("==========================")
             }
 
+            ## TODO change this to use the metadata!!
+            stop("FIXME")
+            if(length(intersect(seqnames(exptData(sexp)[[1]]),
+                                seqnames(seqinfo(sexp))))==0){
+              stop("There is no common genomic references between your BAM
+                   files and the provided annotation. Fix one or the other.")
+            }
+
             ## TODO implement sanity check of chromosome vs chromosome
             ## TODO implement sanity check of annotations
             ## validate the overlap between the BAM header and the annotation
@@ -300,13 +308,13 @@ setMethod(f="simpleRNASeq",
 
             ## TODO, do as for the HistoneChIPseq package
             ## to store the data correctly
-             countAssay <- SimpleList(do.call(cbind,
-                                               parallelize(bamFiles,
-                                                           .streamCount,
-                                                           nnodes,
-                                                           rowRanges(sexp),
-                                                           df,
-                                                           param,verbose)))
+            countAssay <- SimpleList(do.call(cbind,
+                                             parallelize(bamFiles,
+                                                         .streamCount,
+                                                         nnodes,
+                                                         rowRanges(sexp),
+                                                         df,
+                                                         param,verbose)))
             names(countAssay) <- countBy(param)
             assays(sexp) <- endoapply(countAssay, unname)
 

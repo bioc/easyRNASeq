@@ -63,11 +63,13 @@
           ## well we suppose a 1000 is enough to check
           some.lines <- scan(datasource(obj),what=as.list(rep("character",9)),
                              nlines=1000,comment.char="#",quiet=!verbose,sep="\t")
-          gffAttr <- matrix(unlist(strsplit(some.lines[[9]]," |; *")),ncol=2,byrow=TRUE)
+
+          ## Get the attribute keys
+          attrKeys <- unique(sub(" .*","",unlist(strsplit(some.lines[[9]],"; *"))))
 
           ## stop if the attributes we need are not present
           ## we relax on gene_name
-          if(!all(GTF.FIELDS[!GTF.FIELDS %in% c("exon_number","gene_name")] %in% gffAttr[,1])){
+          if(!all(GTF.FIELDS[!GTF.FIELDS %in% c("exon_number","gene_name")] %in% attrKeys)){
             stop(paste("Your gtf file: ",datasource(obj)," does not contain all the required fields: ",
                        paste(GTF.FIELDS[!GTF.FIELDS %in% c("exon_number","gene_name")],collapse=", ")
                        ,".",sep=""))

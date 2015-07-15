@@ -1,5 +1,5 @@
 ##' Internal easyRNASeq annotation methods
-##' 
+##'
 ##' These are internal methods used to retrieve annotations tabularll
 ##' \code{.getBmRange}Use \code{\link[biomaRt:useMart]{biomaRt}} to get exon
 ##' annotations.  \code{.getGffRange}Use
@@ -10,10 +10,10 @@
 ##' define gene models.  \code{.readGffGtf}Use
 ##' \code{\linkS4class{Genome_intervals_stranded}} to get annotation from a gff
 ##' or gtf file. It is called from \code{getGffRange} and \code{getGtfRange}.
-##' 
+##'
 ##' To use multicore machines more efficiently, the default parallel package
 ##' will be used to parallelize the processing.
-##' 
+##'
 ##' @aliases .getBmRange .getGffRange .getGtfRange .geneModelAnnotation
 ##' .readGffGtf
 ##' @name easyRNASeq annotation internal methods
@@ -28,7 +28,7 @@
 ##' @param gAnnot a \code{\linkS4class{RangedData}} object containing exon
 ##' annotations
 ##' @param nbCore number of CPU cores to use
-##' @param obj an \code{\linkS4class{AnnotParam}} object containing the 
+##' @param obj an \code{\linkS4class{AnnotParam}} object containing the
 ##' necessary retrieval information (datasource and type)
 ##' @param ... Additional arguments, passed to more internal functions.
 ##' @return A \code{\linkS4class{RangedData}} containing the loaded or
@@ -41,15 +41,15 @@
 ## get the annot from biomaRt
 ### =======================
 ".getBmRange" <- function(obj,...){
-  
+
   ## for the developer
   stopifnot(is(obj,"AnnotParam"))
-  
+
   ## connect
   ensembl <- useMart(
     biomart="ensembl",
     dataset=paste(tolower(datasource(obj)),"gene_ensembl",sep="_"))
-  
+
   ## query
   ## we extract the necessary valid arguments from ...
   exon.annotation<-eval(parse(text=paste('getBM(
@@ -61,7 +61,7 @@
                            "exon_chrom_start",
                            "exon_chrom_end"),
                          mart=ensembl',.getArguments("getBM",...),")",sep="")))
-  
+
   ## convert and return
   return(GRanges(
     seqnames=exon.annotation$chromosome,
@@ -72,51 +72,51 @@
     exon=exon.annotation$ensembl_exon_id,
     transcript=exon.annotation$ensembl_transcript_id,
     gene=exon.annotation$ensembl_gene_id
-  ))  
+  ))
 }
 
 ### =======================
 ## get the Annot from a gff / gtf file
 ### =======================
 ".readGffGtf" <- function(obj,verbose=verbose){
-  
+
   ## read it (genomeIntervals is the fastest)
   all.annotation <- readGff3(datasource(obj),quiet=!verbose)
-  
+
   ## keep the annotation.type matching the annotation
-  return(all.annotation[all.annotation$type %in% ANNOTATION.TYPE,])  
+  return(all.annotation[all.annotation$type %in% ANNOTATION.TYPE,])
 }
 
 ### =======================
 ## get the annot from a gff file
 ### =======================
 ".getGffRange" <- function(obj,verbose=FALSE){
-	
+
   ## read the file and do sanity checks
   all.annotation <- .readGffGtf(obj,verbose=verbose)
-  
+
   ## save the exon info
   exon.sel <- all.annotation$type %in% ANNOTATION.TYPE["exon"]
   mRNA.sel <- all.annotation$type %in% ANNOTATION.TYPE["mRNA"]
 
   exons <- all.annotation[exon.sel]
   exons$exon <- getGffAttribute(all.annotation[exon.sel],"ID")[,1]
-  
+
   ## get the gene ID
   exons$gene <- getGffAttribute(all.annotation[mRNA.sel],"Parent")[match(
     sapply(strsplit(getGffAttribute(all.annotation[exon.sel],"Parent"),","),"[",1),
     getGffAttribute(all.annotation[mRNA.sel],"ID"))]
-  
+
   ## get the transcript
   transcripts <- getGffAttribute(all.annotation[exon.sel],"Parent")
-  
+
   ## duplicate the ranges
   selector<-rep(seq(along=transcripts),sapply(strsplit(transcripts,","),length))
   exons <- exons[selector,]
-  
+
   ## add the transcript
   exons$transcript <- unlist(strsplit(transcripts,","))
-  
+
   ## return the converted info
   return(as(exons,"GRanges"))
 }
@@ -125,44 +125,32 @@
 ## get the annot from a gtf file
 ### =======================
 ".getGtfRange" <- function(obj,verbose=FALSE){
-  
+
   ## read the file and do sanity checks
   all.annotation <- .readGffGtf(obj,verbose=verbose)
 
   ## subset for exons
   all.annotation <- all.annotation[all.annotation$type %in% ANNOTATION.TYPE["exon"],]
-  
-  ## extract the attributes
-  gffAttr <- do.call(rbind,strsplit(all.annotation$gffAttributes," |;"))
-  
-  ## identify the columns we need
-  sel <- match(GTF.FIELDS,gffAttr[1,]) + 1
-  
-  ## gene 
-  ## if we have no "ENSG"
-  last <- ifelse(length(grep("ENSG",gffAttr[,sel[1]]))==0,1000000L,19L)
-  
-  ## remove possible annoyance
-  all.annotation$gene <- gsub(" |\"|;","",substr(gffAttr[,sel[1]],1,last))
-  
-  ## transcript
-  all.annotation$transcript <- gsub(" |\"|;","",substr(gffAttr[,sel[2]],1,last))
-  
-  ## exon ID
-  all.annotation$exon <- gsub(" |\"|;","",substr(gffAttr[,sel[3]],1,last))
-  
+
+  ## transform the attrs into gff3 like attrs
+  all.annotation$gffAttributes <- .convertGffToGtfAttributes(all.annotation$gffAttributes)
+
+  ## get the attributes we require
+  attrs <- getGffAttribute(all.annotation,GTF.FIELDS)
+
+  ## process the mandatory fields - the first three GTF.FIELDS
+  all.annotation$gene <- attrs[,1]
+  all.annotation$transcript <- attrs[,2]
+  all.annotation$exon <- attrs[,3]
+
   ## gene name
   ## we can only have one NA: gene_name, if so, get the gene_id instead
-  if(is.na(sel[4])){
+  if(all(is.na(attrs[,4]))){
     all.annotation$gene.name <- all.annotation$gene
   } else {
-    all.annotation$gene.name <- gsub(" |\"|;","",gffAttr[,sel[4]])
+    all.annotation$gene.name <- attrs[,4]
   }
-  
-  ## edit the attributes to remove the space after the semi-colon
-  ## otherwise genomeIntervals does not parse it accurately  
-  all.annotation$gffAttributes <- .convertGffToGtfAttributes(all.annotation$gffAttributes)
-  
+
   ## done
   return(as(all.annotation,"GRanges"))
 }
@@ -170,6 +158,7 @@
 ".convertGffToGtfAttributes" <- function(attrs){
   attrs <- gsub("; ",";",attrs)
   attrs <- gsub(" ","=",attrs)
+  attrs <- gsub("\"","",attrs)
   return(attrs)
 }
 
@@ -178,12 +167,12 @@
 ## TODO we should take advantage of the disjoin function in the future
 ## Return a RangedData containing all genes model
 ".geneModelAnnotation" <- function(gAnnot,nbCore=1){
- 
+
   ## can we parallelize
-  if(nbCore>1){  
+  if(nbCore>1){
     ## set the number of cores
     cluster <- makePSOCKcluster(nbCore)
-    
+
     ## get the gene ranges
     RL_list <- do.call(
       "c",
@@ -194,7 +183,7 @@
                   coverage(split(IRanges(start=start(gAnnot[sel]),
                                          end=end(gAnnot[sel])),
                                  gAnnot[sel]$gene))},gAnnot))
-    
+
     ## stop the cluster
     stopCluster(cl=cluster)
   } else {
@@ -212,7 +201,7 @@
 
   ## let's help free memory
   gc()
-  
+
   ## TODO THIS TAKES TOO LONG
   ## get the synthetic exons
   RL<-(IRangesList(RL_list>0))
