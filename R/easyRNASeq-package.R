@@ -25,7 +25,7 @@
 ##' \tabular{ll}{
 ##' Package: \tab easyRNASeq\cr
 ##' Type: \tab Package\cr
-##' Version: \tab 2.5.5\cr
+##' Version: \tab 2.5.7\cr
 ##' Date: \tab 2015-07-06\cr
 ##' License: \tab Artistic-2.0\cr
 ##' LazyLoad: \tab yes\cr

@@ -170,6 +170,15 @@ setGeneric(
   standardGeneric("getAnnotation")
 })
 
+##' @exportMethod createSyntheticTranscripts
+setGeneric(
+  name="createSyntheticTranscripts",
+  def=function(obj,
+               features = c("mRNA", "tRNA", "miRNA"),
+               output = c("Genome_intervals","GRanges")){
+    standardGeneric("createSyntheticTranscripts")
+})
+
 ## setGeneric(
 ##            name="getCoverage",
 ##            def=function(obj,aln){
