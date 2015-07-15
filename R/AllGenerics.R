@@ -152,16 +152,6 @@ setGeneric(name="barcodePlot",
 
 ###==========================
 ## Annotations
-##' @exportMethod fetchAnnotation
-setGeneric(
-           name="fetchAnnotation",
-           def=function(obj,
-             annotationMethod=c("biomaRt","gff","gtf"),
-             filename=character(1),
-             ignoreWarnings=FALSE,
-             ...){
-             standardGeneric("fetchAnnotation")
-           })
 
 ##' @exportMethod getAnnotation
 setGeneric(
@@ -174,30 +164,16 @@ setGeneric(
 setGeneric(
   name="createSyntheticTranscripts",
   def=function(obj,
-               features = c("mRNA", "tRNA", "miRNA"),
-               output = c("Genome_intervals","GRanges")){
+               features = c("mRNA", "miRNA", "tRNA", "transcript"),
+               output = c("Genome_intervals","GRanges"),...){
     standardGeneric("createSyntheticTranscripts")
 })
 
-## setGeneric(
-##            name="getCoverage",
-##            def=function(obj,aln){
-##              standardGeneric("getCoverage")
-##            })
-## TODO think of more proper parameters here
 setGeneric(
            name="findIslands",
            def=function(obj,max.gap=integer(1),min.cov=1L,min.length=integer(1),plot=TRUE,...){
              standardGeneric("findIslands")
            })
-
-## known organisms
-##' @exportMethod knownOrganisms
-setGeneric(
-  name="knownOrganisms",
-  def= function(missing){
-    standardGeneric("knownOrganisms")
-  })
 
 ###==========================
 ## count methods

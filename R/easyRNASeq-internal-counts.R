@@ -59,8 +59,8 @@
 ##' library.
 ##' }
 ##' @param validity.check Shall UCSC chromosome name convention be enforced?
-##' This is only supported for a set of organisms, see
-##' \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq:knownOrganisms}},
+##' This is only supported for a set of organisms, which are  
+##' Dmelanogaster, Hsapiens, Mmusculus and Rnorvegicus;
 ##' otherwise the argument 'chr.map' can be used to complement it.
 ##' @param values a named vector containing count results
 ##' @param ... additional arguments. See the details in

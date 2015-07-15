@@ -83,9 +83,9 @@ setMethod(f="AnnotParam",
           })
 
 setMethod(f="AnnotParam",
-          signature="Granges",
+          signature="GRanges",
           definition=function(
-            datasource=Granges()){
+            datasource=GRanges()){
             new("AnnotParamObject",
                 datasource=datasource
             )

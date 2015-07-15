@@ -121,8 +121,8 @@
 ##' @param type The type of data when using the "aln" format. See the ShortRead
 ##' library.
 ##' @param validity.check Shall UCSC chromosome name convention be enforced?
-##' This is only supported for a set of organisms, see
-##' \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq:knownOrganisms}},
+##' This is only supported for a set of organisms, which are  
+##' Dmelanogaster, Hsapiens, Mmusculus and Rnorvegicus;
 ##' otherwise the argument 'chr.map' can be used to complement it.
 ##' @param ... additional arguments. See details
 ##' @return Returns a count table (a matrix of m features x n samples). If the
@@ -135,7 +135,6 @@
 ##' \code{\linkS4class{RangedSummarizedExperiment}}
 ##' \code{\link[edgeR:DGEList]{edgeR:DGEList}}
 ##' \code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}}
-##' \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq:knownOrganisms}}
 ##' \code{\link[ShortRead:readAligned]{ShortRead:readAligned}}
 ##' @keywords methods
 ##' @examples
@@ -280,9 +279,10 @@ setMethod(
             }
             validity.check=FALSE
         }
-        if(!tolower(organism) %in% c(tolower(knownOrganisms()),"custom") & nrow(chr.map) ==0){
+        ## the knowOrganisms is defunct so we just replace it here - only call
+        knownOrganisms <- eval(formals(easyRNASeq:::.convertToUCSC)$organism)
+        if(!tolower(organism) %in% c(tolower(knownOrganisms),"custom") & nrow(chr.map) ==0){
             warning(paste("Your organism has no mapping defined to perform the validity check for the UCSC compliance of the chromosome name.",
-                          "Defined organism's mapping can be listed using the 'knownOrganisms' function.",
                           "To benefit from the validity check, you can provide a 'chr.map' to your 'easyRNASeq' function call.",
                           "As you did not do so, 'validity.check' is turned off",sep="\n"))
             validity.check=FALSE

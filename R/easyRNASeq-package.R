@@ -25,8 +25,8 @@
 ##' \tabular{ll}{
 ##' Package: \tab easyRNASeq\cr
 ##' Type: \tab Package\cr
-##' Version: \tab 2.5.7\cr
-##' Date: \tab 2015-07-06\cr
+##' Version: \tab 2.5.6\cr
+##' Date: \tab 2015-07-07\cr
 ##' License: \tab Artistic-2.0\cr
 ##' LazyLoad: \tab yes\cr
 ##' Depends: \tab methods, parallel, Biobase, BiocGenerics, biomaRt, Biostrings, edgeR, DESeq, genomeIntervals, GenomeInfoDb, GenomicAlignments, GenomicRanges, SummarizedExperiment, graphics, IRanges, LSD, Rsamtools, S4Vectors, ShortRead, utils\cr
@@ -219,8 +219,6 @@ NULL
 ##' \itemize{
 ##' \item \code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq}}
 ##' \item \code{\link[easyRNASeq:easyRNASeq-coverage-methods]{fetchCoverage}}
-##' \item \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{fetchAnnotation}}
-##' \item \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{knownOrganisms}}
 ##' }
 ##'
 ##' \itemize{
@@ -235,8 +233,6 @@ NULL
 ##' }
 ##' @aliases easyRNASeq easyRNASeq,RNAseq-method
 ##' fetchCoverage,RNAseq-method fetchCoverage
-##' knownOrganisms knownOrganisms,missing-method
-##' fetchAnnotation fetchAnnotation,RNAseq-method
 ##' @name Deprecated functions
 ##' @rdname easyRNASeq-deprecated
 NULL
@@ -246,7 +242,9 @@ NULL
 ###==========================
 ##' The following function are defunct:
 ##' \itemize{
-##' \item \code{lotDispersionEstimates,DGEList-method}
+##' \item \code{fetchAnnotation}
+##' \item \code{knownOrganisms}
+##' \item \code{plotDispersionEstimates,DGEList-method}
 ##' }
 ##'
 ##' \itemize{
@@ -254,7 +252,7 @@ NULL
 ##' function is superseded by the \code{\link[edgeR:plotBCV]{plotBCV}} function
 ##' as the \pkg{edgeR} DGEList object structure changed
 ##' }
-##' @aliases plotDispersionEstimates,DGEList-method
+##' @aliases plotDispersionEstimates,DGEList-method fetchAnnotation knownOrganisms
 ##' @name Defunct functions
 ##' @rdname easyRNASeq-defunct
 NULL

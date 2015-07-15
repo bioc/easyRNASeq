@@ -33,12 +33,11 @@ metadata. The simpleRNASeq method replaces the
 \code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq}} function to
 simplify the usability. It does the following:
 \itemize{
-\item use \code{\link[GenomicRanges:GRanges-class]{GenomicRanges}}
-for loading/pre-processing the data.
-\item fetch \code{\link[easyRNASeq:fetchAnnotation]{annotations}}
+\item use \code{\link[GenomicAlignments:GAlignments-class]{GenomicAlignments}}
+for reading/pre-processing the BAM files.
+\item get the \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{annotations}}
 depending on the selected parameters
-\item extract the reads \code{\link[easyRNASeq:fetchCoverage]{coverage}} from
-the provided file(s)
+\item calculate the coverage from the provided file(s)
 \item \code{\link[easyRNASeq:easyRNASeq-summarization-methods]{summarizes}} the
 read counts according to the selected summarization
 \item returns a \code{\linkS4class{RangedSummarizedExperiment}} object.

@@ -4,18 +4,12 @@
 \alias{Deprecated functions}
 \alias{easyRNASeq}
 \alias{easyRNASeq,RNAseq-method}
-\alias{fetchAnnotation}
-\alias{fetchAnnotation,RNAseq-method}
 \alias{fetchCoverage}
 \alias{fetchCoverage,RNAseq-method}
-\alias{knownOrganisms}
-\alias{knownOrganisms,missing-method}
 \title{The following function have been deprecated:
 \itemize{
 \item \code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq}}
 \item \code{\link[easyRNASeq:easyRNASeq-coverage-methods]{fetchCoverage}}
-\item \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{fetchAnnotation}}
-\item \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{knownOrganisms}}
 }}
 \description{
 \itemize{

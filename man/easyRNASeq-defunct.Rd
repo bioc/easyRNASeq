@@ -2,10 +2,14 @@
 % Please edit documentation in R/easyRNASeq-package.R
 \name{Defunct functions}
 \alias{Defunct functions}
+\alias{fetchAnnotation}
+\alias{knownOrganisms}
 \alias{plotDispersionEstimates,DGEList-method}
 \title{The following function are defunct:
 \itemize{
-\item \code{lotDispersionEstimates,DGEList-method}
+\item \code{fetchAnnotation}
+\item \code{knownOrganisms}
+\item \code{plotDispersionEstimates,DGEList-method}
 }}
 \description{
 \itemize{

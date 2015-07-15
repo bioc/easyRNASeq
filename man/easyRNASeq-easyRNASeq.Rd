@@ -94,8 +94,8 @@ must be equal to the number of sample. In addition the vector should be
 named with the filename of the corresponding samples.}
 
 \item{validity.check}{Shall UCSC chromosome name convention be enforced?
-This is only supported for a set of organisms, see
-\code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq:knownOrganisms}},
+This is only supported for a set of organisms, which are
+Dmelanogaster, Hsapiens, Mmusculus and Rnorvegicus;
 otherwise the argument 'chr.map' can be used to complement it.}
 
 \item{chr.map}{A data.frame describing the mapping of original chromosome
@@ -224,7 +224,6 @@ Nicolas Delhomme
 \code{\linkS4class{RangedSummarizedExperiment}}
 \code{\link[edgeR:DGEList]{edgeR:DGEList}}
 \code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}}
-\code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq:knownOrganisms}}
 \code{\link[ShortRead:readAligned]{ShortRead:readAligned}}
 }
 \keyword{methods}

@@ -1,3 +1,4 @@
+## TODO this should be deprecated
 ##' Extension of the IRanges package
 ##' 
 ##' Return the ranges of the genomic annotation.
@@ -19,18 +20,17 @@
 ##' 
 ##' 	\dontrun{
 ##' 	library("RnaSeqTutorial")
-##' 	obj <- new('RNAseq',
-##' 		organismName="Dmelanogaster",
-##' 		readLength=36L,
-##' 		chrSize=as.list(seqlengths(Dmelanogaster))
-##' 		)
 ##' 
-##' 	obj <- fetchAnnotation(obj,
-##' 				method="gff",
-##'                                 filename=system.file(
-##' 						"extdata",
-##' 						"annot.gff",
-##' 						package="RnaSeqTutorial"))
+##' 	obj <- getAnnotation(
+##'             AnnotParam(
+##'               organism="Dmelanogaster",
+##'               datasource=system.file(
+##'     	          "extdata",
+##' 				        "Dmel-mRNA-exon-r5.52.gff3",
+##' 				        package="RnaSeqTutorial"),
+##'   		        type="gff3"
+##'   ))
+##'   
 ##' 	ranges(obj)
 ##' 	}
 ##' 
