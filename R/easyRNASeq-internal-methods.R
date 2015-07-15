@@ -395,8 +395,13 @@
   ## get the genomic ranges separated by strand and extract a tab of occurence
   grng <- reduce(GRanges(IRanges(start=params$pos,width=params$qwidth),
                          seqnames=params$rname,strand=params$strand))
-  tab <- table(countOverlaps(grng[strand(grng)=="+"],grng[strand(grng)=="-"],
-                             ignore.strand=TRUE)==0)
+
+  ## TODO: here instead of counting the grng overlap, we should summarize the reads
+  ## and tabulate that and take the median or so.
+  tab <- table(factor(countOverlaps(grng[strand(grng)=="+"],
+                                    grng[strand(grng)=="-"],
+                                    ignore.strand=TRUE)==0,
+                      levels=c("FALSE","TRUE")))
   prop <- tab/sum(tab)
 
   ## Create a DataFrame containing:
