@@ -165,7 +165,7 @@ setGeneric(
   name="createSyntheticTranscripts",
   def=function(obj,
                features = c("mRNA", "miRNA", "tRNA", "transcript"),
-               output = c("Genome_intervals","GRanges"),...){
+               ...){
     standardGeneric("createSyntheticTranscripts")
 })
 

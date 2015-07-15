@@ -1,21 +1,116 @@
-## TODO document me
 ## TODO test me
 ## TODO vignette me
 
+##' Methods to create synthetic transcripts
+##'
+##' This function create a set of synthetic transcripts from a provided 
+##' annotation file in "gff3" or "gtf" format. As detailed in 
+##' \url{http://www.epigenesys.eu/en/protocols/bio-informatics/1283-guidelines-for-rna-seq-data-analysis},
+##' One major caveat of estimating gene expression using aligned RNA-Seq reads 
+##' is that a single read, which originated from a single mRNA molecule, might 
+##' sometimes align to several features (e.g. transcripts or genes) with a
+##' lignments of equivalent quality. This, for example, might happen as a result 
+##' of gene duplication and the presence of repetitive or common domains, for 
+##' example. To avoid counting unique mRNA fragments multiple times, the 
+##' stringent approach is to keep only uniquely mapping reads - being aware of 
+##' potential consequences. Not only can “multiple counting” arise from a 
+##' biological reason, but also from technical artifacts, introduced mostly 
+##' by poorly formatted gff3/gtf annotation files. To avoid this, it is best 
+##' practice to adopt a conservative approach by collapsing all existing 
+##' transcripts of a single gene locus into a “synthetic” transcript containing 
+##' every exon of that gene. In the case of overlapping exons, the longest 
+##' genomic interval is kept, i.e. an artificial exon is created. This process 
+##' results in a flattened transcript – a gene structure with a one (gene) to 
+##' one (transcript) relationship.
+##' 
+##' The \code{createSyntheticTranscripts} function implements this, taking
+##' advantage of the hierarchical structure of the gff3/gtf file. Exon
+##' features are related to their transcript (parent), which themselves derives
+##' from their gene parents. Using this relationship, exons are combined per gene
+##' into a flattened transcript structure. Note that this might not avoid multiple
+##' counting if genes overlap on opposing strands. There, only strand specific 
+##' sequencing data has the power to disentangle these situations.
+##' 
+##' As gff3/gtf file can contain a large number of feature types, the 
+##' \code{createSyntheticTranscripts} currently only supports: \emph{mRNA}, 
+##' \emph{miRNA}, \emph{tRNA} and \emph{transcript}. Please contact me if you
+##' need additional features to be considered. Note however, that I will only 
+##' add features that are part of the \url{sequenceontology.org} SOFA 
+##' (SO_Feature_Annotation) ontology.
+##'
+##' @aliases createSyntheticTranscripts 
+##' createSyntheticTranscripts,AnnotParamCharacter-method
+##' createSyntheticTranscripts,character-method
+##' @rdname easyRNASeq-createSyntheticTranscripts
+##' @param obj a \code{\linkS4class{AnnotParamCharacter}} object or the 
+##' annotation filename as a \code{character} string 
+##' @param features one or more of 'mRNA', 'miRNA', 'tRNA', 'transcript'
+##' @param input the type of input, one of 'gff3' or 'gtf' - only valid if 
+##' \code{obj} is a character
+##' @param output the output type, one of 'Genome_intervals' or 'GRanges' - only 
+##' valid if \code{obj} is a character
+##' @return 
+##' Depending on the \code{obj} class.
+##' \itemize{
+##'   \item \code{AnnotParamCharacter}: a \code{AnnotParamObject} object
+##'   \item a \code{character} filename: depending on the selected \code{output}
+##'   value, a \code{\link{genomeIntervals:Genome_intervals-class}{Genome_intervals}} 
+##'   or a \code{\linkS4class{GRanges}} object.
+##' }
+##' @author Nicolas Delhomme
+##' @seealso
+##' \itemize{
+##' \item{For the input:
+##' \itemize{
+##' \item \code{\linkS4class{AnnotParam}}
+##' }}
+##' \item{For the output:
+##' \itemize{
+##' \item \code{\linkS4class{AnnotParam}}
+##' \item \code{\link{genomeIntervals:Genome_intervals-class}{Genome_intervals}}
+##' \item \code{\linkS4class{GRanges}}
+##' }}}
+##' @keywords methods
+##' @examples
+##'
+##'   \dontrun{
+##'   ## the data
+##'   library("RnaSeqTutorial")
+##'
+##'
+##'   ## create the AnnotParam
+##'   annotParam <- AnnotParam(system.file(
+##'                    "extdata",
+##'                    "annot.gff",
+##'                    package="RnaSeqTutorial"))
+##'
+##'   ## create the synthetic transcripts
+##'   annotParam <- createSyntheticTranscripts(annotParam)
+##'
+##'  }
+##'
 setMethod(f = "createSyntheticTranscripts",
           signature = "AnnotParamCharacter",
           definition = function(obj,
-                                features = c("mRNA", "miRNA", "tRNA", "transcript"),
-                                output = c("Genome_intervals","GRanges"),...) {
+                                features = c("mRNA", "miRNA", "tRNA", "transcript")) {
+
+            # Check for the input type
             supported.types <- c("gff3","gtf")
             if(!type(obj) %in% supported.types){
               stop(sprintf("Only the %s types are supported by this function",
                    paste(supported.types,collapse=", ")))
             }
-            return(createSyntheticTranscripts(datasource(obj),
-                                       features=features,
-                                       output=output,
-                                       input=type(obj)))
+              
+            # Validate the object
+            .validate(obj)
+            
+            # Create the synth. trx.
+            return(
+              AnnotParam(datasource = 
+                           createSyntheticTranscripts(datasource(obj),
+                                                      features=features,
+                                                      output="GRanges",
+                                                      input=type(obj))))
 })
 
 setMethod(f = "createSyntheticTranscripts",
@@ -40,6 +135,11 @@ setMethod(f = "createSyntheticTranscripts",
   
   #' read the gff3/gtf file
   dat <- readGff3(obj)
+  
+  #' Check that all required features are there
+  if(!all(c("gene","exon") %in% levels(dat$type))){
+    stop("Your annotation file does not contain all the necessary features. It should contain 'gene', 'exon' and at least one of the 'features' argument")
+  }
   
   #' If gtf, reformat the attributes and drop the double quotes
   if(input=="gtf"){
