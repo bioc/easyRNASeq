@@ -191,7 +191,7 @@ NULL
 ##' @importFrom DESeq fitInfo newCountDataSet
 ##' @importFrom edgeR calcNormFactors DGEList estimateCommonDisp
 ##' estimateTagwiseDisp maPlot plotMDS.DGEList plotMeanVar plotBCV
-##' @importFrom genomeIntervals c getGffAttribute parseGffAttributes
+##' @importFrom genomeIntervals getGffAttribute parseGffAttributes
 ##' @importFrom GenomicAlignments GAlignments readGAlignments readGAlignmentPairs
 ##' @importFrom GenomicRanges GRanges GRangesList
 ##' @importFrom graphics abline axis axTicks boxplot grid hist legend lines

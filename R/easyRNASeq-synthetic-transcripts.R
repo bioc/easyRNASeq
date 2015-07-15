@@ -203,7 +203,7 @@ setMethod(f = "createSyntheticTranscripts",
   }
   
   ## create gffs for each feature
-  featureGff <- Reduce(c,lapply(features, function(f) {
+  feats <- lapply(features, function(f) {
     if(verbose){message(sprintf("Processing %s features",f))}
     f.sel <- geneID %in% idMap[,relation$Parent][idMap$type == f]
     fGff <- NULL
@@ -217,8 +217,9 @@ setMethod(f = "createSyntheticTranscripts",
                                   sep="")
     }
     return(fGff)
-  }))
-  
+  })
+  featureGff <- Reduce(c,feats[!sapply(feats,is.null)])  
+
   ## create the exon gff
   rngList <- rngList[match(geneID[geneID %in% idMap[,relation$Parent]], names(rngList))]
   exonNumber <- elementLengths(rngList)

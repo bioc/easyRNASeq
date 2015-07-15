@@ -18,7 +18,7 @@ Imports:
     DESeq (>= 1.21.0),
     edgeR (>= 3.11.2),
     GenomeInfoDb (>= 1.5.8),
-    genomeIntervals (>= 1.25.2),
+    genomeIntervals (>= 1.25.3),
     GenomicAlignments (>= 1.5.11),
     GenomicRanges (>= 1.21.16),
     SummarizedExperiment (>= 0.3.1),
