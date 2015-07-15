@@ -278,9 +278,7 @@ setMethod(f="simpleRNASeq",
               message("==========================")
             }
 
-            ## TODO change this to use the metadata!!
-            stop("FIXME")
-            if(length(intersect(seqnames(exptData(sexp)[[1]]),
+            if(length(intersect(seqnames(metadata(sexp)$SeqInfo),
                                 seqnames(seqinfo(sexp))))==0){
               stop("There is no common genomic references between your BAM
                    files and the provided annotation. Fix one or the other.")

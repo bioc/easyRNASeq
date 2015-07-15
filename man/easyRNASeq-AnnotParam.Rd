@@ -3,7 +3,7 @@
 \docType{methods}
 \name{easyRNASeq AnnotParam constructor}
 \alias{AnnotParam}
-\alias{AnnotParam,Granges-method}
+\alias{AnnotParam,GRanges-method}
 \alias{AnnotParam,RangedData-method}
 \alias{AnnotParam,character-method}
 \alias{AnnotParam,missing-method}
@@ -14,7 +14,7 @@
   "biomaRt", "gtf", "rda"))
 }
 \arguments{
-\item{datasource}{a character or a \code{\linkS4class{RangedData}} or a \code{\linkS4class{Granges}} object. See details.}
+\item{datasource}{a character or a \code{\linkS4class{RangedData}} or a \code{\linkS4class{GRanges}} object. See details.}
 
 \item{type}{one of NULL, biomaRt, gff3, gtf or rda. Default to NULL. See details.}
 }
@@ -22,7 +22,7 @@
 This constructs a \code{\linkS4class{AnnotParam}} object.
 The datasource parameter (see details) is mandatory, however
 other parameters, \emph{i.e.} when the datasource is not a
-\code{\linkS4class{Granges}} or \code{\linkS4class{RangedData}}
+\code{\linkS4class{GRanges}} or \code{\linkS4class{RangedData}}
 default to "genes" and gff3", indicating that the datasource is in
 the gff3 format and that the contained information needs to be grouped
 by "genes". This representing the most common use case. Hence, it is
@@ -38,7 +38,7 @@ There are three parameters for an \code{\linkS4class{AnnotParam}}
 object:
 \itemize{
 \item{datasource}{If no type is provided, the datasource should
-be either a \code{\linkS4class{Granges}}(prefered) or a
+be either a \code{\linkS4class{GRanges}}(prefered) or a
 \code{\linkS4class{RangedData}} (subject to future deprecation)
 object  containing the genic information. These can be obtained
 using the \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{getAnnotation}} function.}
@@ -71,7 +71,7 @@ annotParam <- AnnotParam(datasource=system.file(
 }
 \seealso{
 \itemize{
-\item \code{\linkS4class{Granges}}
+\item \code{\linkS4class{GRanges}}
 \item \code{\linkS4class{RangedData}}
 \item \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{getAnnotation}}
 }

@@ -6,21 +6,21 @@
 ##' This function create a set of synthetic transcripts from a provided 
 ##' annotation file in "gff3" or "gtf" format. As detailed in 
 ##' \url{http://www.epigenesys.eu/en/protocols/bio-informatics/1283-guidelines-for-rna-seq-data-analysis},
-##' One major caveat of estimating gene expression using aligned RNA-Seq reads 
+##' one major caveat of estimating gene expression using aligned RNA-Seq reads 
 ##' is that a single read, which originated from a single mRNA molecule, might 
-##' sometimes align to several features (e.g. transcripts or genes) with a
-##' lignments of equivalent quality. This, for example, might happen as a result 
-##' of gene duplication and the presence of repetitive or common domains, for 
-##' example. To avoid counting unique mRNA fragments multiple times, the 
+##' sometimes align to several features (e.g. transcripts or genes) with
+##' alignments of equivalent quality. This, for example, might happen as a result 
+##' of gene duplication and the presence of repetitive or common domains. 
+##' To avoid counting unique mRNA fragments multiple times, the 
 ##' stringent approach is to keep only uniquely mapping reads - being aware of 
-##' potential consequences. Not only can “multiple counting” arise from a 
+##' potential consequences. Not only can "multiple counting" arise from a 
 ##' biological reason, but also from technical artifacts, introduced mostly 
 ##' by poorly formatted gff3/gtf annotation files. To avoid this, it is best 
 ##' practice to adopt a conservative approach by collapsing all existing 
-##' transcripts of a single gene locus into a “synthetic” transcript containing 
+##' transcripts of a single gene locus into a "synthetic" transcript containing 
 ##' every exon of that gene. In the case of overlapping exons, the longest 
 ##' genomic interval is kept, i.e. an artificial exon is created. This process 
-##' results in a flattened transcript – a gene structure with a one (gene) to 
+##' results in a flattened transcript - a gene structure with a one (gene) to 
 ##' one (transcript) relationship.
 ##' 
 ##' The \code{createSyntheticTranscripts} function implements this, taking
@@ -41,21 +41,18 @@
 ##' @aliases createSyntheticTranscripts 
 ##' createSyntheticTranscripts,AnnotParamCharacter-method
 ##' createSyntheticTranscripts,character-method
-##' @rdname easyRNASeq-createSyntheticTranscripts
+##' @rdname easyRNASeq-synthetic-transcripts
 ##' @param obj a \code{\linkS4class{AnnotParamCharacter}} object or the 
 ##' annotation filename as a \code{character} string 
 ##' @param features one or more of 'mRNA', 'miRNA', 'tRNA', 'transcript'
-##' @param input the type of input, one of 'gff3' or 'gtf' - only valid if 
-##' \code{obj} is a character
-##' @param output the output type, one of 'Genome_intervals' or 'GRanges' - only 
-##' valid if \code{obj} is a character
+##' @param ... If \code{obj} is a character string, \code{input} defines the type of input, one of 'gff3' or 'gtf' and \code{output} defines the output type, one of 'Genome_intervals' or 'GRanges'
 ##' @param verbose increase the verbosity (default TRUE)
 ##' @return 
 ##' Depending on the \code{obj} class.
 ##' \itemize{
 ##'   \item \code{AnnotParamCharacter}: a \code{AnnotParamObject} object
 ##'   \item a \code{character} filename: depending on the selected \code{output}
-##'   value, a \code{\link{genomeIntervals:Genome_intervals-class}{Genome_intervals}} 
+##'   value, a \code{\link[genomeIntervals:Genome_intervals-class]{Genome_intervals}} 
 ##'   or a \code{\linkS4class{GRanges}} object.
 ##' }
 ##' @author Nicolas Delhomme
@@ -68,7 +65,7 @@
 ##' \item{For the output:
 ##' \itemize{
 ##' \item \code{\linkS4class{AnnotParam}}
-##' \item \code{\link{genomeIntervals:Genome_intervals-class}{Genome_intervals}}
+##' \item \code{\link[genomeIntervals:Genome_intervals-class]{Genome_intervals}}
 ##' \item \code{\linkS4class{GRanges}}
 ##' }}}
 ##' @keywords methods
