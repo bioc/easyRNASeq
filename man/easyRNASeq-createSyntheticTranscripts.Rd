@@ -77,7 +77,7 @@ add features that are part of the \url{sequenceontology.org} SOFA
   ## create the AnnotParam
   annotParam <- AnnotParam(system.file(
                    "extdata",
-                   "Dmel-mRNA-exon-r5.52.gff3",
+                   "annot.gff",
                    package="RnaSeqTutorial"))
 
   ## create the synthetic transcripts

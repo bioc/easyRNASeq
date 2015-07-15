@@ -77,18 +77,26 @@
 ##'   ## the data
 ##'   library("RnaSeqTutorial")
 ##'
+##'   ## get the example file
+##'   library(curl)
+##'   curl_download("https://microasp.upsc.se/root/upscb-public/raw/master/tutorial/easyRNASeq/Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz",
+##'              "Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz")
 ##'
 ##'   ## create the AnnotParam
-##'   annotParam <- AnnotParam(system.file(
-##'                    "extdata",
-##'                    "annot.gff",
-##'                    package="RnaSeqTutorial"))
+##'   annotParam <- AnnotParam(
+##'     datasource="Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz",
+##'     type="gtf")
 ##'
 ##'   ## create the synthetic transcripts
 ##'   annotParam <- createSyntheticTranscripts(annotParam)
 ##'
 ##'  }
 ##'
+## TODO change the example!
+##   annotParam <- AnnotParam(system.file(
+##                    "extdata",
+##                    "Dmel-mRNA-exon-r5.52.gff3",
+##                    package="RnaSeqTutorial"))
 setMethod(f = "createSyntheticTranscripts",
           signature = "AnnotParamCharacter",
           definition = function(obj,
