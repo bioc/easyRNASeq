@@ -8,13 +8,15 @@
 \title{Methods to create synthetic transcripts}
 \usage{
 \S4method{createSyntheticTranscripts}{AnnotParamCharacter}(obj,
-  features = c("mRNA", "miRNA", "tRNA", "transcript"))
+  features = c("mRNA", "miRNA", "tRNA", "transcript"), verbose = TRUE)
 }
 \arguments{
 \item{obj}{a \code{\linkS4class{AnnotParamCharacter}} object or the
 annotation filename as a \code{character} string}
 
 \item{features}{one or more of 'mRNA', 'miRNA', 'tRNA', 'transcript'}
+
+\item{verbose}{increase the verbosity (default TRUE)}
 
 \item{input}{the type of input, one of 'gff3' or 'gtf' - only valid if
 \code{obj} is a character}
@@ -73,15 +75,18 @@ add features that are part of the \url{sequenceontology.org} SOFA
   ## the data
   library("RnaSeqTutorial")
 
+  ## get the example file
+  library(curl)
+  curl_download("https://microasp.upsc.se/root/upscb-public/raw/master/tutorial/easyRNASeq/Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz",
+             "Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz")
 
   ## create the AnnotParam
-  annotParam <- AnnotParam(system.file(
-                   "extdata",
-                   "annot.gff",
-                   package="RnaSeqTutorial"))
+  annotParam <- AnnotParam(
+    datasource="Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz",
+    type="gtf")
 
   ## create the synthetic transcripts
-  annotParam <- createSyntheticTranscripts(annotParam)
+  annotParam <- createSyntheticTranscripts(annotParam,verbose=FALSE)
 
  }
 }

@@ -49,6 +49,7 @@
 ##' \code{obj} is a character
 ##' @param output the output type, one of 'Genome_intervals' or 'GRanges' - only 
 ##' valid if \code{obj} is a character
+##' @param verbose increase the verbosity (default TRUE)
 ##' @return 
 ##' Depending on the \code{obj} class.
 ##' \itemize{
@@ -88,7 +89,7 @@
 ##'     type="gtf")
 ##'
 ##'   ## create the synthetic transcripts
-##'   annotParam <- createSyntheticTranscripts(annotParam)
+##'   annotParam <- createSyntheticTranscripts(annotParam,verbose=FALSE)
 ##'
 ##'  }
 ##'
@@ -100,7 +101,8 @@
 setMethod(f = "createSyntheticTranscripts",
           signature = "AnnotParamCharacter",
           definition = function(obj,
-                                features = c("mRNA", "miRNA", "tRNA", "transcript")) {
+                                features = c("mRNA", "miRNA", "tRNA", "transcript"),
+                                verbose = TRUE) {
 
             # Check for the input type
             supported.types <- c("gff3","gtf")
@@ -110,7 +112,7 @@ setMethod(f = "createSyntheticTranscripts",
             }
               
             # Validate the object
-            .validate(obj)
+            .validate(obj,verbose=verbose)
             
             # Create the synth. trx.
             return(
@@ -118,15 +120,18 @@ setMethod(f = "createSyntheticTranscripts",
                            createSyntheticTranscripts(datasource(obj),
                                                       features=features,
                                                       output="GRanges",
-                                                      input=type(obj))))
+                                                      input=type(obj),
+                                                      verbose=verbose)))
 })
 
 setMethod(f = "createSyntheticTranscripts",
           signature = "character",
             definition = function(obj,
                                   features = c("mRNA", "miRNA", "tRNA", "transcript"),
+                                  verbose = TRUE,
                                   output = c("Genome_intervals","GRanges"),
-                                  input = c("gff3","gtf")) {
+                                  input = c("gff3","gtf")
+                                  ) {
     
   #' first check
   stopifnot(file.exists(obj))
@@ -142,7 +147,7 @@ setMethod(f = "createSyntheticTranscripts",
                      "gtf"=list(ID="transcript_id",Parent="gene_id"))
   
   #' read the gff3/gtf file
-  dat <- readGff3(obj)
+  dat <- readGff3(obj,quiet = !verbose)
   
   #' Check that all required features are there
   if(!all(c("gene","exon") %in% levels(dat$type))){
@@ -198,16 +203,20 @@ setMethod(f = "createSyntheticTranscripts",
   }
   
   ## create gffs for each feature
-  featureGff <- Reduce(c, lapply(features, function(f) {
+  featureGff <- Reduce(c,lapply(features, function(f) {
+    if(verbose){message(sprintf("Processing %s features",f))}
     f.sel <- geneID %in% idMap[,relation$Parent][idMap$type == f]
-    fGff <- dat[sel][f.sel]
-    fGff$type <- f
-    fGff$gffAttributes <- paste("ID=",
-                                getGffAttribute(fGff,relation$Parent),
-                                ".0;Parent=",
-                                getGffAttribute(fGff,relation$Parent),
-                                sep="")
-    fGff
+    fGff <- NULL
+    if(sum(f.sel)>0){
+      fGff <- dat[sel][f.sel]
+      fGff$type <- f
+      fGff$gffAttributes <- paste("ID=",
+                                  getGffAttribute(fGff,relation$Parent),
+                                  ".0;Parent=",
+                                  getGffAttribute(fGff,relation$Parent),
+                                  sep="")
+    }
+    return(fGff)
   }))
   
   ## create the exon gff
@@ -244,7 +253,7 @@ setMethod(f = "createSyntheticTranscripts",
   newgff$source <- "UPSC"
   
   ## sort
-  newgff <- newgff[order(seq_name(newgff), newgff[, 1],
+  newgff <- newgff[order(seqnames(newgff), newgff[, 1],
                          factor(as.character(newgff$type),
                                 labels = seq_len(2 + length(features)),
                                 levels = c("gene", features, "exon"))), ]

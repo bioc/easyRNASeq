@@ -147,7 +147,7 @@ NULL
 ##' @importClassesFrom Biostrings DNAStringSet
 ##' @importClassesFrom DESeq CountDataSet
 ##' @importClassesFrom edgeR DGEList
-##' @importClassesFrom genomeIntervals Genome_intervals
+##' @importClassesFrom genomeIntervals Genome_intervals Genome_intervals_stranded
 ##' @importClassesFrom GenomicAlignments GAlignments GAlignmentPairs
 ##' @importClassesFrom GenomicRanges GRanges GRangesList
 ##' @importClassesFrom SummarizedExperiment RangedSummarizedExperiment
@@ -165,6 +165,7 @@ NULL
 ##' sapply strand "strand<-" table unique
 ##' @importMethodsFrom Biostrings type
 ##' @importMethodsFrom DESeq estimateSizeFactors estimateDispersions
+##' @importMethodsFrom genomeIntervals readGff3 writeGff3
 ##' @importMethodsFrom GenomeInfoDb seqinfo seqlengths "seqlengths<-"
 ##' seqlevels "seqlevels<-" seqnames "seqnames<-"
 ##' @importMethodsFrom GenomicAlignments cigar summarizeOverlaps
@@ -190,7 +191,7 @@ NULL
 ##' @importFrom DESeq fitInfo newCountDataSet
 ##' @importFrom edgeR calcNormFactors DGEList estimateCommonDisp
 ##' estimateTagwiseDisp maPlot plotMDS.DGEList plotMeanVar plotBCV
-##' @importFrom genomeIntervals getGffAttribute parseGffAttributes readGff3
+##' @importFrom genomeIntervals getGffAttribute parseGffAttributes
 ##' @importFrom GenomicAlignments GAlignments readGAlignments readGAlignmentPairs
 ##' @importFrom GenomicRanges GRanges GRangesList
 ##' @importFrom graphics abline axis axTicks boxplot grid hist legend lines
@@ -208,7 +209,7 @@ NULL
 ##' @importFrom utils combn str
 ## and export!
 ##' @exportClass BamFileList RangedData RangedSummarizedExperiment
-##' @exportMethod assay assays colData estimateDispersions estimateSizeFactors fileName metadata rowRanges seqinfo seqlengths seqlevels "seqlevels<-" seqnames "seqnames<-" split srFilter SummarizedExperiment width writeFastq
+##' @exportMethod assay assays colData estimateDispersions estimateSizeFactors fileName metadata rowRanges seqinfo seqlengths seqlevels "seqlevels<-" seqnames "seqnames<-" split srFilter SummarizedExperiment width writeFastq writeGff3
 ##' @export alignData basename chromosomeFilter compose BamFileList IRanges locfit lp newCountDataSet nFilter RangedData readAligned SRFilterResult
 NULL
 

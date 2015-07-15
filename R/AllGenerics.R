@@ -165,7 +165,7 @@ setGeneric(
   name="createSyntheticTranscripts",
   def=function(obj,
                features = c("mRNA", "miRNA", "tRNA", "transcript"),
-               ...){
+               verbose = TRUE, ...){
     standardGeneric("createSyntheticTranscripts")
 })
 
