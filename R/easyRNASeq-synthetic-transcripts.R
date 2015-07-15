@@ -1,3 +1,7 @@
+## TODO document me
+## TODO test me
+## TODO vignette me
+
 setMethod(f = "createSyntheticTranscripts",
           signature = "AnnotParamCharacter",
           definition = function(obj,
@@ -22,7 +26,7 @@ setMethod(f = "createSyntheticTranscripts",
                                   input = c("gff3","gtf")) {
     
   #' first check
-  stopifnot(file.exists(filename))
+  stopifnot(file.exists(obj))
   
   #' get the values
   input <- match.arg(input)
@@ -35,11 +39,11 @@ setMethod(f = "createSyntheticTranscripts",
                      "gtf"=list(ID="transcript_id",Parent="gene_id"))
   
   #' read the gff3/gtf file
-  dat <- readGff3(filename)
+  dat <- readGff3(obj)
   
   #' If gtf, reformat the attributes and drop the double quotes
   if(input=="gtf"){
-    dat$gffAttributes <- gsub("\"","",easyRNASeq:::.convertGffToGtfAttributes(dat$gffAttributes))
+    dat$gffAttributes <- gsub("\"","",.convertGffToGtfAttributes(dat$gffAttributes))
   }
   
   ## get the gene <-> mRNA/transcript map
@@ -66,10 +70,10 @@ setMethod(f = "createSyntheticTranscripts",
                   end = dat[sel, 2])[mRnaID %in% idMap[,relation$ID]]
   
   ## create a set of synthetic exons
-  rngList <- IRanges::reduce(
-    IRanges::split(rngs,
-                   idMap[match(mRnaID[mRnaID %in% idMap[,relation$ID]],
-                               idMap[,relation$ID]),relation$Parent]))
+  rngList <- reduce(
+    split(rngs,
+          idMap[match(mRnaID[mRnaID %in% idMap[,relation$ID]],
+                      idMap[,relation$ID]),relation$Parent]))
   
   ## export the gene, exon and features as gff3
   ## create the new gff object
@@ -102,16 +106,27 @@ setMethod(f = "createSyntheticTranscripts",
   rngList <- rngList[match(geneID[geneID %in% idMap[,relation$Parent]], names(rngList))]
   exonNumber <- elementLengths(rngList)
   exonGff <- dat[rep(which(sel)[geneID %in% idMap[,relation$Parent]], exonNumber)]
-  exonGff[,1] <- IRanges::unlist(start(rngList))
-  exonGff[,2] <- IRanges::unlist(end(rngList))
+  exonGff[,1] <- unlist(start(rngList))
+  exonGff[,2] <- unlist(end(rngList))
   
   exonID <- sapply(exonNumber, ":", 1)
   sel <- geneGff$strand == "+"
   exonID[sel] <- sapply(exonID[sel], rev)
-  ID <- getGffAttribute(exonGff, switch(input,"gff3"=relation$ID,"gtf"=relation$Parent))
-  exonGff$gffAttributes <- paste0("ID=", paste(ID, "exon", unlist(exonID, use.names=FALSE), sep="."),
-                                  ";Name=", paste(ID, "exon", unlist(exonID, use.names=FALSE), sep="."),
-                                  ";Parent=", paste(ID,"0",sep = "."))
+  ID <- getGffAttribute(exonGff, switch(input,
+                                        "gff3"=relation$ID,
+                                        "gtf"=relation$Parent))
+  exonGff$gffAttributes <- paste0("ID=",
+                                  paste(ID,
+                                        "exon",
+                                        unlist(exonID, use.names=FALSE),
+                                        sep="."),
+                                  ";Name=", 
+                                  paste(ID, 
+                                        "exon", 
+                                        unlist(exonID, use.names=FALSE),
+                                        sep="."),
+                                  ";Parent=", 
+                                  paste(ID,"0",sep = "."))
   exonGff$type <- "exon"
   
   ## combine
@@ -136,6 +151,6 @@ setMethod(f = "createSyntheticTranscripts",
                   elt$gene <- sub("\\.0","",elt$transcript)
                   elementMetadata(grng) <- elt
                   grng
-                },
-                stop(paste("Cannot generate output of type", output))))
+                }
+                ))
 })
