@@ -1,6 +1,8 @@
 CHANGES IN VERSION 2.5.6
 -------------------------
 
+  o Ported changes from version 2.4.5 and 2.4.6
+
   o Added a function to create the synthetic transcripts
 
 CHANGES IN VERSION 2.5.5
