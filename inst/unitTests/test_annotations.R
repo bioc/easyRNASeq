@@ -8,7 +8,7 @@
 
 ## to test the internal annotation methods
 "test_internal_getAnnotation" <- function(){
-  
+
   ### =======================
   ## biomaRt
   ### =======================
@@ -18,12 +18,11 @@
   } else {
     warning("No internet connection available for 'test_internal_getAnnotation' type 'BiomaRt'")
   }
-  
+
   ### =======================
   ### object
   ### =======================
-  grngList <- split(
-    GRanges(
+  grngs <- GRanges(
       ranges=IRanges(
       start=c(10,30,100),
       end=c(21,53,123)),
@@ -31,12 +30,11 @@
       strand=c("+","+","-"),
       transcript=c("trA1","trA2","trB"),
       gene=c("gA","gA","gB"),
-      exon=c("e1","e2","e3")),
-    c("chr01","chr01","chr02"))
-  
-  annotParam <- AnnotParam(datasource=grngList)
+      exon=c("e1","e2","e3"))
+
+  annotParam <- AnnotParam(datasource=grngs)
   checkTrue(easyRNASeq:::.validate(annotParam))
-  
+
   ### =======================
   ### rda
   ### =======================
@@ -48,12 +46,12 @@
     ),
     type="rda")
   checkTrue(easyRNASeq:::.validate(annotParam))
-  
+
   ### =======================
   ### gtf
   ### =======================
   ## TODO get a gtf and implement that
-  
+
   ### =======================
   ### gff3
   ### =======================
@@ -65,7 +63,7 @@
         package="RnaSeqTutorial"
       ))
   checkTrue(easyRNASeq:::.validate(annotParam))
-  
+
 }
 
 ### =======================
@@ -79,13 +77,13 @@
 
 ## to test the annotation methods
 "test_getAnnotation_BiomaRt" <- function(){
-  
+
   ## make sure we have connection
   if(Biobase::testBioCConnection()){
-  
+
     ## a flybase accession
     FbAcc <- "FBgn0011656"
-  
+
     ## create a biomaRt annot param
     grngs <- getAnnotation(AnnotParam(
       datasource="Dmelanogaster",
@@ -93,7 +91,7 @@
                            filters="ensembl_gene_id",
                            values=FbAcc
     )
-    
+
     ## check
     checkTrue(ncol(elementMetadata(grngs))==3)
     checkEquals(unique(grngs$gene),FbAcc)
@@ -103,8 +101,7 @@
 }
 
 "test_getAnnotation_env" <- function(){
-  expected <- split(
-    GRanges(
+  expected <- GRanges(
       ranges=IRanges(
         start=c(10,30,100),
         end=c(21,53,123)),
@@ -112,12 +109,11 @@
       strand=c("+","+","-"),
       transcript=c("trA1","trA2","trB"),
       gene=c("gA","gA","gB"),
-      exon=c("e1","e2","e3")),
-    c("chr01","chr01","chr02"))
-  
+      exon=c("e1","e2","e3"))
+
   obtained <- getAnnotation(AnnotParam(
     datasource=expected))
-  
+
   checkIdentical(expected,obtained)
 }
 
@@ -137,7 +133,7 @@
 
 "test_getAnnotation_gtf" <- function(){
   ## TODO implement me once there's a dataset
-  
+
 }
 
 "test_getAnnotation_rda" <- function(){
@@ -148,7 +144,7 @@
       package="RnaSeqTutorial"
     ),
     type="rda"))
-  
+
   ## hardcoded tests
   checkTrue(ncol(rngData)==4)
   checkTrue(nrow(rngData)==110595)
