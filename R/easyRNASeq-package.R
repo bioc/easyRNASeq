@@ -169,8 +169,7 @@ NULL
 ##' @importMethodsFrom GenomeInfoDb seqinfo seqlengths "seqlengths<-"
 ##' seqlevels "seqlevels<-" seqnames "seqnames<-"
 ##' @importMethodsFrom GenomicAlignments cigar summarizeOverlaps
-##' @importMethodsFrom GenomicRanges assay assays "assays<-" colData "colData<-"
-##' grglist rowRanges "rowRanges<-"
+##' @importMethodsFrom GenomicRanges grglist
 ##' @importMethodsFrom IRanges as.list as.matrix as.table
 ##' "colnames<-" countOverlaps coverage elementLengths end "end<-" findOverlaps
 ##' gsub mean median narrow nchar queryHits ranges reduce rev "rownames<-" space
@@ -183,7 +182,8 @@ NULL
 ##' runValue substr
 ##' @importMethodsFrom ShortRead chromosome id position readAligned
 ##' srdistance sread srFilter writeFastq
-##' @importMethodsFrom SummarizedExperiment SummarizedExperiment
+##' @importMethodsFrom SummarizedExperiment SummarizedExperiment assay assays
+##' "assays<-" colData "colData<-" rowRanges "rowRanges<-"
 ## import methods
 ##' @importFrom biomaRt getBM listDatasets useDataset useMart
 ##' @importFrom BiocParallel MulticoreParam SerialParam
