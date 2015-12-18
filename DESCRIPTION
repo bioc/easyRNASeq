@@ -1,6 +1,6 @@
 Package: easyRNASeq
 Version: 2.6.1
-Date: 2015-12-08
+Date: 2015-12-14
 Type: Package
 Title: Count summarization and normalization for RNA-Seq data
 Author: Nicolas Delhomme, Ismael Padioleau, Bastian Schiffthaler, Niklas Maehler
@@ -37,9 +37,12 @@ Suggests:
     BSgenome (>= 1.38.0),
     BSgenome.Dmelanogaster.UCSC.dm3 (>= 1.4.0),
     GenomicFeatures (>= 1.22.5),
+    knitr,
+    rmarkdown,
     RnaSeqTutorial (>= 0.7.0),
     RUnit (>= 0.4.31)
 License: Artistic-2.0
 LazyLoad: yes
+VignetteBuilder: knitr
 biocViews: GeneExpression, RNASeq, Genetics, Preprocessing
 RoxygenNote: 5.0.1

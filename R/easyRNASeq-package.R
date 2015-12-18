@@ -180,7 +180,7 @@ NULL
 ##' ScanBamParam yieldSize "yieldSize<-"
 ##' @importMethodsFrom S4Vectors "%in%" elementMetadata "elementMetadata<-"
 ##' endoapply ifelse levels mcols metadata "metadata<-" Rle runLength runsum
-##' runValue substr
+##' runValue split substr
 ##' @importMethodsFrom ShortRead chromosome id position readAligned
 ##' srdistance sread srFilter writeFastq
 ##' @importMethodsFrom SummarizedExperiment SummarizedExperiment
@@ -209,7 +209,7 @@ NULL
 ##' @importFrom utils combn str
 ## and export!
 ##' @exportClass BamFileList RangedData RangedSummarizedExperiment
-##' @exportMethod assay assays colData estimateDispersions estimateSizeFactors fileName metadata rowRanges seqinfo seqlengths seqlevels "seqlevels<-" seqnames "seqnames<-" srFilter SummarizedExperiment width writeFastq writeGff3
+##' @exportMethod assay assays colData estimateDispersions estimateSizeFactors fileName metadata rowRanges seqinfo seqlengths seqlevels "seqlevels<-" seqnames "seqnames<-" split srFilter SummarizedExperiment width writeFastq writeGff3
 ##' @export alignData basename chromosomeFilter compose BamFileList IRanges locfit lp newCountDataSet nFilter RangedData readAligned SRFilterResult
 NULL
 

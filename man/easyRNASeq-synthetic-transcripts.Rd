@@ -22,7 +22,12 @@ annotation filename as a \code{character} string}
 
 \item{verbose}{increase the verbosity (default TRUE)}
 
-\item{...}{If \code{obj} is a character string, \code{input} defines the type of input, one of 'gff3' or 'gtf' and \code{output} defines the output type, one of 'Genome_intervals' or 'GRanges'}
+\item{output}{the output type, one of 'Genome_intervals' or 'GRanges'}
+
+\item{input}{the type of input, one of 'gff3' or 'gtf'}
+
+\item{...}{If \code{obj} is a character string, \code{input} and
+\code{output} - see below}
 }
 \value{
 Depending on the \code{obj} class.
@@ -78,7 +83,8 @@ add features that are part of the \url{sequenceontology.org} SOFA
 
   ## get the example file
   library(curl)
-  curl_download("https://microasp.upsc.se/root/upscb-public/raw/master/tutorial/easyRNASeq/Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz",
+  curl_download("https://microasp.upsc.se/root/upscb-public/raw/master/
+  tutorial/easyRNASeq/Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz",
              "Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz")
 
   ## create the AnnotParam
