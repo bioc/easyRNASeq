@@ -69,9 +69,9 @@
 
           ## stop if the attributes we need are not present
           ## we relax on gene_name
-          if(!all(GTF.FIELDS[!GTF.FIELDS %in% c("exon_number","gene_name")] %in% attrKeys)){
+          if(!all(GTF.FIELDS[!GTF.FIELDS %in% c("gene_name")] %in% attrKeys)){
             stop(paste("Your gtf file: ",datasource(obj)," does not contain all the required fields: ",
-                       paste(GTF.FIELDS[!GTF.FIELDS %in% c("exon_number","gene_name")],collapse=", ")
+                       paste(GTF.FIELDS[!GTF.FIELDS %in% c("gene_name")],collapse=", ")
                        ,".",sep=""))
           }
           if(verbose){

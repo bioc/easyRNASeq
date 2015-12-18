@@ -527,7 +527,7 @@ naPositionFilter <- function(.name="NA Position Filter"){
   },name=.name)
 }
 
-##' an internal function
+# an internal function
 ".getBpParam" <- function(mc.cores=1L){
   return(switch(as.character(mc.cores),
                 "1"=SerialParam(),
