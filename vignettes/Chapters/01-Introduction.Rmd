@@ -1,0 +1,33 @@
+# Introduction
+
+This vignette provides the implementation of the procedure described in point 
+7 of our __Guidelines for RNA-Seq data analysis__[^1] protocol available from
+the __Epigenesys__ [website](http://www.epigenesys.eu).
+
+Briefly, it details the step necessary to:
+1. create a non-redundant annotation
+1. count reads per feature
+1. pre-analyse the data, i.e. assess the pertinence of the samples' 
+charateristics in the light of their biological provenance; _i.e._ in other words
+perform a so called _"biological QA"_ using assessment methods such as _Principal
+Component Analysis_, _Multi-dimensional Scaling_, _Hierarcical Clustering_, _etc._
+
+The aim of this vignette is to go through these steps using the __easyRNASeq__
+package, hence the rationale of the implementation will not be discussed, albeit
+relevant litterature will be pointed at when necessarry.
+
+To perform the listed steps, we need to instantiate a number 
+of objects to store the minimal set of parameters describing the conducted 
+__RNA-Seq__ experiment, _e.g._ the BAM files location, the annotation location 
+and type, the sequencing parameters, _etc._
+
+To get started with this process, we load the package into our R session:
+
+```{r library}
+library(easyRNASeq)
+```
+
+before instantiating an __AnnotParam__ object informing on the location and type
+of the annotation to be used.
+
+====

@@ -10,6 +10,7 @@
 ##' @rdname easyRNASeq-internal-AnnotParam-methods
 ##' @param obj An AnnotParam object
 ##' @param verbose To print (or not) messages
+##' @param lenient Relax validation parameters for gtf files
 ##' @param \dots additional arguments passed to the retrieval function.
 ##' At the moment only forwarded to the \pkg{biomaRt} \code{\link[biomaRt:getBM]{getBM}}
 ##' function.
@@ -18,7 +19,7 @@
 ##' @author Nicolas Delhomme
 ##' @keywords internal
 
-".validate" <- function(obj,verbose=TRUE){
+".validate" <- function(obj,verbose=TRUE,lenient=FALSE){
 
   ## for the developer
   stopifnot(is(obj,"AnnotParam"))
@@ -68,11 +69,28 @@
           attrKeys <- unique(sub(" .*","",unlist(strsplit(some.lines[[9]],"; *"))))
 
           ## stop if the attributes we need are not present
-          ## we relax on gene_name
-          if(!all(GTF.FIELDS[!GTF.FIELDS %in% c("gene_name")] %in% attrKeys)){
-            stop(paste("Your gtf file: ",datasource(obj)," does not contain all the required fields: ",
-                       paste(GTF.FIELDS[!GTF.FIELDS %in% c("gene_name")],collapse=", ")
-                       ,".",sep=""))
+          if(!lenient){
+              ## we relax on gene_name
+              if(!all(GTF.FIELDS[!GTF.FIELDS %in% c("gene_name")] %in% attrKeys)){
+                  stop(paste("Your gtf file: ",datasource(obj),
+                             " does not contain all the required fields: ",
+                             paste(GTF.FIELDS[!GTF.FIELDS %in% c("gene_name")],
+                                   collapse=", ")
+                             ,".",sep=""))
+              }
+          } else {
+              ## we are lenient with gtfs
+              if(! "exon" %in% unique(some.lines[[3]]) ||
+                     ! all(GTF.FIELDS[!GTF.FIELDS %in% c("gene_name","exon_id")]
+                           %in% attrKeys)){
+                  stop(paste("Your gtf file: ",datasource(obj),
+                             " does not contain all the required fields: ",
+                             paste(GTF.FIELDS[!GTF.FIELDS %in%
+                                                  c("gene_name","exon_id")],
+                                   collapse=", "),
+                             " even under lenient criteria looking",
+                             " only at 'exon' features",".",sep=""))
+              }
           }
           if(verbose){
             message("Validated a datasource of type ",type(obj))

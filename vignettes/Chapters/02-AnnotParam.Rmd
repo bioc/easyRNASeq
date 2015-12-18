@@ -1,0 +1,46 @@
+# Annotation parameters - AnnotParam
+
+The __AnnotParam__ class is meant to store the minimal set of information 
+necessary to retrieve the annotation
+
+The minimal information to provide is:
+
+1. a datasource: a path to a file provided as a character string or if the _type_
+is biomaRt, the datasource you want to connect to, as retrieved using the
+__biomaRt__ __datasource__ function.
+2. a type: one of "gff3","gtf","rda", and "biomaRt". _gff3_ is the default. If 
+_rda_ is used, it expects the corresponding file to contain a _GRanges_ object
+by the name of _gAnnot_.
+
+<!-- Make that part of the RnaSeqTutorial package
+The __easyRNASeq__ package comes with a companion package called __RnaSeqTutorial__
+that contains a set of exemplary data. We start by loading that package (install 
+it from Bioconductor if it is missing on your system).
+-->
+
+In this tutorial, we will reproduce the analysis performed in _Robinson, 
+Delhomme et al._ [@Robinson:2014p6362]. For that we will start by downloading
+the original annotation gff3 file for _P. trichocarpa_, a close related species
+of the trees used in the study into the current directory.
+
+```{r P trichocarpa annotation}
+library(curl)
+curl_download(url=paste0("ftp://ftp.plantgenie.org/Data/PopGenIE/",
+                         "Populus_trichocarpa/v3.0/v10.1/GFF3/",
+                         "Ptrichocarpa_210_v3.0_gene_exons.gff3.gz"),
+                  destfile=,"./Ptrichocarpa_210_v3.0_gene_exons.gff3.gz")
+```
+
+Before instantiating an "AnnotParam" object.
+
+```{r AnnotParam}
+    annotParam <- AnnotParam(
+        datasource="./Ptrichocarpa_210_v3.0_gene_exons.gff3.gz")
+```
+
+This annotation file however contains multiple copy of the same exons, _i.e._ 
+when exons are shared by several isoforms of a gene. This might result in 
+so-called "multiple-counting" and as described in these guidelines[^1], we 
+will to circumvent that issue create a set of synthetic transcripts.
+
+====

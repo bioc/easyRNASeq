@@ -83,8 +83,8 @@ add features that are part of the \url{sequenceontology.org} SOFA
 
   ## get the example file
   library(curl)
-  curl_download("https://microasp.upsc.se/root/upscb-public/raw/master/
-  tutorial/easyRNASeq/Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz",
+  curl_download(paste0("https://microasp.upsc.se/root/upscb-public/raw/",
+  "master/tutorial/easyRNASeq/Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"),
              "Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz")
 
   ## create the AnnotParam

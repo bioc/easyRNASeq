@@ -80,7 +80,8 @@
 ##'
 ##'   ## get the example file
 ##'   library(curl)
-##'   curl_download("https://microasp.upsc.se/root/upscb-public/raw/master/tutorial/easyRNASeq/Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz",
+##'   curl_download(paste0("https://microasp.upsc.se/root/upscb-public/raw/",
+##'   "master/tutorial/easyRNASeq/Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"),
 ##'              "Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz")
 ##'
 ##'   ## create the AnnotParam
@@ -112,7 +113,13 @@ setMethod(f = "createSyntheticTranscripts",
             }
 
             # Validate the object
-            .validate(obj,verbose=verbose)
+            tryCatch(.validate(obj,verbose=verbose),
+                     error=function(e){
+                        warning(paste("Your gtf file is not comprehensive;",
+                                      "possibly containing only 'exon' features"))
+                        message("Validating under lenient criteria")
+                        .validate(obj,verbose=verbose,lenient=TRUE)
+                     })
 
             # Create the synth. trx.
             return(
@@ -238,9 +245,13 @@ setMethod(f = "createSyntheticTranscripts",
                             geneGff$gffAttributes <- sub(relation$Parent,
                                                          "ID",geneGff$gffAttributes)
                         }
+                        geneGff
                     })
 
-  ## TODO GO ON THERE
+  # define the gene ID if gtf is exon only
+  if(input=="gtf" & sum(gene.sel)==0){
+      geneID <- getGffAttribute(geneGff,"ID")
+  }
 
   ## create gffs for each feature
   feats <- lapply(features, function(f) {
@@ -260,10 +271,26 @@ setMethod(f = "createSyntheticTranscripts",
   })
   featureGff <- Reduce(c,feats[!sapply(feats,is.null)])
 
+  # create the featureGff if we have only exon gtf
+  if(input=="gtf" & is.null(featureGff)){
+      featureGff <- geneGff
+      featureGff$type <- "mRNA"
+      featureGff$gffAttributes <- paste("ID=",
+                          geneID,
+                          ".0;Parent=",
+                          geneID,
+                          sep=""
+      )
+  }
+
   ## create the exon gff
   rngList <- rngList[match(geneID[geneID %in% idMap[,relation$Parent]], names(rngList))]
   exonNumber <- elementLengths(rngList)
-  exonGff <- dat[rep(which(gene.sel)[geneID %in% idMap[,relation$Parent]], exonNumber)]
+  if(sum(gene.sel)>0){
+      exonGff <- dat[rep(which(gene.sel)[geneID %in% idMap[,relation$Parent]], exonNumber)]
+  } else {
+      exonGff <- geneGff[rep(1:length(exonNumber),exonNumber)]
+  }
   exonGff[,1] <- unlist(start(rngList))
   exonGff[,2] <- unlist(end(rngList))
 
@@ -272,7 +299,10 @@ setMethod(f = "createSyntheticTranscripts",
   exonID[sel] <- sapply(exonID[sel], rev)
   ID <- getGffAttribute(exonGff, switch(input,
                                         "gff3"=relation$ID,
-                                        "gtf"=relation$Parent))
+                                        "gtf"={
+                                            ifelse(sum(gene.sel)==0,
+                                                   "ID",
+                                            relation$Parent)}))
   exonGff$gffAttributes <- paste0("ID=",
                                   paste(ID,
                                         "exon",

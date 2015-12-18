@@ -1,0 +1,2 @@
+<!-- from 01-Intorduction.Rmd -->
+[^1]: http://www.epigenesys.eu/en/protocols/bio-informatics/1283-guidelines-for-rna-seq-data-analysis

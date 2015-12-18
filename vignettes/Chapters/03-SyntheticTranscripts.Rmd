@@ -1,0 +1,72 @@
+# Synthetic transcripts - createSyntheticTranscripts
+
+One major caveat of estimating gene expression using aligned RNA-Seq reads is 
+that a single read, which originated from a single mRNA molecule, might 
+sometimes align to several features (e.g. transcripts or genes) with alignments
+of equivalent quality. 
+
+This, for example, might happen as a result of gene duplication and the presence
+of repetitive or common domains. To avoid counting unique mRNA fragments 
+multiple times, the stringent approach is to keep only uniquely mapping reads - 
+being aware of potential consequences, see the note below. 
+
+Not only can ???multiple counting??? arise from a biological reason, but also from 
+technical artifacts, introduced mostly by poorly formatted gff3/gtf annotation 
+files. To avoid this, it is best practice to adopt a conservative approach by 
+collapsing all existing transcripts of a single gene locus into a **???synthetic???**
+transcript containing every exon of that gene. In the case of overlapping exons, 
+the longest genomic interval is kept, i.e. an artificial exon is created. 
+This process results in a flattened transcript ??? a gene structure with a one to
+one relationship. 
+
+To create such a structure, we use the __createSyntheticTranscripts__ function
+on the file we just downloaded, simply by passing our __annotParam__ object as 
+argument.
+
+```{r create synthetic transcripts}
+annotParam <- createSyntheticTranscripts(annotParam,verbose=FALSE)
+```
+
+This function returns an updated annotParam object that contains the newly
+created, flattened transcript annotation. This object can then be saved as 
+an _rda_ file for later re-use or for sharing with collaborators.
+```{r save the object}
+save(annotParam,
+file="./Ptrichocarpa_210_v3.0_gene_exons_synthetic-transcripts_annotParam.rda")
+```
+
+## Alternatives
+Instead of updating the _annotParam_ object, we could have created an object of 
+class __Genome_Intervals__ from the __genomeIntervals__ package, using the 
+same function but using the actual _datasource_ of the previous _annotParam_ 
+object as argument rather than the object itself.
+
+```{r create synthetic transcripts as gI}
+gI <- createSyntheticTranscripts(
+    "./Ptrichocarpa_210_v3.0_gene_exons.gff3.gz",
+    verbose=FALSE)
+```
+
+This _gI_ object can then be exported as a gff3 file.
+
+```{r export the file}
+writeGff3(gI,
+          file="./Ptrichocarpa_210_v3.0_gene_exons_synthetic-transcripts.gff3.gz")
+```
+
+
+----
+
+<!-- Revisit this once we have added MMSeq -->
+
+**Note:** Ignoring multi-mapping reads may introduce biases in the read counts 
+of some genes (such as that of paralogs or of very conserved gene families), 
+but in the context of a conservative first analysis we are of the current
+opinion that they are best ignored. One should of course assess how many reads 
+are multi-mapping (check for example the STAR output) and possibly extract them 
+from the alignment read file to visualize them using a genome browser so as to 
+understand where they are located and how they may affect any analysis. 
+Based on this, one may, at a later stage, decide to relax the counting 
+parameters to accept multi-mapping reads.
+
+====

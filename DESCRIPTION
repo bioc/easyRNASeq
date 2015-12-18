@@ -1,6 +1,6 @@
 Package: easyRNASeq
 Version: 2.6.1
-Date: 2015-12-14
+Date: 2015-12-18
 Type: Package
 Title: Count summarization and normalization for RNA-Seq data
 Author: Nicolas Delhomme, Ismael Padioleau, Bastian Schiffthaler, Niklas Maehler
@@ -36,6 +36,7 @@ Suggests:
     BiocStyle (>= 1.8.0),
     BSgenome (>= 1.38.0),
     BSgenome.Dmelanogaster.UCSC.dm3 (>= 1.4.0),
+    curl,
     GenomicFeatures (>= 1.22.5),
     knitr,
     rmarkdown,

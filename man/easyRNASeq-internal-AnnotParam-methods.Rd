@@ -5,12 +5,14 @@
 \alias{AnnotParam internal methods}
 \title{Internal methods of AnnotParam objects}
 \usage{
-.validate(obj, verbose = TRUE)
+.validate(obj, verbose = TRUE, lenient = FALSE)
 }
 \arguments{
 \item{obj}{An AnnotParam object}
 
 \item{verbose}{To print (or not) messages}
+
+\item{lenient}{Relax validation parameters for gtf files}
 
 \item{\dots}{additional arguments passed to the retrieval function.
 At the moment only forwarded to the \pkg{biomaRt} \code{\link[biomaRt:getBM]{getBM}}

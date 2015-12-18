@@ -1,0 +1,62 @@
+---
+title: "A walkthrough the easyRNASeq package functionalities"
+author: "Nicolas Delhomme"
+date: "`r Sys.Date()`"
+bibliography: Bibliography/References.bib
+output: 
+  html_document:
+    fig_captions: yes
+    number_seections: yes
+    pandoc_args:
+    - +RTS
+    - -K500m
+    - -RTS
+    toc: yes
+vignette: >
+  %\VignetteIndexEntry{geneNetworkR}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r style, echo=FALSE, results='asis'}
+BiocStyle::markdown()
+```
+
+```{r message=FALSE,warning=FALSE,results='hide',echo=FALSE}
+options(digits=2)
+```
+
+```{r child = "Chapters/01-Introduction.Rmd"}
+```
+
+```{r child = "Chapters/02-AnnotParam.Rmd"}
+```
+
+```{r child = "Chapters/03-SyntheticTranscripts.Rmd"}
+```
+
+```{r child = "Chapters/04-BamParam.Rmd"}
+```
+
+```{r child = "Chapters/05-RnaSeqParam.Rmd"}
+```
+
+```{r child = "Chapters/06-simpleRNASeq.Rmd"}
+```
+
+```{r child = "Chapters/08-Session-Info.Rmd"}
+```
+
+```{r child = "Chapters/09-Acknowledgments.Rmd"}
+```
+
+```{r child = "Chapters/10-Foonotes.Rmd"}
+```
+
+```{r child = "Chapters/11-Images.Rmd"}
+```
+
+```{r child = "Chapters/12-Appendix.Rmd"}
+```
+
+# References
