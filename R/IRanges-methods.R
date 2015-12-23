@@ -42,6 +42,7 @@ setMethod(
           definition=function(x){
             switch(class(genomicAnnotation(x)),
                    "GRanges"={
+                       ## TODO why do we split it?
                      split(ranges(genomicAnnotation(x)),
                            seqnames(genomicAnnotation(x)))
                    },

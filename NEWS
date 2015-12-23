@@ -1,3 +1,37 @@
+CHANGES IN VERSION 2.7.2
+-------------------------
+
+  o Ported version 2.6.1 changes
+
+CHANGES IN VERSION 2.7.1
+-------------------------
+
+ o Changes by Hervé to update the NAMESPACE
+
+CHANGES IN VERSION 2.7.0
+-------------------------
+
+  o Original Bioconductor version 3.2
+
+CHANGES IN VERSION 2.6.1
+-------------------------
+
+  o Upgraded the dependencies
+
+  o Introduced the new vignette (SimpleRNASeq) structure
+
+  o Fixed a cosmetic issue
+
+  o Corrected man pages
+
+  o Fixed issues with the synthetic transcript generation from gtf file. Thanks
+    to Sylvain Foisy for reporting this one.
+
+CHANGES IN VERSION 2.6.0
+-------------------------
+
+  o Original Bioconductor version 3.2
+
 CHANGES IN VERSION 2.5.6
 -------------------------
 

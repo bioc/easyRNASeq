@@ -25,8 +25,8 @@
 ##' \tabular{ll}{
 ##' Package: \tab easyRNASeq\cr
 ##' Type: \tab Package\cr
-##' Version: \tab 2.5.6\cr
-##' Date: \tab 2015-07-15\cr
+##' Version: \tab 2.7.2\cr
+##' Date: \tab 2015-12-18\cr
 ##' License: \tab Artistic-2.0\cr
 ##' LazyLoad: \tab yes\cr
 ##' Depends: \tab methods, parallel, Biobase, BiocGenerics, biomaRt, Biostrings, edgeR, DESeq, genomeIntervals, GenomeInfoDb, GenomicAlignments, GenomicRanges, SummarizedExperiment, graphics, IRanges, LSD, Rsamtools, S4Vectors, ShortRead, utils\cr
@@ -170,16 +170,16 @@ NULL
 ##' seqlevels "seqlevels<-" seqnames "seqnames<-"
 ##' @importMethodsFrom GenomicAlignments cigar summarizeOverlaps
 ##' @importMethodsFrom GenomicRanges grglist
-##' @importMethodsFrom IRanges as.list as.matrix as.table
+##' @importMethodsFrom IRanges as.list as.matrix
 ##' "colnames<-" countOverlaps coverage elementLengths end "end<-" findOverlaps
 ##' gsub mean median narrow nchar queryHits ranges reduce rev "rownames<-" space
-##' split start "start<-" sub  tolower "universe<-" unlist values which width
+##' start "start<-" sub  tolower "universe<-" unlist values which width
 ##' @importMethodsFrom methods coerce initialize show
 ##' @importMethodsFrom Rsamtools countBam path scanBam scanBamHeader
 ##' ScanBamParam yieldSize "yieldSize<-"
-##' @importMethodsFrom S4Vectors "%in%" elementMetadata "elementMetadata<-"
+##' @importMethodsFrom S4Vectors "%in%" as.table elementMetadata "elementMetadata<-"
 ##' endoapply ifelse levels mcols metadata "metadata<-" Rle runLength runsum
-##' runValue substr
+##' runValue split substr
 ##' @importMethodsFrom ShortRead chromosome id position readAligned
 ##' srdistance sread srFilter writeFastq
 ##' @importMethodsFrom SummarizedExperiment SummarizedExperiment assay assays
