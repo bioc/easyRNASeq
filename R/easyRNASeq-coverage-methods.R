@@ -140,7 +140,7 @@ setMethod(
     )
     
     ## stop if the chr sel removes everything!
-    if(length(aln.info$rng.list)==0 | sum(elementLengths(aln.info$rng.list)) == 0){
+    if(length(aln.info$rng.list)==0 | sum(elementNROWS(aln.info$rng.list)) == 0){
       stop(paste("No data was retrieved from the file: ",
                  filename,
                  ". Make sure that your file is valid, that your 'chr.sel' (if provided) contains valid values; i.e. values as found in the alignment file, not as returned by 'RNAseq'.",
@@ -205,7 +205,7 @@ setMethod(
     }
     
     if(any(unlist(start(aln.info$rng.list),use.names=FALSE) > chrSize(obj)[rep(names(aln.info$rng.list),
-                                                                               elementLengths(start(aln.info$rng.list)))])){
+                                                                               elementNROWS(start(aln.info$rng.list)))])){
       stop("Some of your read coordinates are bigger than the chromosome sizes you provided. Aborting!")
     }
     

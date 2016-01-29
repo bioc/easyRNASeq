@@ -171,7 +171,7 @@ NULL
 ##' @importMethodsFrom GenomicAlignments cigar summarizeOverlaps
 ##' @importMethodsFrom GenomicRanges grglist
 ##' @importMethodsFrom IRanges as.list as.matrix
-##' "colnames<-" countOverlaps coverage elementLengths end "end<-" findOverlaps
+##' "colnames<-" countOverlaps coverage end "end<-" findOverlaps
 ##' gsub mean median narrow nchar queryHits ranges reduce rev "rownames<-" space
 ##' start "start<-" sub  tolower "universe<-" unlist values which width
 ##' @importMethodsFrom methods coerce initialize show
@@ -203,7 +203,7 @@ NULL
 ##' @importFrom methods as extends is new
 ##' @importFrom parallel makePSOCKcluster parLapply stopCluster
 ##' @importFrom Rsamtools BamFileList bamFlagTest index scanBamFlag
-##' @importFrom S4Vectors DataFrame SimpleList
+##' @importFrom S4Vectors DataFrame SimpleList elementNROWS
 ##' @importFrom ShortRead alignData chromosomeFilter compose nFilter
 ##' SRFilterResult
 ##' @importFrom utils combn str

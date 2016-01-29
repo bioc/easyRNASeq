@@ -285,7 +285,7 @@ setMethod(f = "createSyntheticTranscripts",
 
   ## create the exon gff
   rngList <- rngList[match(geneID[geneID %in% idMap[,relation$Parent]], names(rngList))]
-  exonNumber <- elementLengths(rngList)
+  exonNumber <- elementNROWS(rngList)
   if(sum(gene.sel)>0){
       exonGff <- dat[rep(which(gene.sel)[geneID %in% idMap[,relation$Parent]], exonNumber)]
   } else {

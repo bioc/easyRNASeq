@@ -480,7 +480,7 @@ silent <- sapply(
 ## rngList
 ## 
 ## ## check what's the gene with the max number of exons
-## mostExons <- rev(names(table(elementLengths(rngList))))[1]
+## mostExons <- rev(names(table(elementNROWS(rngList))))[1]
 ## mostExons
 ## 
 ## ## work the magic; collapse the genes IRanges
@@ -488,7 +488,7 @@ silent <- sapply(
 ## rngList
 ## 
 ## ## what's the max now?
-## rev(names(table(elementLengths(rngList))))[1]
+## rev(names(table(elementNROWS(rngList))))[1]
 ## 
 ## ## create the gff
 ## ## get the gff information; here we simply duplicate the
@@ -502,7 +502,7 @@ silent <- sapply(
 ##       strsplit(getGffAttribute(exons,"Parent"),
 ##                ","),"[",1),
 ##     transcriptGeneMapping$ID),"Parent"]),
-##   elementLengths(rngList)),]
+##   elementNROWS(rngList)),]
 ## 
 ## ## update the coordinates
 ## syntheticGeneModel[,1]<- unlist(start(rngList))
@@ -512,17 +512,17 @@ silent <- sapply(
 ## levels(syntheticGeneModel$source)<- "inhouse"
 ## 
 ## ## get the exon number for the minus strand
-## exonNumber<- lapply(elementLengths(rngList),":",1)
+## exonNumber<- lapply(elementNROWS(rngList),":",1)
 ## 
 ## ## reverse them on the plus strand
-## sel<- strand(syntheticGeneModel)[cumsum(elementLengths(rngList))] == "+"
+## sel<- strand(syntheticGeneModel)[cumsum(elementNROWS(rngList))] == "+"
 ## exonNumber[sel]<- sapply(exonNumber[sel],rev)
 ## 
 ## ## update the attributes
 ## syntheticGeneModel$gffAttributes<- paste("ID=",
-##   rep(names(rngList),elementLengths(rngList)),
+##   rep(names(rngList),elementNROWS(rngList)),
 ##   ":",unlist(exonNumber),";Parent=",
-##   rep(names(rngList),elementLengths(rngList)),".0",sep="")
+##   rep(names(rngList),elementNROWS(rngList)),".0",sep="")
 ## 
 ## ## write the file
 ## writeGff3(syntheticGeneModel,file="dmel_synthetic_transcript_r5-54.gff3")
