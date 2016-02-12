@@ -1,5 +1,5 @@
 Package: easyRNASeq
-Version: 2.7.3
+Version: 2.7.4
 Date: 2015-12-20
 Type: Package
 Title: Count summarization and normalization for RNA-Seq data
@@ -20,10 +20,10 @@ Imports:
     GenomeInfoDb (>= 1.7.3),
     genomeIntervals (>= 1.27.0),
     GenomicAlignments (>= 1.7.3),
-    GenomicRanges (>= 1.23.7),
+    GenomicRanges (>= 1.23.16),
     SummarizedExperiment (>= 1.1.11),
     graphics,
-    IRanges (>= 2.5.18),
+    IRanges (>= 2.5.27),
     LSD (>= 3.0),
     locfit,
     methods,

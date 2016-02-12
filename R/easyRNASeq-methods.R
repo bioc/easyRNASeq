@@ -468,8 +468,8 @@ setMethod(
             ## TODO this is a bit fishy as it depends on the order of the summarization argument...
             if(!(count == "genes" & summarization[1] == "geneModels")){
                 ovl <- findOverlaps(ranges(obj),
-                                    ignoreSelf=TRUE,
-                                    ignoreRedundant=TRUE)
+                                    drop.self=TRUE,
+                                    drop.redundant=TRUE)
                 ovl.number <- sum(sapply(ovl,
                                          function(hits){length(unique(queryHits(hits)))}))
                 if(ovl.number > 0){
@@ -482,8 +482,8 @@ setMethod(
                     genomicAnnotation(obj)$overlap <- as.table(ovl) > 0
                 }
                 if(count == "transcripts"){
-                    ovl <- findOverlaps(ranges(obj),ignoreSelf=TRUE,type="equal",
-                                        ignoreRedundant=TRUE)
+                    ovl <- findOverlaps(ranges(obj),drop.self=TRUE,type="equal",
+                                        drop.redundant=TRUE)
                     dup.exon <- sum(sapply(ovl,
                                            function(hits){length(unique(queryHits(hits)))}))
                     if(dup.exon > 0){
@@ -548,7 +548,7 @@ setMethod(
                 geneModel(obj) <- .geneModelAnnotation(genomicAnnotation(obj),nbCore)
 
                 ## check the gene model
-                ovl <- findOverlaps(geneModel(obj),ignoreSelf=TRUE,ignoreRedundant=TRUE)
+                ovl <- findOverlaps(geneModel(obj),drop.self=TRUE,drop.redundant=TRUE)
                 ovl.number <- sum(sapply(ovl,function(hits){length(unique(queryHits(hits)))}))
                 if(ovl.number > 0){
                     if(! ignoreWarnings){
