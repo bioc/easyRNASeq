@@ -256,16 +256,20 @@ setMethod(f = "createSyntheticTranscripts",
   ## create gffs for each feature
   feats <- lapply(features, function(f) {
     if(verbose){message(sprintf("Processing %s features",f))}
-    f.sel <- geneID %in% idMap[,relation$Parent][idMap$type == f]
+    f.sel <- idMap$type == f
     fGff <- NULL
     if(sum(f.sel)>0){
       fGff <- dat[sel][f.sel]
       fGff$type <- f
       fGff$gffAttributes <- paste("ID=",
-                                  getGffAttribute(fGff,relation$ID),
+                                  getGffAttribute(fGff,relation$Parent),
                                   ".0;Parent=",
-                                  getGffAttribute(fGff,relation$ID),
+                                  getGffAttribute(fGff,relation$Parent),
                                   sep="")
+      # Make the feature unique
+      fGff <- fGff[order(width(fGff),decreasing = TRUE),]
+      pars <- getGffAttribute(fGff,"Parent")
+      fGff <- fGff[match(unique(pars),pars),]
     }
     return(fGff)
   })

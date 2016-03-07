@@ -43,4 +43,4 @@ when exons are shared by several isoforms of a gene. This might result in
 so-called "multiple-counting" and as described in these guidelines[^1], we 
 will to circumvent that issue create a set of synthetic transcripts.
 
-====
+----

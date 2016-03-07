@@ -1,3 +1,12 @@
+CHANGES IN VERSION 2.6.2
+-------------------------
+
+  o Fixed issues with the gff3 synthetic transcript generation. Several
+    mRNA lines per mRNA were kept and the feature selection was failing
+    for features other than mRNA (e.g. tRNA or miRNA)
+
+  o Extended the SimpleRNASeq vignette
+
 CHANGES IN VERSION 2.6.1
 -------------------------
 

@@ -1,4 +1,67 @@
-# More to come
-Work in progress...
+# Bam Parameters - BamParam
 
-=====
+High throughput sequencing RNA-Seq data comes in a multitude of _flavours_, 
+_i.e._ even from a single provider, protocol - _e.g._ strand specific, 
+paired-end - reads characteristics - _e.g._ read length - will vary. 
+
+The __easyRNASeq simpleRNASeq__ method will infer these information based on
+excerpts sampled from the data. However, it is always best to provide these
+information, as
+1. the inference is done on small excerpt and can fail
+2. it is always good to document an analysis
+
+By default __easyRNASeq simpleRNASeq__ will keep the inferred parameters 
+over the user-provided parameters if these do not agree and emit corresponding
+warnings. The choice to rely on inferred parameters over user-provided one
+is to enforce user to cross-validate their knowledge of the data characteristics,
+as these are crucial for an adequate processing. Remember GIGO[^2].
+
+If the _automatic inference_ does fail, please let me know, so that I optimise
+it. Meanwhile, you can use the __override__ argument to enforce the use of
+user-passed parameters.
+
+To reproduce the results from _Robinson, Delhomme et al._ [@Robinson:2014p6362],
+we first need to download an excerpt of the data.
+
+We first retrieve the file listing and md5 codes
+```{r bam files}
+library(curl)
+curl_download(url=paste0("ftp://ftp.plantgenie.org/Tutorials/RnaSeqTutorial/",
+                         "data/star/md5.txt"),
+                  destfile="md5.txt")
+```
+
+In this part of the vignette, we will _NOT_ process all the data, albeit it would
+be possible, but for the sake of brevity, we will only retrieve the six first
+datasets. We get these from the sample information contained within this package.
+
+```{r data}
+data(RobinsonDelhomme2014)
+lapply(RobinsonDelhomme2014[1:6,"Filename"],function(f){
+    curl_download(url=paste0("ftp://ftp.plantgenie.org/Tutorials/",
+                             "RnaSeqTutorial/data/star/",f),
+                  destfile=f)
+})
+```
+
+These six files - as the rest of the dataset - have been sequenced on an 
+Illumina HiSeq 2500 in paired-end mode using a non-strand specific library
+protocol with a read length of 100 bp. The raw data have been processed as
+described in the aforementioned guidelines[^1] and as such have been filtered 
+for rRNA sequences, trimmed for adapters and clipped for quality. The resulting 
+reads (of length 50-100bp) have then been aligned using STAR.
+
+<!-- TODO cite STAR -->
+
+Using these information, we finally generate the __BamParam__ object.
+
+```{r bamParam}
+bamParam <- BamParam(paired = TRUE,
+                     stranded = FALSE)
+```
+
+A third parameter _yieldSize_ can be set to speed up the processing on multi-CPU
+or multi-core computers. It splits and processed the BAM files in chunk of size
+_yieldSize_ with a default of 1M reads.
+
+----

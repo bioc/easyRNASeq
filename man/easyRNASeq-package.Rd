@@ -23,18 +23,6 @@ Offers functionalities to summarize read counts per feature of interest, e.g. ex
 Offers functionalities to normalize the summarized counts using 3rd party packages like \code{\link[DESeq:newCountDataSet]{DESeq}}
 or \code{\link[edgeR:DGEList]{edgeR}}.
 }
-\details{
-\tabular{ll}{
-Package: \tab easyRNASeq\cr
-Type: \tab Package\cr
-Version: \tab 2.6.1\cr
-Date: \tab 2015-08-12\cr
-License: \tab Artistic-2.0\cr
-LazyLoad: \tab yes\cr
-Depends: \tab methods, parallel, Biobase, BiocGenerics, biomaRt, Biostrings, edgeR, DESeq, genomeIntervals, GenomeInfoDb, GenomicAlignments, GenomicRanges, SummarizedExperiment, graphics, IRanges, LSD, Rsamtools, S4Vectors, ShortRead, utils\cr
-Suggests: \tab BSgenome.Dmelanogaster.UCSC.dm3
-}
-}
 \section{Methods}{
 
 The main function \code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq}} will summarize the counts per
