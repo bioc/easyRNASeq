@@ -22,17 +22,6 @@
 ##' Offers functionalities to normalize the summarized counts using 3rd party packages like \code{\link[DESeq:newCountDataSet]{DESeq}}
 ##' or \code{\link[edgeR:DGEList]{edgeR}}.
 ##'
-##' \tabular{ll}{
-##' Package: \tab easyRNASeq\cr
-##' Type: \tab Package\cr
-##' Version: \tab 2.7.2\cr
-##' Date: \tab 2015-12-18\cr
-##' License: \tab Artistic-2.0\cr
-##' LazyLoad: \tab yes\cr
-##' Depends: \tab methods, parallel, Biobase, BiocGenerics, biomaRt, Biostrings, edgeR, DESeq, genomeIntervals, GenomeInfoDb, GenomicAlignments, GenomicRanges, SummarizedExperiment, graphics, IRanges, LSD, Rsamtools, S4Vectors, ShortRead, utils\cr
-##' Suggests: \tab BSgenome.Dmelanogaster.UCSC.dm3
-##' }
-##'
 ##' @section Methods:
 ##' The main function \code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq}} will summarize the counts per
 ##' feature of interest, for as many samples as provided and will return a
@@ -177,9 +166,9 @@ NULL
 ##' @importMethodsFrom methods coerce initialize show
 ##' @importMethodsFrom Rsamtools countBam path scanBam scanBamHeader
 ##' ScanBamParam yieldSize "yieldSize<-"
-##' @importMethodsFrom S4Vectors "%in%" as.table elementMetadata "elementMetadata<-"
-##' endoapply ifelse levels mcols metadata "metadata<-" Rle runLength runsum
-##' runValue split substr
+##' @importMethodsFrom S4Vectors "%in%" as.table elementMetadata
+##' "elementMetadata<-" elementNROWS endoapply ifelse levels mcols metadata
+##' "metadata<-" Rle runLength runsum runValue split substr
 ##' @importMethodsFrom ShortRead chromosome id position readAligned
 ##' srdistance sread srFilter writeFastq
 ##' @importMethodsFrom SummarizedExperiment SummarizedExperiment assay assays
@@ -203,10 +192,11 @@ NULL
 ##' @importFrom methods as extends is new
 ##' @importFrom parallel makePSOCKcluster parLapply stopCluster
 ##' @importFrom Rsamtools BamFileList bamFlagTest index scanBamFlag
-##' @importFrom S4Vectors DataFrame SimpleList elementNROWS queryHits
+##' @importFrom S4Vectors DataFrame queryHits SimpleList
 ##' @importFrom ShortRead alignData chromosomeFilter compose nFilter
 ##' SRFilterResult
-##' @importFrom utils combn str
+##' @importFrom stats aggregate na.omit
+##' @importFrom utils combn str packageVersion
 ## and export!
 ##' @exportClass BamFileList RangedData RangedSummarizedExperiment
 ##' @exportMethod assay assays colData estimateDispersions estimateSizeFactors fileName metadata rowRanges seqinfo seqlengths seqlevels "seqlevels<-" seqnames "seqnames<-" split srFilter SummarizedExperiment width writeFastq writeGff3
@@ -256,6 +246,33 @@ NULL
 ##' @aliases plotDispersionEstimates,DGEList-method fetchAnnotation knownOrganisms
 ##' @name Defunct functions
 ##' @rdname easyRNASeq-defunct
+NULL
+
+###==========================
+## To detail dataset
+###==========================
+#' Dataset included in the package
+#'
+#' The package contains a dataset from the \emph{Robinson, Delhomme et al., 2014}
+#' publication.
+#' \itemize{
+#' \item{RobinsonDelhomme2014}{a normalised expression count table. This dataset was
+#' generated from 17 \emph{Populus tremula} - Eurasian
+#' aspen - trees used to assess the sexual dimorphism of this dioecious species. This
+#' count matrix has been generating following published pre-processing
+#' guidelines - see \url{http://www.epigenesys.eu/en/protocols/bio-informatics/1283-guidelines-for-rna-seq-data-analysis} -
+#' and the resulting HTSeq files have been collated and the obtained raw count
+#' matrix submitted to a variance stabilising transformation. Subsequently, the
+#' values have been transformed so that the minimal vst values - that
+#' corresponds to an absence of expression - is 0. Hence the counts in the
+#' matrix are library-size normalized, variance stabilised expression values,
+#' with a minimal value of 0.}
+#' }
+#' @aliases easyRNASeq-datasets
+#' RobinsonDelhomme2014
+#' @name easyRNASeq-datasets
+#' @rdname easyRNASeq-datasets
+#' @keywords data
 NULL
 
 ###==========================

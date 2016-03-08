@@ -1,0 +1,42 @@
+# RNA-Seq parameters - RnaSeqParam
+
+The final set of parameters we need to define encapsulate the __AnnotParam__ and
+__BamParam__ and detail how the read summarization should be performed. 
+__simpleRNASeq__ supports A) 2 modes of counting:
+
+1. by read
+
+2. by bp
+
+the latter of which, was the default counting method the __easyRNASeq__ function.
+Due to the more complex implementation required, the non-evidence of increase
+in counting accuracy and the extended support of the _read-based_ approach by
+the mainstream, standardised _Bioconductor_ package has led the _read_ method 
+to be the default in __simpleRNASeq__. Due to lack of time for maintenance and
+improvement, the _bp-based_ method is also not recommended.
+
+over B) 4 feature types: exon, transcript, gene or any __feature__ provided by 
+the user. The latter may be for example used for counting reads in promoter
+regions. 
+
+Given a flattened transcript structure - as created in a previous section - 
+summarizing by _transcripts_ or _genes_ is equivalent. __Note that using a non
+flattened annotation with any feature type will result in multiple counting!!__
+_i.e._ the product of a single mRNA fragment will be counted for every features
+it overlap, hence introducing a significant __bias__ in downstream analyses.
+
+Given a flattened transcript structure, summarizing by exon enables the use of 
+the resulting count table for processes such as differential exon usage analyses,
+as implemented in the __DEXSeq__ package.
+
+For the Robinson, Delhomme _et al._ dataset, we are interested in the gene 
+expression, hence we create our __RnaSeqParam__ object as follows:
+
+```{r rnaSeqParam}
+rnaSeqParam <- RnaSeqParam(annotParam = annotParam,
+                           bamParam = bamParam,
+                           countBy = "genes",
+                           precision = "read")
+```
+
+____

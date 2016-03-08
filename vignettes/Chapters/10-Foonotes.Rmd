@@ -1,2 +1,5 @@
-<!-- from 01-Intorduction.Rmd -->
+<!-- from 01-Introduction.Rmd -->
 [^1]: http://www.epigenesys.eu/en/protocols/bio-informatics/1283-guidelines-for-rna-seq-data-analysis
+
+<!-- from 04-BamParam.Rmd -->
+[^2]: Garbage In Garbage Out

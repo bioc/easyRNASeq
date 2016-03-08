@@ -10,13 +10,13 @@ of repetitive or common domains. To avoid counting unique mRNA fragments
 multiple times, the stringent approach is to keep only uniquely mapping reads - 
 being aware of potential consequences, see the note below. 
 
-Not only can ???multiple counting??? arise from a biological reason, but also from 
+Not only can multiple counting arise from a biological reason, but also from 
 technical artifacts, introduced mostly by poorly formatted gff3/gtf annotation 
 files. To avoid this, it is best practice to adopt a conservative approach by 
-collapsing all existing transcripts of a single gene locus into a **???synthetic???**
+collapsing all existing transcripts of a single gene locus into a **synthetic**
 transcript containing every exon of that gene. In the case of overlapping exons, 
 the longest genomic interval is kept, i.e. an artificial exon is created. 
-This process results in a flattened transcript ??? a gene structure with a one to
+This process results in a flattened transcript: a gene structure with a one to
 one relationship. 
 
 To create such a structure, we use the __createSyntheticTranscripts__ function
@@ -54,7 +54,6 @@ writeGff3(gI,
           file="./Ptrichocarpa_210_v3.0_gene_exons_synthetic-transcripts.gff3.gz")
 ```
 
-
 ----
 
 <!-- Revisit this once we have added MMSeq -->
@@ -69,4 +68,4 @@ understand where they are located and how they may affect any analysis.
 Based on this, one may, at a later stage, decide to relax the counting 
 parameters to accept multi-mapping reads.
 
-====
+----
