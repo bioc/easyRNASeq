@@ -1,3 +1,8 @@
+CHANGES IN VERSION 2.7.7
+-------------------------
+
+  o Ported version 2.6.3 changes
+
 CHANGES IN VERSION 2.7.6
 -------------------------
 
@@ -32,6 +37,11 @@ CHANGES IN VERSION 2.7.0
 -------------------------
 
   o Original Bioconductor version 3.2
+
+CHANGES IN VERSION 2.6.3
+-------------------------
+
+  o Updated the maintainer address
 
 CHANGES IN VERSION 2.6.2
 -------------------------
