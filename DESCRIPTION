@@ -1,5 +1,5 @@
 Package: easyRNASeq
-Version: 2.11.1
+Version: 2.12.0
 Date: 2015-03-10
 Type: Package
 Title: Count summarization and normalization for RNA-Seq data
