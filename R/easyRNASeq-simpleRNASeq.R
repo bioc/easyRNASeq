@@ -176,6 +176,7 @@ setMethod(f="simpleRNASeq",
                 warning(paste("Bam file:",rownames(df)[i],df[i,"Note"]))
                 FALSE
               } else {
+                warning("At the moment, this function will improperly count Illumina stranded data, reporting reads that align to the opposite strand of the transcript/gene. Please use the param argument to force an unstranded analysis behaviour. Support for \"reverse\" strand specificity will be implemented ASAP")
                 if(verbose){
                   message("Bam file: ",rownames(df)[i],
                           " is ", ifelse(df[i,"Stranded"],
