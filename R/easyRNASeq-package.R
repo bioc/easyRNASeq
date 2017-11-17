@@ -167,7 +167,7 @@ NULL
 ##' @importMethodsFrom Rsamtools countBam path scanBam scanBamHeader
 ##' ScanBamParam yieldSize "yieldSize<-"
 ##' @importMethodsFrom S4Vectors "%in%" as.table elementMetadata
-##' "elementMetadata<-" elementNROWS endoapply ifelse levels mcols metadata
+##' "elementMetadata<-" elementNROWS ifelse levels mcols metadata
 ##' "metadata<-" Rle runLength runsum runValue split substr
 ##' @importMethodsFrom ShortRead chromosome id position readAligned
 ##' srdistance sread srFilter writeFastq
@@ -192,7 +192,7 @@ NULL
 ##' @importFrom methods as extends is new
 ##' @importFrom parallel makePSOCKcluster parLapply stopCluster
 ##' @importFrom Rsamtools BamFileList bamFlagTest index scanBamFlag
-##' @importFrom S4Vectors DataFrame queryHits SimpleList
+##' @importFrom S4Vectors endoapply DataFrame queryHits SimpleList
 ##' @importFrom ShortRead alignData chromosomeFilter compose nFilter
 ##' SRFilterResult
 ##' @importFrom stats aggregate na.omit
