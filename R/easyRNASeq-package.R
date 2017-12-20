@@ -150,8 +150,8 @@ NULL
 ##' @importMethodsFrom Biobase fData varMetadata
 ##' @importMethodsFrom BiocGenerics annotation cbind clusterApply
 ##' colnames counts duplicated estimateDispersions estimateSizeFactors
-##' eval fileName get intersect lapply match order paste pmax rbind rownames
-##' sapply strand "strand<-" table unique
+##' eval fileName get intersect lapply match order path paste pmax rbind
+##' rownames sapply strand "strand<-" table unique
 ##' @importMethodsFrom Biostrings type
 ##' @importMethodsFrom DESeq estimateSizeFactors estimateDispersions
 ##' @importMethodsFrom genomeIntervals readGff3 writeGff3
@@ -164,7 +164,7 @@ NULL
 ##' gsub mean median narrow nchar ranges reduce rev "rownames<-" space
 ##' start "start<-" sub  tolower "universe<-" unlist values which width
 ##' @importMethodsFrom methods coerce initialize show
-##' @importMethodsFrom Rsamtools countBam path scanBam scanBamHeader
+##' @importMethodsFrom Rsamtools countBam scanBam scanBamHeader
 ##' ScanBamParam yieldSize "yieldSize<-"
 ##' @importMethodsFrom S4Vectors "%in%" as.table elementMetadata
 ##' "elementMetadata<-" elementNROWS ifelse levels mcols metadata
