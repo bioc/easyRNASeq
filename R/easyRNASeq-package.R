@@ -186,7 +186,7 @@ NULL
 ##' @importFrom graphics abline axis axTicks boxplot grid hist legend lines
 ##' mtext par plot rect
 ##' @importFrom IRanges IRanges IRangesList LogicalList
-##' RangedData RangesList SplitDataFrameList RleList
+##' RangedData SplitDataFrameList RleList
 ##' @importFrom locfit locfit lp
 ##' @importFrom LSD heatscatter
 ##' @importFrom methods as extends is new
