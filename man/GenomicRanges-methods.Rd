@@ -2,10 +2,10 @@
 % Please edit documentation in R/GenomicRanges-methods.R
 \docType{methods}
 \name{easyRNASeq GenomicRanges package extension}
+\alias{easyRNASeq GenomicRanges package extension}
 \alias{colnames}
 \alias{colnames,GRanges-method}
 \alias{colnames,GRangesList-method}
-\alias{easyRNASeq GenomicRanges package extension}
 \alias{unsafeAppend}
 \alias{unsafeAppend,GAlignments,GAlignments-method}
 \title{Extension of the GenomicRanges package}
@@ -33,7 +33,7 @@ unsafeAppend(obj1,obj2)
 }
 \description{
 Describes extensions to the \code{\link[GenomicRanges:GRanges-class]{GenomicRanges}} package.
-For \code{\linkS4class{GRanges}} and 
+For \code{\linkS4class{GRanges}} and
 \code{\linkS4class{GRangesList}} objects:
 \itemize{
 \item \code{colnames} returns the column name of a \code{\linkS4class{GRanges}} or
@@ -55,8 +55,7 @@ our case.
 }
 \examples{
 
-	\dontrun{
-	## an example of a RangedData annotation
+ # an example of a RangedData annotation
 	gAnnot <- RangedData(
                      IRanges(
                              start=c(10,30,100),
@@ -65,30 +64,25 @@ our case.
                           strand=c("+","+","-"),
                           transcripts=c("trA1","trA2","trB"),
                           gene=c("gA","gA","gB"),
-                          exon=c("e1","e2","e3"),
-                          universe = "Hs19"
+                          exon=c("e1","e2","e3")
                           )
 
-	## an example of a GRangesList annotation
+	# an example of a GRangesList annotation
 	grngs <- as(gAnnot,"GRanges")
 
-	## accessing the colnames
+	# accessing the colnames
 	colnames(grngs)
 
-	## creating a GRangesList
+	# creating a GRangesList
 	grngsList<-split(grngs,seqnames(grngs))
 
-	## accessing the colnames
+	# accessing the colnames
 	colnames(grngsList)
-	}
 
-## For unsafeAppend
+# For unsafeAppend
 library(GenomicAlignments)
 unsafeAppend(GAlignments(),GAlignments())
 
-}
-\author{
-Nicolas Delhomme
 }
 \seealso{
 \itemize{
@@ -99,5 +93,7 @@ Nicolas Delhomme
 \code{\link[BiocGenerics:colnames]{colnames}}
 }
 }
+\author{
+Nicolas Delhomme
+}
 \keyword{methods}
-

@@ -3,19 +3,19 @@
 \docType{methods}
 \name{ShortRead additional methods}
 \alias{ShortRead additional methods}
-\alias{alignData}
 \alias{barcodePlot}
 \alias{barcodePlot,AlignedRead-method}
 \alias{barcodePlot,DNAStringSet-method}
 \alias{barcodePlot,ShortReadQ-method}
 \alias{chastityFilter}
 \alias{chastityFilter,SRFilter-method}
+\alias{naPositionFilter}
+\alias{naPositionFilter,SRFilter-method}
 \alias{demultiplex}
 \alias{demultiplex,AlignedRead-method}
 \alias{demultiplex,DNAStringSet-method}
 \alias{demultiplex,ShortReadQ-method}
-\alias{naPositionFilter}
-\alias{naPositionFilter,SRFilter-method}
+\alias{alignData}
 \title{Methods extending the ShortRead package functionalities}
 \usage{
 demultiplex(obj,barcodes=c(),barcodes.qty=12,barcode.length=6,
@@ -92,14 +92,15 @@ that were used.
 \examples{
 
 	\dontrun{
-	## the barcode
+	# the barcode
 	barcodes=c("ACACTG","ACTAGC","ATGGCT","TTGCGA")
 
-	## the multiplexed data
-	alns <- readAligned(
-                    system.file(
-                                "extdata",
-                                package="RnaSeqTutorial"),
+invisible(curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+       "master/tutorial/easyRNASeq/multiplex_export.txt.gz"),
+       "multiplex_export.txt.gz"))
+
+	# the multiplexed data
+	alns <- readAligned(".",
                     pattern="multiplex_export",
                     filter=compose(
                       chastityFilter(),
@@ -108,7 +109,7 @@ that were used.
                     type="SolexaExport",
                     withAll=TRUE)
 
-	## barcode plot
+	# barcode plot
 	barcodePlot(alns,
             barcodes=barcodes,
             type="within",
@@ -117,14 +118,14 @@ that were used.
             main="All samples",
             xlim=c(0,0.5))
 
-	## demultiplexing
+	# demultiplexing
 	dem.alns <- demultiplex(alns,
                         barcodes=barcodes,
                         edition.dist=2,
                         barcodes.qty=4,
                         type="within")
 
-	## plotting again
+	# plotting again
 	par(mfrow=c(2,2))
 	barcode.frequencies <- lapply(
                               names(dem.alns$barcodes),
@@ -141,11 +142,10 @@ that were used.
 	}
 
 }
-\author{
-Nicolas Delhomme
-}
 \seealso{
 \code{\linkS4class{SRFilter}} \code{\linkS4class{AlignedRead}}
 }
+\author{
+Nicolas Delhomme
+}
 \keyword{methods}
-

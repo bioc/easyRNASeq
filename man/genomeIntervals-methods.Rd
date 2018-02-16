@@ -22,15 +22,14 @@ type column, usually a factor or a character vector } }
 column.  }}
 }
 \examples{
-\dontrun{
-annot<-readGff3(system.file("extdata",
-                            "Dmel-mRNA-exon-r5.52.gff3",
-                            package="RnaSeqTutorial")
+
+ library(curl)
+invisible(curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+                               "master/tutorial/easyRNASeq/Dmel-mRNA-exon-r5.52.gff3.gz"),
+                        "Dmel-mRNA-exon-r5.52.gff3.gz"))
+annot<-readGff3("Dmel-mRNA-exon-r5.52.gff3.gz",quiet=TRUE)
 type(annot)
-}
-}
-\author{
-Nicolas Delhomme
+
 }
 \seealso{
 \itemize{
@@ -39,4 +38,6 @@ object}}
 \item \code{\link[genomeIntervals:readGff3]{readGff3 function}}
 }
 }
-
+\author{
+Nicolas Delhomme
+}

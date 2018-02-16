@@ -1,92 +1,98 @@
-##' simpleRNASeq method
-##'
-##' This function is a wrapper around the more low level functionalities of the
-##' package. It is the simplest way to get a \code{\linkS4class{RangedSummarizedExperiment}}
-##' object from a set of bam files. \code{\linkS4class{RangedSummarizedExperiment}} are
-##' containers meant to hold any Next-Generation Sequencing experiment results and
-##' metadata. The simpleRNASeq method replaces the
-##' \code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq}} function to
-##' simplify the usability. It does the following:
-##' \itemize{
-##' \item use \code{\link[GenomicAlignments:GAlignments-class]{GenomicAlignments}}
-##' for reading/pre-processing the BAM files.
-##' \item get the \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{annotations}}
-##' depending on the selected parameters
-##' \item calculate the coverage from the provided file(s)
-##' \item \code{\link[easyRNASeq:easyRNASeq-summarization-methods]{summarizes}} the
-##' read counts according to the selected summarization
-##' \item returns a \code{\linkS4class{RangedSummarizedExperiment}} object.
-##' }
-##'
-##' @aliases simpleRNASeq simpleRNASeq,BamFileList,RnaSeqParam-method
-##' @rdname easyRNASeq-simpleRNASeq
-##' @param bamFiles a \code{\linkS4class{BamFileList}} object
-##' @param nnodes The number of CPU cores to use in parallel
-##' @param override Should the provided parameters override the detected ones
-##' @param param RnaSeqParam a \code{\linkS4class{RnaSeqParam}} object
-##' that describes the RNA-Seq experimental setup.
-##' @param verbose a logical to be report progress or not.
-##' @return returns a \code{\linkS4class{RangedSummarizedExperiment}} object.
-##' @author Nicolas Delhomme
-##' @seealso
-##' \itemize{
-##' \item{For the input:
-##' \itemize{
-##' \item \code{\linkS4class{AnnotParam}}
-##' \item \code{\linkS4class{BamParam}}
-##' \item \code{\linkS4class{RnaSeqParam}}
-##' }}
-##' \item{For the output:
-##' \code{\linkS4class{RangedSummarizedExperiment}}
-##' }
-##' \item{For related functions:
-##' \itemize{
-##' \item \code{\linkS4class{BamFile}}
-##' \item \code{\linkS4class{BamFileList}}
-##' \code{\link[easyRNASeq:easyRNASeq-BamFileList]{getBamFileList}}
-##' }
-##' }}
-##' @keywords methods
-##' @examples
-##'
-##'   \dontrun{
-##'   ## the data
-##'   library("RnaSeqTutorial")
-##'
-##'   ## get the BamFileList
-##'   bamFiles <- getBamFileList(
-##'             dir(path=system.file("extdata",
-##'                 package="RnaSeqTutorial"),
-##'                 pattern="^[A,T].*\\.bam$",
-##'                 full.names=TRUE))
-##'
-##'   ## create the AnnotParam
-##'   annotParam <- AnnotParam(system.file(
-##'                    "extdata",
-##'                    "Dmel-mRNA-exon-r5.52.gff3",
-##'                    package="RnaSeqTutorial"))
-##'
-##'   ## create the RnaSeqParam
-##'   rnaSeqParam <- RnaSeqParam(annotParam=annotParam)
-##'
-##'   ## get a RangedSummarizedExperiment containing the counts table
-##'   sexp <- simpleRNASeq(
-##'     bamFiles=bamFiles,
-##'     param=rnaSeqParam,
-##'     verbose=TRUE
-##'   )
-##'
-##'   ## get the counts
-##'   assay(sexp)$exons
-##'  }
-##'
-## TODO integrate that in the right position in the file
-## \item{groupBy}{One of genes or chromosomes. The default is "genes". It is the
-## prefered way to provide annotation and will results in the use of the Bioconductor
-## \code{\link[GenomicRanges:summarizeOverlaps]{summarizeOverlaps}} function. Using the
-## "chromosomes" value results in the use of specific
-## \code{\link[easyRNASeq:easyRNASeq-count-methods]{easyRNASeq count functionalities}}.}
-## TODO implement a way to select the chromosomes
+#' simpleRNASeq method
+#'
+#' This function is a wrapper around the more low level functionalities of the
+#' package. It is the simplest way to get a \code{\linkS4class{RangedSummarizedExperiment}}
+#' object from a set of bam files. \code{\linkS4class{RangedSummarizedExperiment}} are
+#' containers meant to hold any Next-Generation Sequencing experiment results and
+#' metadata. The simpleRNASeq method replaces the
+#' \code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq}} function to
+#' simplify the usability. It does the following:
+#' \itemize{
+#' \item use \code{\link[GenomicAlignments:GAlignments-class]{GenomicAlignments}}
+#' for reading/pre-processing the BAM files.
+#' \item get the \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{annotations}}
+#' depending on the selected parameters
+#' \item calculate the coverage from the provided file(s)
+#' \item \code{\link[easyRNASeq:easyRNASeq-summarization-methods]{summarizes}} the
+#' read counts according to the selected summarization
+#' \item returns a \code{\linkS4class{RangedSummarizedExperiment}} object.
+#' }
+#'
+#' @aliases simpleRNASeq simpleRNASeq,BamFileList,RnaSeqParam-method
+#' @rdname easyRNASeq-simpleRNASeq
+#' @param bamFiles a \code{\linkS4class{BamFileList}} object
+#' @param nnodes The number of CPU cores to use in parallel
+#' @param override Should the provided parameters override the detected ones
+#' @param param RnaSeqParam a \code{\linkS4class{RnaSeqParam}} object
+#' that describes the RNA-Seq experimental setup.
+#' @param verbose a logical to be report progress or not.
+#' @return returns a \code{\linkS4class{RangedSummarizedExperiment}} object.
+#' @author Nicolas Delhomme
+#' @seealso
+#' \itemize{
+#' \item{For the input:
+#' \itemize{
+#' \item \code{\linkS4class{AnnotParam}}
+#' \item \code{\linkS4class{BamParam}}
+#' \item \code{\linkS4class{RnaSeqParam}}
+#' }}
+#' \item{For the output:
+#' \code{\linkS4class{RangedSummarizedExperiment}}
+#' }
+#' \item{For related functions:
+#' \itemize{
+#' \item \code{\linkS4class{BamFile}}
+#' \item \code{\linkS4class{BamFileList}}
+#' \code{\link[easyRNASeq:easyRNASeq-BamFileList]{getBamFileList}}
+#' }
+#' }}
+#' @keywords methods
+#' @examples
+#'
+#'   # the data
+#'   library(curl)
+#'
+#' # get the example data files - we retrieve a set of example bam files
+#' # from GitHub using curl, as well as their index.
+#' invisible(sapply(c("ACACTG","ACTAGC"),function(bam){
+#'     curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+#'                          "master/tutorial/easyRNASeq/",bam,".bam"),paste0(bam,".bam"))
+#'     curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+#'                          "master/tutorial/easyRNASeq/",bam,".bam.bai"),paste0(bam,".bam.bai"))
+#'   }))
+#'
+#' # and some annotation
+#' invisible(curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+#' "master/tutorial/easyRNASeq/Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"),
+#' "Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"))
+#'
+#'  # get the BamFileList
+#'  bamFiles <- getBamFileList(dir(".",pattern="^[A,T].*\\.bam$",full.names=TRUE))
+#'
+#'   # create the AnnotParam
+#'   annotParam <- AnnotParam("Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz",
+#'                            type="gtf")
+#'
+#'   # create the RnaSeqParam
+#'   rnaSeqParam <- RnaSeqParam(annotParam=annotParam)
+#'
+#'   # get a RangedSummarizedExperiment containing the counts table
+#'   sexp <- simpleRNASeq(
+#'     bamFiles=bamFiles,
+#'     param=rnaSeqParam,
+#'     verbose=TRUE
+#'   )
+#'
+#'   # get the counts
+#'   assay(sexp)$exons
+#'
+# TODO integrate that in the right position in the file
+# \item{groupBy}{One of genes or chromosomes. The default is "genes". It is the
+# prefered way to provide annotation and will results in the use of the Bioconductor
+# \code{\link[GenomicRanges:summarizeOverlaps]{summarizeOverlaps}} function. Using the
+# "chromosomes" value results in the use of specific
+# \code{\link[easyRNASeq:easyRNASeq-count-methods]{easyRNASeq count functionalities}}.}
+# TODO implement a way to select the chromosomes
 setMethod(f="simpleRNASeq",
           signature=c("BamFileList","RnaSeqParam"),
           definition=function(
@@ -107,27 +113,27 @@ setMethod(f="simpleRNASeq",
               message("Pre-processing ",length(bamFiles)," BAM files.")
             }
 
-            ### =======================
-            ## validate the BAMFileList
-            ### =======================
+            ## =======================
+            # validate the BAMFileList
+            ## =======================
             if(verbose){
               message("Validating the BAM files.")
             }
             validate(bamFiles)
 
-            ### =======================
-            ## create the output object
-            ### =======================
+            ## =======================
+            # create the output object
+            ## =======================
             sexp <- SummarizedExperiment(
               colData=DataFrame(
                 FilePath=path(bamFiles),
                 FileName=basename(names(bamFiles)),
                 row.names=basename(names(bamFiles))))
 
-            ### =======================
-            ## process the bams
-            ### =======================
-            ## 1. the sequence info
+            ## =======================
+            # process the bams
+            ## =======================
+            # 1. the sequence info
             seqinfos <- lapply(bamFiles,seqinfo)
             if(length(seqinfos[[1]])==0){
               stop("It would seem some of your BAM files have no sequence information in their headers. Check these.")
@@ -142,32 +148,32 @@ setMethod(f="simpleRNASeq",
               message("Extracted ",length(metadata$SeqInfo)," reference sequences information.")
             }
 
-            ## 2. paired or not and variable length or not
-            ## TODO edit the yieldSize
+            # 2. paired or not and variable length or not
+            # TODO edit the yieldSize
             colData(sexp) <- cbind(colData(sexp),
                                    do.call(rbind,
                                            parallelize(bamFiles,.streamForParam,
                                                        nnodes,
                                                        yieldSize=10^6,
                                                        verbose=verbose)))
-            ## a. paired
+            # a. paired
             if(verbose){
               message("Found ",sum(!colData(sexp)$Paired)," single-end BAM files.")
               message("Found ",sum(colData(sexp)$Paired)," paired-end BAM files.")
             }
 
-            ## TODO can we handle both paired and single - end data at the same time?
+            # TODO can we handle both paired and single - end data at the same time?
 
-            ## b. width
+            # b. width
             if(verbose){
               dev.null <- sapply(1:length(bamFiles),function(i,rL){
                 message("Bam file: ",rownames(rL)[i]," has reads of length ", rL[i,])
               },colData(sexp)[,"ReadLength",drop=FALSE])
             }
 
-            ## c. strandedness
-            ## TODO check the Bioc April 2014 newletter for a method to determine
-            ## strandedness
+            # c. strandedness
+            # TODO check the Bioc April 2014 newletter for a method to determine
+            # strandedness
             colData(sexp)[,"Stranded"] <- sapply(1:nrow(colData(sexp)),
                                                  function(i,df){
               if(is.na(df[i,"Stranded"])){
@@ -187,14 +193,14 @@ setMethod(f="simpleRNASeq",
               }
             },colData(sexp)[,c("Stranded","Note")])
 
-            ## reset the note
+            # reset the note
             colData(sexp)$Note <- NULL
 
-            ## TODO WE need to access the presence of multiple mapping reads
+            # TODO WE need to access the presence of multiple mapping reads
 
 
-            ## d. compare with BamParam if provided.
-            ## 1. paired
+            # d. compare with BamParam if provided.
+            # 1. paired
             if(length(unique(colData(sexp)$Paired))!=1){
               warning(paste("You have mixed SE and PE data. Every sample will be",
                             "treated according to the identified characteristic,",
@@ -208,7 +214,7 @@ setMethod(f="simpleRNASeq",
               }
             }
 
-            ## 2. stranded
+            # 2. stranded
             if(length(unique(colData(sexp)$Stranded))!=1){
               warning(paste("You have mixed stranded and unstradned data. Every sample will be",
                             "treated according to the identified characteristic,",
@@ -224,7 +230,7 @@ setMethod(f="simpleRNASeq",
               }
             }
 
-            ## use the identified parameters or override
+            # use the identified parameters or override
             df <- switch(as.character(override),
                          "FALSE" = colData(sexp)[,c("Paired","Stranded")],
                          "TRUE" = DataFrame(
@@ -237,7 +243,7 @@ setMethod(f="simpleRNASeq",
                             "Contact me if you think the parameter detection failed."))
             }
 
-            ## 3. not a validation but add the read counts
+            # 3. not a validation but add the read counts
             colData(sexp)$TotalReads <- parallelize(bamFiles,
                                                     .streamForTotalCount,
                                                     nnodes,verbose=verbose)
@@ -248,26 +254,26 @@ setMethod(f="simpleRNASeq",
               },colData(sexp)$TotalReads)
             }
 
-            ### =======================
-            ## validate the annotation
-            ## and get the annotation
-            ### =======================
+            ## =======================
+            # validate the annotation
+            # and get the annotation
+            ## =======================
             if(verbose){
               message("==========================")
               message("Processing the annotation")
               message("==========================")
             }
 
-            ## TODO in the annotation validation, we should make sure that
-            ## the right fields are there and are of the right kind;
-            ## character or character Rle
+            # TODO in the annotation validation, we should make sure that
+            # the right fields are there and are of the right kind;
+            # character or character Rle
 
-            ## split into a GRangesList based on transcripts or chromosomes
-            ## check out why is exon a matrix
+            # split into a GRangesList based on transcripts or chromosomes
+            # check out why is exon a matrix
             grngs <- getAnnotation(annotParam(param),verbose=verbose)
 
-            ## TODO we need to adapt the rda, etc description and the AnnotParam
-            ## to accept a GRanges and not a GRangesList
+            # TODO we need to adapt the rda, etc description and the AnnotParam
+            # to accept a GRanges and not a GRangesList
             sexp <- as(sexp,"RangedSummarizedExperiment")
             rowRanges(sexp) <- switch(precision(param),
                                     "read"={split(grngs,mcols(grngs)[,sub("s$","",countBy(param))])},
@@ -285,18 +291,18 @@ setMethod(f="simpleRNASeq",
                    files and the provided annotation. Fix one or the other.")
             }
 
-            ## TODO implement sanity check of chromosome vs chromosome
-            ## TODO implement sanity check of annotations
-            ## validate the overlap between the BAM header and the annotation
-            ## how to validate? check that chromosomes in the BAM file
-            ## overlap those in the annot
-            ## what to do if not
-            ## stop if no overlap
-            ## stop if not all are present and the option "smth smth" is not set
+            # TODO implement sanity check of chromosome vs chromosome
+            # TODO implement sanity check of annotations
+            # validate the overlap between the BAM header and the annotation
+            # how to validate? check that chromosomes in the BAM file
+            # overlap those in the annot
+            # what to do if not
+            # stop if no overlap
+            # stop if not all are present and the option "smth smth" is not set
 
-            ### =======================
-            ## parallelize
-            ### =======================
+            ## =======================
+            # parallelize
+            ## =======================
             if(verbose){
               message("==========================")
               message("Creating the count table")
@@ -305,8 +311,8 @@ setMethod(f="simpleRNASeq",
                                               " CPU cores in parallel"))
             }
 
-            ## TODO, do as for the HistoneChIPseq package
-            ## to store the data correctly
+            # TODO, do as for the HistoneChIPseq package
+            # to store the data correctly
             countAssay <- SimpleList(do.call(cbind,
                                              parallelize(bamFiles,
                                                          .streamCount,
@@ -317,7 +323,7 @@ setMethod(f="simpleRNASeq",
             names(countAssay) <- countBy(param)
             assays(sexp) <- endoapply(countAssay, unname)
 
-            ## done
+            # done
             if(verbose){
               message("==========================")
               message("Returning a")

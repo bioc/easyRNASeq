@@ -1,188 +1,192 @@
-## TODO we need to unify the exons/features, i.e. make sure they are unique
-## the easiest way is probably to report the unique only whenever exons or
-## features are used. for transcripts and genes, we need to ensure that this is the case
+# TODO we need to unify the exons/features, i.e. make sure they are unique
+# the easiest way is probably to report the unique only whenever exons or
+# features are used. for transcripts and genes, we need to ensure that this is the case
 
-## TODO think of using match.arg for default values
-## match.arg(c("auto", "variableStep", "fixedStep"),c("auto", "variableStep", "fixedStep"))
-## and to replace the .checkArguments function actually!!
+# TODO think of using match.arg for default values
+# match.arg(c("auto", "variableStep", "fixedStep"),c("auto", "variableStep", "fixedStep"))
+# and to replace the .checkArguments function actually!!
 
-## easy call
-##' easyRNASeq method
-##'
-##' This function is a wrapper around the more low level functionalities of the
-##' package.  Is the easiest way to get a count matrix from a set of read
-##' files.  It does the following: \itemize{
-##' \item{\code{\link[easyRNASeq:ShortRead-methods]{use ShortRead/Rsamtools
-##' methods}} for loading/pre-processing the data.}
-##' \item{\code{\link[easyRNASeq:easyRNASeq-annotation-methods]{fetch the annotations}}
-##' depending on the provided arguments}
-##' \item{\code{\link[easyRNASeq:easyRNASeq-coverage-methods]{get the reads coverage}} from
-##' the provided file(s)}
-##' \item{\code{\link[easyRNASeq:easyRNASeq-summarization-methods]{summarize the
-##' reads}} according to the selected summarization features}
-##' \item{\code{\link[easyRNASeq:easyRNASeq-correction-methods]{optionally
-##' apply}} a data correction (i.e. generating RPKM).}
-##' \item{\code{\link[easyRNASeq:edgeR-methods]{use edgeR methods}} for
-##' post-processing the data or}
-##' \item{\code{\link[easyRNASeq:DESeq-methods]{use
-##' DESeq methods}} for post-processing the data (either of them being
-##' recommended over RPKM).}  }
-##'
-##' \itemize{ \item{\dots{} Additional arguments for different functions:
-##' \itemize{
-##' \item{For the \pkg{biomaRt} \code{\link[biomaRt:getBM]{getBM}} function}
-##' \item{For the \code{\link[easyRNASeq:easyRNASeq-annotation-internal-methods]{readGffGtf}}
-##' internal function that takes an optional arguments: annotation.type that
-##' default to "exon" (used to select the proper rows of the gff or gtf file)}
-##' \item{ For the \code{\link[DESeq:estimateDispersions]{DESeq
-##' estimateDispersions}} method}
-##' \item{For to the \code{\link[base:list.files]{list.files}}
-##' function used to locate the read files.}
-##' }}
-##' \item{the annotationObject When the
-##' \code{annotationMethods} is set to \code{env} or \code{rda}, a properly
-##' formatted \code{RangedData} or \code{GRangesList} object need to be
-##' provided. Check the paragraph RangedData in the vignette or the examples at
-##' the bottom of this page for examples. The data.frame-like structure of
-##' these objects is where \code{easyRNASeq} will look for the exon, feature,
-##' transcript, or gene identifier. Depending on the count method selected, it
-##' is essential that the akin column name is present in the annotationObject.
-##' E.g. when counting "features", the annotationObject has to contain a
-##' "feature" field.}
-##' \item{the chr.map The chr.map argument for the easyRNASeq
-##' function only works for an "organismName" of value 'custom' with the
-##' "validity.check" parameter set to 'TRUE'.  This data.frame should contain
-##' two columns named 'from' and 'to'. The row should represent the chromosome
-##' name in your original data and the wished name in the output of the
-##' function.}
-##' \item{count The count can be summarized by exons, features,
-##' genes, islands or transcripts. While exons, genes and transcripts are
-##' obvious, "features" describes any features provided by the user, e.g.
-##' enhancer loci. These are processed as the exons are. For "islands", it is
-##' for an under development function that identifies de-novo expression loci
-##' and count the number of reads overlapping them. }
-##' \item{chr.sizes If set to "auto", then the format has to be "bam", in which
-##' case the chromosome names and size are extracted from the BAM header}
-##' }
-##'
-##' @aliases easyRNASeq-deprecated easyRNASeq,character-method
-##' @rdname easyRNASeq-easyRNASeq
-##' @param annotationFile The location (full path) of the annotation file
-##' @param annotationObject A \code{\linkS4class{RangedData}} or
-##' \code{\linkS4class{GRangesList}} object containing the annotation.
-##' @param annotationMethod The method to fetch the annotation, one of
-##' "biomaRt","env","gff","gtf" or "rda". All methods but "biomaRt" and "env"
-##' require the annotationFile to be set. The "env" method requires the
-##' annotationObject to be set.
-##' @param chr.map A data.frame describing the mapping of original chromosome
-##' names towards wished chromosome names. See details.
-##' @param chr.sel A vector of chromosome names to subset the final results.
-##' @param chr.sizes A vector or a list containing the chromosomes' size of the
-##' selected organism or simply the string "auto". See details.
-##' @param conditions A vector of descriptor, each sample must have a
-##' descriptor if you use outputFormat DESeq or edgeR. The size of this list
-##' must be equal to the number of sample. In addition the vector should be
-##' named with the filename of the corresponding samples.
-##' @param count The feature used to summarize the reads. One of
-##' 'exons','features','genes','islands' or 'transcripts'. See details.
-##' @param filenames The name, not the path, of the files to use
-##' @param filesDirectory The directory where the files to be used are located.
-##' Defaults to the current directory.
-##' @param filter The filter to be applied when loading the data using the
-##' "aln" format
-##' @param format The format of the reads, one of "aln","bam". If not "bam",
-##' all the types supported by the \pkg{ShortRead} package are supported too.
-##' As of version 1.3.5, it defaults to bam.
-##' @param gapped Is the bam file provided containing gapped alignments?
-##' @param ignoreWarnings set to TRUE (bad idea! they have a good reason to be
-##' there) if you do not want warning messages.
-##' @param min.cov When computing read islands, the minimal coverage to take
-##' into account for calling an island
-##' @param min.length The minimal size an island should have to be kept
-##' @param max.gap When computing read islands, the maximal gap size allowed
-##' between two islands to merge them
-##' @param nbCore defines how many CPU core to use when computing the
-##' geneModels. Use the default parallel library
-##' @param normalize A boolean to convert the returned counts in RPKM. Valid
-##' when the \code{outputFormat} is left undefined (i.e. when a matrix is
-##' returned) and when it is \code{DESeq} or \code{edgeR}. Note that it is not
-##' advised to normalize the data prior DESeq or edgeR usage!
-##' @param organism A character string describing the organism
-##' @param outputFormat By default, easyRNASeq returns a matrix.
-##' If one of \code{DESeq},\code{edgeR},\code{RNAseq},
-##' \code{SummarizedExperiment} is provided then
-##' the respective object is returned.
-##' @param pattern For easyRNASeq, the pattern of file to look for, e.g. "bam$"
-##' @param plot Whether or not to plot assessment graphs.
-##' @param readLength The read length in bp
-##' @param silent set to TRUE if you do not want messages to be printed out.
-##' @param summarization A character defining which method to use when
-##' summarizing reads by genes. So far, only "geneModels" is available.
-##' @param type The type of data when using the "aln" format. See the ShortRead
-##' library.
-##' @param validity.check Shall UCSC chromosome name convention be enforced?
-##' This is only supported for a set of organisms, which are  
-##' Dmelanogaster, Hsapiens, Mmusculus and Rnorvegicus;
-##' otherwise the argument 'chr.map' can be used to complement it.
-##' @param ... additional arguments. See details
-##' @return Returns a count table (a matrix of m features x n samples). If the
-##' \code{outputFormat} option has been set, a corresponding object is returned:
-##' a \code{\linkS4class{RangedSummarizedExperiment}}, a
-##' \code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}}, a
-##' \code{\link[edgeR:DGEList]{edgeR:DGEList}} or \code{\linkS4class{RNAseq}}.
-##' @author Nicolas Delhomme
-##' @seealso \code{\linkS4class{RNAseq}}
-##' \code{\linkS4class{RangedSummarizedExperiment}}
-##' \code{\link[edgeR:DGEList]{edgeR:DGEList}}
-##' \code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}}
-##' \code{\link[ShortRead:readAligned]{ShortRead:readAligned}}
-##' @keywords methods
-##' @examples
-##'
-##' 	\dontrun{
-##' 	library("RnaSeqTutorial")
-##' 	library(BSgenome.Dmelanogaster.UCSC.dm3)
-##'
-##' 	## creating a count table from 4 bam files
-##' 	count.table <- easyRNASeq(filesDirectory=
-##' 		    			system.file(
-##' 					"extdata",
-##' 					package="RnaSeqTutorial"),
-##' 					pattern="[A,C,T,G]{6}\\.bam$",
-##' 				format="bam",
-##' 				readLength=36L,
-##' 				organism="Dmelanogaster",
-##' 				chr.sizes=as.list(seqlengths(Dmelanogaster)),
-##' 				annotationMethod="rda",
-##' 				annotationFile=system.file(
-##' 				                            "data",
-##' 							    "gAnnot.rda",
-##' 							    package="RnaSeqTutorial"),
-##' 				count="exons")
-##'
-##' 	## an example of a chr.map
-##' 	chr.map <- data.frame(from=c("2L","2R","MT"),to=c("chr2L","chr2R","chrMT"))
-##'
-##' 	## an example of a RangedData annotation
-##' 	gAnnot <- RangedData(
-##'                      IRanges(
-##'                              start=c(10,30,100),
-##'                              end=c(21,53,123)),
-##'                           space=c("chr01","chr01","chr02"),
-##'                           strand=c("+","+","-"),
-##'                           transcript=c("trA1","trA2","trB"),
-##'                           gene=c("gA","gA","gB"),
-##'                           exon=c("e1","e2","e3"),
-##'                           universe = "Hs19"
-##'                           )
-##'
-##' 	## an example of a GRangesList annotation
-##' 	grngs <- as(gAnnot,"GRanges")
-##' 	grngsList<-split(grngs,seqnames(grngs))
-##' }
-##'
-## TODO if the summarization ever get changed, modify the if statement
-## when validating the annotation object for no overlapping features
+# easy call
+#' easyRNASeq method
+#'
+#' This function is a wrapper around the more low level functionalities of the
+#' package.  Is the easiest way to get a count matrix from a set of read
+#' files.  It does the following: \itemize{
+#' \item{\code{\link[easyRNASeq:ShortRead-methods]{use ShortRead/Rsamtools
+#' methods}} for loading/pre-processing the data.}
+#' \item{\code{\link[easyRNASeq:easyRNASeq-annotation-methods]{fetch the annotations}}
+#' depending on the provided arguments}
+#' \item{\code{\link[easyRNASeq:easyRNASeq-coverage-methods]{get the reads coverage}} from
+#' the provided file(s)}
+#' \item{\code{\link[easyRNASeq:easyRNASeq-summarization-methods]{summarize the
+#' reads}} according to the selected summarization features}
+#' \item{\code{\link[easyRNASeq:easyRNASeq-correction-methods]{optionally
+#' apply}} a data correction (i.e. generating RPKM).}
+#' \item{\code{\link[easyRNASeq:edgeR-methods]{use edgeR methods}} for
+#' post-processing the data or}
+#' \item{\code{\link[easyRNASeq:DESeq-methods]{use
+#' DESeq methods}} for post-processing the data (either of them being
+#' recommended over RPKM).}  }
+#'
+#' \itemize{ \item{\dots{} Additional arguments for different functions:
+#' \itemize{
+#' \item{For the \pkg{biomaRt} \code{\link[biomaRt:getBM]{getBM}} function}
+#' \item{For the \code{\link[easyRNASeq:easyRNASeq-annotation-internal-methods]{readGffGtf}}
+#' internal function that takes an optional arguments: annotation.type that
+#' default to "exon" (used to select the proper rows of the gff or gtf file)}
+#' \item{ For the \code{\link[DESeq:estimateDispersions]{DESeq
+#' estimateDispersions}} method}
+#' \item{For to the \code{\link[base:list.files]{list.files}}
+#' function used to locate the read files.}
+#' }}
+#' \item{the annotationObject When the
+#' \code{annotationMethods} is set to \code{env} or \code{rda}, a properly
+#' formatted \code{RangedData} or \code{GRangesList} object need to be
+#' provided. Check the paragraph RangedData in the vignette or the examples at
+#' the bottom of this page for examples. The data.frame-like structure of
+#' these objects is where \code{easyRNASeq} will look for the exon, feature,
+#' transcript, or gene identifier. Depending on the count method selected, it
+#' is essential that the akin column name is present in the annotationObject.
+#' E.g. when counting "features", the annotationObject has to contain a
+#' "feature" field.}
+#' \item{the chr.map The chr.map argument for the easyRNASeq
+#' function only works for an "organismName" of value 'custom' with the
+#' "validity.check" parameter set to 'TRUE'.  This data.frame should contain
+#' two columns named 'from' and 'to'. The row should represent the chromosome
+#' name in your original data and the wished name in the output of the
+#' function.}
+#' \item{count The count can be summarized by exons, features,
+#' genes, islands or transcripts. While exons, genes and transcripts are
+#' obvious, "features" describes any features provided by the user, e.g.
+#' enhancer loci. These are processed as the exons are. For "islands", it is
+#' for an under development function that identifies de-novo expression loci
+#' and count the number of reads overlapping them. }
+#' \item{chr.sizes If set to "auto", then the format has to be "bam", in which
+#' case the chromosome names and size are extracted from the BAM header}
+#' }
+#'
+#' @aliases easyRNASeq-deprecated easyRNASeq,character-method
+#' @rdname easyRNASeq-easyRNASeq
+#' @param annotationFile The location (full path) of the annotation file
+#' @param annotationObject A \code{\linkS4class{RangedData}} or
+#' \code{\linkS4class{GRangesList}} object containing the annotation.
+#' @param annotationMethod The method to fetch the annotation, one of
+#' "biomaRt","env","gff","gtf" or "rda". All methods but "biomaRt" and "env"
+#' require the annotationFile to be set. The "env" method requires the
+#' annotationObject to be set.
+#' @param chr.map A data.frame describing the mapping of original chromosome
+#' names towards wished chromosome names. See details.
+#' @param chr.sel A vector of chromosome names to subset the final results.
+#' @param chr.sizes A vector or a list containing the chromosomes' size of the
+#' selected organism or simply the string "auto". See details.
+#' @param conditions A vector of descriptor, each sample must have a
+#' descriptor if you use outputFormat DESeq or edgeR. The size of this list
+#' must be equal to the number of sample. In addition the vector should be
+#' named with the filename of the corresponding samples.
+#' @param count The feature used to summarize the reads. One of
+#' 'exons','features','genes','islands' or 'transcripts'. See details.
+#' @param filenames The name, not the path, of the files to use
+#' @param filesDirectory The directory where the files to be used are located.
+#' Defaults to the current directory.
+#' @param filter The filter to be applied when loading the data using the
+#' "aln" format
+#' @param format The format of the reads, one of "aln","bam". If not "bam",
+#' all the types supported by the \pkg{ShortRead} package are supported too.
+#' As of version 1.3.5, it defaults to bam.
+#' @param gapped Is the bam file provided containing gapped alignments?
+#' @param ignoreWarnings set to TRUE (bad idea! they have a good reason to be
+#' there) if you do not want warning messages.
+#' @param min.cov When computing read islands, the minimal coverage to take
+#' into account for calling an island
+#' @param min.length The minimal size an island should have to be kept
+#' @param max.gap When computing read islands, the maximal gap size allowed
+#' between two islands to merge them
+#' @param nbCore defines how many CPU core to use when computing the
+#' geneModels. Use the default parallel library
+#' @param normalize A boolean to convert the returned counts in RPKM. Valid
+#' when the \code{outputFormat} is left undefined (i.e. when a matrix is
+#' returned) and when it is \code{DESeq} or \code{edgeR}. Note that it is not
+#' advised to normalize the data prior DESeq or edgeR usage!
+#' @param organism A character string describing the organism
+#' @param outputFormat By default, easyRNASeq returns a matrix.
+#' If one of \code{DESeq},\code{edgeR},\code{RNAseq},
+#' \code{SummarizedExperiment} is provided then
+#' the respective object is returned.
+#' @param pattern For easyRNASeq, the pattern of file to look for, e.g. "bam$"
+#' @param plot Whether or not to plot assessment graphs.
+#' @param readLength The read length in bp
+#' @param silent set to TRUE if you do not want messages to be printed out.
+#' @param summarization A character defining which method to use when
+#' summarizing reads by genes. So far, only "geneModels" is available.
+#' @param type The type of data when using the "aln" format. See the ShortRead
+#' library.
+#' @param validity.check Shall UCSC chromosome name convention be enforced?
+#' This is only supported for a set of organisms, which are
+#' Dmelanogaster, Hsapiens, Mmusculus and Rnorvegicus;
+#' otherwise the argument 'chr.map' can be used to complement it.
+#' @param ... additional arguments. See details
+#' @return Returns a count table (a matrix of m features x n samples). If the
+#' \code{outputFormat} option has been set, a corresponding object is returned:
+#' a \code{\linkS4class{RangedSummarizedExperiment}}, a
+#' \code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}}, a
+#' \code{\link[edgeR:DGEList]{edgeR:DGEList}} or \code{\linkS4class{RNAseq}}.
+#' @author Nicolas Delhomme
+#' @seealso \code{\linkS4class{RNAseq}}
+#' \code{\linkS4class{RangedSummarizedExperiment}}
+#' \code{\link[edgeR:DGEList]{edgeR:DGEList}}
+#' \code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}}
+#' \code{\link[ShortRead:readAligned]{ShortRead:readAligned}}
+#' @keywords methods
+#' @examples
+#'
+#' 	library(curl)
+#' 	library(BSgenome.Dmelanogaster.UCSC.dm3)
+#'
+#'  # get the example data files - we retrieve a set of example bam files
+#'  # from GitHub using curl, as well as their index.
+#'  invisible(sapply(c("ACACTG","ACTAGC"),function(bam){
+#'      curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+#'                           "master/tutorial/easyRNASeq/",bam,".bam"),paste0(bam,".bam"))
+#'      curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+#'                           "master/tutorial/easyRNASeq/",bam,".bam.bai"),paste0(bam,".bam.bai"))
+#'  }))
+#'
+#'  # get an example annotation file - we retrieve it from GitHub using curl
+#'  invisible(curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+#'        "master/tutorial/easyRNASeq/gAnnot.rda"),"gAnnot.rda"))
+#'
+#' 	# creating a count table from 4 bam files
+#' 	count.table <- easyRNASeq(filesDirectory=".",
+#' 					pattern="[A,C,T,G]{6}\\.bam$",
+#' 				format="bam",
+#' 				readLength=36L,
+#' 				organism="Dmelanogaster",
+#' 				chr.sizes=seqlengths(Dmelanogaster),
+#' 				annotationMethod="rda",
+#' 				annotationFile="gAnnot.rda",
+#' 				count="exons")
+#'
+#' 	# an example of a chr.map
+#' 	chr.map <- data.frame(from=c("2L","2R","MT"),to=c("chr2L","chr2R","chrMT"))
+#'
+#' 	# an example of a RangedData annotation
+#' 	gAnnot <- RangedData(
+#'                      IRanges(
+#'                              start=c(10,30,100),
+#'                              end=c(21,53,123)),
+#'                           space=c("chr01","chr01","chr02"),
+#'                           strand=c("+","+","-"),
+#'                           transcript=c("trA1","trA2","trB"),
+#'                           gene=c("gA","gA","gB"),
+#'                           exon=c("e1","e2","e3")
+#'                           )
+#'
+#' 	# an example of a GRangesList annotation
+#' 	grngs <- as(gAnnot,"GRanges")
+#' 	grngsList<-split(grngs,seqnames(grngs))
+#'
+# TODO if the summarization ever get changed, modify the if statement
+# when validating the annotation object for no overlapping features
 setMethod(
     f="easyRNASeq",
     signature="character",
@@ -208,24 +212,24 @@ setMethod(
         ignoreWarnings=FALSE,
         silent=FALSE,...){
 
-        ## deprecation
+        # deprecation
         .Deprecated("simpleRNASeq")
 
-        ## sanity check
+        # sanity check
         if(!silent){
             .catn("Checking arguments...")
         }
 
-        ## TODO remove in next version
-        ## Check if user give a format
-        ## if(length(format)>1){
-        ##   stop("You must indicate the format of you source files, by setting argument 'format'")
-        ## }
+        # TODO remove in next version
+        # Check if user give a format
+        # if(length(format)>1){
+        #   stop("You must indicate the format of you source files, by setting argument 'format'")
+        # }
 
-        ## we use a default now.
+        # we use a default now.
         format <- match.arg(format)
 
-        ## check the chr.sizes
+        # check the chr.sizes
         if(length(chr.sizes)==1){
             if(chr.sizes=="auto" & format != "bam"){
                 stop("As you are not using the 'bam' format, you need to set the 'chr.sizes' option.")
@@ -236,7 +240,7 @@ setMethod(
             }
         }
 
-        ## test the counts
+        # test the counts
         if(length(count)!=1){
             if(!ignoreWarnings){
                 warning("No count method was provided. Defaulting to 'features'.")
@@ -245,7 +249,7 @@ setMethod(
         }
         .checkArguments("easyRNASeq","count",count)
 
-        ## test the summarization
+        # test the summarization
         if(count == "genes" & length(summarization)>1){
             stop(paste("A 'summarization' method is necessary if you choose the 'genes' count method!"))
         }
@@ -264,12 +268,12 @@ setMethod(
             }
         }
 
-        ## check the annotationMethod
+        # check the annotationMethod
         if(count != "islands"){
             .checkArguments("easyRNASeq","annotationMethod",annotationMethod)
         }
 
-        ## check the organism
+        # check the organism
         if(organism==character(1)){
             if(annotationMethod=="biomaRt"){
                 stop("A valid organism name is necessary for the 'organism' arguments when using the 'biomaRt' annotation method.")
@@ -279,7 +283,7 @@ setMethod(
             }
             validity.check=FALSE
         }
-        ## the knowOrganisms is defunct so we just replace it here - only call
+        # the knowOrganisms is defunct so we just replace it here - only call
         knownOrganisms <- eval(formals(easyRNASeq:::.convertToUCSC)$organism)
         if(!tolower(organism) %in% c(tolower(knownOrganisms),"custom") & nrow(chr.map) ==0){
             warning(paste("Your organism has no mapping defined to perform the validity check for the UCSC compliance of the chromosome name.",
@@ -291,24 +295,24 @@ setMethod(
             stop("You want to use a 'custom' organism, but do not provide a 'chr.map'. Aborting.")
         }
 
-        ## check the output formats, default to SummarizedExperiment
+        # check the output formats, default to SummarizedExperiment
         outputFormat <- match.arg(outputFormat)
 
-        ## check the files
+        # check the files
         if((length(filenames) == 0 & pattern == "") | (length(filenames) > 0 & pattern != "")){
             stop("You need to provide EITHER a list of 'filenames' present in the 'filesDirectory' OR a 'pattern' matching them.")
         }
 
-        ## if we have filenames, create the pattern
+        # if we have filenames, create the pattern
         if(length(filenames) > 0){
             pattern <- paste(filenames, '$',sep="",collapse="|")
         }
 
-        ## get source files from the given directory
+        # get source files from the given directory
         filesList <- .list.files(path=path.expand(filesDirectory),pattern=pattern,...)
         names(filesList) <- basename(filesList)
 
-        ## check the list of file
+        # check the list of file
         if(length(filesList) == 0 ){
             stop(
                 paste(
@@ -322,20 +326,20 @@ setMethod(
                 )
         }
 
-        ## check if we have index with bai
-        ## actually create a BamFileList
+        # check if we have index with bai
+        # actually create a BamFileList
         if(format=="bam"){
             filesList <- getBamFileList(filesList)
         }
 
-        ## check the conditions
+        # check the conditions
         if(length(conditions)>0){
             if(is.null(names(conditions)) | length(filesList) != length(conditions) | !all(names(filesList) %in% names(conditions))){
                 stop("The 'conditions' should be a named vector, the length of the files to proceed. The names should be the names of the files to proceed.")
             }
         }
 
-        ## sort the file lists according to filenames or conditions
+        # sort the file lists according to filenames or conditions
         if(length(filenames)>0){
             filesList <- filesList[match(filenames,names(filesList))]
         } else {
@@ -344,17 +348,17 @@ setMethod(
             }
         }
 
-        ## create the object and fill the fileName
+        # create the object and fill the fileName
         obj <- new('RNAseq',organismName=organism,readLength=readLength,fileName=names(filesList))
 
-        ## Set chromosome size
+        # Set chromosome size
         if(length(chr.sizes)==1){
             if(chr.sizes == "auto"){
 
-                ## read the headers
+                # read the headers
                 headers <- lapply(filesList,scanBamHeader)
 
-                ## Two sanity checks
+                # Two sanity checks
                 if(!all(sapply(headers,
                                function(header,expected){
                                    identical(sort(names(header$targets)),expected)
@@ -369,7 +373,7 @@ setMethod(
                     stop("The chromosome lengths differ between BAM files.")
                 }
 
-                ## check if we got some chr sizes at all
+                # check if we got some chr sizes at all
                 if(length(chr.sizes)==0){
                     stop(paste("No chromosome sizes could be determined from your",
                                "BAM file(s).Is the BAM header present?\nIf not,",
@@ -379,17 +383,17 @@ setMethod(
             }
         } else {
             if(! is.integer(chr.sizes)){
-                stop("chr.sizes should be a named list of integers. 'Use 'as.integer' to convert from numeric.")
+                stop("chr.sizes should be a named integer vector. 'Use 'as.integer' to convert from numeric.")
             }
             if(is.null(names(chr.sizes))){
-                stop("chr.sizes should be a NAMED list of integers. Use 'names()<-' to set the appropriate chromosome names.")
+                stop("chr.sizes should be a NAMED integer vector. Use 'names()<-' to set the appropriate chromosome names.")
             }
         }
 
-        ## store them
+        # store them
         chrSize(obj) <- chr.sizes
 
-        ## check if the chromosome size are valid
+        # check if the chromosome size are valid
         if(validity.check){
             if(organismName(obj) != "custom"){
                 chr.grep <- grep("chr",names(chrSize(obj)))
@@ -402,12 +406,12 @@ setMethod(
             names(chrSize(obj)) <- .convertToUCSC(names(chrSize(obj)),organismName(obj),chr.map)
         }
 
-        ## fetch annotation
+        # fetch annotation
         if(!silent){
             .catn("Fetching annotations...")
         }
 
-        ## validate and get them
+        # validate and get them
         annotParam <- switch(annotationMethod,
                              "biomaRt"=AnnotParam(
                                  datasource=organism,
@@ -419,7 +423,7 @@ setMethod(
                                  type=annotationMethod))
         genomicAnnotation(obj)<-getAnnotation(annotParam)
 
-        ## check if the chromosome names in the annotation are valid
+        # check if the chromosome names in the annotation are valid
         if(validity.check){
           if(organismName(obj) != "custom"){
             chr.grep <- grep("chr",names(chrSize(obj)))
@@ -438,13 +442,13 @@ setMethod(
           }
         }
 
-        ## create
+        # create
         if(!any(names(seqlengths(genomicAnnotation(obj))) %in% seqnames(obj))){
           stop("There is no common sequence names between your annotation and your BAM!")
         }
 
-        ## check if the annotation contains the valid fields for the count method
-        ## check if the annotation are valid
+        # check if the annotation contains the valid fields for the count method
+        # check if the annotation are valid
         if(count != "islands"){
             if(!(sub("s$","",count)) %in% colnames(genomicAnnotation(obj))){
                 stop(
@@ -456,7 +460,7 @@ setMethod(
                     )
             }
 
-            ## check if any annotation is outside the chrSizes boundaries
+            # check if any annotation is outside the chrSizes boundaries
             common.names <- intersect(names(ranges(obj)),names(chrSize(obj)))
             if(any(sapply(lapply(ranges(obj)[match(common.names,names(ranges(obj)))],range),end) > chrSize(obj)[match(common.names,names(chrSize(obj)))])){
                 stop(paste("Your annotation is not in sync with your alignments!",
@@ -464,8 +468,8 @@ setMethod(
                            "in your BAM file. You may be using two different genome versions."))
             }
 
-            ## check for overlaps
-            ## TODO this is a bit fishy as it depends on the order of the summarization argument...
+            # check for overlaps
+            # TODO this is a bit fishy as it depends on the order of the summarization argument...
             if(!(count == "genes" & summarization[1] == "geneModels")){
                 ovl <- findOverlaps(ranges(obj),
                                     drop.self=TRUE,
@@ -498,7 +502,7 @@ setMethod(
             }
         }
 
-        ## check if the chromosome names are valid
+        # check if the chromosome names are valid
         if(validity.check){
           if (annotationMethod != "biomaRt" & organismName(obj) != "custom") {
             chr.grep <- grep("chr", names(genomicAnnotation(obj)))
@@ -512,7 +516,7 @@ setMethod(
           }
         }
 
-        ## subset the annotation by chr.sel
+        # subset the annotation by chr.sel
         if (length(chr.sel) >0){
             if(!chr.sel %in% names(genomicAnnotation(obj))){
                 stop(paste("The chromosome name you have given in the 'chr.sel' argument",
@@ -526,7 +530,7 @@ setMethod(
             }
         }
 
-        ## Check if the condition list have the same size as the file list
+        # Check if the condition list have the same size as the file list
         if(outputFormat=="DESeq"|outputFormat=="edgeR" ){
             if(length(conditions)!=length(filesList)){
                 stop(paste(
@@ -539,7 +543,7 @@ setMethod(
             }
         }
 
-        ## Generate the gene model if required
+        # Generate the gene model if required
         if(count == 'genes'){
             if(summarization == 'geneModels'){
                 if(!silent){
@@ -547,7 +551,7 @@ setMethod(
                 }
                 geneModel(obj) <- .geneModelAnnotation(genomicAnnotation(obj),nbCore)
 
-                ## check the gene model
+                # check the gene model
                 ovl <- findOverlaps(geneModel(obj),drop.self=TRUE,drop.redundant=TRUE)
                 ovl.number <- sum(sapply(ovl,function(hits){length(unique(queryHits(hits)))}))
                 if(ovl.number > 0){
@@ -562,13 +566,13 @@ setMethod(
             }
         }
 
-        ## Do count
-        ## Changed from sapply to lapply to make sure that the rownames are conserved!
+        # Do count
+        # Changed from sapply to lapply to make sure that the rownames are conserved!
         if(!silent){
             .catn("Summarizing counts...")
         }
 
-        ## perform the count (in parallel if asked)
+        # perform the count (in parallel if asked)
         countData <- parallelize(obj=filesList,fun=.doCount,nnodes=nbCore,
                                  rnaSeq=obj,format=format,
                                  filter=filter,count=count,
@@ -581,31 +585,31 @@ setMethod(
                                  plot=plot,gapped=gapped,
                                  silent=silent,...)
 
-        ## decomplex the data
-        ## counts
+        # decomplex the data
+        # counts
         listOfCount <- do.call(cbind,lapply(countData,function(cData){
             cData$counts
         }))
 
-        ## sizes
+        # sizes
         librarySize(obj) <- do.call("c",lapply(countData,function(cData){
             cData$size
         }))
 
-        ## we shouldn't get back a list
+        # we shouldn't get back a list
         if(is.list(listOfCount)){
             warning("Something unexpected happened while calculating the coverage and summarizing it. Aborting and returning the current objects. Check the readCounts slot for more details.")
             return(list(RNAseq=obj,readCounts=listOfCount))
         }
 
-        ## we want proper names!
+        # we want proper names!
         colnames(listOfCount) <- fileName(obj)
         if(!all(rownames(listOfCount) %in% .getName(obj,count))){
             warning("Something unexpected happened while calculating the coverage and summarizing it. Aborting and returning the current object. Check the readCounts slot for more details.")
             return(list(RNAseq=obj,readCounts=listOfCount))
         }
 
-        ## islands or not
+        # islands or not
         if( count == 'islands'){
             readCounts(obj)<- .extendCountList(readCounts(obj),listOfCount,count)
         } else{
@@ -616,12 +620,12 @@ setMethod(
                 )
         }
 
-        ## Return object asked by user
+        # Return object asked by user
         if(!silent){
             .catn("Preparing output")
         }
 
-        ## if necessary normalize
+        # if necessary normalize
         return(switch(outputFormat,
                       "DESeq"={
                           cds <- newCountDataSet(countData=readCounts(obj,count,summarization,unique=TRUE),conditions=conditions)
@@ -647,7 +651,7 @@ setMethod(
                       },
                       "matrix"= {
                           if(normalize){
-                              ## note that we pass count and summarization as argument to the threedots of the function
+                              # note that we pass count and summarization as argument to the threedots of the function
                               counts <- .normalizationDispatcher(obj,type="RPKM",count=count,summarization=summarization,plot=FALSE,silent=silent)
                           } else {
                               counts <- readCounts(obj,count,summarization,unique=TRUE)
@@ -655,7 +659,7 @@ setMethod(
                           return(counts)
                       },
                       "SummarizedExperiment"={
-                          ## TODO think that for exons/features the count might be redundant
+                          # TODO think that for exons/features the count might be redundant
                           if(normalize){
                               if(!ignoreWarnings){
                                   warning(paste("Since you want a 'RangedSummarizedExperiment' object,",
@@ -665,15 +669,15 @@ setMethod(
                               }
                           }
 
-                          ## get the counts
+                          # get the counts
                           counts <- readCounts(obj,count,summarization)
 
-                          ## create the sample annotation
-                          ## TODO should we return the range if we have many reads?
-                          ## TODO and at the moment the ReadLength will be 0 if it is not set
-                          ## as a parameter... We need to return it as part of the parallel
-                          ## processing above - will be easier when all the internals rely on
-                          ## SummarizedExperiment
+                          # create the sample annotation
+                          # TODO should we return the range if we have many reads?
+                          # TODO and at the moment the ReadLength will be 0 if it is not set
+                          # as a parameter... We need to return it as part of the parallel
+                          # processing above - will be easier when all the internals rely on
+                          # SummarizedExperiment
                           colData <- DataFrame(FileName=fileName(obj),
                                                LibSize=librarySize(obj),
                                                ReadLength=min(readLength(obj)),
@@ -682,14 +686,14 @@ setMethod(
                               colData$Condition <- conditions
                           }
 
-                          ## create the "gene" annotation
-                          ## TODO this probably need refactoring...
+                          # create the "gene" annotation
+                          # TODO this probably need refactoring...
                           rowRanges <- switch(count,
                                             "genes"= {
                                                 switch(summarization,
                                                        "geneModels"= as(geneModel(obj),"GRanges"),
                                                        switch(class(genomicAnnotation(obj)),
-                                                              ## FIXME; need to be tested!
+                                                              # FIXME; need to be tested!
                                                               "RangedData"={
                                                                   grng <- as(genomicAnnotation(obj),"GRanges")
                                                                   sel <- !duplicated(grng$gene)
@@ -704,7 +708,7 @@ setMethod(
                                                                   }
                                                                   grng
                                                               },
-                                                              ## FIXME; need to be adapted as the above!
+                                                              # FIXME; need to be adapted as the above!
                                                               "GRangesList"=unlist(genomicAnnotation(obj)),
                                                               genomicAnnotation(obj)))
                                             },
@@ -724,7 +728,7 @@ setMethod(
                                                            }
                                                            grng
                                                        },
-                                                       ## FIXME; need to be adapted as the above!
+                                                       # FIXME; need to be adapted as the above!
                                                        "GRangesList"=unlist(genomicAnnotation(obj)),
                                                        genomicAnnotation(obj))
                                             },
@@ -734,30 +738,30 @@ setMethod(
                                                    genomicAnnotation(obj))
                                             )
 
-                          ## correct the seq lengths if we have any NA (occurs when we use a RangedData)
+                          # correct the seq lengths if we have any NA (occurs when we use a RangedData)
                           if(any(is.na(seqlengths(rowRanges)))){
                               common.names <- intersect(names(chrSize(obj)),names(seqlengths(rowRanges)))
-                              ## no need to check that we have a common set, it was done before so we must have one
+                              # no need to check that we have a common set, it was done before so we must have one
                               seqlengths(rowRanges)[match(common.names,
                                                         names(seqlengths(rowRanges)))] <- chrSize(obj)[match(common.names,
                                                                                                            names(chrSize(obj)))]
                           }
 
-                          ## the assay contains the data
+                          # the assay contains the data
                           sexp <- SummarizedExperiment(
                               assays=SimpleList(counts=counts),
                               rowRanges=rowRanges,
                               colData=colData)
 
-                          ## add the rownames
+                          # add the rownames
                           rownames(sexp) <- rownames(counts)
 
-                          ## issue a warning
+                          # issue a warning
                           if(any(duplicated(rownames(sexp)))){
                               warning(paste("As you are counting by ",count,", your assay contains redundant entries.",sep=""))
                           }
 
-                          ## report
+                          # report
                           return(sexp)
                       }
                       ))

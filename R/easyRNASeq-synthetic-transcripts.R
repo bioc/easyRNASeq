@@ -1,104 +1,92 @@
-## TODO test me
-## TODO vignette me
+# TODO test me
+# TODO vignette me
 
-##' Methods to create synthetic transcripts
-##'
-##' This function create a set of synthetic transcripts from a provided
-##' annotation file in "gff3" or "gtf" format. As detailed in
-##' \url{http://www.epigenesys.eu/en/protocols/bio-informatics/1283-guidelines-for-rna-seq-data-analysis},
-##' one major caveat of estimating gene expression using aligned RNA-Seq reads
-##' is that a single read, which originated from a single mRNA molecule, might
-##' sometimes align to several features (e.g. transcripts or genes) with
-##' alignments of equivalent quality. This, for example, might happen as a result
-##' of gene duplication and the presence of repetitive or common domains.
-##' To avoid counting unique mRNA fragments multiple times, the
-##' stringent approach is to keep only uniquely mapping reads - being aware of
-##' potential consequences. Not only can "multiple counting" arise from a
-##' biological reason, but also from technical artifacts, introduced mostly
-##' by poorly formatted gff3/gtf annotation files. To avoid this, it is best
-##' practice to adopt a conservative approach by collapsing all existing
-##' transcripts of a single gene locus into a "synthetic" transcript containing
-##' every exon of that gene. In the case of overlapping exons, the longest
-##' genomic interval is kept, i.e. an artificial exon is created. This process
-##' results in a flattened transcript - a gene structure with a one (gene) to
-##' one (transcript) relationship.
-##'
-##' The \code{createSyntheticTranscripts} function implements this, taking
-##' advantage of the hierarchical structure of the gff3/gtf file. Exon
-##' features are related to their transcript (parent), which themselves derives
-##' from their gene parents. Using this relationship, exons are combined per gene
-##' into a flattened transcript structure. Note that this might not avoid multiple
-##' counting if genes overlap on opposing strands. There, only strand specific
-##' sequencing data has the power to disentangle these situations.
-##'
-##' As gff3/gtf file can contain a large number of feature types, the
-##' \code{createSyntheticTranscripts} currently only supports: \emph{mRNA},
-##' \emph{miRNA}, \emph{tRNA} and \emph{transcript}. Please contact me if you
-##' need additional features to be considered. Note however, that I will only
-##' add features that are part of the \url{sequenceontology.org} SOFA
-##' (SO_Feature_Annotation) ontology.
-##'
-##' @aliases createSyntheticTranscripts
-##' createSyntheticTranscripts,AnnotParamCharacter-method
-##' createSyntheticTranscripts,character-method
-##' @rdname easyRNASeq-synthetic-transcripts
-##' @param obj a \code{\linkS4class{AnnotParamCharacter}} object or the
-##' annotation filename as a \code{character} string
-##' @param features one or more of 'mRNA', 'miRNA', 'tRNA', 'transcript'
-##' @param ... If \code{obj} is a character string, \code{input} and
-##' \code{output} - see below
-##' @param input the type of input, one of 'gff3' or 'gtf'
-##' @param output the output type, one of 'Genome_intervals' or 'GRanges'
-##' @param verbose increase the verbosity (default TRUE)
-##' @return
-##' Depending on the \code{obj} class.
-##' \itemize{
-##'   \item \code{AnnotParamCharacter}: a \code{AnnotParamObject} object
-##'   \item a \code{character} filename: depending on the selected \code{output}
-##'   value, a \code{\link[genomeIntervals:Genome_intervals-class]{Genome_intervals}}
-##'   or a \code{\linkS4class{GRanges}} object.
-##' }
-##' @author Nicolas Delhomme
-##' @seealso
-##' \itemize{
-##' \item{For the input:
-##' \itemize{
-##' \item \code{\linkS4class{AnnotParam}}
-##' }}
-##' \item{For the output:
-##' \itemize{
-##' \item \code{\linkS4class{AnnotParam}}
-##' \item \code{\link[genomeIntervals:Genome_intervals-class]{Genome_intervals}}
-##' \item \code{\linkS4class{GRanges}}
-##' }}}
-##' @keywords methods
-##' @examples
-##'
-##'   \dontrun{
-##'   ## the data
-##'   library("RnaSeqTutorial")
-##'
-##'   ## get the example file
-##'   library(curl)
-##'   curl_download(paste0("https://microasp.upsc.se/root/upscb-public/raw/",
-##'   "master/tutorial/easyRNASeq/Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"),
-##'              "Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz")
-##'
-##'   ## create the AnnotParam
-##'   annotParam <- AnnotParam(
-##'     datasource="Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz",
-##'     type="gtf")
-##'
-##'   ## create the synthetic transcripts
-##'   annotParam <- createSyntheticTranscripts(annotParam,verbose=FALSE)
-##'
-##'  }
-##'
-## TODO change the example!
-##   annotParam <- AnnotParam(system.file(
-##                    "extdata",
-##                    "Dmel-mRNA-exon-r5.52.gff3",
-##                    package="RnaSeqTutorial"))
+#' Methods to create synthetic transcripts
+#'
+#' This function create a set of synthetic transcripts from a provided
+#' annotation file in "gff3" or "gtf" format. As detailed in
+#' \url{http://www.epigenesys.eu/en/protocols/bio-informatics/1283-guidelines-for-rna-seq-data-analysis},
+#' one major caveat of estimating gene expression using aligned RNA-Seq reads
+#' is that a single read, which originated from a single mRNA molecule, might
+#' sometimes align to several features (e.g. transcripts or genes) with
+#' alignments of equivalent quality. This, for example, might happen as a result
+#' of gene duplication and the presence of repetitive or common domains.
+#' To avoid counting unique mRNA fragments multiple times, the
+#' stringent approach is to keep only uniquely mapping reads - being aware of
+#' potential consequences. Not only can "multiple counting" arise from a
+#' biological reason, but also from technical artifacts, introduced mostly
+#' by poorly formatted gff3/gtf annotation files. To avoid this, it is best
+#' practice to adopt a conservative approach by collapsing all existing
+#' transcripts of a single gene locus into a "synthetic" transcript containing
+#' every exon of that gene. In the case of overlapping exons, the longest
+#' genomic interval is kept, i.e. an artificial exon is created. This process
+#' results in a flattened transcript - a gene structure with a one (gene) to
+#' one (transcript) relationship.
+#'
+#' The \code{createSyntheticTranscripts} function implements this, taking
+#' advantage of the hierarchical structure of the gff3/gtf file. Exon
+#' features are related to their transcript (parent), which themselves derives
+#' from their gene parents. Using this relationship, exons are combined per gene
+#' into a flattened transcript structure. Note that this might not avoid multiple
+#' counting if genes overlap on opposing strands. There, only strand specific
+#' sequencing data has the power to disentangle these situations.
+#'
+#' As gff3/gtf file can contain a large number of feature types, the
+#' \code{createSyntheticTranscripts} currently only supports: \emph{mRNA},
+#' \emph{miRNA}, \emph{tRNA} and \emph{transcript}. Please contact me if you
+#' need additional features to be considered. Note however, that I will only
+#' add features that are part of the \url{sequenceontology.org} SOFA
+#' (SO_Feature_Annotation) ontology.
+#'
+#' @aliases createSyntheticTranscripts
+#' createSyntheticTranscripts,AnnotParamCharacter-method
+#' createSyntheticTranscripts,character-method
+#' @rdname easyRNASeq-synthetic-transcripts
+#' @param obj a \code{\linkS4class{AnnotParamCharacter}} object or the
+#' annotation filename as a \code{character} string
+#' @param features one or more of 'mRNA', 'miRNA', 'tRNA', 'transcript'
+#' @param ... If \code{obj} is a character string, \code{input} and
+#' \code{output} - see below
+#' @param input the type of input, one of 'gff3' or 'gtf'
+#' @param output the output type, one of 'Genome_intervals' or 'GRanges'
+#' @param verbose increase the verbosity (default TRUE)
+#' @return
+#' Depending on the \code{obj} class.
+#' \itemize{
+#'   \item \code{AnnotParamCharacter}: a \code{AnnotParamObject} object
+#'   \item a \code{character} filename: depending on the selected \code{output}
+#'   value, a \code{\link[genomeIntervals:Genome_intervals-class]{Genome_intervals}}
+#'   or a \code{\linkS4class{GRanges}} object.
+#' }
+#' @author Nicolas Delhomme
+#' @seealso
+#' \itemize{
+#' \item{For the input:
+#' \itemize{
+#' \item \code{\linkS4class{AnnotParam}}
+#' }}
+#' \item{For the output:
+#' \itemize{
+#' \item \code{\linkS4class{AnnotParam}}
+#' \item \code{\link[genomeIntervals:Genome_intervals-class]{Genome_intervals}}
+#' \item \code{\linkS4class{GRanges}}
+#' }}}
+#' @keywords methods
+#' @examples
+#'
+#'   # get the example file
+#'   library(curl)
+#'   invisible(curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+#'                               "master/tutorial/easyRNASeq/Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"),
+#'                        "Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"))
+#'   # create the AnnotParam
+#'   annotParam <- AnnotParam(
+#'     datasource="Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz",
+#'     type="gtf")
+#'
+#'   # create the synthetic transcripts
+#'   annotParam <- createSyntheticTranscripts(annotParam,verbose=FALSE)
+#'
 setMethod(f = "createSyntheticTranscripts",
           signature = "AnnotParamCharacter",
           definition = function(obj,
@@ -131,7 +119,7 @@ setMethod(f = "createSyntheticTranscripts",
                                                       verbose=verbose)))
 })
 
-##' @rdname easyRNASeq-synthetic-transcripts
+#' @rdname easyRNASeq-synthetic-transcripts
 setMethod(f = "createSyntheticTranscripts",
           signature = "character",
             definition = function(obj,
@@ -171,7 +159,7 @@ setMethod(f = "createSyntheticTranscripts",
     dat$gffAttributes <- gsub("\"","",.convertGffToGtfAttributes(dat$gffAttributes))
   }
 
-  ## get the gene <-> mRNA/transcript map
+  # get the gene <-> mRNA/transcript map
   # This is mRNA IDs and their parents (genes)
   sel <- dat$type %in% features
 
@@ -181,7 +169,7 @@ setMethod(f = "createSyntheticTranscripts",
                       getGffAttribute(dat[sel],relation$ID),
                       getGffAttribute(dat[sel],relation$Parent))
 
-  ## extract the exons and group by gene ID
+  # extract the exons and group by gene ID
   exon.sel <- dat$type == "exon"
 
   # If we have a minimal gtf (no gene); get the idMap
@@ -194,28 +182,28 @@ setMethod(f = "createSyntheticTranscripts",
   # fail if we get nothing - this should not happen though
   stopifnot(nrow(idMap)>0)
 
-  ## we can drop multiple Parents (i.e. comma separated Parent values as we are
-  ## collapsing them anyway)
+  # we can drop multiple Parents (i.e. comma separated Parent values as we are
+  # collapsing them anyway)
   mRnaID <- sub(",.*","",getGffAttribute(dat[exon.sel],switch(input,
                                                          "gff3"=relation$Parent,
                                                          "gtf"=relation$ID)))
 
-  ## avoid unwanted features
+  # avoid unwanted features
   rngs <- IRanges(start = dat[exon.sel, 1],
                   end = dat[exon.sel, 2])[mRnaID %in% idMap[,relation$ID]]
 
-  ## create a set of synthetic exons
+  # create a set of synthetic exons
   rngList <- reduce(
     split(rngs,
           idMap[match(mRnaID[mRnaID %in% idMap[,relation$ID]],
                       idMap[,relation$ID]),relation$Parent]))
 
-  ## export the gene, exon and features as gff3
-  ## create the new gff object
-  ## select the gene
+  # export the gene, exon and features as gff3
+  # create the new gff object
+  # select the gene
   gene.sel <- dat$type == "gene"
 
-  ## create the gene gff
+  # create the gene gff
   geneID <- getGffAttribute(dat[gene.sel,],
                             switch(input,
                                    "gff3"=relation$ID,
@@ -253,7 +241,7 @@ setMethod(f = "createSyntheticTranscripts",
       geneID <- getGffAttribute(geneGff,"ID")
   }
 
-  ## create gffs for each feature
+  # create gffs for each feature
   feats <- lapply(features, function(f) {
     if(verbose){message(sprintf("Processing %s features",f))}
     f.sel <- idMap$type == f
@@ -287,7 +275,7 @@ setMethod(f = "createSyntheticTranscripts",
       )
   }
 
-  ## create the exon gff
+  # create the exon gff
   rngList <- rngList[match(geneID[geneID %in% idMap[,relation$Parent]], names(rngList))]
   exonNumber <- elementNROWS(rngList)
   if(sum(gene.sel)>0){
@@ -321,13 +309,13 @@ setMethod(f = "createSyntheticTranscripts",
                                   paste(ID,"0",sep = "."))
   exonGff$type <- "exon"
 
-  ## combine
+  # combine
   newgff <- c(geneGff, featureGff, exonGff)
 
-  ## change the source
+  # change the source
   newgff$source <- "easyRNASeq"
 
-  ## sort
+  # sort
   newgff <- newgff[order(seqnames(newgff), newgff[, 1],
                          factor(as.character(newgff$type),
                                 labels = seq_len(2 + length(features)),

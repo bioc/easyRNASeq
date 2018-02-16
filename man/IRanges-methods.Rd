@@ -48,4 +48,3 @@ be of the \code{\linkS4class{RangedData}} or
 Nicolas Delhomme
 }
 \keyword{methods}
-

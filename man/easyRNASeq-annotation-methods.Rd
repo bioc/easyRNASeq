@@ -69,4 +69,3 @@ Nicolas Delhomme
 \keyword{connection}
 \keyword{data}
 \keyword{methods}
-

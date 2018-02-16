@@ -19,13 +19,11 @@ The precision slot is used to determine the count unit:
  Objects can be created by calls of the
 form \code{new("RnaSeqParam", ...)} or using the RnaSeqParam constructor.
 }
+
 \examples{
 
 showClass("RnaSeqParam")
 
-}
-\author{
-Nicolas Delhomme
 }
 \seealso{
 \itemize{
@@ -40,5 +38,7 @@ Nicolas Delhomme
 \item \code{\link[easyRNASeq:easyRNASeq-summarization-methods]{easyRNASeq summarization functions}}
 }
 }
+\author{
+Nicolas Delhomme
+}
 \keyword{classes}
-

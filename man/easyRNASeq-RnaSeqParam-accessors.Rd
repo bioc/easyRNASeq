@@ -2,20 +2,20 @@
 % Please edit documentation in R/easyRNASeq-RnaSeqParam-accessors.R
 \docType{methods}
 \name{easyRNASeq RnaSeqParam accessors}
-\alias{RnaSeqParam-accessors}
-\alias{annotParam}
-\alias{annotParam,RnaSeqParam-method}
-\alias{bamParam}
-\alias{bamParam,RnaSeqParam-method}
-\alias{countBy}
-\alias{countBy,RnaSeqParam-method}
-\alias{datasource,RnaSeqParam-method}
 \alias{easyRNASeq RnaSeqParam accessors}
-\alias{paired,RnaSeqParam-method}
-\alias{precision}
-\alias{precision,RnaSeqParam-method}
-\alias{stranded,RnaSeqParam-method}
+\alias{RnaSeqParam-accessors}
 \alias{yieldSize,RnaSeqParam-method}
+\alias{bamParam}
+\alias{annotParam}
+\alias{countBy}
+\alias{precision}
+\alias{countBy,RnaSeqParam-method}
+\alias{precision,RnaSeqParam-method}
+\alias{bamParam,RnaSeqParam-method}
+\alias{annotParam,RnaSeqParam-method}
+\alias{datasource,RnaSeqParam-method}
+\alias{paired,RnaSeqParam-method}
+\alias{stranded,RnaSeqParam-method}
 \title{Accessors for RnaSeqParam class}
 \usage{
 \S4method{yieldSize}{RnaSeqParam}(object)
@@ -55,9 +55,6 @@ rsp <- RnaSeqParam(annotParam=annotParam)
 ysize <-yieldSize(rsp)
 
 }
-\author{
-Nicolas Delhomme
-}
 \seealso{
 \itemize{
   \item The \code{\link[easyRNASeq:easyRNASeq-AnnotParam-class]{AnnotParam}} class
@@ -66,5 +63,7 @@ Nicolas Delhomme
 }
 The \code{\link[easyRNASeq:easyRNASeq-BamParam-accessors]{BamParam yieldSize}} accessor
 }
+\author{
+Nicolas Delhomme
+}
 \keyword{manip}
-

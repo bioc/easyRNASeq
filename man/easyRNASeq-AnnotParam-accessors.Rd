@@ -2,10 +2,10 @@
 % Please edit documentation in R/easyRNASeq-AnnotParam-accessors.R
 \docType{methods}
 \name{easyRNASeq AnnotParam accessors}
+\alias{easyRNASeq AnnotParam accessors}
 \alias{AnnotParam-accessors}
 \alias{datasource}
 \alias{datasource,AnnotParam-method}
-\alias{easyRNASeq AnnotParam accessors}
 \alias{type,AnnotParam-method}
 \title{Accessors for AnnotParam class}
 \usage{
@@ -31,22 +31,22 @@ Implemented are:
 }
 \examples{
 
-annot <- AnnotParam(
-  datasource=system.file(
-                        "extdata",
-                        "Dmel-mRNA-exon-r5.52.gff3",
-                        package="RnaSeqTutorial"))
-## get the datasource Parameter
+library(curl)
+invisible(curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+                               "master/tutorial/easyRNASeq/Dmel-mRNA-exon-r5.52.gff3.gz"),
+                        "Dmel-mRNA-exon-r5.52.gff3.gz"))
+
+annot <- AnnotParam(datasource="Dmel-mRNA-exon-r5.52.gff3.gz")
+# get the datasource Parameter
 datasource(annot)
 
-}
-\author{
-Nicolas Delhomme
 }
 \seealso{
 The \code{\link[easyRNASeq:easyRNASeq-AnnotParam-class]{AnnotParam}} class.
 The type and organism generics are imported from the \code{\link[BSgenome:BSgenome-class]{BSgenome}} and
 \code{\link[Biostrings:XString-class]{Biostrings}} package, respectively.
 }
+\author{
+Nicolas Delhomme
+}
 \keyword{manip}
-

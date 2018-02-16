@@ -12,12 +12,6 @@ __biomaRt__ __datasource__ function.
 _rda_ is used, it expects the corresponding file to contain a _GRanges_ object
 by the name of _gAnnot_.
 
-<!-- Make that part of the RnaSeqTutorial package
-The __easyRNASeq__ package comes with a companion package called __RnaSeqTutorial__
-that contains a set of exemplary data. We start by loading that package (install 
-it from Bioconductor if it is missing on your system).
--->
-
 In this tutorial, we will reproduce the analysis performed in _Robinson, 
 Delhomme et al._ [@Robinson:2014p6362]. For that we will start by downloading
 the original annotation gff3 file for _P. trichocarpa_, a close related species

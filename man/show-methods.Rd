@@ -3,9 +3,9 @@
 \docType{methods}
 \name{show methods}
 \alias{show methods}
+\alias{show,RNAseq-method}
 \alias{show,AnnotParam-method}
 \alias{show,BamParam-method}
-\alias{show,RNAseq-method}
 \alias{show,RnaSeqParam-method}
 \title{Display the content of classes from the easyRNASeq package.}
 \usage{
@@ -28,5 +28,5 @@ Display the values of the different slots of the
 \code{\linkS4class{RNAseq}} object.  } 
 \item{Annot/Bam/RnaSeqParam}{The respective object settings.}}
 }
-\keyword{methods}
 
+\keyword{methods}

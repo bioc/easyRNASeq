@@ -4,10 +4,10 @@
 \name{parallel additional methods}
 \alias{parallel additional methods}
 \alias{parallelize}
-\alias{parallelize,BamFileList,function-method}
-\alias{parallelize,GRangesList,function-method}
 \alias{parallelize,list,function-method}
 \alias{parallelize,vector,function-method}
+\alias{parallelize,GRangesList,function-method}
+\alias{parallelize,BamFileList,function-method}
 \title{parallel additional methods}
 \usage{
 \S4method{parallelize}{list,`function`}(obj = list(), fun = NULL,
@@ -36,13 +36,12 @@ a cluster object is created and the object dispatched for parallelization.
 \examples{
 parallelize(list(a<-c(1,2),b<-c(2,1)),sum,nnodes=1)
 }
-\author{
-Nicolas Delhomme
-}
 \seealso{
 \code{\link[parallel:clusterApply]{clusterApply}}
 \code{\link[parallel:makePSOCKcluster]{makePSOCKcluster}}
 \code{\link[parallel:stopCluster]{stopCluster}}
 }
+\author{
+Nicolas Delhomme
+}
 \keyword{methods}
-

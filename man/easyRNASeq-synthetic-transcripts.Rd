@@ -2,8 +2,9 @@
 % Please edit documentation in R/easyRNASeq-synthetic-transcripts.R
 \docType{methods}
 \name{createSyntheticTranscripts,AnnotParamCharacter-method}
-\alias{createSyntheticTranscripts}
 \alias{createSyntheticTranscripts,AnnotParamCharacter-method}
+\alias{createSyntheticTranscripts}
+\alias{createSyntheticTranscripts,character-method}
 \alias{createSyntheticTranscripts,character-method}
 \title{Methods to create synthetic transcripts}
 \usage{
@@ -77,29 +78,19 @@ add features that are part of the \url{sequenceontology.org} SOFA
 }
 \examples{
 
-  \dontrun{
-  ## the data
-  library("RnaSeqTutorial")
-
-  ## get the example file
+  # get the example file
   library(curl)
-  curl_download(paste0("https://microasp.upsc.se/root/upscb-public/raw/",
-  "master/tutorial/easyRNASeq/Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"),
-             "Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz")
-
-  ## create the AnnotParam
+  invisible(curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+                              "master/tutorial/easyRNASeq/Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"),
+                       "Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"))
+  # create the AnnotParam
   annotParam <- AnnotParam(
     datasource="Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz",
     type="gtf")
 
-  ## create the synthetic transcripts
+  # create the synthetic transcripts
   annotParam <- createSyntheticTranscripts(annotParam,verbose=FALSE)
 
- }
-
-}
-\author{
-Nicolas Delhomme
 }
 \seealso{
 \itemize{
@@ -114,5 +105,7 @@ Nicolas Delhomme
 \item \code{\linkS4class{GRanges}}
 }}}
 }
+\author{
+Nicolas Delhomme
+}
 \keyword{methods}
-

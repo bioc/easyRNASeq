@@ -3,15 +3,15 @@
 \docType{methods}
 \name{DESeq additional methods}
 \alias{DESeq additional methods}
-\alias{locfit}
-\alias{lp}
 \alias{multivariateConditions}
 \alias{multivariateConditions,CountDataSet-method}
-\alias{newCountDataSet}
 \alias{plotDispLSD}
 \alias{plotDispLSD,CountDataSet-method}
 \alias{plotDispersionEstimates}
 \alias{plotDispersionEstimates,CountDataSet-method}
+\alias{locfit}
+\alias{lp}
+\alias{newCountDataSet}
 \title{Extension for the DESeq package}
 \usage{
 multivariateConditions(obj)
@@ -81,12 +81,11 @@ the dispersion estimate as described in the \pkg{DESeq} vignette.}
 	}
 
 }
-\author{
-Nicolas Delhomme, Bastian Schiffthaler
-}
 \seealso{
 \code{\linkS4class{CountDataSet}}
 \code{\link[DESeq:plotDispEsts]{plotDispEsts}}
 }
+\author{
+Nicolas Delhomme, Bastian Schiffthaler
+}
 \keyword{methods}
-

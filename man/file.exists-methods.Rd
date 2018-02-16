@@ -2,8 +2,8 @@
 % Please edit documentation in R/file.exists-methods.R
 \docType{methods}
 \name{file.exists methods}
-\alias{file.exists}
 \alias{file.exists methods}
+\alias{file.exists}
 \alias{file.exists,BamFile-method}
 \title{Extend the file.exists function to check the path slot of a Rsamtools BamFile class for existence}
 \usage{
@@ -20,5 +20,5 @@ Check if the bam file represented by a \code{\linkS4class{BamFile}} object exist
 Checkk if the bam file linked to by a
 \code{\linkS4class{BamFile}} object exists.  } }
 }
-\keyword{methods}
 
+\keyword{methods}

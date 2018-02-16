@@ -2,12 +2,12 @@
 % Please edit documentation in R/easyRNASeq-AnnotParam.R
 \docType{methods}
 \name{easyRNASeq AnnotParam constructor}
+\alias{easyRNASeq AnnotParam constructor}
 \alias{AnnotParam}
-\alias{AnnotParam,GRanges-method}
-\alias{AnnotParam,RangedData-method}
 \alias{AnnotParam,character-method}
 \alias{AnnotParam,missing-method}
-\alias{easyRNASeq AnnotParam constructor}
+\alias{AnnotParam,RangedData-method}
+\alias{AnnotParam,GRanges-method}
 \title{AnnotParam constructor}
 \usage{
 \S4method{AnnotParam}{character}(datasource = character(0), type = c("gff3",
@@ -53,21 +53,19 @@ In all cases, the datasource is a \code{character} describing:
 }
 }
 \examples{
-## create an object to retrieve annotation from biomaRt
+# create an object to retrieve annotation from biomaRt
 annotParam <- AnnotParam(datasource="Hsapiens",type="biomaRt")
 
-## get the datasource and type
+# get the datasource and type
 datasource(annotParam)
 type(annotParam)
 
-## create an object to retrieve annotation from an rda object
-\dontrun{
-library(RnaSeqTutorial)
-annotParam <- AnnotParam(datasource=system.file(
-  package="RnaSeqTutorial",
-  "data","gAnnot.rda"
-),type="rda")
-}
+# create an object to retrieve annotation from an rda object
+library(curl)
+invisible(curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+       "master/tutorial/easyRNASeq/gAnnot.rda"),"gAnnot.rda"))
+annotParam <- AnnotParam(datasource="gAnnot.rda",type="rda")
+
 }
 \seealso{
 \itemize{
@@ -76,4 +74,3 @@ annotParam <- AnnotParam(datasource=system.file(
 \item \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{getAnnotation}}
 }
 }
-

@@ -4,8 +4,8 @@
 \alias{Deprecated functions}
 \alias{easyRNASeq}
 \alias{easyRNASeq,RNAseq-method}
-\alias{fetchCoverage}
 \alias{fetchCoverage,RNAseq-method}
+\alias{fetchCoverage}
 \title{The following function have been deprecated:
 \itemize{
 \item \code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq}}
@@ -23,4 +23,3 @@ function is not called directly anymore but through higher level functions (from
 GenomicRanges package), the 'what' and 'isUnmappedQuery' parameters were obsolete.
 }
 }
-

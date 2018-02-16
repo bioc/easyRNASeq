@@ -2,9 +2,9 @@
 % Please edit documentation in R/easyRNASeq-BamParam.R
 \docType{methods}
 \name{easyRNASeq BamParam constructor}
+\alias{easyRNASeq BamParam constructor}
 \alias{BamParam}
 \alias{BamParam,ANY-method}
-\alias{easyRNASeq BamParam constructor}
 \title{BamParam constructor}
 \usage{
 \S4method{BamParam}{ANY}(paired = TRUE, stranded = FALSE,
@@ -46,4 +46,3 @@ BamParam(stranded=TRUE,yieldSize=1L)
 
 
 }
-

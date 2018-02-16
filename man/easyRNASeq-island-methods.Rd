@@ -42,21 +42,22 @@ functions are now outdated and would need to be actualized.
 \examples{
 
 	\dontrun{
-	## NOTE that this function might need to be actualized
+	# NOTE that this function might need to be actualized
 	obj <- new('RNAseq',
 		organismName="Dmelanogaster",
 		readLength=36L,
 		chrSize=as.list(seqlengths(Dmelanogaster))
 		)
 
-	obj <- fetchCoverage(
-			obj,
-			format="bam",
-                        filename=system.file(
-				"extdata",
-				"ACACTG.bam",
-                            	package="RnaSeqTutorial")
-			)
+ library(curl)
+ invisible(sapply(c("ACACTG","ACTAGC"),function(bam){
+     curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+                          "master/tutorial/easyRNASeq/",bam,".bam"),paste0(bam,".bam"))
+     curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+                          "master/tutorial/easyRNASeq/",bam,".bam.bai"),paste0(bam,".bam.bai"))
+ }))
+
+	obj <- fetchCoverage(obj,format="bam",filename="ACACTG.bam")
 
 	obj <- findIslands(
 			obj,
@@ -72,4 +73,3 @@ Nicolas Delhomme
 \keyword{connection}
 \keyword{data}
 \keyword{methods}
-

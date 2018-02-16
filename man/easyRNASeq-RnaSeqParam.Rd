@@ -2,9 +2,9 @@
 % Please edit documentation in R/easyRNASeq-RnaSeqParam.R
 \docType{methods}
 \name{easyRNASeq RnaSeqParam constructor}
+\alias{easyRNASeq RnaSeqParam constructor}
 \alias{RnaSeqParam}
 \alias{RnaSeqParam,ANY-method}
-\alias{easyRNASeq RnaSeqParam constructor}
 \title{RnaSeqParam constructor}
 \usage{
 \S4method{RnaSeqParam}{ANY}(annotParam = AnnotParam(),
@@ -66,4 +66,3 @@ RnaSeqParam(bamParam=BamParam(stranded=TRUE,yieldSize=1L),annotParam=annotParam)
 
 
 }
-

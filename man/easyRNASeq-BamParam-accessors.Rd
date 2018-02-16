@@ -2,14 +2,14 @@
 % Please edit documentation in R/easyRNASeq-BamParam-accessors.R
 \docType{methods}
 \name{easyRNASeq BamParam accessors}
-\alias{BamParam-accessors}
 \alias{easyRNASeq BamParam accessors}
-\alias{paired}
-\alias{paired,BamParam-method}
-\alias{stranded}
-\alias{stranded,BamParam-method}
+\alias{BamParam-accessors}
 \alias{yieldSize}
 \alias{yieldSize,BamParam-method}
+\alias{paired}
+\alias{stranded}
+\alias{paired,BamParam-method}
+\alias{stranded,BamParam-method}
 \title{Accessors for BamParam class}
 \usage{
 yieldSize(object,...)
@@ -37,12 +37,11 @@ bp <- BamParam()
 ysize <-yieldSize(bp)
 
 }
-\author{
-Nicolas Delhomme
-}
 \seealso{
 The \code{\link[easyRNASeq:easyRNASeq-BamParam-class]{BamParam}} class
 The \code{\link[easyRNASeq:easyRNASeq-RnaSeqParam-accessors]{RnaSeqParam yieldSize}} accessor
 }
+\author{
+Nicolas Delhomme
+}
 \keyword{manip}
-

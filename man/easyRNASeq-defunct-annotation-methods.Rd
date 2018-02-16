@@ -13,4 +13,3 @@ defunct. The \code{fetchAnnotation} function has been replaced by the
 \author{
 Nicolas Delhomme
 }
-

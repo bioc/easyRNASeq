@@ -24,13 +24,11 @@ the following slots:
 }
 all of which can be accessed using the accordingly names accessor.
 }
+
 \examples{
 
 showClass("BamParam")
 
-}
-\author{
-Nicolas Delhomme
 }
 \seealso{
 \itemize{
@@ -43,5 +41,7 @@ Nicolas Delhomme
 \item \code{\link[easyRNASeq:easyRNASeq-AnnotParam]{AnnotParam constructor}}
 }
 }
+\author{
+Nicolas Delhomme
+}
 \keyword{classes}
-

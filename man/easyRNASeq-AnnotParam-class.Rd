@@ -18,13 +18,11 @@ form \code{new("AnnotParamCharacter", ...)} or \code{new("AnnotParamObject", ...
 \code{\link[easyRNASeq:easyRNASeq-AnnotParam]{AnnotParam}} constructor (failsafe, prefered).
 The class \code{AnnotParam} in itself is virtual and hence cannot be instantiated.
 }
+
 \examples{
 
 showClass("AnnotParam")
 
-}
-\author{
-Nicolas Delhomme
 }
 \seealso{
 \itemize{
@@ -35,5 +33,7 @@ Nicolas Delhomme
 \item \code{\link[easyRNASeq:easyRNASeq-AnnotParam]{AnnotParam constructor}}
 }
 }
+\author{
+Nicolas Delhomme
+}
 \keyword{classes}
-

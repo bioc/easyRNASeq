@@ -2,8 +2,8 @@
 % Please edit documentation in R/easyRNASeq-simpleRNASeq.R
 \docType{methods}
 \name{simpleRNASeq,BamFileList,RnaSeqParam-method}
-\alias{simpleRNASeq}
 \alias{simpleRNASeq,BamFileList,RnaSeqParam-method}
+\alias{simpleRNASeq}
 \title{simpleRNASeq method}
 \usage{
 \S4method{simpleRNASeq}{BamFileList,RnaSeqParam}(bamFiles = BamFileList(),
@@ -45,40 +45,43 @@ read counts according to the selected summarization
 }
 \examples{
 
-  \dontrun{
-  ## the data
-  library("RnaSeqTutorial")
+  # the data
+  library(curl)
 
-  ## get the BamFileList
-  bamFiles <- getBamFileList(
-            dir(path=system.file("extdata",
-                package="RnaSeqTutorial"),
-                pattern="^[A,T].*\\\\.bam$",
-                full.names=TRUE))
+# get the example data files - we retrieve a set of example bam files
+# from GitHub using curl, as well as their index.
+invisible(sapply(c("ACACTG","ACTAGC"),function(bam){
+    curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+                         "master/tutorial/easyRNASeq/",bam,".bam"),paste0(bam,".bam"))
+    curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+                         "master/tutorial/easyRNASeq/",bam,".bam.bai"),paste0(bam,".bam.bai"))
+  }))
 
-  ## create the AnnotParam
-  annotParam <- AnnotParam(system.file(
-                   "extdata",
-                   "Dmel-mRNA-exon-r5.52.gff3",
-                   package="RnaSeqTutorial"))
+# and some annotation
+invisible(curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+"master/tutorial/easyRNASeq/Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"),
+"Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"))
 
-  ## create the RnaSeqParam
+ # get the BamFileList
+ bamFiles <- getBamFileList(dir(".",pattern="^[A,T].*\\\\.bam$",full.names=TRUE))
+
+  # create the AnnotParam
+  annotParam <- AnnotParam("Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz",
+                           type="gtf")
+
+  # create the RnaSeqParam
   rnaSeqParam <- RnaSeqParam(annotParam=annotParam)
 
-  ## get a RangedSummarizedExperiment containing the counts table
+  # get a RangedSummarizedExperiment containing the counts table
   sexp <- simpleRNASeq(
     bamFiles=bamFiles,
     param=rnaSeqParam,
     verbose=TRUE
   )
 
-  ## get the counts
+  # get the counts
   assay(sexp)$exons
- }
 
-}
-\author{
-Nicolas Delhomme
 }
 \seealso{
 \itemize{
@@ -99,5 +102,7 @@ Nicolas Delhomme
 }
 }}
 }
+\author{
+Nicolas Delhomme
+}
 \keyword{methods}
-

@@ -2,11 +2,11 @@
 % Please edit documentation in R/print-methods.R
 \docType{methods}
 \name{print methods}
-\alias{print}
 \alias{print methods}
+\alias{print}
+\alias{print,RNAseq-method}
 \alias{print,AnnotParam-method}
 \alias{print,BamParam-method}
-\alias{print,RNAseq-method}
 \alias{print,RnaSeqParam-method}
 \title{Pretty print the content of classes from the easyRNASeq package.}
 \usage{
@@ -34,4 +34,3 @@ Print information about a \code{\linkS4class{RNAseq}},
 Nicolas Delhomme
 }
 \keyword{methods}
-

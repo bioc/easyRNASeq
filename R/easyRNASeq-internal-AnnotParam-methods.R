@@ -1,37 +1,37 @@
-##' Internal methods of AnnotParam objects
-##'
-##' These are \code{\linkS4class{AnnotParam}}{AnnotParam} class internal methods:
-##' \itemize{
-##' \item .validate validate the content of an AnnotParam object
-##' }
-##'
-##' @aliases .validate
-##' @name AnnotParam internal methods
-##' @rdname easyRNASeq-internal-AnnotParam-methods
-##' @param obj An AnnotParam object
-##' @param verbose To print (or not) messages
-##' @param lenient Relax validation parameters for gtf files
-##' @param \dots additional arguments passed to the retrieval function.
-##' At the moment only forwarded to the \pkg{biomaRt} \code{\link[biomaRt:getBM]{getBM}}
-##' function.
-##' @return
-##' \item{.validate}{invisibly return a TRUE logical on success and stops on failure}
-##' @author Nicolas Delhomme
-##' @keywords internal
+#' Internal methods of AnnotParam objects
+#'
+#' These are \code{\linkS4class{AnnotParam}}{AnnotParam} class internal methods:
+#' \itemize{
+#' \item .validate validate the content of an AnnotParam object
+#' }
+#'
+#' @aliases .validate
+#' @name AnnotParam internal methods
+#' @rdname easyRNASeq-internal-AnnotParam-methods
+#' @param obj An AnnotParam object
+#' @param verbose To print (or not) messages
+#' @param lenient Relax validation parameters for gtf files
+#' @param \dots additional arguments passed to the retrieval function.
+#' At the moment only forwarded to the \pkg{biomaRt} \code{\link[biomaRt:getBM]{getBM}}
+#' function.
+#' @return
+#' \item{.validate}{invisibly return a TRUE logical on success and stops on failure}
+#' @author Nicolas Delhomme
+#' @keywords internal
 
 ".validate" <- function(obj,verbose=TRUE,lenient=FALSE){
 
-  ## for the developer
+  # for the developer
   stopifnot(is(obj,"AnnotParam"))
 
-  ## check that the datasource is set
+  # check that the datasource is set
   if(length(datasource(obj))==0){
     stop("No annotation datasource provided.")
   }
 
-  ## we don't check that the type is set, we
-  ## just fail if we don't know it
-  ## switch per annotation
+  # we don't check that the type is set, we
+  # just fail if we don't know it
+  # switch per annotation
   return(switch(
     class(obj),
     "AnnotParamCharacter"=
@@ -55,22 +55,22 @@
           TRUE
         },
         "gtf"={
-          ## check if the file exists
+          # check if the file exists
           if(!file.exists(datasource(obj))){
             stop(paste("The provided annotation file:",datasource(obj),"does not exist."))
           }
 
-          ## read some lines
-          ## well we suppose a 1000 is enough to check
+          # read some lines
+          # well we suppose a 1000 is enough to check
           some.lines <- scan(datasource(obj),what=as.list(rep("character",9)),
                              nlines=1000,comment.char="#",quiet=!verbose,sep="\t")
 
-          ## Get the attribute keys
+          # Get the attribute keys
           attrKeys <- unique(sub(" .*","",unlist(strsplit(some.lines[[9]],"; *"))))
 
-          ## stop if the attributes we need are not present
+          # stop if the attributes we need are not present
           if(!lenient){
-              ## we relax on gene_name
+              # we relax on gene_name
               if(!all(GTF.FIELDS[!GTF.FIELDS %in% c("gene_name")] %in% attrKeys)){
                   stop(paste("Your gtf file: ",datasource(obj),
                              " does not contain all the required fields: ",
@@ -79,7 +79,7 @@
                              ,".",sep=""))
               }
           } else {
-              ## we are lenient with gtfs
+              # we are lenient with gtfs
               if(! "exon" %in% unique(some.lines[[3]]) ||
                      ! all(GTF.FIELDS[!GTF.FIELDS %in% c("gene_name","exon_id")]
                            %in% attrKeys)){
@@ -98,22 +98,22 @@
           TRUE
         },
         "gff3"={
-          ## check if the file exists
+          # check if the file exists
           if(!file.exists(datasource(obj))){
             stop(paste("The provided annotation file:",datasource(obj),"does not exist."))
           }
 
-          ## check the header
+          # check the header
           if(sub("\\D+","",readLines(datasource(obj),1))!=3){
             stop(paste("Your file:",datasource(obj),
-                       "does not contain a gff header: '##gff-version 3' as first line. Is that really a gff3 file?"))
+                       "does not contain a gff header: '#gff-version 3' as first line. Is that really a gff3 file?"))
           }
 
-          ## read some more and check that we got the proper annotation type
-          ## NOTE exon is hardcoded. We might want to change it if we ever
-          ## change the .readGffGtf annotation.type parameter
-          ## NOTE that we read only 1000 lines including comments and hope it's enough to get a
-          ## sufficient validation set
+          # read some more and check that we got the proper annotation type
+          # NOTE exon is hardcoded. We might want to change it if we ever
+          # change the .readGffGtf annotation.type parameter
+          # NOTE that we read only 1000 lines including comments and hope it's enough to get a
+          # sufficient validation set
           some.lines <- scan(datasource(obj),
                              what=as.list(rep("character",9)),
                              nlines=1000,comment.char="#",
@@ -122,15 +122,15 @@
             stop("The provided gff3 contains no annotation of type 'mRNA' and/or 'exon' in the first 1000 lines.")
           }
 
-          ## select the lines we need
+          # select the lines we need
           sel <- some.lines[[3]] %in% c("mRNA","exon")
 
-          ## check for the Parent
+          # check for the Parent
           if(length(grep("Parent=",some.lines[[9]][sel]))!=sum(sel)){
             stop("The provided gff3 does not contain a 'Parent' attribute for all the annotation of type 'mRNA' and/or 'exon'.")
           }
 
-          ## check for the ID
+          # check for the ID
           if(length(grep("ID=",some.lines[[9]][sel]))!=sum(sel)){
             stop("The provided gff3 does not contain a 'ID' attribute for all the annotation of type 'mRNA' and/or 'exon'.")
           }
@@ -141,8 +141,8 @@
           TRUE
         },
         "biomaRt"={
-          ## check if there is connectivity
-          ## check the datasource
+          # check if there is connectivity
+          # check the datasource
           if(length(datasource(obj))==0){
             stop(paste("To use the biomaRt functionnalities, we need a datasource name. Set it using the datasource() function."))
           }
@@ -165,10 +165,10 @@
 
 ".extract" <- function(obj,verbose=TRUE,...){
 
-  ## for the developer
+  # for the developer
   stopifnot(is(obj,"AnnotParam"))
 
-  ## switch per annotation
+  # switch per annotation
   return(switch(class(obj),
          "AnnotParamCharacter"=switch(
            type(obj),

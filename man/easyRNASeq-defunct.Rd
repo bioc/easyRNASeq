@@ -2,9 +2,9 @@
 % Please edit documentation in R/easyRNASeq-package.R
 \name{Defunct functions}
 \alias{Defunct functions}
+\alias{plotDispersionEstimates,DGEList-method}
 \alias{fetchAnnotation}
 \alias{knownOrganisms}
-\alias{plotDispersionEstimates,DGEList-method}
 \title{The following function are defunct:
 \itemize{
 \item \code{fetchAnnotation}
@@ -18,4 +18,3 @@ function is superseded by the \code{\link[edgeR:plotBCV]{plotBCV}} function
 as the \pkg{edgeR} DGEList object structure changed
 }
 }
-

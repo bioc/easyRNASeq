@@ -1,3 +1,10 @@
+CHANGES IN VERSION 2.15.4
+-------------------------
+
+  o Removed dependencies to RnaSeqTutorial
+
+  o Removed calls to RangedData constructor defunct parameters
+
 CHANGES IN VERSION 2.7.7
 -------------------------
 

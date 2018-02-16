@@ -20,29 +20,26 @@ object from a set of filenames. The filenames need to contain the file path if t
 are not in the working directory.
 }
 \examples{
+library(curl)
+ # get the example data files - we retrieve a set of example bam files
+ # from GitHub using curl, as well as their index.
+ invisible(sapply(c("ACACTG","ACTAGC"),function(bam){
+     curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+                          "master/tutorial/easyRNASeq/",bam,".bam"),paste0(bam,".bam"))
+     curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+                          "master/tutorial/easyRNASeq/",bam,".bam.bai"),paste0(bam,".bam.bai"))
+ }))
 
-  library("RnaSeqTutorial")
+	# creating a BamFileList using a directory and pattern
+	bfl <- getBamFileList(dir(".",pattern="[A,C,T,G]{6}\\\\.bam$",
+    	full.names=TRUE))
 
-	## creating a BamFileList using a directory and pattern
-	bfl <- getBamFileList(
-                        dir(path=system.file("extdata",
-					                  package="RnaSeqTutorial"),
-					              pattern="[A,C,T,G]{6}\\\\.bam$",
-  				              full.names=TRUE))
-
-  ## using filenames
-  filenames <- dir(path=
-  	    			      system.file("extdata",
-					          package="RnaSeqTutorial"),
-					     pattern="[A,C,T,G]{6}\\\\.bam$",
-  				     full.names=TRUE)
+  # using filenames
+  filenames <- dir(".",pattern="[A,C,T,G]{6}\\\\.bam$",full.names=TRUE)
   bfl <- getBamFileList(filenames)
-  
-  ## get them recursively
-  filenames <- dir(path=
-        			      system.file("extdata",
-					          package="RnaSeqTutorial"),
-					     pattern="[A,C,T,G]{6}\\\\.bam$",
+
+  # get them recursively
+  filenames <- dir(path=".",pattern="[A,C,T,G]{6}\\\\.bam$",
   				     full.names=TRUE,recursive=TRUE)
   bfl <- getBamFileList(filenames)
 
@@ -51,4 +48,3 @@ are not in the working directory.
 \code{linkS4class{BamFileList-class}}{BamFileList}
 \code{\link[base:list.files]{dir}}
 }
-

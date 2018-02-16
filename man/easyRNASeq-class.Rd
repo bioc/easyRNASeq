@@ -2,9 +2,9 @@
 % Please edit documentation in R/AllClasses.R
 \docType{class}
 \name{RNAseq class}
-\alias{RNAseq}
 \alias{RNAseq class}
 \alias{RNAseq-class}
+\alias{RNAseq}
 \title{Class "RNAseq"}
 \description{
 A class holding all the necessary information and annotation to summarize
@@ -15,13 +15,11 @@ for RNA-Seq experiments.
  Objects can be created by calls of the
 form \code{new("RNAseq", ...)}.
 }
+
 \examples{
 
 showClass("RNAseq")
 
-}
-\author{
-Nicolas Delhomme
 }
 \seealso{
 \itemize{ \item\code{\linkS4class{RangedData}}
@@ -38,5 +36,7 @@ coverage methods}}
 summarization methods}} \item\code{\link[easyRNASeq:print-methods]{print}}
 }
 }
+\author{
+Nicolas Delhomme
+}
 \keyword{classes}
-

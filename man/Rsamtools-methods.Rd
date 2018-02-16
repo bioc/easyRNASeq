@@ -2,15 +2,15 @@
 % Please edit documentation in R/Rsamtools-methods.R
 \docType{methods}
 \name{validate,BamFile-method}
-\alias{validate}
 \alias{validate,BamFile-method}
+\alias{validate}
 \alias{validate,BamFileList-method}
 \title{Extension of the Rsamtools package}
 \usage{
 \S4method{validate}{BamFile}(obj, header = TRUE, cross.validation = TRUE)
 }
 \arguments{
-\item{obj}{An object of the \code{\linkS4class{BamFile}} or 
+\item{obj}{An object of the \code{\linkS4class{BamFile}} or
 \code{\linkS4class{BamFileList}} class}
 
 \item{header}{a boolean to (de)activate the check for a BAM
@@ -29,7 +29,7 @@ Fails anyway if any file is missing.
 Describes extensions to the Rsamtools package.
 \itemize{
 \item For \code{\linkS4class{BamFile}} and
-\code{\linkS4class{BamFileList}} objects: 
+\code{\linkS4class{BamFileList}} objects:
 \itemize{
 \item \code{validate} validates a \code{\linkS4class{BamFile}} or
 \code{\linkS4class{BamFileList}} object.
@@ -40,18 +40,20 @@ Describes extensions to the Rsamtools package.
 \code{validate} checks whether the BAM file exists and if a BAI index is present.
 }
 \examples{
-filenames <- dir(path=system.file("extdata",
-      		                  package="RnaSeqTutorial"),
-					       pattern="[A,C,T,G]{6}\\\\.bam$",
-  				       full.names=TRUE)
+library(curl)
+ invisible(sapply(c("ACACTG","ACTAGC"),function(bam){
+     curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+                          "master/tutorial/easyRNASeq/",bam,".bam"),paste0(bam,".bam"))
+     curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+                          "master/tutorial/easyRNASeq/",bam,".bam.bai"),paste0(bam,".bam.bai"))
+ }))
+
+filenames <- dir(".",pattern="[A,C,T,G]{6}\\\\.bam$",full.names=TRUE)
 
 bfl <-BamFileList(filenames,index=filenames)
 
 validate(bfl)
 
-}
-\author{
-Nicolas Delhomme
 }
 \seealso{
 \itemize{
@@ -59,5 +61,7 @@ Nicolas Delhomme
 \item \code{\linkS4class{BamFileList}}
 }
 }
+\author{
+Nicolas Delhomme
+}
 \keyword{methods}
-

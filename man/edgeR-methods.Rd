@@ -43,4 +43,3 @@ the effect of the normalization factor.
 Nicolas Delhomme
 }
 \keyword{methods}
-

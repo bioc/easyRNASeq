@@ -75,31 +75,38 @@ defined.  }
 }
 \examples{
 
-	\dontrun{
-	## create an RNAseq object
-	## summarizing 4 bam files by exons
-	rnaSeq <- easyRNASeq(system.file(
-                                 "extdata",
-                                 package="RnaSeqTutorial"),
+library(curl)
+library(BSgenome.Dmelanogaster.UCSC.dm3)
+
+ # get the example data files - we retrieve a set of example bam files
+ # from GitHub using curl, as well as their index.
+invisible(sapply(c("ACACTG","ACTAGC"),function(bam){
+     curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+                          "master/tutorial/easyRNASeq/",bam,".bam"),paste0(bam,".bam"))
+     curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+                          "master/tutorial/easyRNASeq/",bam,".bam.bai"),paste0(bam,".bam.bai"))
+ }))
+
+ # get an example annotation file - we retrieve it from GitHub using curl
+ invisible(curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+       "master/tutorial/easyRNASeq/gAnnot.rda"),"gAnnot.rda"))
+
+
+	# create an RNAseq object
+	# summarizing 2 bam files by exons
+	rnaSeq <- easyRNASeq(".",
                      organism="Dmelanogaster",
-                     chr.sizes=as.list(seqlengths(Dmelanogaster)),
+                     chr.sizes=seqlengths(Dmelanogaster),
                      readLength=36L,
                      annotationMethod="rda",
-                     annotationFile=system.file(
-                       "data",
-                       "gAnnot.rda",
-                       package="RnaSeqTutorial"),
+                     annotationFile="gAnnot.rda",
                      format="bam",
                      count="exons",
                      pattern="[A,C,T,G]{6}\\\\.bam$",
                      outputFormat="RNAseq")
-	## summing up the exons by transcript
+	# summing up the exons by transcript
 	rnaSeq <- transcriptCounts(rnaSeq)
-	}
 
-}
-\author{
-Nicolas Delhomme
 }
 \seealso{
 \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq
@@ -107,5 +114,7 @@ annotation methods}}
 \code{\link[easyRNASeq:easyRNASeq-summarization-internal-methods]{.geneModelSummarization}}
 \code{\link[easyRNASeq:easyRNASeq-island-methods]{findIslands}}
 }
+\author{
+Nicolas Delhomme
+}
 \keyword{methods}
-

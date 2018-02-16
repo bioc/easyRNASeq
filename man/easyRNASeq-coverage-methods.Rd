@@ -85,12 +85,11 @@ argument to the function
 	}
 
 }
-\author{
-Nicolas Delhomme
-}
 \seealso{
 \code{\linkS4class{Rle}}
 \code{\link[ShortRead:readAligned]{ShortRead:readAligned}}
 }
+\author{
+Nicolas Delhomme
+}
 \keyword{methods}
-

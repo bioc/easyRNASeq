@@ -2,8 +2,8 @@
 % Please edit documentation in R/basename-methods.R
 \docType{methods}
 \name{basename methods}
-\alias{basename}
 \alias{basename methods}
+\alias{basename}
 \alias{basename,BamFile-method}
 \alias{basename,BamFileList-method}
 \title{Extend the basename function to display Rsamtools BamFile class basename}
@@ -21,5 +21,5 @@ Display the basename of the bam file represented by a \code{\linkS4class{BamFile
 Display the basename of the bam file linked to by a
 \code{\linkS4class{BamFile}} object.  } }
 }
-\keyword{methods}
 
+\keyword{methods}

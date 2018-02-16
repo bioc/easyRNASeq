@@ -2,11 +2,11 @@
 % Please edit documentation in R/easyRNASeq-normalize.R
 \docType{methods}
 \name{easyRNASeq correction methods}
+\alias{easyRNASeq correction methods}
 \alias{RPKM}
 \alias{RPKM,RNAseq,ANY,ANY,ANY-method}
-\alias{RPKM,RNAseq-method}
 \alias{RPKM,matrix,ANY,vector,vector-method}
-\alias{easyRNASeq correction methods}
+\alias{RPKM,RNAseq-method}
 \title{easyRNASeq count table correction to RPKM}
 \usage{
 \S4method{RPKM}{matrix,ANY,vector,vector}(obj, from = c("exons", "features",
@@ -92,11 +92,10 @@ names match the column names of the count matrix.}}
 }
 
 }
-\author{
-Nicolas Delhomme
-}
 \seealso{
 \code{\link[easyRNASeq:easyRNASeq-accessors]{readCounts}}
 }
+\author{
+Nicolas Delhomme
+}
 \keyword{methods}
-

@@ -45,10 +45,7 @@ TRUE.
 If you are completely new to the R/Bioconductor
 \cite{Gentleman:2004p2013} packages dealing with Next-Generation
 Sequencing, you might want to start by doing the tutorial available in
-the \Robject{RnaSeqTutorial} vignette in the data package
-\Biocexptpkg{RnaSqTutorial}. The same holds true if you're interested in
-understanding the details behind the content of the present
-vignette. If neither nor, just go ahead.
+the \Robject{simpleRNASeq} vignette.
 
 \subparagraph{}
 Moreover, if you find \Biocpkg{easyRNASeq} useful and apply it in the
@@ -171,14 +168,6 @@ in most sequencing facilities and hence is bound to be deprecated as a function
 in the \Biocpkg{easyRNASeq} package in a few release cycles.
 \newline
 
-Finally, additional post-processing such as exporting the count table as bed
-and wig formatted file, to be visualized into the UCSC genome browser
-or a stand alone genome browser are described in the vignette of the
-companion data package \Biocexptpkg{RnaSqTutorial}. Note that the information in
-this tutorial is getting quickly outdated given the pace of evolution of the NGS
-field in general. The basic information it contains are perfectly correct
-though. A newer version of that tutorial is in preparation.
-
 \begin{figure}[htpb]
 \centerline{\includegraphics[width=0.80\textwidth]{easyRNASeq.png}}
 \caption{easyRNAseq Overview. The R packages used for the
@@ -190,9 +179,8 @@ though. A newer version of that tutorial is in preparation.
 \section{easyRNASeq}
 \label{s:eRS}
 
-Throughout this vignette, the data present in the \Biocexptpkg{RnaSeqTutorial}
-data package will be used to demonstrate functionalities. Refer to its
-documentation for more details; but shortly, it contains different \emph{Drosophila melanogaster}
+Throughout this vignette, the data present in our GitHub repository will be used
+to demonstrate functionalities. Briefly, it contains different \emph{Drosophila melanogaster}
 RNA-Seq dataset saved in different format as well as the related
 annotation retrieved from  FlyBase \cite{Tweedie:2009p2014}.
 \newline
@@ -216,17 +204,32 @@ specified in the corresponding \Biocpkg{BSgenome} package,
 \Biocpkg{BSgenome.Dmelanogaster.UCSC.dm3} package.
 \newline
 
-\warning{As there are numerous RNA-Seq protocol,
-each with its own specificities, the \Rfunction{easyRNASeq} function has a large
-number of arguments to cope with these. This number of arguments, with
-only a few defaults values might be intimidating but we are in the
-process of consolidating them. Meanwhile, please refer to the documentation and the examples in
-this vignette and the \Biocexptpkg{RnaSqTutorial} one to get familiar
-with them. Do not hesitate to ask on the Bioconductor mailing list
-if the purpose of some argument were still unclear.}
-
 \subsection{usage}
 \label{ss:usage}
+
+\paragraph{Retrieving the tutorial data}
+First, we load the \Rpackage{curl} library to retrieve the \emph{Drosophila melanogaster}
+gene annotation in gtf format, as well as in an Rdata format. Next we retrieve
+a couple of BAM formatted files.
+
+<<Tutorial data>>=
+library(curl)
+ invisible(curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+   "master/tutorial/easyRNASeq/Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"),
+             "Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"))
+
+ invisible(curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+   "master/tutorial/easyRNASeq/gAnnot.rda"),
+             "gAnnot.rda"))
+
+   invisible(sapply(c("ACACTG","ACTAGC","ATGGCT","TTGCGA"),function(bam){
+     curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+       "master/tutorial/easyRNASeq/",bam,".bam"),paste0(bam,".bam"))
+     curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+       "master/tutorial/easyRNASeq/",bam,".bam.bai"),paste0(bam,".bam.bai"))
+   }))
+
+@
 
 \paragraph{Initial example}
 In the following, the \Rfunction{easyRNASeq} function is called with
@@ -241,19 +244,13 @@ count table of these $4$ samples for every exon in the genome.
 
 <<Load the library and create the object>>=
 library(easyRNASeq)
-library(RnaSeqTutorial)
 
-count.table <- easyRNASeq(filesDirectory=system.file(
-                            "extdata",
-                            package="RnaSeqTutorial"),
+count.table <- easyRNASeq(filesDirectory=".",
                           pattern="[A,C,T,G]{6}\\.bam$",
                           readLength=30L,
                           organism="Dmelanogaster",
                           annotationMethod="rda",
-                          annotationFile=system.file(
-                            "data",
-                            "gAnnot.rda",
-                            package="RnaSeqTutorial"),
+                          annotationFile="gAnnot.rda",
                           count="exons"
                           )
 @
@@ -267,10 +264,7 @@ In this usage of the \Rfunction{easyRNASeq} function, we're reading bam files
 (the default \Rcode{format} argument), present
 in the directory passed as first argument to the function (the
 \Rcode{filesDirectory} argument) using
-a regular expression to match the file names (\Rcode{pattern} argument). The
-\Rcode{system.file} function retrieves the actual path on your file system
-where the \Biocexptpkg{RnaSeqTutorial} package was installed and in that
-particular case of its ``extdata'' sub-directory. The pattern used to
+a regular expression to match the file names (\Rcode{pattern} argument). The pattern used to
 retrieve the files is similar to that of the \Rpackage{base} functions
 \Rfunction{dir} and \Rfunction{grep}. Here we look up files, which name
 contains 6 times one of the ``A'', ``C'', ``G'' or ``T'' letter,
@@ -331,16 +325,11 @@ a pattern matching approach to find the alignment files. For example, if you're
 only interested in two samples out of the four previously used ones, you could do:
 
 << Create the object with only 2 files, eval=FALSE>>=
-count.table <- easyRNASeq(system.file(
-                                      "extdata",
-                                      package="RnaSeqTutorial"),
+count.table <- easyRNASeq(".",
                           organism="Dmelanogaster",
                           readLength=30L,
                           annotationMethod="rda",
-                          annotationFile=system.file(
-                            "data",
-                            "gAnnot.rda",
-                            package="RnaSeqTutorial"),
+                          annotationFile="gAnnot.rda",
                           count="exons",
                           filenames=c("ACACTG.bam", "ACTAGC.bam"))
 @
@@ -513,16 +502,11 @@ was used to look for splicing events. Note the use of the
 \Rcode{gapped} boolean argument.
 
 <<read a gapped  bam file, eval=FALSE>>=
-count.table <- easyRNASeq(system.file(
-                                      "extdata",
-                                      package="RnaSeqTutorial"),
+count.table <- easyRNASeq(".",
                           organism="Dmelanogaster",
                           readLength=36L,
                           annotationMethod="rda",
-                          annotationFile=system.file(
-                            "data",
-                            "gAnnot.rda",
-                            package="RnaSeqTutorial"),
+                          annotationFile="gAnnot.rda",
                           gapped=TRUE,
                           count="exons",
                           filenames="gapped.bam")
@@ -538,25 +522,19 @@ argument, essential to filter usable reads is also given. This argument is
 crucial as export files contain every read, including those
 not aligning and those not passing the original quality filter
 performed during the Illumina Base Calling, a.k.a. the
-chastity filter. For more details, see the section ``Filtering the
-Data'' in the \Biocexptpkg{RnaSqTutorial} vignette. Finally, also note the
+chastity filter. Finally, also note the
 \Rcode{chr.sizes} argument; it precises the sizes of the chromosomes using a
 named integer vector.Indeed, these cannot be determined programatically
 unlike for the BAM format where the chromosome sizes can be extracted from the
 header.
 
 <<read an export, eval=FALSE>>=
-count.table <- easyRNASeq(system.file(
-                                      "extdata",
-                                      package="RnaSeqTutorial"),
+count.table <- easyRNASeq(".",
                           organism="Dmelanogaster",
                           chr.sizes=seqlengths(Dmelanogaster),
                           readLength=36L,
                           annotationMethod="rda",
-                          annotationFile=system.file(
-                            "data",
-                            "gAnnot.rda",
-                            package="RnaSeqTutorial"),
+                          annotationFile="gAnnot.rda",
                           format="aln",
                           type="SolexaExport",
                           count="exons",
@@ -581,17 +559,7 @@ these files should implement. Using incorrectly formatted file is bound to fail,
 but most of the time a relevant error message will be reported. GTF
 files as produced by \eg Ensembl and GFF3 files as produced by \eg Flybase are
 correct implementation of these formats. If you encounter problems with an
-annotation file, please try first to locate and correct them. For the GFF
-format, the example file present in the \Biocexptpkg{RnaSqTutorial}
-package can be used as a reference. If you have installed this package the
-following gives you that gff file path on your machine:}
-
-<<GFF3, eval=FALSE>>=
-system.file(
-            "extdata",
-            "Dmel-mRNA-exon-r5.52.gff3",
-            package="RnaSeqTutorial")
-@
+annotation file, please try first to locate and correct them.}
 
 \bioccomment{If you do not manage to identify the issue, please contact the
 Bioconductor mailing list for help.}
@@ -600,16 +568,14 @@ Bioconductor mailing list for help.}
 \label{p:biomaRt}
 The following is an example of how to use biomaRt to retrieve annotation.
 <<load annotation from biomaRt, eval=FALSE>>=
-rnaSeq <- easyRNASeq(system.file(
-                                      "extdata",
-                                      package="RnaSeqTutorial"),
-                          organism="Dmelanogaster",
-                          readLength=36L,
-                          annotationMethod="biomaRt",
-                          gapped=TRUE,
-                          count="exons",
-                          filenames="gapped.bam",
-                          outputFormat="RNAseq")
+rnaSeq <- easyRNASeq(".",
+                     organism="Dmelanogaster",
+                     readLength=36L,
+                     annotationMethod="biomaRt",
+                     gapped=TRUE,
+                     count="exons",
+                     filenames="gapped.bam",
+                     outputFormat="RNAseq")
 @
 
 Once the annotation is fetched, it can be retrieved provided that the
@@ -653,16 +619,11 @@ pairs are separated by semi-colons \textbf{whitout} space. Have a look at the
 formatted as the \Rfunction{easyRNASeq} expects it.
 
 <<load the annotation from a gff, eval=FALSE>>=
-count.table <- easyRNASeq(system.file(
-                                      "extdata",
-                                      package="RnaSeqTutorial"),
+count.table <- easyRNASeq(".",
                           organism="Dmelanogaster",
                           readLength=36L,
                           annotationMethod="gff",
-                          annotationFile=system.file(
-                            "extdata",
-                            "Dmel-mRNA-exon-r5.52.gff3",
-                            package="RnaSeqTutorial"),
+                          annotationFile="Dmel-mRNA-exon-r5.52.gff3",
                           gapped=TRUE,
                           count="exons",
                           filenames="gapped.bam")
@@ -687,8 +648,7 @@ gAnnot <- RangedData(
                           strand=c("+","+","-"),
                           transcript=c("trA1","trA2","trB"),
                           gene=c("gA","gA","gB"),
-                          exon=c("e1","e2","e3"),
-                          universe = "Hs19"
+                          exon=c("e1","e2","e3")
                           )
 gAnnot
 @
@@ -703,10 +663,9 @@ lookup the proper values in the annotation, \eg for summarizing by
 mandatory;  a ``feature'' one for counting ``features'', a
 ``transcript'' one for ``transcripts'', \etc.
 For a peek at the \Rclass{RangedData} class \Robject{gAnnot}
-object used in the \Biocpkg{RnaSeqTutorial} tutorial, do:
+object, do:
 
 <<look at the gAnnot, eval=FALSE>>=
-library(RnaSeqTutorial)
 data(gAnnot)
 gAnnot
 @
@@ -752,16 +711,11 @@ shortly - as shown below - the only change that need doing is to use the
 \Rclass{RNAseq} value of the \Rfunction{outputFormat} argument.
 
 <<easyRNASeq output>>=
-rnaSeq <- easyRNASeq(system.file(
-                                 "extdata",
-                                 package="RnaSeqTutorial"),
+rnaSeq <- easyRNASeq(".",
                      organism="Dmelanogaster",
                      readLength=30L,
                      annotationMethod="rda",
-                     annotationFile=system.file(
-                       "data",
-                       "gAnnot.rda",
-                       package="RnaSeqTutorial"),
+                     annotationFile="gAnnot.rda",
                      count="exons",
                      pattern="[A,C,T,G]{6}\\.bam$",
                      outputFormat="RNAseq")
@@ -841,16 +795,10 @@ package) approach.
 
 Here is an example on how to get a RPKM count table:
 <<RPKM normalization, eval=FALSE>>=
-count.table <- easyRNASeq(system.file(
-                                      "extdata",
-                                      package="RnaSeqTutorial"),
-                          organism="Dmelanogaster",
+count.table <- easyRNASeq(".",organism="Dmelanogaster",
                           readLength=30L,
                           annotationMethod="rda",
-                          annotationFile=system.file(
-                            "data",
-                            "gAnnot.rda",
-                            package="RnaSeqTutorial"),
+                          annotationFile="gAnnot.rda",
                           count="exons",
                           filenames=c("ACACTG.bam", "ACTAGC.bam",
                             "ATGGCT.bam", "TTGCGA.bam"),
@@ -913,16 +861,11 @@ package. Since we have few data, the default fit fails and reports an error
 telling us to change the \Rcode{fitType} argument.
 
 <<DESeq normalization, eval=FALSE>>=
-countDataSet <- easyRNASeq(system.file(
-                                      "extdata",
-                                      package="RnaSeqTutorial"),
+countDataSet <- easyRNASeq(".",
                           organism="Dmelanogaster",
                           readLength=30L,
                           annotationMethod="rda",
-                          annotationFile=system.file(
-                            "data",
-                            "gAnnot.rda",
-                            package="RnaSeqTutorial"),
+                          annotationFile="gAnnot.rda",
                           count="exons",
                           filenames=c("ACACTG.bam", "ACTAGC.bam",
                             "ATGGCT.bam", "TTGCGA.bam"),
@@ -946,16 +889,11 @@ explanation.}
 The same procedure can be done using the \Biocpkg{edgeR} package functionalities.
 
 <<edgeR normalization, eval=FALSE>>=
-dgeList <- easyRNASeq(system.file(
-                                  "extdata",
-                                  package="RnaSeqTutorial"),
+dgeList <- easyRNASeq(".",
                       organism="Dmelanogaster",
                       readLength=30L,
                       annotationMethod="rda",
-                      annotationFile=system.file(
-                        "data",
-                        "gAnnot.rda",
-                        package="RnaSeqTutorial"),
+                      annotationFile="gAnnot.rda",
                       count="exons",
                       filenames=c("ACACTG.bam", "ACTAGC.bam",
                         "ATGGCT.bam", "TTGCGA.bam"),
@@ -978,9 +916,7 @@ visualization, etc. is not the scope of the \Biocpkg{easyRNASeq}
 package. This one has a few more functionalities, the most important
 of which will be described in the next section. To proceed with your
 data analysis, check the relevant package vignettes (\Biocpkg{DESeq},
-\Biocpkg{edgeR}) for differential expression analysis and the
-\Biocexptpkg{RnaSqTutorial} for examples of track files generation using
-the \Biocpkg{rtracklayer} package.
+\Biocpkg{edgeR}) for differential expression analysis.
 
 \subsection{Performance}
 \label{perf}
@@ -1071,10 +1007,10 @@ silent <- sapply(
 @
 
 <<Demultiplexing sample>>=
-alns <- readAligned(
-                    system.file(
-                                "extdata",
-                                package="RnaSeqTutorial"),
+invisible(curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+                               "master/tutorial/easyRNASeq/multiplex_export.txt.gz"),
+                        "multiplex_export.txt.gz"))
+alns <- readAligned(".",
                     pattern="multiplex_export",
                     filter=compose(
                       chastityFilter(),
@@ -1181,8 +1117,7 @@ It is important to assess wether
 within a given sample there was a barcode bias. Generally, visually
 assessing the data is important to make sure that the raw data you are
 looking at agrees with the experimental design that was
-performed. This is discussed in the \Robject{RnaSeqTutorial} vignette
-of the \Biocexptpkg{RnaSqTutorial}.
+performed.
 \newline
 Finally, we can save the demultiplexed files to disk.
 <<write the file>>=
@@ -1230,17 +1165,12 @@ the Bioconductor repository.
 
 <<count function example, eval=FALSE>>=
 ## creating a RangedSummarizedExperiment from 4 bam files
-sumExp <- easyRNASeq(filesDirectory=system.file(
-                  "extdata",
-                  package="RnaSeqTutorial"),
+sumExp <- easyRNASeq(".",
                 pattern="[A,C,T,G]{6}\\.bam$",
                 readLength=30L,
                 organism="Dmelanogaster",
                 annotationMethod="rda",
-                annotationFile=system.file(
-                  "data",
-                  "gAnnot.rda",
-                  package="RnaSeqTutorial"),
+                annotationFile="gAnnot.rda",
                 count="exons",
                      outputFormat="SummarizedExperiment"
                 )
@@ -1411,9 +1341,7 @@ as follows:
 
 <<easyTrx, eval=FALSE>>=
 sumExp <- easyRNASeq(
-  filesDirectory=system.file(
-    "extdata",
-    package="RnaSeqTutorial"),
+  filesDirectory=".",
   pattern="[A,C,T,G]{6}\\.bam$",
   readLength=30L,
   chr.sel="chr2L",
@@ -1964,7 +1892,6 @@ vignette were:
 <<SessionInfo, echo=FALSE>>=
 library(easyRNASeq)
 library(BSgenome.Dmelanogaster.UCSC.dm3)
-library(RnaSeqTutorial)
 sessionInfo()
 @
 

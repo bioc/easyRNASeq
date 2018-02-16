@@ -2,38 +2,26 @@
 % Please edit documentation in R/easyRNASeq-package.R
 \docType{package}
 \name{easyRNASeq package}
+\alias{easyRNASeq package}
+\alias{easyRNASeq-package}
+\alias{assay}
+\alias{type}
 \alias{BamFileList}
 \alias{BamFileList-class}
 \alias{IRanges}
 \alias{RangedData}
-\alias{RangedData-class}
-\alias{RangedSummarizedExperiment-class}
 \alias{SRFilterResult}
-\alias{assay}
+\alias{RangedSummarizedExperiment-class}
 \alias{chromosomeFilter}
 \alias{compose}
-\alias{easyRNASeq package}
-\alias{easyRNASeq package-package}
-\alias{easyRNASeq-package}
 \alias{nFilter}
-\alias{type}
+\alias{RangedData-class}
+\alias{easyRNASeq package-package}
 \title{Count summarization and normalization pipeline for Next Generation Sequencing data.}
 \description{
 Offers functionalities to summarize read counts per feature of interest, e.g. exons, transcripts, genes, etc.
 Offers functionalities to normalize the summarized counts using 3rd party packages like \code{\link[DESeq:newCountDataSet]{DESeq}}
 or \code{\link[edgeR:DGEList]{edgeR}}.
-}
-\details{
-\tabular{ll}{
-Package: \tab easyRNASeq\cr
-Type: \tab Package\cr
-Version: \tab 2.7.2\cr
-Date: \tab 2015-12-18\cr
-License: \tab Artistic-2.0\cr
-LazyLoad: \tab yes\cr
-Depends: \tab methods, parallel, Biobase, BiocGenerics, biomaRt, Biostrings, edgeR, DESeq, genomeIntervals, GenomeInfoDb, GenomicAlignments, GenomicRanges, SummarizedExperiment, graphics, IRanges, LSD, Rsamtools, S4Vectors, ShortRead, utils\cr
-Suggests: \tab BSgenome.Dmelanogaster.UCSC.dm3
-}
 }
 \section{Methods}{
 
@@ -58,33 +46,46 @@ For more insider details, and step by step functions, see:
 	\code{\link[easyRNASeq:DESeq-methods]{DESeq methods}} for post-processing the data.
 	}
 }
+
 \examples{
-	\dontrun{
-	library("RnaSeqTutorial")
-	library(BSgenome.Dmelanogaster.UCSC.dm3)
 
-	## creating a count table from 4 bam files
-	count.table <- easyRNASeq(filesDirectory=
-		    			system.file(
-					"extdata",
-					package="RnaSeqTutorial"),
-					pattern="[A,C,T,G]{6}\\\\.bam$",
-				format="bam",
-				readLength=36L,
-				organism="Dmelanogaster",
-				chr.sizes=as.list(seqlengths(Dmelanogaster)),
-				annotationMethod="rda",
-				annotationFile=system.file(
-				                            "data",
-							    "gAnnot.rda",
-							    package="RnaSeqTutorial"),
-				count="exons")
+  # get the example annotation file - we retrieve a gtf file from GitHub
+  library(curl)
+  invisible(curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+  "master/tutorial/easyRNASeq/Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"),
+            "Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"))
 
-	}
+  # get the example data files - we retrieve a set of example bam files
+  # from GitHub using curl, as well as their index.
+  invisible(sapply(c("ACACTG","ACTAGC"),function(bam){
+    curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+      "master/tutorial/easyRNASeq/",bam,".bam"),paste0(bam,".bam"))
+    curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+      "master/tutorial/easyRNASeq/",bam,".bam.bai"),paste0(bam,".bam.bai"))
+  }))
 
-}
-\author{
-Nicolas Delhomme, Bastian Schiffthaler, Ismael Padioleau
+  # create the AnnotParam
+  annotParam <- AnnotParam(
+    datasource="Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz",
+    type="gtf")
+
+  # create the synthetic transcripts
+  annotParam <- createSyntheticTranscripts(annotParam,verbose=FALSE)
+
+     # create the RnaSeqParam
+     rnaSeqParam <- RnaSeqParam(annotParam=annotParam)
+
+     # get a RangedSummarizedExperiment containing the counts table
+  sexp <- simpleRNASeq(
+      bamFiles=bamFiles,
+      param=rnaSeqParam,
+      verbose=TRUE
+  )
+
+  # get the counts
+  assay(sexp)$exons
+
+
 }
 \seealso{
 The class RNAseq specification:
@@ -134,5 +135,7 @@ The class RNAseq specification:
     }
   }
 }
+\author{
+Nicolas Delhomme, Bastian Schiffthaler, Ismael Padioleau
+}
 \keyword{package}
-

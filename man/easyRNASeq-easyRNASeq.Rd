@@ -94,7 +94,7 @@ must be equal to the number of sample. In addition the vector should be
 named with the filename of the corresponding samples.}
 
 \item{validity.check}{Shall UCSC chromosome name convention be enforced?
-This is only supported for a set of organisms, which are  
+This is only supported for a set of organisms, which are
 Dmelanogaster, Hsapiens, Mmusculus and Rnorvegicus;
 otherwise the argument 'chr.map' can be used to complement it.}
 
@@ -175,31 +175,37 @@ case the chromosome names and size are extracted from the BAM header}
 }
 \examples{
 
-	\dontrun{
-	library("RnaSeqTutorial")
+	library(curl)
 	library(BSgenome.Dmelanogaster.UCSC.dm3)
 
-	## creating a count table from 4 bam files
-	count.table <- easyRNASeq(filesDirectory=
-		    			system.file(
-					"extdata",
-					package="RnaSeqTutorial"),
+ # get the example data files - we retrieve a set of example bam files
+ # from GitHub using curl, as well as their index.
+ invisible(sapply(c("ACACTG","ACTAGC"),function(bam){
+     curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+                          "master/tutorial/easyRNASeq/",bam,".bam"),paste0(bam,".bam"))
+     curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+                          "master/tutorial/easyRNASeq/",bam,".bam.bai"),paste0(bam,".bam.bai"))
+ }))
+
+ # get an example annotation file - we retrieve it from GitHub using curl
+ invisible(curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+       "master/tutorial/easyRNASeq/gAnnot.rda"),"gAnnot.rda"))
+
+	# creating a count table from 4 bam files
+	count.table <- easyRNASeq(filesDirectory=".",
 					pattern="[A,C,T,G]{6}\\\\.bam$",
 				format="bam",
 				readLength=36L,
 				organism="Dmelanogaster",
-				chr.sizes=as.list(seqlengths(Dmelanogaster)),
+				chr.sizes=seqlengths(Dmelanogaster),
 				annotationMethod="rda",
-				annotationFile=system.file(
-				                            "data",
-							    "gAnnot.rda",
-							    package="RnaSeqTutorial"),
+				annotationFile="gAnnot.rda",
 				count="exons")
 
-	## an example of a chr.map
+	# an example of a chr.map
 	chr.map <- data.frame(from=c("2L","2R","MT"),to=c("chr2L","chr2R","chrMT"))
 
-	## an example of a RangedData annotation
+	# an example of a RangedData annotation
 	gAnnot <- RangedData(
                      IRanges(
                              start=c(10,30,100),
@@ -208,18 +214,13 @@ case the chromosome names and size are extracted from the BAM header}
                           strand=c("+","+","-"),
                           transcript=c("trA1","trA2","trB"),
                           gene=c("gA","gA","gB"),
-                          exon=c("e1","e2","e3"),
-                          universe = "Hs19"
+                          exon=c("e1","e2","e3")
                           )
 
-	## an example of a GRangesList annotation
+	# an example of a GRangesList annotation
 	grngs <- as(gAnnot,"GRanges")
 	grngsList<-split(grngs,seqnames(grngs))
-}
 
-}
-\author{
-Nicolas Delhomme
 }
 \seealso{
 \code{\linkS4class{RNAseq}}
@@ -228,5 +229,7 @@ Nicolas Delhomme
 \code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}}
 \code{\link[ShortRead:readAligned]{ShortRead:readAligned}}
 }
+\author{
+Nicolas Delhomme
+}
 \keyword{methods}
-
