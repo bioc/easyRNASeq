@@ -20,6 +20,7 @@ the following slots:
 \itemize{
 \item paired
 \item stranded
+\item strandProtocol
 \item yieldSize
 }
 all of which can be accessed using the accordingly names accessor.

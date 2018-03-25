@@ -20,7 +20,7 @@
 ##' \item .extendCountList extend or create the result count list of matrices
 ##' }
 ##' }
-##' 
+##'
 ##' @aliases .doCount .doBasicCount .bestExonSummarization .geneModelSummarization
 ##' .extendCountList
 ##' @name easyRNASeq summarization internal methods
@@ -59,7 +59,7 @@
 ##' library.
 ##' }
 ##' @param validity.check Shall UCSC chromosome name convention be enforced?
-##' This is only supported for a set of organisms, which are  
+##' This is only supported for a set of organisms, which are
 ##' Dmelanogaster, Hsapiens, Mmusculus and Rnorvegicus;
 ##' otherwise the argument 'chr.map' can be used to complement it.
 ##' @param values a named vector containing count results
@@ -71,7 +71,7 @@
 ##' \item \code{\linkS4class{RNAseq}}
 ##' \code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq}}.
 ##' }
-##' 
+##'
 ##' @return \itemize{
 ##' \item .doCount: a list containing \itemize{
 ##' \item counts: the summarized counts as a matrix of dimension number of genes x 1
@@ -90,7 +90,7 @@
 	if(is.null(readCounts(obj,'exons'))){
 		exonCounts(obj)
 	}
-	eCounts<-data.frame(                            
+	eCounts<-data.frame(
                             .getName(obj,"genes"),
                             .getName(obj,"exons"),
                             readCounts(obj,'exons'))
@@ -104,10 +104,10 @@
 }
 
 ".geneModelSummarization" <- function(obj){
-  
+
   ## select for the proper spaces
   gm.sel <- na.omit(match(names(readCoverage(obj)),names(geneModel(obj))))
-  
+
   gAgg <- aggregate(
                             as.integer(
                                        unlist(
@@ -134,14 +134,14 @@
   if(length(readCoverage(obj))==0){
     stop('The readCoverage slot is empty')
   }
-  
+
   ## not used by supposedly faster than aggregate
   ##RleViewsList(rleList=trackCoverage, rangesList=exons)
-  
+
   nams <- switch(class(genomicAnnotation(obj)),
                  "GRanges"=seqlevels(genomicAnnotation(obj)),
                  "RangedData"=names(genomicAnnotation(obj)))
-  
+
   ## counts
   ## this would need fixing also!
   ## FIXME
@@ -163,7 +163,7 @@
                               type=c("exons","features","transcripts","genes","islands"),
                               subType=character(1),
                               filename=character(1)){
-	
+
   ## check the type
   types <- eval(formals(".extendCountList")$type)
   if(!type %in% types){
@@ -181,7 +181,7 @@
                   paste(subType,sep=", "),"to ''"))
     subType=character(1)
   }
-  
+
   ## Special treatment for Islands counts
   if(type == 'islands'){
     if(length(cList)>0){
@@ -191,7 +191,7 @@
     else{
       eval(parse(text=paste("cList$",type,"<- values",sep="")))
     }
-    
+
   }
   ##check if the object is initialized or not
   else if(length(cList)>0){
@@ -204,11 +204,11 @@
         sel <- colnames(add) %in% colnames(list)
         if(all(sel)){
           list <- add
-        } else { 
+        } else {
           if(any(sel)){
             list[,colnames(add)[sel]] <- add[,sel]
           }
-          
+
           list <- cbind(list,add[,!sel])
           rownames(list) <- c(rownames(list),names(add)[!sel])
         }
@@ -225,7 +225,7 @@
     ## Object initialisation: set list
     eval(parse(text=paste("cList$",type,ifelse(subType=="","",paste("$",subType,sep="")),"<- values",sep="")))
   }
-  
+
   cList <- as.list(cList)
   return(cList)
   ##cListType <- as.list(cListType)
@@ -248,6 +248,8 @@
                        plot=TRUE,
                        gapped=FALSE,
                        silent=FALSE,...){
+
+    .Defunct("simpleRNASeq")
 
   ## load the library
   ## since we start fresh R instances
@@ -272,7 +274,7 @@
                             "Please report if you think otherwise."))
     }
   }
-  
+
   ## report
   if(!silent){
     .catn(paste("Processing",basename(filename)))
@@ -286,7 +288,7 @@
                           validity.check=validity.check,
                           chr.map=chr.map,
                           gapped=gapped,...)
-  
+
   ## emergency stop
   if(length(intersect(names(readCoverage(rnaSeq)),seqlevels(genomicAnnotation(rnaSeq))))==0
      & organismName(rnaSeq) == character(1)
@@ -298,7 +300,7 @@
                "Or you can select 'custom' as an organims and use the 'chr.map' argument to define",
                "the conversion to be applied to the chromosome names",sep="\n"))
   }
-  
+
   ## Do count
   rnaSeq <- switch(count,
                 "exons"=exonCounts(rnaSeq),
@@ -309,7 +311,7 @@
                 "islands"=islandCounts(rnaSeq,max.gap=max.gap,
                   min.cov=min.cov,min.length=min.length,plot=plot)
                 )
-  
+
   return(list(counts=readCounts(rnaSeq,count,summarization),size=librarySize(rnaSeq)))
 }
 

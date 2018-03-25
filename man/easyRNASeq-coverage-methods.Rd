@@ -73,7 +73,7 @@ argument to the function
 		readLength=36L,
 		chrSize=as.list(seqlengths(Dmelanogaster))
 		)
-	
+
 	obj <- fetchCoverage(
 			obj,
 			format="bam",

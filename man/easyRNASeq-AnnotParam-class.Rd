@@ -13,8 +13,8 @@ annotation for processing an RNA-Seq experiment.
 }
 \section{Objects from the Class}{
  Objects can be created by calls of the
-form \code{new("AnnotParamCharacter", ...)} or \code{new("AnnotParamObject", ...)} 
-(both subject to API changes) or using the 
+form \code{new("AnnotParamCharacter", ...)} or \code{new("AnnotParamObject", ...)}
+(both subject to API changes) or using the
 \code{\link[easyRNASeq:easyRNASeq-AnnotParam]{AnnotParam}} constructor (failsafe, prefered).
 The class \code{AnnotParam} in itself is virtual and hence cannot be instantiated.
 }

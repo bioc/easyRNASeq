@@ -22,10 +22,6 @@
 \alias{librarySize<-}
 \alias{librarySize,RNAseq-method}
 \alias{librarySize<-,RNAseq-method}
-\alias{organismName<-}
-\alias{organismName}
-\alias{organismName,RNAseq-method}
-\alias{organismName<-,RNAseq-method}
 \alias{readCounts<-}
 \alias{readCounts}
 \alias{readCounts,RNAseq-method}
@@ -77,11 +73,7 @@ objects in the \pkg{easyRNASeq} package.
 }
 \examples{
 
-rnaSeq<-new("RNAseq")
-##set organisme name of an RNAseq object
-organismName(rnaSeq) <- "Dmelanogaster"
-##get organisme name of an RNAseq object
-orgName<-organismName(rnaSeq)
+# This class is deprecated and as such there are no exmples of its use
 
 }
 \author{

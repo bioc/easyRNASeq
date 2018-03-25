@@ -81,7 +81,8 @@ add features that are part of the \url{sequenceontology.org} SOFA
   # get the example file
   library(curl)
   invisible(curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
-                              "master/tutorial/easyRNASeq/Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"),
+                              "master/tutorial/easyRNASeq/",
+                              "Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"),
                        "Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"))
   # create the AnnotParam
   annotParam <- AnnotParam(

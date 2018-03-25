@@ -9,7 +9,7 @@
 \alias{.getArguments}
 \alias{.getName}
 \alias{.list.files}
-\alias{.list.files-deprecated}
+\alias{.list.files-defunct}
 \alias{.getWidth}
 \alias{.normalizationDispatcher}
 \alias{reduce}
@@ -54,8 +54,7 @@ package}
 
 \item{...}{For \code{.getArguments} a list of named parameters to be
 matched against a function formal definition. For \code{.catn}, the values
-to be printed. For \code{.list.files} (deprecated), the additional parameters to be filtered
-for the list.files function.}
+to be printed.}
 }
 \value{
 \item{argString}{a character string representing these arguments
@@ -70,11 +69,11 @@ a NumericList, or NULL respectively}
 \description{
 These are generic internal methods:
 \itemize{
+\item Actual
+\itemize{
 \item .catn Just some pretty printing.
 \item .checkArguments check that the provided argument match one
 of the formal definition of the function. Stop if not.
-\item .convertToUCSC
-convert chromosome names to UCSC compliant ones.
 \item .extractIRangesList extract an IRanges object from an AlignedRead or a
 GAlignments object or a list returned by reading a bam file with
 Rsamtools. It returns a list containing the IRangesList and library size.
@@ -86,8 +85,6 @@ with the different possible annotation object: \code{RangedData},
 \item .getWidth Get the genomicAnnotation withs. Necessary to deal
 with the different possible annotation object: \code{RangedData},
 \code{GRanges} or \code{GRangesList}.
-\item .list.files check the arguments passed through the \dots to select
-only the valid ones (deprecated).
 \item .normalizationDispatcher a function to dispatch
 the normalization depending on the 'outputFormat' chosen by the user.
 \item reduce Allow proper dispatch between the
@@ -100,6 +97,14 @@ the \link[GenomicRanges:GRanges-class]{GenomicRanges} strand function
 \link[genomeIntervals:Genome_intervals_stranded-class]{genomeIntervals} and
 the \link[GenomicRanges:GRanges-class]{GenomicRanges} strand replace
 function
+}
+\item Defunct
+\itemize{
+\item .convertToUCSC
+convert chromosome names to UCSC compliant ones.
+\item .list.files check the arguments passed through the \dots to select
+only the valid ones (defunct).
+}
 }
 }
 \author{

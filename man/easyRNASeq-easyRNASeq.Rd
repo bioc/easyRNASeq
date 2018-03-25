@@ -3,7 +3,7 @@
 \docType{methods}
 \name{easyRNASeq,character-method}
 \alias{easyRNASeq,character-method}
-\alias{easyRNASeq-deprecated}
+\alias{easyRNASeq-defunct}
 \title{easyRNASeq method}
 \usage{
 \S4method{easyRNASeq}{character}(filesDirectory = getwd(),
@@ -174,7 +174,7 @@ case the chromosome names and size are extracted from the BAM header}
 }
 }
 \examples{
-
+ \dontrun{
 	library(curl)
 	library(BSgenome.Dmelanogaster.UCSC.dm3)
 
@@ -220,7 +220,7 @@ case the chromosome names and size are extracted from the BAM header}
 	# an example of a GRangesList annotation
 	grngs <- as(gAnnot,"GRanges")
 	grngsList<-split(grngs,seqnames(grngs))
-
+}
 }
 \seealso{
 \code{\linkS4class{RNAseq}}

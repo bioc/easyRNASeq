@@ -65,7 +65,7 @@
 #' case the chromosome names and size are extracted from the BAM header}
 #' }
 #'
-#' @aliases easyRNASeq-deprecated easyRNASeq,character-method
+#' @aliases easyRNASeq-defunct easyRNASeq,character-method
 #' @rdname easyRNASeq-easyRNASeq
 #' @param annotationFile The location (full path) of the annotation file
 #' @param annotationObject A \code{\linkS4class{RangedData}} or
@@ -138,7 +138,7 @@
 #' \code{\link[ShortRead:readAligned]{ShortRead:readAligned}}
 #' @keywords methods
 #' @examples
-#'
+#'  \dontrun{
 #' 	library(curl)
 #' 	library(BSgenome.Dmelanogaster.UCSC.dm3)
 #'
@@ -184,9 +184,7 @@
 #' 	# an example of a GRangesList annotation
 #' 	grngs <- as(gAnnot,"GRanges")
 #' 	grngsList<-split(grngs,seqnames(grngs))
-#'
-# TODO if the summarization ever get changed, modify the if statement
-# when validating the annotation object for no overlapping features
+#' }
 setMethod(
     f="easyRNASeq",
     signature="character",
@@ -213,7 +211,7 @@ setMethod(
         silent=FALSE,...){
 
         # deprecation
-        .Deprecated("simpleRNASeq")
+        .Defunct("simpleRNASeq")
 
         # sanity check
         if(!silent){
@@ -284,7 +282,10 @@ setMethod(
             validity.check=FALSE
         }
         # the knowOrganisms is defunct so we just replace it here - only call
-        knownOrganisms <- eval(formals(easyRNASeq:::.convertToUCSC)$organism)
+        # TAKEN AWAY as the function is defunct and to prevent an R CMD check NOTE
+        #knownOrganisms <- eval(formals(easyRNASeq:::.convertToUCSC)$organism)
+        # A Placeholder to have the var defined
+        knownOrganisms <- ""
         if(!tolower(organism) %in% c(tolower(knownOrganisms),"custom") & nrow(chr.map) ==0){
             warning(paste("Your organism has no mapping defined to perform the validity check for the UCSC compliance of the chromosome name.",
                           "To benefit from the validity check, you can provide a 'chr.map' to your 'easyRNASeq' function call.",
@@ -510,8 +511,9 @@ setMethod(
               if (!ignoreWarnings) {
                 warning("You enforce UCSC chromosome conventions, however the provided annotation is not compliant. Correcting it.")
               }
-              names(genomicAnnotation(obj)) <- easyRNASeq:::.convertToUCSC(names(genomicAnnotation(obj)),
-                                                                           organismName(obj), chr.map)
+              # TAKEN AWAY as the function is defunct and to prevent an R CMD check NOTE
+              #names(genomicAnnotation(obj)) <- easyRNASeq:::.convertToUCSC(names(genomicAnnotation(obj)),
+              #                                                             organismName(obj), chr.map)
             }
           }
         }

@@ -73,7 +73,10 @@ For more insider details, and step by step functions, see:
   annotParam <- createSyntheticTranscripts(annotParam,verbose=FALSE)
 
      # create the RnaSeqParam
-     rnaSeqParam <- RnaSeqParam(annotParam=annotParam)
+     rnaSeqParam <- RnaSeqParam(annotParam=annotParam,countBy="gene")
+
+  # get the bamfiles
+  bamFiles <- getBamFileList(dir(pattern="^[A,T].*\\\\.bam$",full.names=TRUE))
 
      # get a RangedSummarizedExperiment containing the counts table
   sexp <- simpleRNASeq(
@@ -83,7 +86,7 @@ For more insider details, and step by step functions, see:
   )
 
   # get the counts
-  assay(sexp)$exons
+  assays(sexp)$genes
 
 
 }

@@ -84,7 +84,7 @@
 #'   )
 #'
 #'   # get the counts
-#'   assay(sexp)$exons
+#'   assays(sexp)$exons
 #'
 # TODO integrate that in the right position in the file
 # \item{groupBy}{One of genes or chromosomes. The default is "genes". It is the
@@ -182,7 +182,7 @@ setMethod(f="simpleRNASeq",
                 warning(paste("Bam file:",rownames(df)[i],df[i,"Note"]))
                 FALSE
               } else {
-                warning("At the moment, this function will improperly count Illumina stranded data, reporting reads that align to the opposite strand of the transcript/gene. Please use the param argument to force an unstranded analysis behaviour. Support for \"reverse\" strand specificity will be implemented ASAP")
+                #warning("At the moment, this function will improperly count Illumina stranded data, reporting reads that align to the opposite strand of the transcript/gene. Please use the param argument to force an unstranded analysis behaviour. Support for \"reverse\" strand specificity will be implemented ASAP")
                 if(verbose){
                   message("Bam file: ",rownames(df)[i],
                           " is ", ifelse(df[i,"Stranded"],
@@ -214,9 +214,20 @@ setMethod(f="simpleRNASeq",
               }
             }
 
+            # update the BAM files
+            if(!override){
+                if(any(colData(sexp)$Paired)){
+                   asMates(bamFiles)[colData(sexp)$Paired] <- TRUE
+                }
+            } else {
+                if(stranded(param)){
+                    asMates(bamFiles) <- TRUE
+                }
+            }
+
             # 2. stranded
             if(length(unique(colData(sexp)$Stranded))!=1){
-              warning(paste("You have mixed stranded and unstradned data. Every sample will be",
+              warning(paste("You have mixed stranded and unstranded data. Every sample will be",
                             "treated according to the identified characteristic,",
                             "i.e. the provided parameter will be ignored when necessary."))
             } else {
@@ -242,6 +253,15 @@ setMethod(f="simpleRNASeq",
                             "Hope you know what you are doing.",
                             "Contact me if you think the parameter detection failed."))
             }
+
+            # add the protocol parameter
+            warning(paste("As of version 2.15.5, easyRNASeq assumes that, if the",
+                          "data is strand specific, the sequencing was done",
+                          "using a protocol such as the Illumina TruSeq, where",
+                          "the reverse strand is quantified - i.e. the",
+                          "strandProtocol argument of the BamParam class defaults",
+                          "to 'reverse'."))
+            df <- cbind(df,StrandProtocol=rep(strandProtocol(param),length(bamFiles)))
 
             # 3. not a validation but add the read counts
             colData(sexp)$TotalReads <- parallelize(bamFiles,

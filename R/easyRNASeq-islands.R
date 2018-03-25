@@ -56,6 +56,7 @@ setMethod(
           signature="RNAseq",
           definition=function(obj,max.gap=integer(1),min.cov=1L,min.length=integer(1),plot=TRUE,...){
 
+            .Defunct(msg = "There is no replacement for this function in this package. There are much better utilities to do this, not necessarily in R e.g. bedtools.")
             # check the gap
             if(max.gap<0){
               stop("There are no such thing as a negative gap... Change your max.gap parameter.")

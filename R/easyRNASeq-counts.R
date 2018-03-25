@@ -61,7 +61,7 @@
 #' \code{\link[easyRNASeq:easyRNASeq-island-methods]{findIslands}}
 #' @keywords methods
 #' @examples
-#'
+#' \dontrun{
 #' library(curl)
 #' library(BSgenome.Dmelanogaster.UCSC.dm3)
 #'
@@ -93,6 +93,7 @@
 #'                      outputFormat="RNAseq")
 #' 	# summing up the exons by transcript
 #' 	rnaSeq <- transcriptCounts(rnaSeq)
+#' }
 #'
 ## TODO for the exonCounts and other counts, we really need to pay attention to the order of the chromosomes.
 ## We could have that forced (i.e. having them ordered) at the rnaSeq creation time

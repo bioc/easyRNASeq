@@ -80,7 +80,7 @@ invisible(curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
   )
 
   # get the counts
-  assay(sexp)$exons
+  assays(sexp)$exons
 
 }
 \seealso{

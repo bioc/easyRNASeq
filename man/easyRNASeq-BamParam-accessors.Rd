@@ -10,16 +10,19 @@
 \alias{stranded}
 \alias{paired,BamParam-method}
 \alias{stranded,BamParam-method}
+\alias{strandProtocol}
+\alias{strandProtocol,BamParam-method}
 \title{Accessors for BamParam class}
 \usage{
 yieldSize(object,...)
 paired(object)
 stranded(object)
+strandProtocol(object)
 }
 \arguments{
 \item{object}{An object derived from class \code{BamParam}.}
 
-\item{...}{Additional parameter inherited from the 
+\item{...}{Additional parameter inherited from the
 \code{\link[Rsamtools:RsamtoolsFile-class]{Rsamtools package yieldSize function}}.
 Ignored here.}
 }

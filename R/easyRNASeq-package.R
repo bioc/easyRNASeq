@@ -129,6 +129,9 @@
 #'      # create the RnaSeqParam
 #'      rnaSeqParam <- RnaSeqParam(annotParam=annotParam,countBy="gene")
 #'
+#'   # get the bamfiles
+#'   bamFiles <- getBamFileList(dir(pattern="^[A,T].*\\.bam$",full.names=TRUE))
+#'
 #'      # get a RangedSummarizedExperiment containing the counts table
 #'   sexp <- simpleRNASeq(
 #'       bamFiles=bamFiles,
@@ -180,8 +183,8 @@ NULL
 #' gsub mean median narrow nchar ranges reduce rev "rownames<-" space
 #' start "start<-" sub  tolower unlist values which width
 #' @importMethodsFrom methods coerce initialize show
-#' @importMethodsFrom Rsamtools countBam scanBam scanBamHeader
-#' ScanBamParam yieldSize "yieldSize<-"
+#' @importMethodsFrom Rsamtools asMates "asMates<-" countBam scanBam
+#' scanBamHeader ScanBamParam yieldSize "yieldSize<-"
 #' @importMethodsFrom S4Vectors "%in%" as.table elementMetadata
 #' "elementMetadata<-" elementNROWS levels mcols metadata
 #' "metadata<-" Rle runLength runsum runValue split substr
@@ -222,33 +225,15 @@ NULL
 ##==========================
 # To detail the deprecation
 ##==========================
-#' The following function have been deprecated:
-#' \itemize{
-#' \item \code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq}}
-#' \item \code{\link[easyRNASeq:easyRNASeq-coverage-methods]{fetchCoverage}}
-#' }
-#'
-#' \itemize{
-#' \item The \code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq}} function is superseded by the
-#' \code{\link[easyRNASeq:easyRNASeq-simpleRNASeq]{simpleRNASeq}} function to consolidate and
-#' prune the overall package. The changes are based on user comments and on the
-#' general standardization occuring in the field.
-#' \item The \code{\link[easyRNASeq:easyRNASeq-coverage-methods]{fetchCoverage}} function only had two
-#' parameters deprecated as the consequence of the package consolidation. As the scanBam
-#' function is not called directly anymore but through higher level functions (from the
-#' GenomicRanges package), the 'what' and 'isUnmappedQuery' parameters were obsolete.
-#' }
-#' @aliases easyRNASeq easyRNASeq,RNAseq-method
-#' fetchCoverage,RNAseq-method fetchCoverage
-#' @name Deprecated functions
-#' @rdname easyRNASeq-deprecated
-NULL
-
+# nothing at the time - copy the defunct block if needed and
+# replace defunct by deprecated
 ##==========================
 # To detail defunct function
 ##==========================
 #' The following function are defunct:
 #' \itemize{
+#' \item \code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq}}
+#' \item \code{\link[easyRNASeq:easyRNASeq-coverage-methods]{fetchCoverage}}
 #' \item \code{fetchAnnotation}
 #' \item \code{knownOrganisms}
 #' \item \code{plotDispersionEstimates,DGEList-method}
@@ -258,8 +243,18 @@ NULL
 #' \item The \code{plotDispersionEstimates,DGEList-method}
 #' function is superseded by the \code{\link[edgeR:plotBCV]{plotBCV}} function
 #' as the \pkg{edgeR} DGEList object structure changed
+#' \item The \code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq}} function is superseded by the
+#' \code{\link[easyRNASeq:easyRNASeq-simpleRNASeq]{simpleRNASeq}} function to consolidate and
+#' prune the overall package. The changes are based on user comments and on the
+#' general standardization occuring in the field.
+#' \item The \code{\link[easyRNASeq:easyRNASeq-coverage-methods]{fetchCoverage}} function only had two
+#' parameters deprecated as the consequence of the package consolidation. As the scanBam
+#' function is not called directly anymore but through higher level functions (from the
+#' GenomicRanges package), the 'what' and 'isUnmappedQuery' parameters were obsolete.
 #' }
 #' @aliases plotDispersionEstimates,DGEList-method fetchAnnotation knownOrganisms
+#' easyRNASeq easyRNASeq,RNAseq-method fetchCoverage,RNAseq-method fetchCoverage
+#' organismName<- organismName organismName,RNAseq-method organismName<-,RNAseq-method
 #' @name Defunct functions
 #' @rdname easyRNASeq-defunct
 NULL

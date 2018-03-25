@@ -8,24 +8,28 @@
 \title{BamParam constructor}
 \usage{
 \S4method{BamParam}{ANY}(paired = TRUE, stranded = FALSE,
-  yieldSize = 1000000L)
+  strandProtocol = c("reverse", "forward"), yieldSize = 1000000L)
 }
 \arguments{
-\item{paired}{TODO}
+\item{paired}{boolean whether the BAM file contains paired-end data or not}
 
-\item{stranded}{TODO}
+\item{stranded}{boolean whether the reads are strand specific}
 
-\item{yieldSize}{TODO}
+\item{strandProtocol}{factor with values 'reverse' and 'forward' specifying the
+type of strand specificity protocol. 'reverse', the reads are on the opposite
+strand to the gene; typical for Illumina TRUSEQ strand-specific protocol.}
+
+\item{yieldSize}{the amount of reads to be streamed at a time. Default to 1M}
 }
 \description{
 This constructs a \code{\linkS4class{BamParam}} object.
-The default parameters are derived from the currently most 
+The default parameters are derived from the currently most
 common RNA-Seq experimental use-case and are detailed below:
 \itemize{
 \item paired is TRUE, \emph{i.e.} paired-end sequencing is expected.
 \item stranded is FALSE \emph{i.e.} stranded sequencing is not expected.
-\item yieldSize is set to 1,000,000. This is the amount of reads iteratively 
-processed from the bam file stream. It is a compromise between speed, 
+\item yieldSize is set to 1,000,000. This is the amount of reads iteratively
+processed from the bam file stream. It is a compromise between speed,
 process-parallelization and memory usage.
 }
 }
@@ -37,12 +41,12 @@ of the selected parameters, leaving the other parameters
 unaffected.
 }
 \examples{
-## the defaults
+# the defaults
 BamParam()
 
-## change the default
+# change the default
 BamParam(paired=FALSE)
 BamParam(stranded=TRUE,yieldSize=1L)
-
+BamParam(stranded=TRUE,strandProtocol="forward",yieldSize=1L)
 
 }

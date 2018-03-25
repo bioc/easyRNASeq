@@ -64,7 +64,7 @@ library.
 }}
 
 \item{validity.check}{Shall UCSC chromosome name convention be enforced?
-This is only supported for a set of organisms, which are  
+This is only supported for a set of organisms, which are
 Dmelanogaster, Hsapiens, Mmusculus and Rnorvegicus;
 otherwise the argument 'chr.map' can be used to complement it.}
 

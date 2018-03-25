@@ -74,7 +74,7 @@ defined.  }
 \code{\link[easyRNASeq:easyRNASeq-island-methods]{findIslands}} }}
 }
 \examples{
-
+\dontrun{
 library(curl)
 library(BSgenome.Dmelanogaster.UCSC.dm3)
 
@@ -106,6 +106,7 @@ invisible(sapply(c("ACACTG","ACTAGC"),function(bam){
                      outputFormat="RNAseq")
 	# summing up the exons by transcript
 	rnaSeq <- transcriptCounts(rnaSeq)
+}
 
 }
 \seealso{

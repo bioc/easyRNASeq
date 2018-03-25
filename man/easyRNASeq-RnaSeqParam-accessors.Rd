@@ -16,6 +16,7 @@
 \alias{datasource,RnaSeqParam-method}
 \alias{paired,RnaSeqParam-method}
 \alias{stranded,RnaSeqParam-method}
+\alias{strandProtocol,RnaSeqParam-method}
 \title{Accessors for RnaSeqParam class}
 \usage{
 \S4method{yieldSize}{RnaSeqParam}(object)
@@ -38,6 +39,7 @@ Implemented are:
 \item paired
 \item precision
 \item stranded
+\item strandProtocol
 \item yieldSize
 }
 }

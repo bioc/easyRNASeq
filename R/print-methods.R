@@ -24,6 +24,7 @@ setMethod(
           f="print",
           signature="RNAseq",
           definition=function(x,verbose=FALSE,...){
+            .Defunct(msg="The RNAseq class is now defunct.")
             .catn(class(x), "annotation and data for", organismName(x), "containing:\n")
             ## annotations
             .catn("1) Annotations:\n")

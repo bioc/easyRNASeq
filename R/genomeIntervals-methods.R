@@ -14,7 +14,8 @@
 #' type column, usually a factor or a character vector } }
 #' @examples
 #'
-#'  library(curl)
+#' library(curl)
+#' library(genomeIntervals)
 #' invisible(curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
 #'                                "master/tutorial/easyRNASeq/Dmel-mRNA-exon-r5.52.gff3.gz"),
 #'                         "Dmel-mRNA-exon-r5.52.gff3.gz"))

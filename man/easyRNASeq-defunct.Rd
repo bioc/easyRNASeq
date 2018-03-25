@@ -5,8 +5,18 @@
 \alias{plotDispersionEstimates,DGEList-method}
 \alias{fetchAnnotation}
 \alias{knownOrganisms}
+\alias{easyRNASeq}
+\alias{easyRNASeq,RNAseq-method}
+\alias{fetchCoverage,RNAseq-method}
+\alias{fetchCoverage}
+\alias{organismName<-}
+\alias{organismName}
+\alias{organismName,RNAseq-method}
+\alias{organismName<-,RNAseq-method}
 \title{The following function are defunct:
 \itemize{
+\item \code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq}}
+\item \code{\link[easyRNASeq:easyRNASeq-coverage-methods]{fetchCoverage}}
 \item \code{fetchAnnotation}
 \item \code{knownOrganisms}
 \item \code{plotDispersionEstimates,DGEList-method}
@@ -16,5 +26,13 @@
 \item The \code{plotDispersionEstimates,DGEList-method}
 function is superseded by the \code{\link[edgeR:plotBCV]{plotBCV}} function
 as the \pkg{edgeR} DGEList object structure changed
+\item The \code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq}} function is superseded by the
+\code{\link[easyRNASeq:easyRNASeq-simpleRNASeq]{simpleRNASeq}} function to consolidate and
+prune the overall package. The changes are based on user comments and on the
+general standardization occuring in the field.
+\item The \code{\link[easyRNASeq:easyRNASeq-coverage-methods]{fetchCoverage}} function only had two
+parameters deprecated as the consequence of the package consolidation. As the scanBam
+function is not called directly anymore but through higher level functions (from the
+GenomicRanges package), the 'what' and 'isUnmappedQuery' parameters were obsolete.
 }
 }

@@ -1,3 +1,21 @@
+CHANGES IN VERSION 2.15.5
+-------------------------
+
+  o Ensured that counting happens in a strand specific way when
+  stranded data is provided
+
+  o The easyRNASeq and all related methods are now defunct.
+
+  o Added a BamParam strandProtocol argument value to count reads
+  on the reverse strand
+
+  o Removed calls to RangedData constructor defunct parameters in unit tests
+
+  o Removed dependencies to RnaSeqTutorial in unit tests
+
+  o Removed the easyRNASeq vignette. Replaced it with a knitr vignette - to be
+  completed.
+
 CHANGES IN VERSION 2.15.4
 -------------------------
 

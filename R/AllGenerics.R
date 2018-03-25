@@ -396,6 +396,7 @@ setGeneric(name="BamParam",
            def=function(
                         paired=TRUE,
                         stranded=FALSE,
+                        strandProtocol=c("reverse","forward"),
                         yieldSize=1e6L){
              standardGeneric("BamParam")
            })
@@ -410,6 +411,12 @@ setGeneric(name="paired",
 setGeneric(name="stranded",
            def=function(object){
              standardGeneric("stranded")
+           })
+
+##' @exportMethod strandProtocol
+setGeneric(name="strandProtocol",
+           def=function(object){
+               standardGeneric("strandProtocol")
            })
 
 ## imported but need to be exported

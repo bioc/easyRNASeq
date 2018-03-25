@@ -1,5 +1,5 @@
 ##' Accessors for RnaSeqParam class
-##' 
+##'
 ##' These functions and generics define `accessors` (to get and set values) for
 ##' \code{\linkS4class{RnaSeqParam}} objects within the \pkg{easyRNASeq} package.
 ##' Implemented are:
@@ -11,16 +11,18 @@
 ##' \item paired
 ##' \item precision
 ##' \item stranded
+##' \item strandProtocol
 ##' \item yieldSize
 ##' }
-##' 
+##'
 ##' @aliases RnaSeqParam-accessors
 ##' yieldSize,RnaSeqParam-method
 ##' bamParam annotParam countBy precision
 ##' countBy,RnaSeqParam-method precision,RnaSeqParam-method
 ##' bamParam,RnaSeqParam-method annotParam,RnaSeqParam-method
-##' datasource,RnaSeqParam-method 
+##' datasource,RnaSeqParam-method
 ##' paired,RnaSeqParam-method stranded,RnaSeqParam-method
+##' strandProtocol,RnaSeqParam-method
 ##' @name easyRNASeq RnaSeqParam accessors
 ##' @rdname easyRNASeq-RnaSeqParam-accessors
 ##' @param object An object derived from class \code{RnaSeqParam}.
@@ -41,12 +43,12 @@
 ##'                                 "extdata",
 ##'                                 "Dmel-mRNA-exon-r5.52.gff3",
 ##'                                 package="RnaSeqTutorial"))
-##' 
+##'
 ##' ## create the RnaSeqParam
 ##' rsp <- RnaSeqParam(annotParam=annotParam)
 ##' ## get the yieldSize Parameter
 ##' ysize <-yieldSize(rsp)
-##' 
+##'
 
 setMethod(f="yieldSize",
           signature="RnaSeqParam",
@@ -97,3 +99,8 @@ setMethod(f="stranded",
             return(stranded(bamParam(object)))
           })
 
+setMethod(f="strandProtocol",
+          signature="RnaSeqParam",
+          definition=function(object){
+              return(strandProtocol(bamParam(object)))
+          })

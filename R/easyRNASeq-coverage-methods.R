@@ -1,13 +1,13 @@
 ##' Compute the coverage from a Short Read Alignment file
-##' 
+##'
 ##' Computes the genomic reads' coverage from a
 ##' read file in bam format or any format supported by \pkg{ShortRead}.
-##' 
+##'
 ##' \dots{} for fetchCoverage: Can be used for readAligned method from package
 ##' \pkg{ShortRead}. The use of the dots for the scanBamFlag method from package
 ##' \pkg{Rsamtools} has been deprecated, as were the 'what' and 'isUnmappedQuery'
-##' argument to the function 
-##' 
+##' argument to the function
+##'
 ##' @aliases fetchCoverage-deprecated
 ##' @name easyRNASeq coverage methods
 ##' @rdname easyRNASeq-coverage-methods
@@ -39,17 +39,17 @@
 ##' \code{\link[ShortRead:readAligned]{ShortRead:readAligned}}
 ##' @keywords methods
 ##' @examples
-##' 
+##'
 ##'   \dontrun{
 ##' 	library("RnaSeqTutorial")
 ##' 	library(BSgenome.Dmelanogaster.UCSC.dm3)
-##' 
+##'
 ##' 	obj <- new('RNAseq',
 ##' 		organismName="Dmelanogaster",
 ##' 		readLength=36L,
 ##' 		chrSize=as.list(seqlengths(Dmelanogaster))
 ##' 		)
-##' 	
+##'
 ##' 	obj <- fetchCoverage(
 ##' 			obj,
 ##' 			format="bam",
@@ -59,7 +59,7 @@
 ##'                             	package="RnaSeqTutorial")
 ##' 			)
 ##' 	}
-##' 
+##'
 setMethod(
   f="fetchCoverage",
   signature="RNAseq",
@@ -68,7 +68,7 @@ setMethod(
                       filename=character(1),
                       filter=srFilter(),
                       type="SolexaExport",
-                      chr.sel=c(),                      
+                      chr.sel=c(),
                       validity.check=TRUE,
                       chr.map=data.frame(),
                       ignoreWarnings=FALSE,
@@ -76,31 +76,33 @@ setMethod(
                       paired=FALSE,
                       stranded=FALSE,
                       bp.coverage=FALSE,...){
-    
+
     ## warn for deprecation
-    if(.getArguments(scanBamFlag,...)!=""){
+    .Defunct("simpleRNASeq")
+
+      if(.getArguments(scanBamFlag,...)!=""){
       .Deprecated(new="fetchCoverage(...)",old="fetchCoverage(...,isUnmappedQuery=FALSE,what=c('rname','pos','qwidth'),...)")
       warning("Passing scanBamFlag arguments has been deprecated. They will be ignored.")
     }
-    
+
     ## check the filename
     if(!file.exists(filename)){
       stop(paste("Cannot read the file:",filename))
     }
-    
+
     ## set fileName slot if unset (just the filename)
     if(length(fileName(obj)) == 0){
       fileName(obj) <- basename(filename)
     }
-    
+
     ## check the format
     .checkArguments("fetchCoverage","format",format)
-    
+
     ## convert a filename to a BamFile
     if(format=="bam" & is.character(filename)){
       filename <- getBamFileList(filename)
     }
-    
+
     ## are we looking for gapped alignments?
     if(gapped){
       switch(format,
@@ -113,7 +115,7 @@ setMethod(
                format="gapped"
              })
     }
-    
+
     ## switch to read the file
     ## not sure that the ... works for readAligned.
     aln.info <- switch(format,
@@ -122,7 +124,7 @@ setMethod(
                                      pattern=basename(filename),
                                      filter=filter,type=type,withId=TRUE,...),
                          chr.sel),
-                       bam={                                 
+                       bam={
                          ## flag <- eval(parse(text=paste(
                          ##                      "scanBamFlag(isUnmappedQuery=isUnmappedQuery",
                          ##                      .getArguments(scanBamFlag,...),")",sep="")))
@@ -138,7 +140,7 @@ setMethod(
                          chr.sel
                        )
     )
-    
+
     ## stop if the chr sel removes everything!
     if(length(aln.info$rng.list)==0 | sum(elementNROWS(aln.info$rng.list)) == 0){
       stop(paste("No data was retrieved from the file: ",
@@ -146,9 +148,9 @@ setMethod(
                  ". Make sure that your file is valid, that your 'chr.sel' (if provided) contains valid values; i.e. values as found in the alignment file, not as returned by 'RNAseq'.",
                  sep=""))
     }
-    
+
     librarySize(obj) <- aln.info$lib.size
-    
+
     ## UCSC chr naming convention validity check
     if(validity.check){
       ## modified in version 1.1.9 (06.03.2012) as it was unwise to check for chr in the names
@@ -163,12 +165,12 @@ setMethod(
       names(aln.info$rng.list) <- .convertToUCSC(names(aln.info$rng.list),organismName(obj),chr.map)
       ##              }
     }
-    
+
     ## check if we have a single read length
     rL <- unique(do.call("c",lapply(width(aln.info$rng.list),unique)))
     rL <- rL[rL != 0]
     rL <- sort(rL,decreasing=TRUE)
-    
+
     ## check what the user provided
     ## the double && is to make sure we have
     ## a single value tested even if rL
@@ -182,7 +184,7 @@ setMethod(
                      "The reads have been trimmed."))
         .catn("Minimum length of",min(rL),"bp.")
         .catn("Maximum length of",max(rL),"bp.")
-      } else {                
+      } else {
         .catn("The reads are of",rL,"bp.")
       }
     } else {
@@ -195,7 +197,7 @@ setMethod(
       }
     }
     readLength(obj) <- as.integer(rL)
-    
+
     ## check for the chromosome size and report any problem
     ## TODO this would not be necessary if chr.size is auto
     if(!all(names(aln.info$rng.list) %in% names(chrSize(obj)))){
@@ -203,12 +205,12 @@ setMethod(
                     paste(names(aln.info$rng.list)[!names(aln.info$rng.list) %in% names(chrSize(obj))],collapse=", "),
                     "is (are) not present in the provided 'chr.sizes' argument"))
     }
-    
+
     if(any(unlist(start(aln.info$rng.list),use.names=FALSE) > chrSize(obj)[rep(names(aln.info$rng.list),
                                                                                elementNROWS(start(aln.info$rng.list)))])){
       stop("Some of your read coordinates are bigger than the chromosome sizes you provided. Aborting!")
     }
-    
+
     ## check and correct the names in the width and in the ranges, keep the common selector
     valid.names <- sort(intersect(names(aln.info$rng.list),names(chrSize(obj))))
     if(length(chr.sel)>0){
@@ -218,7 +220,7 @@ setMethod(
         if(!ignoreWarnings){
           warn=FALSE
           if(!all(names(aln.info$rng.list)[names(aln.info$rng.list) %in% chrs] %in% valid.names)){
-            warning("Not all the selected ('chr.sel') chromosome names from your read file(s) (aln or bam) exist in your chromosome size list 'chr.sizes'.")   
+            warning("Not all the selected ('chr.sel') chromosome names from your read file(s) (aln or bam) exist in your chromosome size list 'chr.sizes'.")
             warn=TRUE
           }
           if(!all(names(chrSize(obj))[names(chrSize(obj)) %in% chrs] %in% valid.names)){
@@ -235,7 +237,7 @@ setMethod(
       if(!ignoreWarnings){
         warn=FALSE
         if(!all(names(aln.info$rng.list) %in% valid.names)){
-          warning("Not all the chromosome names present in your read file(s) (aln or bam) exist in your chromosome size list 'chr.sizes'.")   
+          warning("Not all the chromosome names present in your read file(s) (aln or bam) exist in your chromosome size list 'chr.sizes'.")
           warn=TRUE
         }
         if(!all(names(chrSize(obj))%in%valid.names)){
@@ -248,16 +250,16 @@ setMethod(
         }
       }
     }
-    
+
     ## calc the coverage
-    
+
     ## define the possibilities
     ## 00 is variable length and read coverage
     ## 01 is variable length and bp coverage
     ## 10 is unique length and read coverage
     ## 11 is unique length and bp coverage
     ## 01 and 11 are the same, we just return the bp coverage
-    
+
     ## Nico August 6th 2012 v1.3.9
     ## Removed the 1e6 divisions as Herve added the support for numeric Rle as a result
     ## from the coverage vector.
@@ -278,10 +280,10 @@ setMethod(
                                                 width=as.list(chrSize(obj)[match(valid.names,names(chrSize(obj)))]))/readLength(obj),
 {coverage(aln.info$rng.list[match(valid.names,names(aln.info$rng.list))],
           width=as.list(chrSize(obj)[match(valid.names,names(chrSize(obj)))]))})
-    
+
     ## Nico August 6th 2012 v1.3.9
     ## commented ou as Herve implemented support for Rle numeric vectors for the coverage
-    ## and it would return a warning if any coverage value would be NA (i.e. above the 32/64 bit limit). 
+    ## and it would return a warning if any coverage value would be NA (i.e. above the 32/64 bit limit).
     ## Nico sometime July 2012 v1.3.7
     ## ensure that we're not returning junk
     ## could happen if 1e6 is too much and we
@@ -293,11 +295,11 @@ setMethod(
     ##     stop("The observed number of count differs from the expected number! Something went wrong, please contact the author.")
     ##   }
     ## }
-    
+
     ## Nico August 9th 2012 v.1.3.10
     ## coverage use to return a named list which it does not anymore
     names(readCoverage(obj)) <- valid.names
-    
+
     ## return obj
     return(obj)
   })
