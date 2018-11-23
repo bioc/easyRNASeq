@@ -18,7 +18,7 @@
 #' @section Objects from the Class: Objects can be created by calls of the
 #' form \code{new("RNAseq", ...)}.
 #' @author Nicolas Delhomme
-#' @seealso \itemize{ \item\code{\linkS4class{RangedData}}
+#' @seealso \itemize{ \item\code{\linkS4class{GRangesList}}
 #' \item\code{\linkS4class{RleList}}
 #' \item\code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq function}}
 #' \item\code{\link[easyRNASeq:easyRNASeq-accessors]{RNAseq accessors}}
@@ -42,25 +42,25 @@ setClass(
          representation=representation(
            chrSize="integer",
            fileName="character",
-           geneModel="RangedData",
-           genomicAnnotation="Vector",
+           geneModel="GRanges",
+           genomicAnnotation="GRanges",
            librarySize="numeric",
            organismName="character",
            readCounts="list",
            readCoverage="RleList",
-           readIslands="RangedData",
+           readIslands="GRanges",
            readLength="integer"
            ),
          prototype=prototype(
            chrSize=integer(0),
            fileName=character(0),
-           geneModel=RangedData(),
-           genomicAnnotation=RangedData(),
+           geneModel=GRanges(),
+           genomicAnnotation=GRanges(),
            librarySize=numeric(0),
            organismName=character(1),
            readCounts=list(),
            readCoverage=RleList(),
-           readIslands=RangedData(),
+           readIslands=GRanges(),
            readLength=integer(1)
            )
 #         ,

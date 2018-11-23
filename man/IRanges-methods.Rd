@@ -21,9 +21,7 @@ Return the ranges of the genomic annotation.
 }
 \details{
 It retrieves the object stored in the genomicAnnotation slot of the RNAseq
-object and apply the \code{ranges} function on it. The object retrieved can
-be of the \code{\linkS4class{RangedData}} or
-\code{\linkS4class{GRangesList}} class.
+object and apply the \code{ranges} function on it.
 }
 \examples{
 
@@ -39,7 +37,7 @@ be of the \code{\linkS4class{RangedData}} or
 				        package="RnaSeqTutorial"),
   		        type="gff3"
   ))
-  
+
 	ranges(obj)
 	}
 

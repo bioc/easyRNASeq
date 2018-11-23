@@ -34,7 +34,7 @@ annotations}
 \item{nbCore}{number of CPU cores to use}
 }
 \value{
-A \code{\linkS4class{RangedData}} containing the loaded or
+A \code{\linkS4class{GRanges}} containing the loaded or
 processed annotations.
 }
 \description{

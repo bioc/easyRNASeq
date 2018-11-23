@@ -7,18 +7,20 @@
 \title{easyRNASeq method}
 \usage{
 \S4method{easyRNASeq}{character}(filesDirectory = getwd(),
-  organism = character(1), chr.sizes = c("auto"), readLength = integer(1),
-  annotationMethod = c("biomaRt", "env", "gff", "gtf", "rda"),
-  annotationFile = character(1), annotationObject = RangedData(),
-  format = c("bam", "aln"), gapped = FALSE, count = c("exons", "features",
-  "genes", "islands", "transcripts"), outputFormat = c("matrix",
-  "SummarizedExperiment", "DESeq", "edgeR", "RNAseq"), pattern = character(1),
+  organism = character(1), chr.sizes = c("auto"),
+  readLength = integer(1), annotationMethod = c("biomaRt", "env",
+  "gff", "gtf", "rda"), annotationFile = character(1),
+  annotationObject = GRangesList(), format = c("bam", "aln"),
+  gapped = FALSE, count = c("exons", "features", "genes", "islands",
+  "transcripts"), outputFormat = c("matrix", "SummarizedExperiment",
+  "DESeq", "edgeR", "RNAseq"), pattern = character(1),
   filenames = character(0), nbCore = 1, filter = srFilter(),
-  type = "SolexaExport", chr.sel = c(), summarization = c("bestExons",
-  "geneModels"), normalize = FALSE, max.gap = integer(1), min.cov = 1L,
-  min.length = integer(1), plot = TRUE, conditions = c(),
-  validity.check = TRUE, chr.map = data.frame(), ignoreWarnings = FALSE,
-  silent = FALSE, ...)
+  type = "SolexaExport", chr.sel = c(),
+  summarization = c("bestExons", "geneModels"), normalize = FALSE,
+  max.gap = integer(1), min.cov = 1L, min.length = integer(1),
+  plot = TRUE, conditions = c(), validity.check = TRUE,
+  chr.map = data.frame(), ignoreWarnings = FALSE, silent = FALSE,
+  ...)
 }
 \arguments{
 \item{filesDirectory}{The directory where the files to be used are located.
@@ -38,7 +40,7 @@ annotationObject to be set.}
 
 \item{annotationFile}{The location (full path) of the annotation file}
 
-\item{annotationObject}{A \code{\linkS4class{RangedData}} or
+\item{annotationObject}{A
 \code{\linkS4class{GRangesList}} object containing the annotation.}
 
 \item{format}{The format of the reads, one of "aln","bam". If not "bam",
@@ -149,8 +151,8 @@ function used to locate the read files.}
 }}
 \item{the annotationObject When the
 \code{annotationMethods} is set to \code{env} or \code{rda}, a properly
-formatted \code{RangedData} or \code{GRangesList} object need to be
-provided. Check the paragraph RangedData in the vignette or the examples at
+formatted \code{GRangesList} object need to be
+provided. Check the vignette or the examples at
 the bottom of this page for examples. The data.frame-like structure of
 these objects is where \code{easyRNASeq} will look for the exon, feature,
 transcript, or gene identifier. Depending on the count method selected, it
@@ -205,20 +207,17 @@ case the chromosome names and size are extracted from the BAM header}
 	# an example of a chr.map
 	chr.map <- data.frame(from=c("2L","2R","MT"),to=c("chr2L","chr2R","chrMT"))
 
-	# an example of a RangedData annotation
-	gAnnot <- RangedData(
-                     IRanges(
+	# an example of a GRangesList annotation
+	grngs <- GRanges(seqnames=c("chr01","chr01","chr02"),
+                     ranges=IRanges(
                              start=c(10,30,100),
                              end=c(21,53,123)),
-                          space=c("chr01","chr01","chr02"),
                           strand=c("+","+","-"),
                           transcript=c("trA1","trA2","trB"),
                           gene=c("gA","gA","gB"),
                           exon=c("e1","e2","e3")
                           )
 
-	# an example of a GRangesList annotation
-	grngs <- as(gAnnot,"GRanges")
 	grngsList<-split(grngs,seqnames(grngs))
 }
 }

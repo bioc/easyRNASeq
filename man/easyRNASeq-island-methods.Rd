@@ -26,7 +26,7 @@ select an appropriate value for the minimum coverage.}
 }
 \value{
 An \code{RNAseq} object with the readIsland slot set with a
-RangedData containing the selected islands and the readCount slot
+GRanges containing the selected islands and the readCount slot
 actualized with a list containing the count table per island.
 }
 \description{

@@ -9,9 +9,10 @@
 \alias{RPKM,RNAseq-method}
 \title{easyRNASeq count table correction to RPKM}
 \usage{
-\S4method{RPKM}{matrix,ANY,vector,vector}(obj, from = c("exons", "features",
-  "transcripts", "bestExons", "geneModels", "islands"), lib.size = numeric(1),
-  feature.size = integer(1), simplify = TRUE, ...)
+\S4method{RPKM}{matrix,ANY,vector,vector}(obj, from = c("exons",
+  "features", "transcripts", "bestExons", "geneModels", "islands"),
+  lib.size = numeric(1), feature.size = integer(1), simplify = TRUE,
+  ...)
 }
 \arguments{
 \item{obj}{An object of class \code{\linkS4class{RNAseq}} or a

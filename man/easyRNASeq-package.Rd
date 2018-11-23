@@ -9,13 +9,13 @@
 \alias{BamFileList}
 \alias{BamFileList-class}
 \alias{IRanges}
-\alias{RangedData}
+\alias{GRanges-class}
+\alias{GRanges}
 \alias{SRFilterResult}
 \alias{RangedSummarizedExperiment-class}
 \alias{chromosomeFilter}
 \alias{compose}
 \alias{nFilter}
-\alias{RangedData-class}
 \alias{easyRNASeq package-package}
 \title{Count summarization and normalization pipeline for Next Generation Sequencing data.}
 \description{
@@ -120,7 +120,6 @@ The class RNAseq specification:
     \item{Classes}{
       \code{\linkS4class{BamFileList}}
       \code{\linkS4class{CountDataSet}}
-      \code{\linkS4class{RangedData}}
       \code{\linkS4class{RangedSummarizedExperiment}}
     }
     \item{Functions/Methods}{
@@ -132,7 +131,6 @@ The class RNAseq specification:
       \code{\link[locfit:locfit]{The locfit function}}
       \code{\link[Rsamtools:BamFileList]{The BamFileList constructor}}
       \code{\link[IRanges:IRanges-constructor]{The IRanges constructor}}
-      \code{\link[IRanges:RangedData-class]{The RangedData constructor}}
       \code{\link[ShortRead:srFilter]{For the SRFilterResult,
       chromosomeFilter, compose and nFilter methods}}
     }

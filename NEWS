@@ -1,3 +1,8 @@
+CHANGES IN VERSION 2.19.1
+-------------------------
+
+  o Dropped the RangedData support as these are now deprecated.
+
 CHANGES IN VERSION 2.15.5
 -------------------------
 

@@ -48,8 +48,8 @@
 #' @name easyRNASeq package
 #' @rdname easyRNASeq-package
 #' @aliases easyRNASeq-package assay type BamFileList BamFileList-class IRanges
-#' RangedData SRFilterResult RangedSummarizedExperiment-class chromosomeFilter
-#' compose nFilter RangedData-class
+#' GRanges-class GRanges SRFilterResult RangedSummarizedExperiment-class chromosomeFilter
+#' compose nFilter
 #' @docType package
 #' @author Nicolas Delhomme, Bastian Schiffthaler, Ismael Padioleau
 #' @keywords package
@@ -83,7 +83,6 @@
 #'     \item{Classes}{
 #'       \code{\linkS4class{BamFileList}}
 #'       \code{\linkS4class{CountDataSet}}
-#'       \code{\linkS4class{RangedData}}
 #'       \code{\linkS4class{RangedSummarizedExperiment}}
 #'     }
 #'     \item{Functions/Methods}{
@@ -95,7 +94,6 @@
 #'       \code{\link[locfit:locfit]{The locfit function}}
 #'       \code{\link[Rsamtools:BamFileList]{The BamFileList constructor}}
 #'       \code{\link[IRanges:IRanges-constructor]{The IRanges constructor}}
-#'       \code{\link[IRanges:RangedData-class]{The RangedData constructor}}
 #'       \code{\link[ShortRead:srFilter]{For the SRFilterResult,
 #'       chromosomeFilter, compose and nFilter methods}}
 #'     }
@@ -159,7 +157,7 @@ NULL
 #' @importClassesFrom GenomicAlignments GAlignments GAlignmentPairs
 #' @importClassesFrom GenomicRanges GRanges GRangesList
 #' @importClassesFrom SummarizedExperiment RangedSummarizedExperiment
-#' @importClassesFrom IRanges RangedData RleList
+#' @importClassesFrom IRanges RleList
 #' @importClassesFrom S4Vectors Annotated Vector DataFrame SimpleList
 #' @importClassesFrom methods ANY character "function" integer
 #' list matrix missing numeric vector
@@ -180,7 +178,7 @@ NULL
 #' @importMethodsFrom GenomicRanges grglist
 #' @importMethodsFrom IRanges as.list as.matrix
 #' "colnames<-" countOverlaps coverage end "end<-" findOverlaps
-#' gsub mean median narrow nchar ranges reduce rev "rownames<-" space
+#' gsub mean median narrow nchar ranges reduce "rownames<-" space
 #' start "start<-" sub  tolower unlist values which width
 #' @importMethodsFrom methods coerce initialize show
 #' @importMethodsFrom Rsamtools asMates "asMates<-" countBam scanBam
@@ -205,7 +203,7 @@ NULL
 #' @importFrom graphics abline axis axTicks boxplot grid hist legend lines
 #' mtext par plot rect
 #' @importFrom IRanges IRanges IRangesList LogicalList
-#' RangedData SplitDataFrameList RleList
+#' SplitDataFrameList RleList
 #' @importFrom locfit locfit lp
 #' @importFrom LSD heatscatter
 #' @importFrom methods as extends is new
@@ -217,9 +215,9 @@ NULL
 #' @importFrom stats aggregate na.omit
 #' @importFrom utils combn str packageVersion
 # and export!
-#' @exportClass BamFileList RangedData RangedSummarizedExperiment
+#' @exportClass BamFileList GRanges RangedSummarizedExperiment
 #' @exportMethod assay assays colData estimateDispersions estimateSizeFactors fileName metadata rowRanges seqinfo seqlengths seqlevels "seqlevels<-" seqnames "seqnames<-" split srFilter SummarizedExperiment width writeFastq writeGff3
-#' @export alignData basename chromosomeFilter compose BamFileList IRanges locfit lp newCountDataSet nFilter RangedData readAligned SRFilterResult
+#' @export alignData basename chromosomeFilter compose BamFileList GRanges IRanges locfit lp newCountDataSet nFilter readAligned SRFilterResult
 NULL
 
 ##==========================

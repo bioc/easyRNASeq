@@ -7,7 +7,8 @@
 \alias{validate,BamFileList-method}
 \title{Extension of the Rsamtools package}
 \usage{
-\S4method{validate}{BamFile}(obj, header = TRUE, cross.validation = TRUE)
+\S4method{validate}{BamFile}(obj, header = TRUE,
+  cross.validation = TRUE)
 }
 \arguments{
 \item{obj}{An object of the \code{\linkS4class{BamFile}} or

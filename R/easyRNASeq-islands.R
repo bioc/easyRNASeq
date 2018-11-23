@@ -19,7 +19,7 @@
 #' select an appropriate value for the minimum coverage.
 #' @param ... See details
 #' @return An \code{RNAseq} object with the readIsland slot set with a
-#' RangedData containing the selected islands and the readCount slot
+#' GRanges containing the selected islands and the readCount slot
 #' actualized with a list containing the count table per island.
 #' @author Nicolas Delhomme
 #' @keywords connection data methods
@@ -131,7 +131,7 @@ setMethod(
             # name them
             names(islandC) <- sprintf('%s%s%07d',names(unlist(island)),'_is',c(1:(length(unlist(island)))))
             # set the readIslands
-            readIslands(obj) <- RangedData(ranges=island,names=names(islandC))
+            readIslands(obj) <- GRanges(ranges=island,names=names(islandC))
 
             # set the counts
             readCounts(obj)<-.extendCountList(readCounts(obj),islandC,"islands",filename=fileName(obj))

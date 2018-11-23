@@ -31,7 +31,7 @@
 ##' @param obj an \code{\linkS4class{AnnotParam}} object containing the
 ##' necessary retrieval information (datasource and type)
 ##' @param ... Additional arguments, passed to more internal functions.
-##' @return A \code{\linkS4class{RangedData}} containing the loaded or
+##' @return A \code{\linkS4class{GRanges}} containing the loaded or
 ##' processed annotations.
 ##' @author Nicolas Delhomme
 ##' @keywords internal
@@ -165,7 +165,7 @@
 ### =======================
 ### TODO we need to adapt the exon numbering depending on the strand!!!
 ## TODO we should take advantage of the disjoin function in the future
-## Return a RangedData containing all genes model
+## Return a GRanges containing all genes model
 ".geneModelAnnotation" <- function(gAnnot,nbCore=1){
 
   ## can we parallelize
@@ -206,11 +206,11 @@
   ## get the synthetic exons
   RL<-(IRangesList(RL_list>0))
   sel<-rep(match(names(RL),gAnnot$gene),sapply(RL,length))
-  return(RangedData(space = seqnames(gAnnot)[sel],
+  return(GRanges(seqnames(gAnnot)[sel],
                  ranges = IRanges(start=unlist(start(RL)),end=unlist(end(RL))),
                  strand=strand(gAnnot)[sel],
-                    gene=gAnnot$gene[sel],
-                    transcript=paste(gAnnot$gene[sel],"transcript",sep="_"),
+                 gene=gAnnot$gene[sel],
+                 transcript=paste(gAnnot$gene[sel],"transcript",sep="_"),
                  exon=paste(gAnnot$gene[sel],
                             unlist(sapply(RL,
                                           function(gene){c(1:length(gene))})),sep="_")))

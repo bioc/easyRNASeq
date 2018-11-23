@@ -6,15 +6,14 @@
 \alias{AnnotParam}
 \alias{AnnotParam,character-method}
 \alias{AnnotParam,missing-method}
-\alias{AnnotParam,RangedData-method}
 \alias{AnnotParam,GRanges-method}
 \title{AnnotParam constructor}
 \usage{
-\S4method{AnnotParam}{character}(datasource = character(0), type = c("gff3",
-  "biomaRt", "gtf", "rda"))
+\S4method{AnnotParam}{character}(datasource = character(0),
+  type = c("gff3", "biomaRt", "gtf", "rda"))
 }
 \arguments{
-\item{datasource}{a character or a \code{\linkS4class{RangedData}} or a \code{\linkS4class{GRanges}} object. See details.}
+\item{datasource}{a character or a \code{\linkS4class{GRanges}} object. See details.}
 
 \item{type}{one of NULL, biomaRt, gff3, gtf or rda. Default to NULL. See details.}
 }
@@ -22,7 +21,7 @@
 This constructs a \code{\linkS4class{AnnotParam}} object.
 The datasource parameter (see details) is mandatory, however
 other parameters, \emph{i.e.} when the datasource is not a
-\code{\linkS4class{GRanges}} or \code{\linkS4class{RangedData}}
+\code{\linkS4class{GRanges}}
 default to "genes" and gff3", indicating that the datasource is in
 the gff3 format and that the contained information needs to be grouped
 by "genes". This representing the most common use case. Hence, it is
@@ -38,8 +37,7 @@ There are three parameters for an \code{\linkS4class{AnnotParam}}
 object:
 \itemize{
 \item{datasource}{If no type is provided, the datasource should
-be either a \code{\linkS4class{GRanges}}(prefered) or a
-\code{\linkS4class{RangedData}} (subject to future deprecation)
+be \code{\linkS4class{GRanges}}
 object  containing the genic information. These can be obtained
 using the \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{getAnnotation}} function.}
 \item{type}{One of biomaRt, gff3, gtf or rda. The default is "gff3".
@@ -70,7 +68,6 @@ annotParam <- AnnotParam(datasource="gAnnot.rda",type="rda")
 \seealso{
 \itemize{
 \item \code{\linkS4class{GRanges}}
-\item \code{\linkS4class{RangedData}}
 \item \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{getAnnotation}}
 }
 }

@@ -80,10 +80,10 @@ Rsamtools. It returns a list containing the IRangesList and library size.
 \item .getArguments For a given function returns the arguments
 passed as part of the \dots{} that match that function formals.
 \item .getName Get the genomicAnnotation object names. Necessary to deal
-with the different possible annotation object: \code{RangedData},
+with the different possible annotation object:
 \code{GRanges} or \code{GRangesList}.
 \item .getWidth Get the genomicAnnotation withs. Necessary to deal
-with the different possible annotation object: \code{RangedData},
+with the different possible annotation object:
 \code{GRanges} or \code{GRangesList}.
 \item .normalizationDispatcher a function to dispatch
 the normalization depending on the 'outputFormat' chosen by the user.

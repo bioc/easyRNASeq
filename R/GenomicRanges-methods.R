@@ -48,20 +48,16 @@
 #' @keywords methods
 #' @examples
 #'
-#'  # an example of a RangedData annotation
-#' 	gAnnot <- RangedData(
-#'                      IRanges(
+#'  # an example of annotation
+#' 	grngs <- GRanges(seqnames=c("chr01","chr01","chr02"),
+#'                      ranges=IRanges(
 #'                              start=c(10,30,100),
 #'                              end=c(21,53,123)),
-#'                           space=c("chr01","chr01","chr02"),
 #'                           strand=c("+","+","-"),
 #'                           transcripts=c("trA1","trA2","trB"),
 #'                           gene=c("gA","gA","gB"),
 #'                           exon=c("e1","e2","e3")
 #'                           )
-#'
-#' 	# an example of a GRangesList annotation
-#' 	grngs <- as(gAnnot,"GRanges")
 #'
 #' 	# accessing the colnames
 #' 	colnames(grngs)

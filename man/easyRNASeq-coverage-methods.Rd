@@ -7,10 +7,10 @@
 \title{Compute the coverage from a Short Read Alignment file}
 \usage{
 \S4method{fetchCoverage}{RNAseq}(obj, format = c("aln", "bam"),
-  filename = character(1), filter = srFilter(), type = "SolexaExport",
-  chr.sel = c(), validity.check = TRUE, chr.map = data.frame(),
-  ignoreWarnings = FALSE, gapped = TRUE, paired = FALSE,
-  stranded = FALSE, bp.coverage = FALSE, ...)
+  filename = character(1), filter = srFilter(),
+  type = "SolexaExport", chr.sel = c(), validity.check = TRUE,
+  chr.map = data.frame(), ignoreWarnings = FALSE, gapped = TRUE,
+  paired = FALSE, stranded = FALSE, bp.coverage = FALSE, ...)
 }
 \arguments{
 \item{obj}{An \code{\linkS4class{RNAseq}} object}

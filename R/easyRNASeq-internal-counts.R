@@ -135,12 +135,10 @@
     stop('The readCoverage slot is empty')
   }
 
-  ## not used by supposedly faster than aggregate
+  ## not used but supposedly faster than aggregate
   ##RleViewsList(rleList=trackCoverage, rangesList=exons)
 
-  nams <- switch(class(genomicAnnotation(obj)),
-                 "GRanges"=seqlevels(genomicAnnotation(obj)),
-                 "RangedData"=names(genomicAnnotation(obj)))
+  nams <- seqlevels(genomicAnnotation(obj))
 
   ## counts
   ## this would need fixing also!

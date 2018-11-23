@@ -255,7 +255,7 @@ setGeneric(
              readLength=integer(1),
              annotationMethod=c("biomaRt","env","gff","gtf","rda"),
              annotationFile=character(1),
-             annotationObject=RangedData(),
+             annotationObject=GRangesList(),
              format=c("bam","aln"),gapped=FALSE,
              count=c('exons','features','genes','islands','transcripts'),
              outputFormat=c("matrix","SummarizedExperiment","DESeq","edgeR","RNAseq"),

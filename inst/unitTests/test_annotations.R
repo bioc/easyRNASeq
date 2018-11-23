@@ -126,7 +126,7 @@
     datasource="gAnnot.rda",type="rda"))
 
   ## hardcoded tests
-  checkTrue(ncol(rngData)==4)
-  checkTrue(nrow(rngData)==110595)
-  checkIdentical(colnames(rngData),c("strand","exon","transcript","gene"))
+  checkTrue(ncol(elementMetadata(rngData))==3)
+  checkTrue(length(rngData)==110595)
+  checkIdentical(colnames(rngData),c("exon","transcript","gene"))
 }

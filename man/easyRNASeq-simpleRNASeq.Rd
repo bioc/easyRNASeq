@@ -6,8 +6,10 @@
 \alias{simpleRNASeq}
 \title{simpleRNASeq method}
 \usage{
-\S4method{simpleRNASeq}{BamFileList,RnaSeqParam}(bamFiles = BamFileList(),
-  param = RnaSeqParam(), nnodes = 1, verbose = TRUE, override = FALSE)
+
+  \S4method{simpleRNASeq}{BamFileList,RnaSeqParam}(bamFiles = BamFileList(),
+  param = RnaSeqParam(), nnodes = 1, verbose = TRUE,
+  override = FALSE)
 }
 \arguments{
 \item{bamFiles}{a \code{\linkS4class{BamFileList}} object}

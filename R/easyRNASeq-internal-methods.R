@@ -14,10 +14,10 @@
 #' \item .getArguments For a given function returns the arguments
 #' passed as part of the \dots{} that match that function formals.
 #' \item .getName Get the genomicAnnotation object names. Necessary to deal
-#' with the different possible annotation object: \code{RangedData},
+#' with the different possible annotation object:
 #' \code{GRanges} or \code{GRangesList}.
 #' \item .getWidth Get the genomicAnnotation withs. Necessary to deal
-#' with the different possible annotation object: \code{RangedData},
+#' with the different possible annotation object:
 #' \code{GRanges} or \code{GRangesList}.
 #' \item .normalizationDispatcher a function to dispatch
 #' the normalization depending on the 'outputFormat' chosen by the user.
@@ -629,7 +629,7 @@ setReplaceMethod(
     cat(...,"\n")
 }
 
-# get the names (exon ID, transcript ID, ...) from either a RangedData or GRangesList
+# get the names (exon ID, transcript ID, ...) from a GRangesList
 # NB this is possible, because we order the read object (read coverage) according to the annotations!!!!
 ".getName" <- function(obj,count){
   return(switch(class(genomicAnnotation(obj)),
@@ -646,9 +646,6 @@ setReplaceMethod(
                                                     "[",match(sub("s$","",count),colnames(genomicAnnotation(obj)))),
                                              unlist),
                                       use.names=FALSE)},
-                "RangedData"={
-                  unlist(values(genomicAnnotation(obj)[,sub("s$","",count)]),use.names=FALSE)[,1]
-                },
                 stop(paste("No .getName functionality implemented for the class: ",class(genomicAnnotation(obj)),"!",sep=""))
                 ))
 }
@@ -658,9 +655,6 @@ setReplaceMethod(
                 "GRanges"={
                   unlist(split(width(genomicAnnotation(obj)),
                                seqnames(genomicAnnotation(obj))),use.names=FALSE)
-                },
-                "RangedData"={
-                  width(genomicAnnotation(obj))
                 },
                 stop(paste("No .getWidth functionality implemented for the class: ",class(genomicAnnotation(obj)),"!",sep=""))
   ))

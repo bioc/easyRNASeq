@@ -22,7 +22,7 @@ showClass("RNAseq")
 
 }
 \seealso{
-\itemize{ \item\code{\linkS4class{RangedData}}
+\itemize{ \item\code{\linkS4class{GRangesList}}
 \item\code{\linkS4class{RleList}}
 \item\code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq function}}
 \item\code{\link[easyRNASeq:easyRNASeq-accessors]{RNAseq accessors}}

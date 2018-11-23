@@ -116,13 +116,9 @@ setMethod(
           signature="RNAseq",
           definition=function(obj){
 
-            genomicAnnotation(obj) <- switch(class(genomicAnnotation(obj)),
-                                             "GRanges"=genomicAnnotation(obj)[seqnames(genomicAnnotation(obj)) %in% names(readCoverage(obj))],
-                                             "RangedData"=genomicAnnotation(obj)[names(ranges(obj)) %in% names(readCoverage(obj))])
-            if(class(genomicAnnotation(obj))=="GRanges"){
+              genomicAnnotation(obj) <- genomicAnnotation(obj)[seqnames(genomicAnnotation(obj)) %in% names(readCoverage(obj))]
               seqlevels(genomicAnnotation(obj)) <- seqlevels(genomicAnnotation(obj))[seqlevels(genomicAnnotation(obj)) %in% names(readCoverage(obj))]
-            }
-            exCounts <- .doBasicCount(obj)
+              exCounts <- .doBasicCount(obj)
 
             # FIXME - names are not ordered in the right way!!!
             names(exCounts) <- .getName(obj,"exons")
@@ -138,12 +134,10 @@ setMethod(
           signature="RNAseq",
           definition=function(obj){
 
-            genomicAnnotation(obj) <- switch(class(genomicAnnotation(obj)),
-                                             "GRanges"=genomicAnnotation(obj)[seqnames(genomicAnnotation(obj)) %in% names(readCoverage(obj))],
-                                             "RangedData"=genomicAnnotation(obj)[names(ranges(obj)) %in% names(readCoverage(obj))])
-            if(class(genomicAnnotation(obj))=="GRanges"){
-              seqlevels(genomicAnnotation(obj)) <- seqlevels(genomicAnnotation(obj))[seqlevels(genomicAnnotation(obj)) %in% names(readCoverage(obj))]
-            }
+            genomicAnnotation(obj) <- genomicAnnotation(obj)[seqnames(genomicAnnotation(obj)) %in% names(readCoverage(obj))]
+
+            seqlevels(genomicAnnotation(obj)) <- seqlevels(genomicAnnotation(obj))[seqlevels(genomicAnnotation(obj)) %in% names(readCoverage(obj))]
+
             fCounts <- .doBasicCount(obj)
             names(fCounts) <-  .getName(obj,"features")
             readCounts(obj)<-.extendCountList(readCounts(obj),

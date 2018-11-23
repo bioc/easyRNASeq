@@ -41,8 +41,8 @@
 #' }}
 #' \item{the annotationObject When the
 #' \code{annotationMethods} is set to \code{env} or \code{rda}, a properly
-#' formatted \code{RangedData} or \code{GRangesList} object need to be
-#' provided. Check the paragraph RangedData in the vignette or the examples at
+#' formatted \code{GRangesList} object need to be
+#' provided. Check the vignette or the examples at
 #' the bottom of this page for examples. The data.frame-like structure of
 #' these objects is where \code{easyRNASeq} will look for the exon, feature,
 #' transcript, or gene identifier. Depending on the count method selected, it
@@ -68,7 +68,7 @@
 #' @aliases easyRNASeq-defunct easyRNASeq,character-method
 #' @rdname easyRNASeq-easyRNASeq
 #' @param annotationFile The location (full path) of the annotation file
-#' @param annotationObject A \code{\linkS4class{RangedData}} or
+#' @param annotationObject A
 #' \code{\linkS4class{GRangesList}} object containing the annotation.
 #' @param annotationMethod The method to fetch the annotation, one of
 #' "biomaRt","env","gff","gtf" or "rda". All methods but "biomaRt" and "env"
@@ -169,20 +169,17 @@
 #' 	# an example of a chr.map
 #' 	chr.map <- data.frame(from=c("2L","2R","MT"),to=c("chr2L","chr2R","chrMT"))
 #'
-#' 	# an example of a RangedData annotation
-#' 	gAnnot <- RangedData(
-#'                      IRanges(
+#' 	# an example of a GRangesList annotation
+#' 	grngs <- GRanges(seqnames=c("chr01","chr01","chr02"),
+#'                      ranges=IRanges(
 #'                              start=c(10,30,100),
 #'                              end=c(21,53,123)),
-#'                           space=c("chr01","chr01","chr02"),
 #'                           strand=c("+","+","-"),
 #'                           transcript=c("trA1","trA2","trB"),
 #'                           gene=c("gA","gA","gB"),
 #'                           exon=c("e1","e2","e3")
 #'                           )
 #'
-#' 	# an example of a GRangesList annotation
-#' 	grngs <- as(gAnnot,"GRanges")
 #' 	grngsList<-split(grngs,seqnames(grngs))
 #' }
 setMethod(
@@ -195,7 +192,7 @@ setMethod(
         readLength=integer(1),
         annotationMethod=c("biomaRt","env","gff","gtf","rda"),
         annotationFile=character(1),
-        annotationObject = RangedData(),
+        annotationObject = GRangesList(),
         format=c("bam","aln"),
         gapped=FALSE,
         count=c('exons','features','genes','islands','transcripts'),
@@ -426,21 +423,17 @@ setMethod(
 
         # check if the chromosome names in the annotation are valid
         if(validity.check){
-          if(organismName(obj) != "custom"){
-            chr.grep <- grep("chr",names(chrSize(obj)))
-            if(length(chr.grep)== 0 | !all(1:length(names(chrSize(obj))) %in% chr.grep)){
-              if(!ignoreWarnings){
-                warning("You enforce UCSC chromosome conventions, however the provided chromosome size list is not compliant. Correcting it.")
-              }
+            if(organismName(obj) != "custom"){
+                chr.grep <- grep("chr",names(chrSize(obj)))
+                if(length(chr.grep)== 0 | !all(1:length(names(chrSize(obj))) %in% chr.grep)){
+                    if(!ignoreWarnings){
+                        warning("You enforce UCSC chromosome conventions, however the provided chromosome size list is not compliant. Correcting it.")
+                    }
+                }
             }
-          }
-          if(class(genomicAnnotation(obj))=="GRanges"){
             seqlevels(genomicAnnotation(obj)) <- .convertToUCSC(seqlevels(genomicAnnotation(obj)),organismName(obj),chr.map)
             sel <- match(seqlevels(genomicAnnotation(obj)),names(chrSize(obj)))
             seqlengths(genomicAnnotation(obj))[!is.na(sel)] <- na.omit(chrSize(obj)[sel])
-          } else {
-            warning("FIXME - name convention for RangedData")
-          }
         }
 
         # create
@@ -524,12 +517,8 @@ setMethod(
                 stop(paste("The chromosome name you have given in the 'chr.sel' argument",
                            "does not match any chromosome in your annotation."))
             }
-            genomicAnnotation(obj) <- switch(class(genomicAnnotation(obj)),
-                                             "GRanges"=genomicAnnotation(obj)[seqnames(genomicAnnotation(obj)) %in% chr.sel],
-                                             "RangedData"= genomicAnnotation(obj)[space(genomicAnnotation(obj)) %in% chr.sel,])
-            if(class(genomicAnnotation(obj))=="GRanges"){
-              seqlevels(genomicAnnotation(obj)) <- seqlevels(genomicAnnotation(obj))[seqlevels(genomicAnnotation(obj)) %in% chr.sel]
-            }
+            genomicAnnotation(obj) <- genomicAnnotation(obj)[seqnames(genomicAnnotation(obj)) %in% chr.sel]
+            seqlevels(genomicAnnotation(obj)) <- seqlevels(genomicAnnotation(obj))[seqlevels(genomicAnnotation(obj)) %in% chr.sel]
         }
 
         # Check if the condition list have the same size as the file list
@@ -696,58 +685,58 @@ setMethod(
                                                        "geneModels"= as(geneModel(obj),"GRanges"),
                                                        switch(class(genomicAnnotation(obj)),
                                                               # FIXME; need to be tested!
-                                                              "RangedData"={
-                                                                  grng <- as(genomicAnnotation(obj),"GRanges")
-                                                                  sel <- !duplicated(grng$gene)
-                                                                  mins <- sapply(split(start(grng),grng$gene),min)
-                                                                  maxs <- sapply(split(end(grng),grng$gene),max)
-                                                                  grng <- grng[sel,-match("exon",colnames(grng))]
-                                                                  start(grng) <- mins[match(grng$gene,names(mins))]
-                                                                  end(grng) <- maxs[match(grng$gene,names(maxs))]
-                                                                  if(length(chr.sel)>0){
-                                                                      seqlevels(grng) <- chr.sel
-                                                                      seqnames(grng) <- factor(as.character(seqnames(grng)))
-                                                                  }
-                                                                  grng
-                                                              },
+                                                              # "RangedData"={
+                                                              #     grng <- as(genomicAnnotation(obj),"GRanges")
+                                                              #     sel <- !duplicated(grng$gene)
+                                                              #     mins <- sapply(split(start(grng),grng$gene),min)
+                                                              #     maxs <- sapply(split(end(grng),grng$gene),max)
+                                                              #     grng <- grng[sel,-match("exon",colnames(grng))]
+                                                              #     start(grng) <- mins[match(grng$gene,names(mins))]
+                                                              #     end(grng) <- maxs[match(grng$gene,names(maxs))]
+                                                              #     if(length(chr.sel)>0){
+                                                              #         seqlevels(grng) <- chr.sel
+                                                              #         seqnames(grng) <- factor(as.character(seqnames(grng)))
+                                                              #     }
+                                                              #     grng
+                                                              # },
                                                               # FIXME; need to be adapted as the above!
                                                               "GRangesList"=unlist(genomicAnnotation(obj)),
                                                               genomicAnnotation(obj)))
                                             },
                                             "transcripts"={
                                                 switch(class(genomicAnnotation(obj)),
-                                                       "RangedData"={
-                                                           grng <- as(genomicAnnotation(obj),"GRanges")
-                                                           sel <- !duplicated(grng$transcript)
-                                                           mins <- sapply(split(start(grng),grng$transcript),min)
-                                                           maxs <- sapply(split(end(grng),grng$transcript),max)
-                                                           grng <- grng[sel,-match("exon",colnames(grng))]
-                                                           start(grng) <- mins[match(grng$transcript,names(mins))]
-                                                           end(grng) <- maxs[match(grng$transcript,names(maxs))]
-                                                           if(length(chr.sel)>0){
-                                                               seqlevels(grng) <- chr.sel
-                                                               seqnames(grng) <- factor(as.character(seqnames(grng)))
-                                                           }
-                                                           grng
-                                                       },
+                                                       # "RangedData"={
+                                                       #     grng <- as(genomicAnnotation(obj),"GRanges")
+                                                       #     sel <- !duplicated(grng$transcript)
+                                                       #     mins <- sapply(split(start(grng),grng$transcript),min)
+                                                       #     maxs <- sapply(split(end(grng),grng$transcript),max)
+                                                       #     grng <- grng[sel,-match("exon",colnames(grng))]
+                                                       #     start(grng) <- mins[match(grng$transcript,names(mins))]
+                                                       #     end(grng) <- maxs[match(grng$transcript,names(maxs))]
+                                                       #     if(length(chr.sel)>0){
+                                                       #         seqlevels(grng) <- chr.sel
+                                                       #         seqnames(grng) <- factor(as.character(seqnames(grng)))
+                                                       #     }
+                                                       #     grng
+                                                       # },
                                                        # FIXME; need to be adapted as the above!
                                                        "GRangesList"=unlist(genomicAnnotation(obj)),
                                                        genomicAnnotation(obj))
                                             },
                                             switch(class(genomicAnnotation(obj)),
-                                                   "RangedData"=as(genomicAnnotation(obj),"GRanges"),
                                                    "GRangesList"=unlist(genomicAnnotation(obj)),
                                                    genomicAnnotation(obj))
                                             )
 
+                          # REMOVE?: RangedData are deprecated, keep to check if this is still needed
                           # correct the seq lengths if we have any NA (occurs when we use a RangedData)
-                          if(any(is.na(seqlengths(rowRanges)))){
-                              common.names <- intersect(names(chrSize(obj)),names(seqlengths(rowRanges)))
-                              # no need to check that we have a common set, it was done before so we must have one
-                              seqlengths(rowRanges)[match(common.names,
-                                                        names(seqlengths(rowRanges)))] <- chrSize(obj)[match(common.names,
-                                                                                                           names(chrSize(obj)))]
-                          }
+                          # if(any(is.na(seqlengths(rowRanges)))){
+                          #     common.names <- intersect(names(chrSize(obj)),names(seqlengths(rowRanges)))
+                          #     # no need to check that we have a common set, it was done before so we must have one
+                          #     seqlengths(rowRanges)[match(common.names,
+                          #                               names(seqlengths(rowRanges)))] <- chrSize(obj)[match(common.names,
+                          #                                                                                  names(chrSize(obj)))]
+                          # }
 
                           # the assay contains the data
                           sexp <- SummarizedExperiment(

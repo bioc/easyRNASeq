@@ -46,8 +46,8 @@
           if(class(try(gAnnot <- get("gAnnot",envir=l.env)))=="try-error"){
             stop("The provided annotation file does not contain a gAnnot object.")
           }
-          if(class(gAnnot) != "RangedData" & class(gAnnot) != "GRanges"){
-            stop("The provided gAnnot object is not of class 'RangedData' or 'GRanges'")
+          if(class(gAnnot) != "GRanges"){
+            stop("The provided gAnnot object is not of class 'GRanges'")
           }
           if(verbose){
             message("Validated a datasource of type ",type(obj))
