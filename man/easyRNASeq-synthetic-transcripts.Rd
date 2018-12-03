@@ -5,14 +5,13 @@
 \alias{createSyntheticTranscripts,AnnotParamCharacter-method}
 \alias{createSyntheticTranscripts}
 \alias{createSyntheticTranscripts,character-method}
-\alias{createSyntheticTranscripts,character-method}
 \title{Methods to create synthetic transcripts}
 \usage{
 \S4method{createSyntheticTranscripts}{AnnotParamCharacter}(obj,
   features = c("mRNA", "miRNA", "tRNA", "transcript"), verbose = TRUE)
 
-\S4method{createSyntheticTranscripts}{character}(obj, features = c("mRNA",
-  "miRNA", "tRNA", "transcript"), verbose = TRUE,
+\S4method{createSyntheticTranscripts}{character}(obj,
+  features = c("mRNA", "miRNA", "tRNA", "transcript"), verbose = TRUE,
   output = c("Genome_intervals", "GRanges"), input = c("gff3", "gtf"))
 }
 \arguments{

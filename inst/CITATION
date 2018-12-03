@@ -6,13 +6,13 @@ citEntry(entry="article",
                               as.person("Lars M. Steinmetz" )),
          year = 2012,
          journal = "Bioinformatics",
-         volume = "in press",
-         pages = "in press",
+         volume = "28(19)",
+         pages = "2532-3",
          doi = "10.1093/bioinformatics/bts477",
          url = "http://dx.doi.org/10.1093/bioinformatics/bts477",
-         
-         textVersion = 
-         paste("easyRNASeq: a bioconductor package for processing RNA-Seq data", 
+
+         textVersion =
+         paste("easyRNASeq: a bioconductor package for processing RNA-Seq data",
                "Nicolas Delhomme; Ismael Padioleau; Eileen E. Furlong; Lars M. Steinmetz",
                "Bioinformatics 2012; doi: 10.1093/bioinformatics/bts477",sep="\n"))
 

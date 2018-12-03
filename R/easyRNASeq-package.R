@@ -92,12 +92,11 @@
 #'       \code{\link[SummarizedExperiment:RangedSummarizedExperiment-class]{
 #'         The RangedSummarizedExperiment assay accessor}
 #'       }
-#'       \code{\link[locfit:locfit]{The locfit function}}
-#'       \code{\link[Rsamtools:BamFileList]{The BamFileList constructor}}
-#'       \code{\link[IRanges:IRanges-constructor]{The IRanges constructor}}
-#'       \code{\link[IRanges:RangedData-class]{The RangedData constructor}}
-#'       \code{\link[ShortRead:srFilter]{For the SRFilterResult,
-#'       chromosomeFilter, compose and nFilter methods}}
+#'       The locfit function \code{\link[locfit]{locfit}}
+#'       The BamFileList constructor \code{\link[Rsamtools]{BamFileList-class}}
+#'       The IRanges constructor \code{\link[IRanges]{IRanges-constructor}}
+#'       For the SRFilterResult,
+#'       chromosomeFilter, compose and nFilter methods\code{\link[ShortRead]{srFilter}}
 #'     }
 #'   }
 #'

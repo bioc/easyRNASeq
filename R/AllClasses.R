@@ -29,7 +29,8 @@
 #' \item\code{\link[easyRNASeq:easyRNASeq-coverage-methods]{easyRNASeq
 #' coverage methods}}
 #' \item\code{\link[easyRNASeq:easyRNASeq-summarization-methods]{easyRNASeq
-#' summarization methods}} \item\code{\link[easyRNASeq:print-methods]{print}}
+#' summarization methods}}
+#' \item\code{\link[easyRNASeq:print-methods]{print}}
 #' }
 #' @keywords classes
 #' @examples
@@ -187,7 +188,7 @@ setClass("AnnotParamObject",
 #' a count-table using the \code{\link[easyRNASeq:easyRNASeq-simpleRNASeq]{simpleRNASeq function}}.
 #' The precision slot is used to determine the count unit:
 #' \itemize{
-#' \item{reads}{default. The standard \code{\link[GenomicAlignments:summarizeOverlaps]{GenomicAlignments summarizeOverlaps function}} is used to extract the read counts}
+#' \item{reads}{default. The standard \code{\link[GenomicAlignments]{summarizeOverlaps-methods}} function is used to extract the read counts}
 #' \item{bp}{The \code{\link[easyRNASeq:easyRNASeq-summarization-methods]{easyRNASeq summarization functions}} are used to extract the read covered bp counts}
 #' }
 #' @name RnaSeqParam class
@@ -205,7 +206,7 @@ setClass("AnnotParamObject",
 #' \item \code{\link[easyRNASeq:easyRNASeq-AnnotParam]{AnnotParam constructor}}
 #' \item \code{\linkS4class{BamParam}}
 #' \item \code{\link[easyRNASeq:easyRNASeq-BamParam]{BamParam constructor}}
-#' \item \code{\link[GenomicAlignments:summarizeOverlaps]{summarizeOverlaps}}
+#' \item \code{\link[GenomicAlignments]{summarizeOverlaps-methods}}
 #' \item \code{\link[easyRNASeq:easyRNASeq-summarization-methods]{easyRNASeq summarization functions}}
 #' }
 #' @keywords classes

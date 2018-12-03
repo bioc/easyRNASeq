@@ -17,9 +17,9 @@ unsafeAppend(obj1,obj2)
 \item{x}{An object of the \code{\linkS4class{GRanges}} or
 \code{\linkS4class{GRangesList}} class}
 
-\item{do.NULL}{see \code{\link[BiocGenerics:colnames]{colnames}} for details}
+\item{do.NULL}{see \code{\link[BiocGenerics]{row_colnames}} for details}
 
-\item{prefix}{see \code{\link[BiocGenerics:colnames]{colnames}} for details}
+\item{prefix}{see \code{\link[BiocGenerics]{row_colnames}} for details}
 
 \item{obj1}{A \code{\linkS4class{GAlignments}} object}
 
@@ -90,7 +90,7 @@ unsafeAppend(GAlignments(),GAlignments())
 \item \code{\linkS4class{GRanges}}
 \item \code{\linkS4class{GRangesList}}
 \item \code{\linkS4class{GAlignments}}
-\code{\link[BiocGenerics:colnames]{colnames}}
+\code{\link[BiocGenerics]{row_colnames}}
 }
 }
 \author{

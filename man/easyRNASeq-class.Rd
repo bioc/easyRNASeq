@@ -33,7 +33,8 @@ correction methods}}
 \item\code{\link[easyRNASeq:easyRNASeq-coverage-methods]{easyRNASeq
 coverage methods}}
 \item\code{\link[easyRNASeq:easyRNASeq-summarization-methods]{easyRNASeq
-summarization methods}} \item\code{\link[easyRNASeq:print-methods]{print}}
+summarization methods}}
+\item\code{\link[easyRNASeq:print-methods]{print}}
 }
 }
 \author{

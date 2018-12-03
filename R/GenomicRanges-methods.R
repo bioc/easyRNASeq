@@ -26,8 +26,8 @@
 #' @rdname GenomicRanges-methods
 #' @param x An object of the \code{\linkS4class{GRanges}} or
 #' \code{\linkS4class{GRangesList}} class
-#' @param do.NULL see \code{\link[BiocGenerics:colnames]{colnames}} for details
-#' @param prefix see \code{\link[BiocGenerics:colnames]{colnames}} for details
+#' @param do.NULL see \code{\link[BiocGenerics]{row_colnames}} for details
+#' @param prefix see \code{\link[BiocGenerics]{row_colnames}} for details
 #' @param obj1 A \code{\linkS4class{GAlignments}} object
 #' @param obj2 A \code{\linkS4class{GAlignments}} object
 #' @usage colnames(x, do.NULL = TRUE, prefix = "col")
@@ -43,7 +43,7 @@
 #' \item \code{\linkS4class{GRanges}}
 #' \item \code{\linkS4class{GRangesList}}
 #' \item \code{\linkS4class{GAlignments}}
-#' \code{\link[BiocGenerics:colnames]{colnames}}
+#' \code{\link[BiocGenerics]{row_colnames}}
 #' }
 #' @keywords methods
 #' @examples

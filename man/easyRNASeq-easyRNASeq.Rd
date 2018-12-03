@@ -7,18 +7,20 @@
 \title{easyRNASeq method}
 \usage{
 \S4method{easyRNASeq}{character}(filesDirectory = getwd(),
-  organism = character(1), chr.sizes = c("auto"), readLength = integer(1),
-  annotationMethod = c("biomaRt", "env", "gff", "gtf", "rda"),
-  annotationFile = character(1), annotationObject = RangedData(),
-  format = c("bam", "aln"), gapped = FALSE, count = c("exons", "features",
-  "genes", "islands", "transcripts"), outputFormat = c("matrix",
-  "SummarizedExperiment", "DESeq", "edgeR", "RNAseq"), pattern = character(1),
+  organism = character(1), chr.sizes = c("auto"),
+  readLength = integer(1), annotationMethod = c("biomaRt", "env",
+  "gff", "gtf", "rda"), annotationFile = character(1),
+  annotationObject = RangedData(), format = c("bam", "aln"),
+  gapped = FALSE, count = c("exons", "features", "genes", "islands",
+  "transcripts"), outputFormat = c("matrix", "SummarizedExperiment",
+  "DESeq", "edgeR", "RNAseq"), pattern = character(1),
   filenames = character(0), nbCore = 1, filter = srFilter(),
-  type = "SolexaExport", chr.sel = c(), summarization = c("bestExons",
-  "geneModels"), normalize = FALSE, max.gap = integer(1), min.cov = 1L,
-  min.length = integer(1), plot = TRUE, conditions = c(),
-  validity.check = TRUE, chr.map = data.frame(), ignoreWarnings = FALSE,
-  silent = FALSE, ...)
+  type = "SolexaExport", chr.sel = c(),
+  summarization = c("bestExons", "geneModels"), normalize = FALSE,
+  max.gap = integer(1), min.cov = 1L, min.length = integer(1),
+  plot = TRUE, conditions = c(), validity.check = TRUE,
+  chr.map = data.frame(), ignoreWarnings = FALSE, silent = FALSE,
+  ...)
 }
 \arguments{
 \item{filesDirectory}{The directory where the files to be used are located.

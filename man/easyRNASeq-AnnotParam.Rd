@@ -10,8 +10,8 @@
 \alias{AnnotParam,GRanges-method}
 \title{AnnotParam constructor}
 \usage{
-\S4method{AnnotParam}{character}(datasource = character(0), type = c("gff3",
-  "biomaRt", "gtf", "rda"))
+\S4method{AnnotParam}{character}(datasource = character(0),
+  type = c("gff3", "biomaRt", "gtf", "rda"))
 }
 \arguments{
 \item{datasource}{a character or a \code{\linkS4class{RangedData}} or a \code{\linkS4class{GRanges}} object. See details.}
