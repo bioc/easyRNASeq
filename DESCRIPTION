@@ -45,3 +45,4 @@ LazyLoad: yes
 VignetteBuilder: knitr
 biocViews: GeneExpression, RNASeq, Genetics, Preprocessing, ImmunoOncology
 RoxygenNote: 6.1.1
+Encoding: UTF-8

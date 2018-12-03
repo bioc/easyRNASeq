@@ -20,16 +20,13 @@
 #' @author Nicolas Delhomme
 #' @seealso \itemize{ \item\code{\linkS4class{GRangesList}}
 #' \item\code{\linkS4class{RleList}}
-#' \item\code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq function}}
-#' \item\code{\link[easyRNASeq:easyRNASeq-accessors]{RNAseq accessors}}
-#' \item\code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq
-#' annotation methods}}
-#' \item\code{\link[easyRNASeq:easyRNASeq-correction-methods]{easyRNASeq
-#' correction methods}}
-#' \item\code{\link[easyRNASeq:easyRNASeq-coverage-methods]{easyRNASeq
-#' coverage methods}}
-#' \item\code{\link[easyRNASeq:easyRNASeq-summarization-methods]{easyRNASeq
-#' summarization methods}} \item\code{\link[easyRNASeq:print-methods]{print}}
+#' \item\code{\link{easyRNASeq-easyRNASeq}
+#' \item\code{\link{easyRNASeq-accessors}
+#' \item\code{\link{easyRNASeq-annotation-methods}
+#' \item\code{\link{easyRNASeq-correction-methods}
+#' \item\code{\link{easyRNASeq-coverage-methods}
+#' \item\code{\link{easyRNASeq-summarization-methods}
+#' \item\code{\link{print-methods}
 #' }
 #' @keywords classes
 #' @examples
