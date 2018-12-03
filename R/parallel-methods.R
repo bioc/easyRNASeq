@@ -5,11 +5,11 @@
 ##' The parallelize function ease the use of the parallel package. If the number
 ##' of nodes provided by the user is 1, then a simple 'lapply' is used, otherwise
 ##' a cluster object is created and the object dispatched for parallelization.
-##' 
+##'
 ##' @rdname parallel-methods
 ##' @name parallel additional methods
 ##' @aliases parallelize parallelize,list,function-method
-##' parallelize,vector,function-method 
+##' parallelize,vector,function-method
 ##' parallelize,GRangesList,function-method
 ##' parallelize,BamFileList,function-method
 ##' @param fun the function to be applied in parallel
@@ -19,8 +19,7 @@
 ##' @return the result of the \code{\link[parallel:clusterApply]{clusterApply}} function.
 ##' @author Nicolas Delhomme
 ##' @seealso \code{\link[parallel:clusterApply]{clusterApply}}
-##' \code{\link[parallel:makePSOCKcluster]{makePSOCKcluster}}
-##' \code{\link[parallel:stopCluster]{stopCluster}}
+##' \code{makePSOCKcluster} and \code{stopCluster} in \code{\link[parallel]{makeCluster}}
 ##' @keywords methods
 ##' @examples
 ##' parallelize(list(a<-c(1,2),b<-c(2,1)),sum,nnodes=1)

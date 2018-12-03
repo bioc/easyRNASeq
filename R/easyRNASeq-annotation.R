@@ -1,5 +1,5 @@
 ##' Defunct annotation function
-##' 
+##'
 ##' The \code{fetchAnnotation} and \code{knownOrganisms} function are now
 ##' defunct. The \code{fetchAnnotation} function has been replaced by the
 ##' \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{getAnnotation}} method.
@@ -26,7 +26,7 @@ NULL
 ##' "Dmelanogaster".}
 ##' \item{When reading from a gff3/gtf file, a version 3 formatted
 ##' gff or a gtf (an Ensembl defined gff2 version) is expected. The function
-##' \pkg{genomeIntervals} \code{\link[genomeIntervals:readGff3]{readGff3}} is
+##' \pkg{genomeIntervals} \code{\link[genomeIntervals:readGff3]{genomeIntervals-readGff3}} is
 ##' used to import the data.}
 ##' }
 ##'

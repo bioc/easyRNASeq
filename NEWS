@@ -1,7 +1,29 @@
+CHANGES IN VERSION 2.19.2
+-------------------------
+  o Added the volume and page in the citation
+
+  o Added the ImmunoOncology field per request from Bioc core
+
+  o Fixed the documentation warnings on Windows
+
 CHANGES IN VERSION 2.19.1
 -------------------------
 
   o Dropped the RangedData support as these are now deprecated.
+
+CHANGES IN VERSION 2.18.2
+-------------------------
+
+  o Added the ImmunoOncology field per request from Bioc core
+
+  o Added the volume and page in the citation
+
+  o Fixed the documentation warnings on Windows
+
+CHANGES IN VERSION 2.18.1
+-------------------------
+
+  o Adapted an example as RangedData objects are being deprecated.
 
 CHANGES IN VERSION 2.15.5
 -------------------------

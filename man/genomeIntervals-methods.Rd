@@ -36,7 +36,7 @@ type(annot)
 \itemize{
 \item \code{\link[genomeIntervals:Genome_intervals_stranded-class]{genomeIntervals
 object}}
-\item \code{\link[genomeIntervals:readGff3]{readGff3 function}}
+\item \code{\link[genomeIntervals]{genomeIntervals-readGff3}}
 }
 }
 \author{

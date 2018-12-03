@@ -38,8 +38,7 @@ parallelize(list(a<-c(1,2),b<-c(2,1)),sum,nnodes=1)
 }
 \seealso{
 \code{\link[parallel:clusterApply]{clusterApply}}
-\code{\link[parallel:makePSOCKcluster]{makePSOCKcluster}}
-\code{\link[parallel:stopCluster]{stopCluster}}
+\code{makePSOCKcluster} and \code{stopCluster} in \code{\link[parallel]{makeCluster}}
 }
 \author{
 Nicolas Delhomme
