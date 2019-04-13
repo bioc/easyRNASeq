@@ -62,20 +62,19 @@
 #' @keywords methods
 #' @examples
 #' \dontrun{
-#' library(curl)
 #' library(BSgenome.Dmelanogaster.UCSC.dm3)
 #'
 #'  # get the example data files - we retrieve a set of example bam files
-#'  # from GitHub using curl, as well as their index.
+#'  # from GitHub, as well as their index.
 #' invisible(sapply(c("ACACTG","ACTAGC"),function(bam){
-#'      curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+#'      download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
 #'                           "master/tutorial/easyRNASeq/",bam,".bam"),paste0(bam,".bam"))
-#'      curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+#'      download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
 #'                           "master/tutorial/easyRNASeq/",bam,".bam.bai"),paste0(bam,".bam.bai"))
 #'  }))
 #'
 #'  # get an example annotation file - we retrieve it from GitHub using curl
-#'  invisible(curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+#'  invisible(download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
 #'        "master/tutorial/easyRNASeq/gAnnot.rda"),"gAnnot.rda"))
 #'
 #'

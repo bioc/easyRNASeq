@@ -23,9 +23,8 @@ column.  }}
 }
 \examples{
 
-library(curl)
 library(genomeIntervals)
-invisible(curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+invisible(download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
                                "master/tutorial/easyRNASeq/Dmel-mRNA-exon-r5.52.gff3.gz"),
                         "Dmel-mRNA-exon-r5.52.gff3.gz"))
 annot<-readGff3("Dmel-mRNA-exon-r5.52.gff3.gz",quiet=TRUE)

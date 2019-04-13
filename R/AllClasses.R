@@ -20,13 +20,13 @@
 #' @author Nicolas Delhomme
 #' @seealso \itemize{ \item\code{\linkS4class{GRangesList}}
 #' \item\code{\linkS4class{RleList}}
-#' \item\code{\link{easyRNASeq-easyRNASeq}
-#' \item\code{\link{easyRNASeq-accessors}
-#' \item\code{\link{easyRNASeq-annotation-methods}
-#' \item\code{\link{easyRNASeq-correction-methods}
-#' \item\code{\link{easyRNASeq-coverage-methods}
-#' \item\code{\link{easyRNASeq-summarization-methods}
-#' \item\code{\link{print-methods}
+#' \item\code{\link{easyRNASeq-easyRNASeq}}
+#' \item\code{\link{easyRNASeq-accessors}}
+#' \item\code{\link{easyRNASeq-annotation-methods}}
+#' \item\code{\link{easyRNASeq-correction-methods}}
+#' \item\code{\link{easyRNASeq-coverage-methods}}
+#' \item\code{\link{easyRNASeq-summarization-methods}}
+#' \item\code{\link{print-methods}}
 #' }
 #' @keywords classes
 #' @examples

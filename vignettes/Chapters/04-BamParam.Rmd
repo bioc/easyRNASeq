@@ -25,8 +25,7 @@ we first need to download an excerpt of the data.
 
 We first retrieve the file listing and md5 codes
 ```{r bam files}
-library(curl)
-curl_download(url=paste0("ftp://ftp.plantgenie.org/Tutorials/RnaSeqTutorial/",
+download.file(url=paste0("ftp://ftp.plantgenie.org/Tutorials/RnaSeqTutorial/",
                          "data/star/md5.txt"),
                   destfile="md5.txt")
 ```
@@ -38,7 +37,7 @@ datasets. We get these from the sample information contained within this package
 ```{r data}
 data(RobinsonDelhomme2014)
 lapply(RobinsonDelhomme2014[1:6,"Filename"],function(f){
-    curl_download(url=paste0("ftp://ftp.plantgenie.org/Tutorials/",
+    download.file(url=paste0("ftp://ftp.plantgenie.org/Tutorials/",
                              "RnaSeqTutorial/data/star/",f),
                   destfile=f)
 })
