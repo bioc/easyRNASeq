@@ -75,8 +75,7 @@
 #' @examples
 #'
 #'   # get the example file
-#'   library(curl)
-#'   invisible(curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+#'   invisible(download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
 #'                               "master/tutorial/easyRNASeq/",
 #'                               "Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"),
 #'                        "Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"))

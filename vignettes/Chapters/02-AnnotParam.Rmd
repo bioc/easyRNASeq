@@ -18,8 +18,7 @@ the original annotation gff3 file for _P. trichocarpa_, a close related species
 of the trees used in the study into the current directory.
 
 ```{r P trichocarpa annotation}
-library(curl)
-curl_download(url=paste0("ftp://ftp.plantgenie.org/Data/PopGenIE/",
+download.file(url=paste0("ftp://ftp.plantgenie.org/Data/PopGenIE/",
                          "Populus_trichocarpa/v3.0/v10.1/GFF3/",
                          "Ptrichocarpa_210_v3.0_gene_exons.gff3.gz"),
                   destfile=,"./Ptrichocarpa_210_v3.0_gene_exons.gff3.gz")

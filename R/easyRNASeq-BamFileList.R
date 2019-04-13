@@ -12,13 +12,12 @@
 #' @seealso \code{linkS4class{BamFileList-class}}{BamFileList}
 #' \code{\link[base:list.files]{dir}}
 #' @examples
-#' library(curl)
 #'  # get the example data files - we retrieve a set of example bam files
-#'  # from GitHub using curl, as well as their index.
+#'  # from GitHub, as well as their index.
 #'  invisible(sapply(c("ACACTG","ACTAGC"),function(bam){
-#'      curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+#'      download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
 #'                           "master/tutorial/easyRNASeq/",bam,".bam"),paste0(bam,".bam"))
-#'      curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+#'      download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
 #'                           "master/tutorial/easyRNASeq/",bam,".bam.bai"),paste0(bam,".bam.bai"))
 #'  }))
 #'

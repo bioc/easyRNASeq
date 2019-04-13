@@ -95,7 +95,7 @@ that were used.
 	# the barcode
 	barcodes=c("ACACTG","ACTAGC","ATGGCT","TTGCGA")
 
-invisible(curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+invisible(download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
        "master/tutorial/easyRNASeq/multiplex_export.txt.gz"),
        "multiplex_export.txt.gz"))
 

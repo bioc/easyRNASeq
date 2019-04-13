@@ -41,11 +41,10 @@ Describes extensions to the Rsamtools package.
 \code{validate} checks whether the BAM file exists and if a BAI index is present.
 }
 \examples{
-library(curl)
  invisible(sapply(c("ACACTG","ACTAGC"),function(bam){
-     curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+     download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
                           "master/tutorial/easyRNASeq/",bam,".bam"),paste0(bam,".bam"))
-     curl_download(paste0("https://github.com/UPSCb/UPSCb/raw/",
+     download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
                           "master/tutorial/easyRNASeq/",bam,".bam.bai"),paste0(bam,".bam.bai"))
  }))
 
