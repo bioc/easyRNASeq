@@ -1,6 +1,6 @@
 Package: easyRNASeq
 Version: 2.19.3
-Date: 2019-04-10
+Date: 2019-04-23
 Type: Package
 Title: Count summarization and normalization for RNA-Seq data
 Author: Nicolas Delhomme, Ismael Padioleau, Bastian Schiffthaler, Niklas Maehler
@@ -11,6 +11,7 @@ Description: Calculates the coverage of high-throughput short-reads against
     or 'edgeR' package.
 Imports:
     Biobase (>= 2.41.2),
+    BiocFileCache (>= 1.7.10),
     BiocGenerics (>= 0.27.1),
     BiocParallel (>= 1.15.15),
     biomaRt (>= 2.37.9),
@@ -28,6 +29,7 @@ Imports:
     locfit,
     methods,
     parallel,
+    rappdirs (>= 0.3.1),
     Rsamtools (>= 1.33.7),
     S4Vectors (>= 0.19.23),
     ShortRead (>= 1.39.0),

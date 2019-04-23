@@ -38,19 +38,19 @@
   ### =======================
   ### rda
   ### =======================
-  annotParam <- AnnotParam("gAnnot.rda",type="rda")
+  annotParam <- AnnotParam(fetchData("gAnnot.rda"),type="rda")
   checkTrue(easyRNASeq:::.validate(annotParam))
 
   ### =======================
   ### gtf
   ### =======================
-  annotParam <- AnnotParam("Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz",type="gtf")
+  annotParam <- AnnotParam(fetchData("Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"),type="gtf")
   checkTrue(easyRNASeq:::.validate(annotParam))
 
   ### =======================
   ### gff3
   ### =======================
-  annotParam <- AnnotParam(datasource="Dmel-mRNA-exon-r5.52.gff3.gz")
+  annotParam <- AnnotParam(datasource=fetchData("Dmel-mRNA-exon-r5.52.gff3.gz"))
   checkTrue(easyRNASeq:::.validate(annotParam))
 
 }
@@ -108,7 +108,7 @@
 
 "test_getAnnotation_gff3" <- function(){
   obtained <- getAnnotation(AnnotParam(
-    datasource="Dmel-mRNA-exon-r5.52.gff3.gz"))
+    datasource=fetchData("Dmel-mRNA-exon-r5.52.gff3.gz")))
   checkEquals(length(obtained),177816)
   checkIdentical(levels(seqnames(obtained)),
                  paste("chr",c("2L","2LHet","2R","2RHet",
@@ -123,7 +123,7 @@
 
 "test_getAnnotation_rda" <- function(){
   rngData <- getAnnotation(AnnotParam(
-    datasource="gAnnot.rda",type="rda"))
+    datasource=fetchData("gAnnot.rda"),type="rda"))
 
   ## hardcoded tests
   checkTrue(ncol(elementMetadata(rngData))==3)

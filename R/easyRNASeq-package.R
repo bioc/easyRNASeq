@@ -100,36 +100,29 @@
 #'   }
 #'
 #' @examples
+#'  # the data
+#'  tdir <- tutorialData()
 #'
 #'   # get the example annotation file - we retrieve a gtf file from GitHub
-#'   invisible(download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
-#'   "master/tutorial/easyRNASeq/Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"),
-#'             "Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"))
-#'
-#'   # get the example data files - we retrieve a set of example bam files
-#'   # from GitHub, as well as their index.
-#'   invisible(sapply(c("ACACTG","ACTAGC"),function(bam){
-#'     download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
-#'       "master/tutorial/easyRNASeq/",bam,".bam"),paste0(bam,".bam"))
-#'     download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
-#'       "master/tutorial/easyRNASeq/",bam,".bam.bai"),paste0(bam,".bam.bai"))
-#'   }))
+#'   annot <- fetchData("Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz")
 #'
 #'   # create the AnnotParam
 #'   annotParam <- AnnotParam(
-#'     datasource="Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz",
+#'     datasource=annot,
 #'     type="gtf")
 #'
 #'   # create the synthetic transcripts
 #'   annotParam <- createSyntheticTranscripts(annotParam,verbose=FALSE)
 #'
-#'      # create the RnaSeqParam
-#'      rnaSeqParam <- RnaSeqParam(annotParam=annotParam,countBy="gene")
+#'  # create the RnaSeqParam
+#'  rnaSeqParam <- RnaSeqParam(annotParam=annotParam,countBy="gene")
 #'
-#'   # get the bamfiles
-#'   bamFiles <- getBamFileList(dir(pattern="^[A,T].*\\.bam$",full.names=TRUE))
+#'   # get the bamfiles (from the Bioc cache in this example)
+#'  filenames <- dir(tdir,pattern="[A,T].*\\.bam$",full.names=TRUE)
+#'  indexnames <- sapply(paste0(sub(".*_","",basename(filenames)),".bai"),fetchData)
+#'  bamFiles <- getBamFileList(filenames,indexnames)
 #'
-#'      # get a RangedSummarizedExperiment containing the counts table
+#'  # get a RangedSummarizedExperiment containing the counts table
 #'   sexp <- simpleRNASeq(
 #'       bamFiles=bamFiles,
 #'       param=rnaSeqParam,
@@ -164,6 +157,7 @@ NULL
 #' @importClassesFrom ShortRead AlignedRead ShortReadQ
 # import S4 methods
 #' @importMethodsFrom Biobase fData varMetadata
+#' @importFrom BiocFileCache bfcadd bfcdownload bfcneedsupdate bfcquery bfcrpath
 #' @importMethodsFrom BiocGenerics annotation cbind clusterApply
 #' colnames counts duplicated estimateDispersions estimateSizeFactors
 #' eval fileName get intersect lapply match order path paste pmax rbind
@@ -207,12 +201,13 @@ NULL
 #' @importFrom LSD heatscatter
 #' @importFrom methods as extends is new
 #' @importFrom parallel makePSOCKcluster parLapply stopCluster
+#' @importFrom rappdirs user_cache_dir
 #' @importFrom Rsamtools BamFileList bamFlagTest index scanBamFlag
 #' @importFrom S4Vectors endoapply DataFrame queryHits SimpleList
 #' @importFrom ShortRead alignData chromosomeFilter compose nFilter
 #' SRFilterResult
 #' @importFrom stats aggregate na.omit
-#' @importFrom utils combn download.file str packageVersion
+#' @importFrom utils combn str packageVersion
 # and export!
 #' @exportClass BamFileList GRanges RangedSummarizedExperiment
 #' @exportMethod assay assays colData estimateDispersions estimateSizeFactors fileName metadata rowRanges seqinfo seqlengths seqlevels "seqlevels<-" seqnames "seqnames<-" split srFilter SummarizedExperiment width writeFastq writeGff3
@@ -292,19 +287,23 @@ NULL
 #' \itemize{
 #' \item GTF.FIELDS
 #' \item ANNOTATION.TYPE
+#' \item TUTORIAL.DATA
 #' }
 #'
 #' These objects hold the following information
 #' \itemize{
 #' \item GTF.FIELDS \code{c("gene_id","transcript_id","exon_id","gene_name")}
 #' \item ANNOTATION.TYPE \code{c(mRNA="mRNA",exon="exon")}
+#' \item TUTORIAL.DATA: The list of files needed for the vignette, help and test
+#' pages
 #' }
 #' and are designed as global variables to expose the
-#' fact that they are hardcoded. There exist as
+#' fact that they are hardcoded. These exist as
 #' placeholder in case a user would require different
 #' values for these.
 #'
 #' @aliases easyRNASeq-global-variables .onAttach ANNOTATION.TYPE GTF.FIELDS
+#' TUTORIAL.DATA
 #' @name easyRNASeq-global-variables
 #' @rdname easyRNASeq-global-variables
 #' @param libname a character string giving the library directory where the package defining the namespace was found.
@@ -313,10 +312,26 @@ NULL
 #' @keywords internal
 globalVariables("GTF.FIELDS")
 globalVariables("ANNOTATION.TYPE")
+globalVariables("TUTORIAL.DATA")
 ".onAttach" <- function(libname,pkgname){
   assign("GTF.FIELDS",c("gene_id","transcript_id","exon_id",
                         "gene_name"),
          envir=as.environment("package:easyRNASeq"))
   assign("ANNOTATION.TYPE",c(mRNA="mRNA",exon="exon"),
          envir=as.environment("package:easyRNASeq"))
+  .gitHubURL <- "https://github.com/UPSCb/UPSCb/raw/master/tutorial/easyRNASeq"
+  assign("TUTORIAL.DATA",
+         c(ACACTG.bam=file.path(.gitHubURL,"ACACTG.bam"),
+           ACTAGC.bam=file.path(.gitHubURL,"ACTAGC.bam"),
+           ATGGCT.bam=file.path(.gitHubURL,"ATGGCT.bam"),
+           TTGCGA.bam=file.path(.gitHubURL,"TTGCGA.bam"),
+           ACACTG.bam.bai=file.path(.gitHubURL,"ACACTG.bam.bai"),
+           ACTAGC.bam.bai=file.path(.gitHubURL,"ACTAGC.bam.bai"),
+           ATGGCT.bam.bai=file.path(.gitHubURL,"ATGGCT.bam.bai"),
+           TTGCGA.bam.bai=file.path(.gitHubURL,"TTGCGA.bam.bai"),
+           "Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"=
+               file.path(.gitHubURL,"Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"),
+           gAnnot.rda=file.path(.gitHubURL,"gAnnot.rda"),
+           "Dmel-mRNA-exon-r5.52.gff3.gz"=file.path(.gitHubURL,"Dmel-mRNA-exon-r5.52.gff3.gz")),
+  envir=as.environment("package:easyRNASeq"))
 }

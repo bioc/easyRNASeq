@@ -77,28 +77,20 @@ defined.  }
 \dontrun{
 library(BSgenome.Dmelanogaster.UCSC.dm3)
 
- # get the example data files - we retrieve a set of example bam files
- # from GitHub, as well as their index.
-invisible(sapply(c("ACACTG","ACTAGC"),function(bam){
-     download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
-                          "master/tutorial/easyRNASeq/",bam,".bam"),paste0(bam,".bam"))
-     download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
-                          "master/tutorial/easyRNASeq/",bam,".bam.bai"),paste0(bam,".bam.bai"))
- }))
+ # get the example data files
+ tdir <- tutorialData()
 
  # get an example annotation file - we retrieve it from GitHub using curl
- invisible(download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
-       "master/tutorial/easyRNASeq/gAnnot.rda"),"gAnnot.rda"))
-
+ gAnnot.rda <- fetchData("gAnnot.rda")
 
 	# create an RNAseq object
 	# summarizing 2 bam files by exons
-	rnaSeq <- easyRNASeq(".",
+	rnaSeq <- easyRNASeq(tdir,
                      organism="Dmelanogaster",
                      chr.sizes=seqlengths(Dmelanogaster),
                      readLength=36L,
                      annotationMethod="rda",
-                     annotationFile="gAnnot.rda",
+                     annotationFile=gAnnot.rda,
                      format="bam",
                      count="exons",
                      pattern="[A,C,T,G]{6}\\\\.bam$",

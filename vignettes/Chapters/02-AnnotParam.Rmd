@@ -15,7 +15,7 @@ by the name of _gAnnot_.
 In this tutorial, we will reproduce the analysis performed in _Robinson, 
 Delhomme et al._ [@Robinson:2014p6362]. For that we will start by downloading
 the original annotation gff3 file for _P. trichocarpa_, a close related species
-of the trees used in the study into the current directory.
+of the trees used in the study into the current directory. 
 
 ```{r P trichocarpa annotation}
 download.file(url=paste0("ftp://ftp.plantgenie.org/Data/PopGenIE/",

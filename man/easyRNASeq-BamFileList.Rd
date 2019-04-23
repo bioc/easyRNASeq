@@ -3,13 +3,17 @@
 \docType{methods}
 \name{getBamFileList}
 \alias{getBamFileList}
-\alias{getBamFileList,character-method}
+\alias{getBamFileList,character,character-method}
+\alias{getBamFileList,character,missing-method}
 \title{Get a BamFileList from a list of filenames}
 \usage{
-\S4method{getBamFileList}{character}(filenames = character(0))
+\S4method{getBamFileList}{character,character}(filenames = character(0),
+  indexnames = character(0))
 }
 \arguments{
-\item{filenames}{a character vector containing fully defined filenames}
+\item{filenames}{a character vector containing fully defined BAM file filenames}
+
+\item{indexnames}{a character vector containing fully defined BAM index file filenames}
 }
 \value{
 a \code{linkS4class{BamFileList-class}}{BamFileList}
@@ -20,27 +24,20 @@ object from a set of filenames. The filenames need to contain the file path if t
 are not in the working directory.
 }
 \examples{
- # get the example data files - we retrieve a set of example bam files
- # from GitHub using curl, as well as their index.
- invisible(sapply(c("ACACTG","ACTAGC"),function(bam){
-     download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
-                          "master/tutorial/easyRNASeq/",bam,".bam"),paste0(bam,".bam"))
-     download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
-                          "master/tutorial/easyRNASeq/",bam,".bam.bai"),paste0(bam,".bam.bai"))
- }))
+# tutorial data - store the data in the BiocCache
+tdir <- tutorialData()
 
-	# creating a BamFileList using a directory and pattern
-	bfl <- getBamFileList(dir(".",pattern="[A,C,T,G]{6}\\\\.bam$",
-    	full.names=TRUE))
-
-  # using filenames
-  filenames <- dir(".",pattern="[A,C,T,G]{6}\\\\.bam$",full.names=TRUE)
-  bfl <- getBamFileList(filenames)
+  # creating a BamFileList using a directory and pattern
+  # using filenames (from the Bioc cache)
+  filenames <- dir(tdir,pattern="[A,C,T,G]{6}\\\\.bam$",full.names=TRUE)
+  indexnames <- sapply(paste0(sub(".*_","",basename(filenames)),".bai"),fetchData)
+  bfl <- getBamFileList(filenames,indexnames)
 
   # get them recursively
-  filenames <- dir(path=".",pattern="[A,C,T,G]{6}\\\\.bam$",
-  				     full.names=TRUE,recursive=TRUE)
-  bfl <- getBamFileList(filenames)
+  filenames <- dir(path=tdir,pattern="[A,C,T,G]{6}\\\\.bam$",
+                   full.names=TRUE,recursive=TRUE)
+  indexnames <- sapply(paste0(sub(".*_","",basename(filenames)),".bai"),fetchData)
+  bfl <- getBamFileList(filenames,indexnames)
 
 }
 \seealso{

@@ -18,7 +18,7 @@
   ## does not make sense though to have
   ## an rda file with the default (gff3) type
   ## but that's just a test
-  obj <- new("AnnotParamCharacter",datasource="gAnnot.rda")
+  obj <- new("AnnotParamCharacter",datasource=fetchData("gAnnot.rda"))
 
   ## test the type default
   checkTrue(type(obj)=="gff3")

@@ -30,11 +30,10 @@ Implemented are:
 }
 }
 \examples{
-invisible(download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
-                               "master/tutorial/easyRNASeq/Dmel-mRNA-exon-r5.52.gff3.gz"),
-                        "Dmel-mRNA-exon-r5.52.gff3.gz"))
+# fetch the example data
+Dm.annot <- fetchData("Dmel-mRNA-exon-r5.52.gff3.gz")
 
-annot <- AnnotParam(datasource="Dmel-mRNA-exon-r5.52.gff3.gz")
+annot <- AnnotParam(datasource=Dm.annot)
 # get the datasource Parameter
 datasource(annot)
 

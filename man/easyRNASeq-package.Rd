@@ -48,36 +48,29 @@ For more insider details, and step by step functions, see:
 }
 
 \examples{
+ # the data
+ tdir <- tutorialData()
 
   # get the example annotation file - we retrieve a gtf file from GitHub
-  invisible(download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
-  "master/tutorial/easyRNASeq/Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"),
-            "Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"))
-
-  # get the example data files - we retrieve a set of example bam files
-  # from GitHub, as well as their index.
-  invisible(sapply(c("ACACTG","ACTAGC"),function(bam){
-    download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
-      "master/tutorial/easyRNASeq/",bam,".bam"),paste0(bam,".bam"))
-    download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
-      "master/tutorial/easyRNASeq/",bam,".bam.bai"),paste0(bam,".bam.bai"))
-  }))
+  annot <- fetchData("Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz")
 
   # create the AnnotParam
   annotParam <- AnnotParam(
-    datasource="Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz",
+    datasource=annot,
     type="gtf")
 
   # create the synthetic transcripts
   annotParam <- createSyntheticTranscripts(annotParam,verbose=FALSE)
 
-     # create the RnaSeqParam
-     rnaSeqParam <- RnaSeqParam(annotParam=annotParam,countBy="gene")
+ # create the RnaSeqParam
+ rnaSeqParam <- RnaSeqParam(annotParam=annotParam,countBy="gene")
 
-  # get the bamfiles
-  bamFiles <- getBamFileList(dir(pattern="^[A,T].*\\\\.bam$",full.names=TRUE))
+  # get the bamfiles (from the Bioc cache in this example)
+ filenames <- dir(tdir,pattern="[A,T].*\\\\.bam$",full.names=TRUE)
+ indexnames <- sapply(paste0(sub(".*_","",basename(filenames)),".bai"),fetchData)
+ bamFiles <- getBamFileList(filenames,indexnames)
 
-     # get a RangedSummarizedExperiment containing the counts table
+ # get a RangedSummarizedExperiment containing the counts table
   sexp <- simpleRNASeq(
       bamFiles=bamFiles,
       param=rnaSeqParam,

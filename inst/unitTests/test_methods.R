@@ -1,6 +1,9 @@
 ## to test the method result consistency over time
 "test_simpleRNASeq" <- function(){
 
+  ## datq directory
+  tdir <- tutorialData()
+
   ## expected results
   columnSums <- c("ACACTG.bam" = 38381,
                   "ACTAGC.bam" = 28895,
@@ -15,10 +18,12 @@
                    "FBgn0259745:6"=592)
 
   ## get the BamFileList
-  bamFiles <- getBamFileList(dir(pattern="^[A,T].*\\.bam$",full.names=TRUE))
+  filenames <- dir(tdir,pattern="[A,T].*\\.bam$",full.names=TRUE)
+  indexnames <- sapply(paste0(sub(".*_","",basename(filenames)),".bai"),fetchData)
+  bamFiles <- getBamFileList(filenames,indexnames)
 
   ## create the AnnotParam
-  annotParam <- AnnotParam("Dmel-mRNA-exon-r5.52.gff3.gz")
+  annotParam <- AnnotParam(fetchData("Dmel-mRNA-exon-r5.52.gff3.gz"))
 
   ## create the RnaSeqParam
   param <- RnaSeqParam(annotParam=annotParam)
@@ -29,6 +34,10 @@
     param=param,
     verbose=FALSE
   )
+
+  ## some cleanup needed because of the Bioc Cache
+  colnames(sexp) <- sub(".*_","",colnames(sexp))
+  sexp <- sexp[,order(colnames(sexp))]
 
   ## check the overall counts
   checkIdentical(colSums(assay(sexp)),columnSums)

@@ -13,12 +13,12 @@
 #' \item{type}{ The content of the
 #' type column, usually a factor or a character vector } }
 #' @examples
-#'
+#' # library
 #' library(genomeIntervals)
-#' invisible(download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
-#'                                "master/tutorial/easyRNASeq/Dmel-mRNA-exon-r5.52.gff3.gz"),
-#'                         "Dmel-mRNA-exon-r5.52.gff3.gz"))
-#' annot<-readGff3("Dmel-mRNA-exon-r5.52.gff3.gz",quiet=TRUE)
+#'
+#' # fetch the example data
+#' gffFilePath <- fetchData("Dmel-mRNA-exon-r5.52.gff3.gz")
+#' annot<-readGff3(gffFilePath,quiet=TRUE)
 #' type(annot)
 #'
 #' @author Nicolas Delhomme

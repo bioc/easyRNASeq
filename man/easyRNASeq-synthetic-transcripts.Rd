@@ -78,13 +78,11 @@ add features that are part of the \url{sequenceontology.org} SOFA
 \examples{
 
   # get the example file
-  invisible(download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
-                              "master/tutorial/easyRNASeq/",
-                              "Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"),
-                       "Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"))
+  Dm.gtf <- fetchData("Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz")
+
   # create the AnnotParam
   annotParam <- AnnotParam(
-    datasource="Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz",
+    datasource=Dm.gtf,
     type="gtf")
 
   # create the synthetic transcripts

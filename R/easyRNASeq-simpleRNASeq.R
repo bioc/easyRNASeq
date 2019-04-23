@@ -49,28 +49,17 @@
 #' @keywords methods
 #' @examples
 #'
-#'   # the data
+#' # the data
+#' tdir <- tutorialData()
+#' annot <- fetchData("Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz")
 #'
-#' # get the example data files - we retrieve a set of example bam files
-#' # from GitHub, as well as their index.
-#' invisible(sapply(c("ACACTG","ACTAGC"),function(bam){
-#'     download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
-#'                          "master/tutorial/easyRNASeq/",bam,".bam"),paste0(bam,".bam"))
-#'     download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
-#'                          "master/tutorial/easyRNASeq/",bam,".bam.bai"),paste0(bam,".bam.bai"))
-#'   }))
-#'
-#' # and some annotation
-#' invisible(download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
-#' "master/tutorial/easyRNASeq/Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"),
-#' "Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz"))
-#'
-#'  # get the BamFileList
-#'  bamFiles <- getBamFileList(dir(".",pattern="^[A,T].*\\.bam$",full.names=TRUE))
+#'  # create the BamFileList, get the BAM and BAI index files from the Bioc cache
+#'  filenames <- dir(tdir,pattern="[A,T].*\\.bam$",full.names=TRUE)
+#'  indexnames <- sapply(paste0(sub(".*_","",basename(filenames)),".bai"),fetchData)
+#'  bamFiles <- getBamFileList(filenames,indexnames)
 #'
 #'   # create the AnnotParam
-#'   annotParam <- AnnotParam("Drosophila_melanogaster.BDGP5.77.with-chr.gtf.gz",
-#'                            type="gtf")
+#'   annotParam <- AnnotParam(annot,type="gtf")
 #'
 #'   # create the RnaSeqParam
 #'   rnaSeqParam <- RnaSeqParam(annotParam=annotParam)

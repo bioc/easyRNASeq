@@ -22,15 +22,15 @@ showClass("RNAseq")
 
 }
 \seealso{
-\itemize{ \item\code{\linkS4class{GRangesList}}
-\item\code{\linkS4class{RleList}}
-\item\code{\link{easyRNASeq-easyRNASeq}}
-\item\code{\link{easyRNASeq-accessors}}
-\item\code{\link{easyRNASeq-annotation-methods}}
-\item\code{\link{easyRNASeq-correction-methods}}
-\item\code{\link{easyRNASeq-coverage-methods}}
-\item\code{\link{easyRNASeq-summarization-methods}}
-\item\code{\link{print-methods}}
+\itemize{ \item \code{\linkS4class{GRangesList}}
+\item \code{\linkS4class{RleList}}
+\item \code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq}}
+\item \code{\link[easyRNASeq:easyRNASeq-accessors]{easyRNASeq accessors}}
+\item \code{\link[easyRNASeq:easyRNASeq-annotation-methods]{easyRNASeq annotation}}
+\item \code{\link[easyRNASeq:easyRNASeq-correction-methods]{easyRNASeq correction (FPKM)}}
+\item \code{\link[easyRNASeq:easyRNASeq-coverage-methods]{easyRNASeq coverage}}
+\item \code{\link[easyRNASeq:easyRNASeq-summarization-methods]{easyRNASeq summarization}}
+\item \code{\link[easyRNASeq:print-methods]{easyRNASeq print methods}}
 }
 }
 \author{

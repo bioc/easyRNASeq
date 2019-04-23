@@ -34,9 +34,13 @@
 
 "test_BamFileValidate" <- function(){
 
-  filenames <- dir(pattern="[A,C,T,G]{6}\\.bam$",full.names=TRUE)
+  tdir <- tutorialData()
 
-  bfl <- BamFileList(filenames,index=filenames)
+  filenames <- dir(tdir,pattern="[A,C,T,G]{6}\\.bam$",full.names=TRUE)
+
+  indexnames <- sapply(paste0(sub(".*_","",basename(filenames)),".bai"),fetchData)
+
+  bfl <- BamFileList(filenames,index=indexnames)
 
   checkTrue(validate(bfl))
 

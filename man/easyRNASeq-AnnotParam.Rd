@@ -59,9 +59,9 @@ datasource(annotParam)
 type(annotParam)
 
 # create an object to retrieve annotation from an rda object
-invisible(download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
-       "master/tutorial/easyRNASeq/gAnnot.rda"),"gAnnot.rda"))
-annotParam <- AnnotParam(datasource="gAnnot.rda",type="rda")
+# fetch the example data
+gAnnot.rda <- fetchData("gAnnot.rda")
+annotParam <- AnnotParam(datasource=gAnnot.rda,type="rda")
 
 }
 \seealso{

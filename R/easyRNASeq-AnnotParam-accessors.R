@@ -24,11 +24,10 @@
 #' The type and organism generics are imported from the \code{\link[BSgenome:BSgenome-class]{BSgenome}} and
 #' \code{\link[Biostrings:XString-class]{Biostrings}} package, respectively.
 #' @examples
-#' invisible(download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
-#'                                "master/tutorial/easyRNASeq/Dmel-mRNA-exon-r5.52.gff3.gz"),
-#'                         "Dmel-mRNA-exon-r5.52.gff3.gz"))
+#' # fetch the example data
+#' Dm.annot <- fetchData("Dmel-mRNA-exon-r5.52.gff3.gz")
 #'
-#' annot <- AnnotParam(datasource="Dmel-mRNA-exon-r5.52.gff3.gz")
+#' annot <- AnnotParam(datasource=Dm.annot)
 #' # get the datasource Parameter
 #' datasource(annot)
 #'

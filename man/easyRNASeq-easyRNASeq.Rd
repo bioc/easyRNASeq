@@ -179,28 +179,22 @@ case the chromosome names and size are extracted from the BAM header}
  \dontrun{
 	library(BSgenome.Dmelanogaster.UCSC.dm3)
 
- # get the example data files - we retrieve a set of example bam files
- # from GitHub using curl, as well as their index.
- invisible(sapply(c("ACACTG","ACTAGC"),function(bam){
-     download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
-                          "master/tutorial/easyRNASeq/",bam,".bam"),paste0(bam,".bam"))
-     download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
-                          "master/tutorial/easyRNASeq/",bam,".bam.bai"),paste0(bam,".bam.bai"))
- }))
+ # get the example data
+ tdir <- tutorialData()
 
- # get an example annotation file - we retrieve it from GitHub using curl
- invisible(download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
-       "master/tutorial/easyRNASeq/gAnnot.rda"),"gAnnot.rda"))
+
+ # get an example annotation file
+ gAnnot.rda <- fetchData("gAnnot.rda")
 
 	# creating a count table from 4 bam files
-	count.table <- easyRNASeq(filesDirectory=".",
+	count.table <- easyRNASeq(filesDirectory="tdir",
 					pattern="[A,C,T,G]{6}\\\\.bam$",
 				format="bam",
 				readLength=36L,
 				organism="Dmelanogaster",
 				chr.sizes=seqlengths(Dmelanogaster),
 				annotationMethod="rda",
-				annotationFile="gAnnot.rda",
+				annotationFile=gAnnot.rda,
 				count="exons")
 
 	# an example of a chr.map

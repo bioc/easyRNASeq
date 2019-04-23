@@ -41,16 +41,16 @@ Describes extensions to the Rsamtools package.
 \code{validate} checks whether the BAM file exists and if a BAI index is present.
 }
 \examples{
- invisible(sapply(c("ACACTG","ACTAGC"),function(bam){
-     download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
-                          "master/tutorial/easyRNASeq/",bam,".bam"),paste0(bam,".bam"))
-     download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
-                          "master/tutorial/easyRNASeq/",bam,".bam.bai"),paste0(bam,".bam.bai"))
- }))
+# retrieve the data
+tdir <- tutorialData()
 
-filenames <- dir(".",pattern="[A,C,T,G]{6}\\\\.bam$",full.names=TRUE)
+# get the bam file path from the Bioc cache
+filenames <- dir(tdir,pattern="[A,C,T,G]{6}\\\\.bam$",full.names=TRUE)
 
-bfl <-BamFileList(filenames,index=filenames)
+# retrieve the index from the Bioc cache too
+inxnames <- sapply(paste0(sub(".*_","",basename(filenames)),".bai"),fetchData)
+
+bfl <-BamFileList(filenames,index=inxnames)
 
 validate(bfl)
 

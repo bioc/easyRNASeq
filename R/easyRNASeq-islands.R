@@ -33,14 +33,10 @@
 #' 		chrSize=as.list(seqlengths(Dmelanogaster))
 #' 		)
 #'
-#'  invisible(sapply(c("ACACTG","ACTAGC"),function(bam){
-#'      download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
-#'                           "master/tutorial/easyRNASeq/",bam,".bam"),paste0(bam,".bam"))
-#'      download.file(paste0("https://github.com/UPSCb/UPSCb/raw/",
-#'                           "master/tutorial/easyRNASeq/",bam,".bam.bai"),paste0(bam,".bam.bai"))
-#'  }))
+#'  # fetch the example data
+#'  bamFilePath <- fetchData("ACACTG.bam")
 #'
-#' 	obj <- fetchCoverage(obj,format="bam",filename="ACACTG.bam")
+#' 	obj <- fetchCoverage(obj,format="bam",filename=bamFilePath)
 #'
 #' 	obj <- findIslands(
 #' 			obj,
