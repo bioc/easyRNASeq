@@ -26,7 +26,7 @@ NULL
 ##' "Dmelanogaster".}
 ##' \item{When reading from a gff3/gtf file, a version 3 formatted
 ##' gff or a gtf (an Ensembl defined gff2 version) is expected. The function
-##' \pkg{genomeIntervals} \code{\link[genomeIntervals:readGff3]{genomeIntervals-readGff3}} is
+##' \pkg{genomeIntervals} \code{\link[genomeIntervals]{genomeIntervals-readGff3}} is
 ##' used to import the data.}
 ##' }
 ##'

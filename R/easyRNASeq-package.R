@@ -81,6 +81,7 @@
 #'   other packages:
 #'   \itemize{
 #'     \item{Classes}{
+#'       \code{\link[Rsamtools]{BamFileList-class}}
 #'       \code{\linkS4class{BamFileList}}
 #'       \code{\linkS4class{CountDataSet}}
 #'       \code{\linkS4class{RangedSummarizedExperiment}}

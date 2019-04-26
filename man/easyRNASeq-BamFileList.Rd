@@ -16,7 +16,7 @@
 \item{indexnames}{a character vector containing fully defined BAM index file filenames}
 }
 \value{
-a \code{linkS4class{BamFileList-class}}{BamFileList}
+a \code{\link[Rsamtools]{BamFileList-class}}
 }
 \description{
 A utility function to create a \code{linkS4class{BamFileList-class}}{BamFileList}
@@ -41,6 +41,6 @@ tdir <- tutorialData()
 
 }
 \seealso{
-\code{linkS4class{BamFileList-class}}{BamFileList}
+\code{\link[Rsamtools]{BamFileList-class}}
 \code{\link[base:list.files]{dir}}
 }

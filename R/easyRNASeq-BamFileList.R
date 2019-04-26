@@ -10,8 +10,8 @@
 #' getBamFileList,character,missing-method
 #' @param filenames a character vector containing fully defined BAM file filenames
 #' @param indexnames a character vector containing fully defined BAM index file filenames
-#' @return a \code{linkS4class{BamFileList-class}}{BamFileList}
-#' @seealso \code{linkS4class{BamFileList-class}}{BamFileList}
+#' @return a \code{\link[Rsamtools]{BamFileList-class}}
+#' @seealso \code{\link[Rsamtools]{BamFileList-class}}
 #' \code{\link[base:list.files]{dir}}
 #' @examples
 #' # tutorial data - store the data in the BiocCache
