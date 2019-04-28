@@ -1,6 +1,6 @@
 #' Get a BamFileList from a list of filenames
 #'
-#' A utility function to create a \code{linkS4class{BamFileList-class}}{BamFileList}
+#' A utility function to create a \code{\link[Rsamtools:BamFile]{BamFileList}}
 #' object from a set of filenames. The filenames need to contain the file path if they
 #' are not in the working directory.
 
@@ -10,8 +10,8 @@
 #' getBamFileList,character,missing-method
 #' @param filenames a character vector containing fully defined BAM file filenames
 #' @param indexnames a character vector containing fully defined BAM index file filenames
-#' @return a \code{\link[Rsamtools]{BamFileList-class}}
-#' @seealso \code{\link[Rsamtools]{BamFileList-class}}
+#' @return a \code{\link[Rsamtools:BamFile]{BamFileList}}
+#' @seealso \code{\link[Rsamtools:BamFile]{BamFileList}}
 #' \code{\link[base:list.files]{dir}}
 #' @examples
 #' # tutorial data - store the data in the BiocCache
