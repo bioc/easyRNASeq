@@ -110,7 +110,7 @@ The class RNAseq specification:
   other packages:
   \itemize{
     \item{Classes}{
-      \code{\link[Rsamtools:BamFile]{BamFileList-class}}
+      \code{\link[Rsamtools:BamFile-class]{BamFileList-class}}
       \code{\linkS4class{CountDataSet}}
       \code{\linkS4class{RangedSummarizedExperiment}}
     }
@@ -121,7 +121,7 @@ The class RNAseq specification:
         The RangedSummarizedExperiment assay accessor}
       }
       The locfit function \code{\link[locfit]{locfit}}
-      The BamFileList constructor \code{\link[Rsamtools:BamFile]{BamFileList-class}}
+      The BamFileList constructor \code{\link[Rsamtools:BamFile-class]{BamFileList-class}}
       The IRanges constructor \code{\link[IRanges]{IRanges-constructor}}
       For the SRFilterResult,
       chromosomeFilter, compose and nFilter methods\code{\link[ShortRead]{srFilter}}
