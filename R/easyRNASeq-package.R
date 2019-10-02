@@ -181,8 +181,8 @@ NULL
 #' "metadata<-" Rle runLength runsum runValue split substr
 #' @importMethodsFrom ShortRead chromosome id position readAligned
 #' srdistance sread srFilter writeFastq
-#' @importMethodsFrom SummarizedExperiment SummarizedExperiment assay assays
-#' "assays<-" colData "colData<-" rowRanges "rowRanges<-"
+#' @importMethodsFrom SummarizedExperiment assay assays "assays<-"
+#' colData "colData<-" rowRanges "rowRanges<-"
 # import methods
 #' @importFrom biomaRt getBM listDatasets useDataset useMart
 #' @importFrom BiocParallel MulticoreParam SerialParam
@@ -207,6 +207,7 @@ NULL
 #' @importFrom ShortRead alignData chromosomeFilter compose nFilter
 #' SRFilterResult
 #' @importFrom stats aggregate na.omit
+#' @importFrom SummarizedExperiment SummarizedExperiment
 #' @importFrom utils combn str packageVersion
 # and export!
 #' @exportClass BamFileList GRanges RangedSummarizedExperiment

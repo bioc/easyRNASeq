@@ -1,6 +1,6 @@
 Package: easyRNASeq
-Version: 2.21.0
-Date: 2019-04-30
+Version: 2.21.1
+Date: 2019-10-02
 Type: Package
 Title: Count summarization and normalization for RNA-Seq data
 Author: Nicolas Delhomme, Ismael Padioleau, Bastian Schiffthaler, Niklas Maehler
@@ -22,7 +22,7 @@ Imports:
     genomeIntervals (>= 1.37.0),
     GenomicAlignments (>= 1.17.3),
     GenomicRanges (>= 1.33.14),
-    SummarizedExperiment (>= 1.11.6),
+    SummarizedExperiment (>= 1.15.9),
     graphics,
     IRanges (>= 2.15.18),
     LSD (>= 4.0),
