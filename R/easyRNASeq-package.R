@@ -7,7 +7,7 @@
 #          "DESeq","edgeR","GenomeInfoDb","genomeIntervals",
 #          "GenomicAlignments","GenomicRanges","SummarizedExperiment",
 #          "IRanges","LSD","Rsamtools","S4Vectors","ShortRead",
-#          "BiocStyle",
+#          "BiocStyle","rappdirs,
 #          "BSgenome",
 #          "BSgenome.Dmelanogaster.UCSC.dm3","GenomicFeatures",
 #          "RUnit")

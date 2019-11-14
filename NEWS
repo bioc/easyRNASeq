@@ -1,3 +1,14 @@
+CHANGES IN VERSION 2.22.1
+-------------------------
+
+  o Added missing steps to the vignette
+
+  o Corrected the RobinsonDelhomme2014 metadata
+
+  o Fixed a bug introduced by a dropped functionality in asMates
+
+  o Updated package version dependencies
+
 CHANGES IN VERSION 2.19.6
 -------------------------
 

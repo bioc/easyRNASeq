@@ -2,4 +2,6 @@
 .Rproj.user
 .Rhistory
 .RData
-easyRNASeq-devel.Rproj
+*.Rproj
+TODO
+.DS_Store

@@ -205,7 +205,7 @@ setMethod(f="simpleRNASeq",
             # update the BAM files
             if(!override){
                 if(any(colData(sexp)$Paired)){
-                   asMates(bamFiles)[colData(sexp)$Paired] <- TRUE
+                   asMates(bamFiles[colData(sexp)$Paired]) <- TRUE
                 }
             } else {
                 if(stranded(param)){

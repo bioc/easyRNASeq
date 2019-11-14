@@ -1,0 +1,8 @@
+# simple RNA-Seq
+We can now run the quantification
+
+```{r simpleRS}
+sexp1 <- simpleRNASeq(bamFiles=bamFiles, 
+                      param=rnaSeqParam,
+                      verbose=TRUE)
+```
