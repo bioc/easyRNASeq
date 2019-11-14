@@ -37,9 +37,14 @@ datasets. We get these from the sample information contained within this package
 ```{r data}
 data(RobinsonDelhomme2014)
 lapply(RobinsonDelhomme2014[1:6,"Filename"],function(f){
+    # BAM files
     download.file(url=paste0("ftp://ftp.plantgenie.org/Tutorials/",
                              "RnaSeqTutorial/data/star/",f),
                   destfile=f)
+    # BAM index files
+    download.file(url=paste0("ftp://ftp.plantgenie.org/Tutorials/",
+                             "RnaSeqTutorial/data/star/",f,".bai"),
+                  destfile=paste0(f,".bai"))
 })
 ```
 
@@ -62,5 +67,13 @@ bamParam <- BamParam(paired = TRUE,
 A third parameter _yieldSize_ can be set to speed up the processing on multi-CPU
 or multi-core computers. It splits and processed the BAM files in chunk of size
 _yieldSize_ with a default of 1M reads.
+
+
+Finally, we create the list of BAM files we just retrieved.
+
+```{r bamFiles}
+bamFiles <- getBamFileList(dir(".","*\\.bam$"),
+                           dir(".","*\\.bai$"))
+```
 
 ----

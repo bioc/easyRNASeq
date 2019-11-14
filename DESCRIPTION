@@ -1,6 +1,6 @@
 Package: easyRNASeq
-Version: 2.23.0
-Date: 2019-10-02
+Version: 2.23.1
+Date: 2019-11-14
 Type: Package
 Title: Count summarization and normalization for RNA-Seq data
 Author: Nicolas Delhomme, Ismael Padioleau, Bastian Schiffthaler, Niklas Maehler
@@ -10,33 +10,33 @@ Description: Calculates the coverage of high-throughput short-reads against
     gene, transcript). The data can be normalized as 'RPKM' or by the 'DESeq'
     or 'edgeR' package.
 Imports:
-    Biobase (>= 2.41.2),
+    Biobase (>= 2.44.0),
     BiocFileCache (>= 1.7.10),
-    BiocGenerics (>= 0.27.1),
-    BiocParallel (>= 1.15.15),
-    biomaRt (>= 2.37.9),
-    Biostrings (>= 2.49.2),
-    DESeq (>= 1.33.0),
-    edgeR (>= 3.23.6),
-    GenomeInfoDb (>= 1.17.4),
-    genomeIntervals (>= 1.37.0),
-    GenomicAlignments (>= 1.17.3),
-    GenomicRanges (>= 1.33.14),
-    SummarizedExperiment (>= 1.15.9),
+    BiocGenerics (>= 0.30.0),
+    BiocParallel (>= 1.18.1),
+    biomaRt (>= 2.40.5),
+    Biostrings (>= 2.52.0),
+    DESeq (>= 1.36.0),
+    edgeR (>= 3.26.8),
+    GenomeInfoDb (>= 1.20.0),
+    genomeIntervals (>= 1.40.0),
+    GenomicAlignments (>= 1.20.1),
+    GenomicRanges (>= 1.36.1),
+    SummarizedExperiment (>= 1.14.1),
     graphics,
-    IRanges (>= 2.15.18),
+    IRanges (>= 2.18.3),
     LSD (>= 4.0),
     locfit,
     methods,
     parallel,
     rappdirs (>= 0.3.1),
-    Rsamtools (>= 1.33.7),
-    S4Vectors (>= 0.19.23),
-    ShortRead (>= 1.39.0),
+    Rsamtools (>= 2.0.3),
+    S4Vectors (>= 0.22.1),
+    ShortRead (>= 1.42.0),
     utils
 Suggests:
-    BiocStyle (>= 2.9.6),
-    BSgenome (>= 1.49.5),
+    BiocStyle (>= 2.12.0),
+    BSgenome (>= 1.52.0),
     BSgenome.Dmelanogaster.UCSC.dm3 (>= 1.4.0),
     curl,
     knitr,
