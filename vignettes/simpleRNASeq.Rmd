@@ -44,6 +44,9 @@ options(digits=2)
 ```{r child = "Chapters/06-simpleRNASeq.Rmd"}
 ```
 
+```{r child = "Chapters/07-cleanUp.Rmd"}
+```
+
 ```{r child = "Chapters/08-Session-Info.Rmd"}
 ```
 
