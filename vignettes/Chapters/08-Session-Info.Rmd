@@ -2,10 +2,3 @@
 ```{r session info, echo=FALSE}
 sessionInfo()
 ```
-
-```{r cleanup, echo=FALSE,}
-    file.remove(c(
-        "./Ptrichocarpa_210_v3.0_gene_exons.gff3.gz",
-        "./Ptrichocarpa_210_v3.0_gene_exons_synthetic-transcripts_annotParam.rda",
-        "./Ptrichocarpa_210_v3.0_gene_exons_synthetic-transcripts.gff3.gz"))
-```

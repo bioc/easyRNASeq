@@ -1,0 +1,9 @@
+```{r cleanup, echo=FALSE}
+data(RobinsonDelhomme2014)
+file.remove(c(
+    "./Ptrichocarpa_210_v3.0_gene_exons.gff3.gz",
+    "./Ptrichocarpa_210_v3.0_gene_exons_synthetic-transcripts_annotParam.rda",
+    "./Ptrichocarpa_210_v3.0_gene_exons_synthetic-transcripts.gff3.gz",
+    RobinsonDelhomme2014[1:6,"Filename"],
+    paste0(RobinsonDelhomme2014[1:6,"Filename"],".bai")))
+```

@@ -40,11 +40,11 @@ lapply(RobinsonDelhomme2014[1:6,"Filename"],function(f){
     # BAM files
     download.file(url=paste0("ftp://ftp.plantgenie.org/Tutorials/",
                              "RnaSeqTutorial/data/star/",f),
-                  destfile=f)
+                  destfile=as.character(f))
     # BAM index files
     download.file(url=paste0("ftp://ftp.plantgenie.org/Tutorials/",
                              "RnaSeqTutorial/data/star/",f,".bai"),
-                  destfile=paste0(f,".bai"))
+                  destfile=as.character(paste0(f,".bai")))
 })
 ```
 

@@ -48,8 +48,8 @@
 #' @name easyRNASeq package
 #' @rdname easyRNASeq-package
 #' @aliases easyRNASeq-package assay type BamFileList BamFileList-class IRanges
-#' GRanges-class GRanges SRFilterResult RangedSummarizedExperiment-class chromosomeFilter
-#' compose nFilter
+#' GRanges-class GRanges SRFilterResult SummarizedExperiment RangedSummarizedExperiment-class
+#' chromosomeFilter compose nFilter
 #' @docType package
 #' @author Nicolas Delhomme, Bastian Schiffthaler, Ismael Padioleau
 #' @keywords package
@@ -211,8 +211,8 @@ NULL
 #' @importFrom utils combn str packageVersion
 # and export!
 #' @exportClass BamFileList GRanges RangedSummarizedExperiment
-#' @exportMethod assay assays colData estimateDispersions estimateSizeFactors fileName metadata rowRanges seqinfo seqlengths seqlevels "seqlevels<-" seqnames "seqnames<-" split srFilter SummarizedExperiment width writeFastq writeGff3
-#' @export alignData basename chromosomeFilter compose BamFileList GRanges IRanges locfit lp newCountDataSet nFilter readAligned SRFilterResult
+#' @exportMethod assay assays colData estimateDispersions estimateSizeFactors fileName metadata rowRanges seqinfo seqlengths seqlevels "seqlevels<-" seqnames "seqnames<-" split srFilter width writeFastq writeGff3
+#' @export alignData basename chromosomeFilter compose BamFileList GRanges IRanges locfit lp newCountDataSet nFilter readAligned SRFilterResult SummarizedExperiment
 NULL
 
 ##==========================

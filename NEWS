@@ -1,7 +1,19 @@
+CHANGES IN VERSION 2.23.2
+-------------------------
+
+  o Ported changed from 2.22.2
+
 CHANGES IN VERSION 2.23.1
 -------------------------
 
   o Ported changed from 2.22.1
+
+CHANGES IN VERSION 2.22.2
+-------------------------
+
+  o Fixed a namespace issue
+
+  o Extended the cleanup step of the vignette
 
 CHANGES IN VERSION 2.22.1
 -------------------------

@@ -12,11 +12,11 @@
 \alias{GRanges-class}
 \alias{GRanges}
 \alias{SRFilterResult}
+\alias{SummarizedExperiment}
 \alias{RangedSummarizedExperiment-class}
 \alias{chromosomeFilter}
 \alias{compose}
 \alias{nFilter}
-\alias{easyRNASeq package-package}
 \title{Count summarization and normalization pipeline for Next Generation Sequencing data.}
 \description{
 Offers functionalities to summarize read counts per feature of interest, e.g. exons, transcripts, genes, etc.

@@ -1,21 +1,11 @@
 %\VignetteIndexEntry{R / Bioconductor for High Throughput Sequence Analysis}
-
 \documentclass[a4paper]{article}
-
-%\SweaveOpts{pdf=FALSE, png=TRUE}
-
-%% bioc style
-<<style-Sweave, eval=TRUE, echo=FALSE, results=tex>>=
-BiocStyle::latex()
-@
 
 %% title
 \title{easyRNASeq - a package for simple RNA-Seq quantification}
 \author{
-  Nicolas Delhomme\footnote{\href{mailto:nicolas.delhomme@umu.se}{
-  nicolas.delhomme@umu.se}}\\
-  Bastian Schiffthaler\footnote{\href{mailto:bastian.schiffthaler@umu.se}{
-  bastian.schiffthaler@umu.se}}\\
+  Nicolas Delhomme\footnote{nicolas.delhomme@umu.se}\\
+  Bastian Schiffthaler\footnote{bastian.schiffthaler@umu.se}\\
 }
 
 \date{\today}
