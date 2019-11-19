@@ -5,3 +5,5 @@
 *.Rproj
 .DS_Store
 TODO
+vignettes/*.html
+vignettes/*.pdf
