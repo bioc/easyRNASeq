@@ -289,14 +289,16 @@ NULL
 #' \item GTF.FIELDS
 #' \item ANNOTATION.TYPE
 #' \item TUTORIAL.DATA
+#' \item VIGNETTE.DATA
 #' }
 #'
 #' These objects hold the following information
 #' \itemize{
 #' \item GTF.FIELDS \code{c("gene_id","transcript_id","exon_id","gene_name")}
 #' \item ANNOTATION.TYPE \code{c(mRNA="mRNA",exon="exon")}
-#' \item TUTORIAL.DATA: The list of files needed for the vignette, help and test
+#' \item TUTORIAL.DATA: The list of files needed for the help and test
 #' pages
+#' \item VIGNETTE.DATA: The list of files needed for the vignette
 #' }
 #' and are designed as global variables to expose the
 #' fact that they are hardcoded. These exist as
@@ -304,7 +306,7 @@ NULL
 #' values for these.
 #'
 #' @aliases easyRNASeq-global-variables .onAttach ANNOTATION.TYPE GTF.FIELDS
-#' TUTORIAL.DATA
+#' TUTORIAL.DATA VIGNETTE.DATA
 #' @name easyRNASeq-global-variables
 #' @rdname easyRNASeq-global-variables
 #' @param libname a character string giving the library directory where the package defining the namespace was found.
@@ -314,6 +316,7 @@ NULL
 globalVariables("GTF.FIELDS")
 globalVariables("ANNOTATION.TYPE")
 globalVariables("TUTORIAL.DATA")
+globalVariables("VIGNETTE.DATA")
 ".onAttach" <- function(libname,pkgname){
   assign("GTF.FIELDS",c("gene_id","transcript_id","exon_id",
                         "gene_name"),
@@ -335,4 +338,35 @@ globalVariables("TUTORIAL.DATA")
            gAnnot.rda=file.path(.gitHubURL,"gAnnot.rda"),
            "Dmel-mRNA-exon-r5.52.gff3.gz"=file.path(.gitHubURL,"Dmel-mRNA-exon-r5.52.gff3.gz")),
   envir=as.environment("package:easyRNASeq"))
+  .plantgenieFTP <- "ftp://ftp.plantgenie.org/Data/PopGenIE/Populus_trichocarpa/v3.0/v10.1/GFF3"
+  .tutorialFTP <- "ftp://ftp.plantgenie.org/Tutorials/RnaSeqTutorial/data/star"
+  assign("VIGNETTE.DATA",
+         c("Ptrichocarpa_210_v3.0_gene_exons.gff3.gz"=
+             file.path(.plantgenieFTP,"Ptrichocarpa_210_v3.0_gene_exons.gff3.gz"),
+           "md5.txt"=file.path(.tutorialFTP,"md5.txt"),
+           "202_subset_sortmerna_trimmomatic_sorted.bam"=
+             file.path(.tutorialFTP,"unitTest","202_subset_sortmerna_trimmomatic_sorted.bam"),
+           "207_subset_sortmerna_trimmomatic_sorted.bam"=
+             file.path(.tutorialFTP,"unitTest","207_subset_sortmerna_trimmomatic_sorted.bam"),
+           "213.1_subset_sortmerna_trimmomatic_sorted.bam"=
+             file.path(.tutorialFTP,"unitTest","213.1_subset_sortmerna_trimmomatic_sorted.bam"),
+           "221_subset_sortmerna_trimmomatic_sorted.bam"=
+             file.path(.tutorialFTP,"unitTest","221_subset_sortmerna_trimmomatic_sorted.bam"),
+           "226.1_subset_sortmerna_trimmomatic_sorted.bam"=
+             file.path(.tutorialFTP,"unitTest","226.1_subset_sortmerna_trimmomatic_sorted.bam"),
+           "229.1_subset_sortmerna_trimmomatic_sorted.bam"=
+             file.path(.tutorialFTP,"unitTest","229.1_subset_sortmerna_trimmomatic_sorted.bam"),
+           "202_subset_sortmerna_trimmomatic_sorted.bam.bai"=
+             file.path(.tutorialFTP,"unitTest","202_subset_sortmerna_trimmomatic_sorted.bam.bai"),
+           "207_subset_sortmerna_trimmomatic_sorted.bam.bai"=
+             file.path(.tutorialFTP,"unitTest","207_subset_sortmerna_trimmomatic_sorted.bam.bai"),
+           "213.1_subset_sortmerna_trimmomatic_sorted.bam.bai"=
+             file.path(.tutorialFTP,"unitTest","213.1_subset_sortmerna_trimmomatic_sorted.bam.bai"),
+           "221_subset_sortmerna_trimmomatic_sorted.bam.bai"=
+             file.path(.tutorialFTP,"unitTest","221_subset_sortmerna_trimmomatic_sorted.bam.bai"),
+           "226.1_subset_sortmerna_trimmomatic_sorted.bam.bai"=
+             file.path(.tutorialFTP,"unitTest","226.1_subset_sortmerna_trimmomatic_sorted.bam.bai"),
+           "229.1_subset_sortmerna_trimmomatic_sorted.bam.bai"=
+             file.path(.tutorialFTP,"unitTest","229.1_subset_sortmerna_trimmomatic_sorted.bam.bai")),
+         envir=as.environment("package:easyRNASeq"))
 }

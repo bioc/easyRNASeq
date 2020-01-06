@@ -1,3 +1,13 @@
+CHANGES IN VERSION 2.22.4
+-------------------------
+
+  o Moved the vignette data retrieval to the biocFileCache
+
+CHANGES IN VERSION 2.22.3
+-------------------------
+
+  o Ensured that misformatted gff3 prefix containing extra white space characters are gracefully handled.
+
 CHANGES IN VERSION 2.22.2
 -------------------------
 

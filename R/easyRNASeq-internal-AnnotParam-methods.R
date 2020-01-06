@@ -104,7 +104,7 @@
           }
 
           # check the header
-          if(sub("\\D+","",readLines(datasource(obj),1))!=3){
+          if(gsub("\\D+|\\s+$","",readLines(datasource(obj),1))!=3){
             stop(paste("Your file:",datasource(obj),
                        "does not contain a gff header: '#gff-version 3' as first line. Is that really a gff3 file?"))
           }

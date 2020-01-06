@@ -477,3 +477,9 @@ setGeneric(name="tutorialData",
            def=function(...){
                standardGeneric("tutorialData")
            })
+
+#' @exportMethod vignetteData
+setGeneric(name="vignetteData",
+           def=function(...){
+             standardGeneric("vignetteData")
+           })

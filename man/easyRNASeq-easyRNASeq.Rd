@@ -203,7 +203,7 @@ case the chromosome names and size are extracted from the BAM header}
 
 	# creating a count table from 4 bam files
 	count.table <- easyRNASeq(filesDirectory="tdir",
-					pattern="[A,C,T,G]{6}\\.bam$",
+					pattern="[A,C,T,G]{6}\\\\.bam$",
 				format="bam",
 				readLength=36L,
 				organism="Dmelanogaster",

@@ -6,6 +6,7 @@
 \alias{ANNOTATION.TYPE}
 \alias{GTF.FIELDS}
 \alias{TUTORIAL.DATA}
+\alias{VIGNETTE.DATA}
 \title{Objects created when the package is attached.}
 \arguments{
 \item{libname}{a character string giving the library directory where the package defining the namespace was found.}
@@ -18,6 +19,7 @@ The package creates the following objects when attached
 \item GTF.FIELDS
 \item ANNOTATION.TYPE
 \item TUTORIAL.DATA
+\item VIGNETTE.DATA
 }
 }
 \details{
@@ -25,8 +27,9 @@ These objects hold the following information
 \itemize{
 \item GTF.FIELDS \code{c("gene_id","transcript_id","exon_id","gene_name")}
 \item ANNOTATION.TYPE \code{c(mRNA="mRNA",exon="exon")}
-\item TUTORIAL.DATA: The list of files needed for the vignette, help and test
+\item TUTORIAL.DATA: The list of files needed for the help and test
 pages
+\item VIGNETTE.DATA: The list of files needed for the vignette
 }
 and are designed as global variables to expose the
 fact that they are hardcoded. These exist as
