@@ -92,7 +92,7 @@ library(BSgenome.Dmelanogaster.UCSC.dm3)
                      annotationFile=gAnnot.rda,
                      format="bam",
                      count="exons",
-                     pattern="[A,C,T,G]{6}\\.bam$",
+                     pattern="[A,C,T,G]{6}\\\\.bam$",
                      outputFormat="RNAseq")
 	# summing up the exons by transcript
 	rnaSeq <- transcriptCounts(rnaSeq)

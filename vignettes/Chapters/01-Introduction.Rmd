@@ -36,4 +36,7 @@ library(easyRNASeq)
 before instantiating an __AnnotParam__ object informing on the location and type
 of the annotation to be used.
 
+```{r vignetteData, echo=FALSE}
+vDir <- vignetteData()
+```
 ----

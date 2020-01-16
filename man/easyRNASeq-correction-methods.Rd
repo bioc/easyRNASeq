@@ -62,7 +62,7 @@ names match the column names of the count matrix.}}
 		    			system.file(
 					"extdata",
 					package="RnaSeqTutorial"),
-					pattern="[A,C,T,G]{6}\\.bam$",
+					pattern="[A,C,T,G]{6}\\\\.bam$",
 				format="bam",
 				readLength=36L,
 				organism="Dmelanogaster",

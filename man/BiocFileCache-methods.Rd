@@ -9,6 +9,8 @@
 \alias{fetchData,character-method}
 \alias{tutorialData}
 \alias{tutorialData,ANY-method}
+\alias{vignetteData}
+\alias{vignetteData,ANY-method}
 \title{Manages the data necessary for the examples using BiocFileCache}
 \usage{
 fetchData(fileURL)
@@ -20,7 +22,7 @@ fetchData(fileURL)
 file in the BiocFileCache (i.e. the file basename), can be used.}
 }
 \description{
-Manages the tutorial and example data using the
+Manages the tutorial, example and vignette data using the
 \code{\linkS4class{BiocFileCache}} package
 }
 \section{Methods}{
@@ -28,12 +30,16 @@ Manages the tutorial and example data using the
 \item{.get_cache}{internal function to set up the cache}
 \item{fetchData}{A function to fetch tutorial data, a file at a time}
 \item{tutorialData}{the function to retrieve all the tutorial data and
+cache it, if it is not already available}
+\item{vignetteData}{the function to retrieve all the tutorial data and
 cache it, if it is not already available}}
 }
 
 \examples{
 tdir <- tutorialData()
 gAnnot.path <- fetchData("gAnnot.rda")
+vdir <- vignetteData()
+md5.txt <- fetchData("md5.txt")
 }
 \seealso{
 \code{\linkS4class{BiocFileCache}}
