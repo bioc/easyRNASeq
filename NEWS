@@ -1,3 +1,8 @@
+CHANGES IN VERSION 2.23.4
+-------------------------
+
+  o Ported changed from 2.22.5
+
 CHANGES IN VERSION 2.23.3
 -------------------------
 
@@ -12,6 +17,11 @@ CHANGES IN VERSION 2.23.1
 -------------------------
 
   o Ported changed from 2.22.1
+
+CHANGES IN VERSION 2.22.5
+-------------------------
+
+  o Moved the vignette data from the FTP to Git
 
 CHANGES IN VERSION 2.22.4
 -------------------------
