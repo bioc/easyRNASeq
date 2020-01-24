@@ -338,35 +338,33 @@ globalVariables("VIGNETTE.DATA")
            gAnnot.rda=file.path(.gitHubURL,"gAnnot.rda"),
            "Dmel-mRNA-exon-r5.52.gff3.gz"=file.path(.gitHubURL,"Dmel-mRNA-exon-r5.52.gff3.gz")),
   envir=as.environment("package:easyRNASeq"))
-  .plantgenieFTP <- "ftp://ftp.plantgenie.org/Data/PopGenIE/Populus_trichocarpa/v3.0/v10.1/GFF3"
-  .tutorialFTP <- "ftp://ftp.plantgenie.org/Tutorials/RnaSeqTutorial/data/star"
   assign("VIGNETTE.DATA",
          c("Ptrichocarpa_210_v3.0_gene_exons.gff3.gz"=
-             file.path(.plantgenieFTP,"Ptrichocarpa_210_v3.0_gene_exons.gff3.gz"),
-           "md5.txt"=file.path(.tutorialFTP,"md5.txt"),
+             file.path(.gitHubURL,"Ptrichocarpa_210_v3.0_gene_exons.gff3.gz"),
+           "md5.txt"=file.path(.gitHubURL,"md5.txt"),
            "202_subset_sortmerna_trimmomatic_sorted.bam"=
-             file.path(.tutorialFTP,"unitTest","202_subset_sortmerna_trimmomatic_sorted.bam"),
+             file.path(.gitHubURL,"unitTest","202_subset_sortmerna_trimmomatic_sorted.bam"),
            "207_subset_sortmerna_trimmomatic_sorted.bam"=
-             file.path(.tutorialFTP,"unitTest","207_subset_sortmerna_trimmomatic_sorted.bam"),
+             file.path(.gitHubURL,"unitTest","207_subset_sortmerna_trimmomatic_sorted.bam"),
            "213.1_subset_sortmerna_trimmomatic_sorted.bam"=
-             file.path(.tutorialFTP,"unitTest","213.1_subset_sortmerna_trimmomatic_sorted.bam"),
+             file.path(.gitHubURL,"unitTest","213.1_subset_sortmerna_trimmomatic_sorted.bam"),
            "221_subset_sortmerna_trimmomatic_sorted.bam"=
-             file.path(.tutorialFTP,"unitTest","221_subset_sortmerna_trimmomatic_sorted.bam"),
+             file.path(.gitHubURL,"unitTest","221_subset_sortmerna_trimmomatic_sorted.bam"),
            "226.1_subset_sortmerna_trimmomatic_sorted.bam"=
-             file.path(.tutorialFTP,"unitTest","226.1_subset_sortmerna_trimmomatic_sorted.bam"),
+             file.path(.gitHubURL,"unitTest","226.1_subset_sortmerna_trimmomatic_sorted.bam"),
            "229.1_subset_sortmerna_trimmomatic_sorted.bam"=
-             file.path(.tutorialFTP,"unitTest","229.1_subset_sortmerna_trimmomatic_sorted.bam"),
+             file.path(.gitHubURL,"unitTest","229.1_subset_sortmerna_trimmomatic_sorted.bam"),
            "202_subset_sortmerna_trimmomatic_sorted.bam.bai"=
-             file.path(.tutorialFTP,"unitTest","202_subset_sortmerna_trimmomatic_sorted.bam.bai"),
+             file.path(.gitHubURL,"unitTest","202_subset_sortmerna_trimmomatic_sorted.bam.bai"),
            "207_subset_sortmerna_trimmomatic_sorted.bam.bai"=
-             file.path(.tutorialFTP,"unitTest","207_subset_sortmerna_trimmomatic_sorted.bam.bai"),
+             file.path(.gitHubURL,"unitTest","207_subset_sortmerna_trimmomatic_sorted.bam.bai"),
            "213.1_subset_sortmerna_trimmomatic_sorted.bam.bai"=
-             file.path(.tutorialFTP,"unitTest","213.1_subset_sortmerna_trimmomatic_sorted.bam.bai"),
+             file.path(.gitHubURL,"unitTest","213.1_subset_sortmerna_trimmomatic_sorted.bam.bai"),
            "221_subset_sortmerna_trimmomatic_sorted.bam.bai"=
-             file.path(.tutorialFTP,"unitTest","221_subset_sortmerna_trimmomatic_sorted.bam.bai"),
+             file.path(.gitHubURL,"unitTest","221_subset_sortmerna_trimmomatic_sorted.bam.bai"),
            "226.1_subset_sortmerna_trimmomatic_sorted.bam.bai"=
-             file.path(.tutorialFTP,"unitTest","226.1_subset_sortmerna_trimmomatic_sorted.bam.bai"),
+             file.path(.gitHubURL,"unitTest","226.1_subset_sortmerna_trimmomatic_sorted.bam.bai"),
            "229.1_subset_sortmerna_trimmomatic_sorted.bam.bai"=
-             file.path(.tutorialFTP,"unitTest","229.1_subset_sortmerna_trimmomatic_sorted.bam.bai")),
+             file.path(.gitHubURL,"unitTest","229.1_subset_sortmerna_trimmomatic_sorted.bam.bai")),
          envir=as.environment("package:easyRNASeq"))
 }
