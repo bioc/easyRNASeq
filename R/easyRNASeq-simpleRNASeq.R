@@ -329,7 +329,7 @@ setMethod(f="simpleRNASeq",
                                                          df,
                                                          param,verbose)))
             names(countAssay) <- countBy(param)
-            assays(sexp) <- endoapply(countAssay, unname)
+            assays(sexp, withDimnames=FALSE) <- endoapply(countAssay, unname)
 
             # done
             if(verbose){
