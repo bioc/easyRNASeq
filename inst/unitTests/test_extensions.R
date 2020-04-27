@@ -5,21 +5,18 @@
 ### =========================
 "test_GRangesColnames" <- function(){
 
-  gAnnot <- RangedData(
-    IRanges(
+  grngs <- GRanges(
+    seqnames=Rle(factor(c("chr01","chr01","chr02"))),
+    ranges=IRanges(
       start=c(10,30,100),
       end=c(21,53,123)),
-    space=c("chr01","chr01","chr02"),
-    strand=c("+","+","-"),
+    strand=Rle(factor(c("+","+","-"))),
     transcript=c("trA1","trA2","trB"),
     gene=c("gA","gA","gB"),
     exon=c("e1","e2","e3")
   )
 
   exptCols <- c("transcript","gene","exon")
-
-  ## an example of a GRangesList annotation
-  grngs <- as(gAnnot,"GRanges")
 
   ## accessing the colnames
   checkEquals(colnames(grngs),exptCols)

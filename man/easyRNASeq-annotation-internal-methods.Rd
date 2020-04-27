@@ -28,7 +28,7 @@ a gtf file. Still internal, but could easily be externalized.}
 
 \item{format}{describes the kind of annotation provided. One of gtf or gff.}
 
-\item{gAnnot}{a \code{\linkS4class{RangedData}} object containing exon
+\item{gAnnot}{a \code{\linkS4class{GRanges}} object containing exon
 annotations}
 
 \item{nbCore}{number of CPU cores to use}

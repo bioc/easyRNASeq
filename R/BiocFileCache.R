@@ -21,6 +21,7 @@
 #' cache it, if it is not already available}}
 #' @keywords methods
 #' @usage fetchData(fileURL)
+#' tutorialData(\dots)
 #' @seealso \code{\linkS4class{BiocFileCache}}
 #' @examples
 #' tdir <- tutorialData()

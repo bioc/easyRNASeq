@@ -33,10 +33,6 @@
   ## the object defaults
   checkTrue(length(obj@datasource) == 0)
 
-  ## with different parameters
-  obj <- new("AnnotParamObject",datasource=RangedData())
-  checkTrue(is(obj@datasource,"RangedData"))
-  checkTrue(length(obj@datasource) == 0)
 }
 
 ### =========================
