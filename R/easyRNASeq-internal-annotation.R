@@ -25,7 +25,7 @@
 ##' a gtf file. Still internal, but could easily be externalized.
 ##' @param filename filename that contains the annotations
 ##' @param format describes the kind of annotation provided. One of gtf or gff.
-##' @param gAnnot a \code{\linkS4class{RangedData}} object containing exon
+##' @param gAnnot a \code{\linkS4class{GRanges}} object containing exon
 ##' annotations
 ##' @param nbCore number of CPU cores to use
 ##' @param obj an \code{\linkS4class{AnnotParam}} object containing the

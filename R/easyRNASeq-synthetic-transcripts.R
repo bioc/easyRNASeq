@@ -45,8 +45,6 @@
 #' @param obj a \code{\linkS4class{AnnotParamCharacter}} object or the
 #' annotation filename as a \code{character} string
 #' @param features one or more of 'mRNA', 'miRNA', 'tRNA', 'transcript'
-#' @param ... If \code{obj} is a character string, \code{input} and
-#' \code{output} - see below
 #' @param input the type of input, one of 'gff3' or 'gtf'
 #' @param output the output type, one of 'Genome_intervals' or 'GRanges'
 #' @param verbose increase the verbosity (default TRUE)

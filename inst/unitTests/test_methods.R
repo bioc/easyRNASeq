@@ -26,7 +26,8 @@
   annotParam <- AnnotParam(fetchData("Dmel-mRNA-exon-r5.52.gff3.gz"))
 
   ## create the RnaSeqParam
-  param <- RnaSeqParam(annotParam=annotParam)
+  param <- RnaSeqParam(annotParam=annotParam,
+                       bamParam=BamParam(paired=FALSE))
 
   ## get a RangedSummarizedExperiment containing the counts table
   sexp <- simpleRNASeq(

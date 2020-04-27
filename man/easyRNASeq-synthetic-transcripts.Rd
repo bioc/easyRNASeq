@@ -31,9 +31,6 @@ annotation filename as a \code{character} string}
 \item{output}{the output type, one of 'Genome_intervals' or 'GRanges'}
 
 \item{input}{the type of input, one of 'gff3' or 'gtf'}
-
-\item{...}{If \code{obj} is a character string, \code{input} and
-\code{output} - see below}
 }
 \value{
 Depending on the \code{obj} class.

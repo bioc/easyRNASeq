@@ -14,6 +14,7 @@
 \title{Manages the data necessary for the examples using BiocFileCache}
 \usage{
 fetchData(fileURL)
+tutorialData(\dots)
 }
 \arguments{
 \item{\dots}{unused for the time being}
