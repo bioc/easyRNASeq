@@ -1,9 +1,9 @@
 ##' Extension for the edgeR package
-##' 
+##'
 ##' This method extends the edgeR package by offering the functionality to plot
 ##' the effect of the normalization factor.
-##' 
-##' 
+##'
+##'
 ##' @aliases plotNormalizationFactors
 ##' plotNormalizationFactors,DGEList,character,character-method
 ##' @name edgeR additional methods
@@ -15,7 +15,7 @@
 ##' @author Nicolas Delhomme
 ##' @keywords methods
 ##' @examples
-##' 
+##'
 ##' 	\dontrun{
 ##' 	## create the object
 ##' 	dgeList <- DGEList(counts,group)
@@ -26,14 +26,14 @@
 ##' 		2,
 ##' 		function(co,obj){plotNormalizationFactors(obj,co[1],co[2])},dgeList)
 ##' 	}
-##' 
+##'
 ## This code was extracted from the edgeR vignette
 ## Robinson et al.
 setMethod(
           f="plotNormalizationFactors",
           signature=c("DGEList","character","character"),
           definition=function(obj=DGEList(),cond1=character(1),cond2=character(1)){
-            
+
             ## check that the cond are in the samples
             if(nrow(obj$samples)==0){
               stop("Your 'DGEList' does not contain sample information!")
@@ -46,7 +46,7 @@ setMethod(
             if(!(all(c(cond1,cond2) %in% rownames(obj$samples)))){
               stop("The provided conditions do not exist in your 'DGEList' samples data.frame. Check the row names.")
             }
-            
+
             ## raw data
             maPlot(obj$counts[, cond1], obj$counts[, cond2],
                    normalize = TRUE, pch = 19,
@@ -73,15 +73,5 @@ setMethod(
                      rownames(obj$samples[cond2,]),
                      paste("(",obj$samples[cond2,"group"],")",sep=""),
                      "after normalization"))
-            grid(col = "blue") 
+            grid(col = "blue")
           })
-
-setMethod(
-          f="plotDispersionEstimates",
-          signature=c("DGEList"),
-          definition=function(obj=DGEList()){
-
-            .Defunct(new="plotBCV",msg="This method is defunct due to change in
-                     the edgeR DGEList object.")
-          })
-

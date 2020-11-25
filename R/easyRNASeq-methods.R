@@ -23,10 +23,7 @@
 #' \item{\code{\link[easyRNASeq:easyRNASeq-correction-methods]{optionally
 #' apply}} a data correction (i.e. generating RPKM).}
 #' \item{\code{\link[easyRNASeq:edgeR-methods]{use edgeR methods}} for
-#' post-processing the data or}
-#' \item{\code{\link[easyRNASeq:DESeq-methods]{use
-#' DESeq methods}} for post-processing the data (either of them being
-#' recommended over RPKM).}  }
+#' post-processing the data, this being strongly recommended over RPKM).}  }
 #'
 #' \itemize{ \item{\dots{} Additional arguments for different functions:
 #' \itemize{
@@ -34,8 +31,6 @@
 #' \item{For the \code{\link[easyRNASeq:easyRNASeq-annotation-internal-methods]{readGffGtf}}
 #' internal function that takes an optional arguments: annotation.type that
 #' default to "exon" (used to select the proper rows of the gff or gtf file)}
-#' \item{ For the \code{\link[DESeq:estimateDispersions]{DESeq
-#' estimateDispersions}} method}
 #' \item{For to the \code{\link[base:list.files]{list.files}}
 #' function used to locate the read files.}
 #' }}
@@ -80,7 +75,7 @@
 #' @param chr.sizes A vector or a list containing the chromosomes' size of the
 #' selected organism or simply the string "auto". See details.
 #' @param conditions A vector of descriptor, each sample must have a
-#' descriptor if you use outputFormat DESeq or edgeR. The size of this list
+#' descriptor if you use outputFormat edgeR. The size of this list
 #' must be equal to the number of sample. In addition the vector should be
 #' named with the filename of the corresponding samples.
 #' @param count The feature used to summarize the reads. One of
@@ -105,11 +100,11 @@
 #' geneModels. Use the default parallel library
 #' @param normalize A boolean to convert the returned counts in RPKM. Valid
 #' when the \code{outputFormat} is left undefined (i.e. when a matrix is
-#' returned) and when it is \code{DESeq} or \code{edgeR}. Note that it is not
-#' advised to normalize the data prior DESeq or edgeR usage!
+#' returned) and when it is \code{edgeR}. Note that you should not
+#' normalize the data prior to using edgeR!
 #' @param organism A character string describing the organism
 #' @param outputFormat By default, easyRNASeq returns a matrix.
-#' If one of \code{DESeq},\code{edgeR},\code{RNAseq},
+#' If one of \code{edgeR}, \code{RNAseq} or
 #' \code{SummarizedExperiment} is provided then
 #' the respective object is returned.
 #' @param pattern For easyRNASeq, the pattern of file to look for, e.g. "bam$"
@@ -128,13 +123,11 @@
 #' @return Returns a count table (a matrix of m features x n samples). If the
 #' \code{outputFormat} option has been set, a corresponding object is returned:
 #' a \code{\linkS4class{RangedSummarizedExperiment}}, a
-#' \code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}}, a
 #' \code{\link[edgeR:DGEList]{edgeR:DGEList}} or \code{\linkS4class{RNAseq}}.
 #' @author Nicolas Delhomme
 #' @seealso \code{\linkS4class{RNAseq}}
 #' \code{\linkS4class{RangedSummarizedExperiment}}
 #' \code{\link[edgeR:DGEList]{edgeR:DGEList}}
-#' \code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}}
 #' \code{\link[ShortRead:readAligned]{ShortRead:readAligned}}
 #' @keywords methods
 #' @examples
@@ -189,7 +182,7 @@ setMethod(
         format=c("bam","aln"),
         gapped=FALSE,
         count=c('exons','features','genes','islands','transcripts'),
-        outputFormat=c("matrix","SummarizedExperiment","DESeq","edgeR","RNAseq"),
+        outputFormat=c("matrix","SummarizedExperiment","edgeR","RNAseq"),
         pattern=character(1),filenames=character(0),nbCore=1,
         filter=srFilter(),type="SolexaExport",
         chr.sel=c(),summarization=c("bestExons","geneModels"),
@@ -515,7 +508,7 @@ setMethod(
         }
 
         # Check if the condition list have the same size as the file list
-        if(outputFormat=="DESeq"|outputFormat=="edgeR" ){
+        if(outputFormat=="edgeR" ){
             if(length(conditions)!=length(filesList)){
                 stop(paste(
                     "The number of conditions:",
@@ -611,13 +604,6 @@ setMethod(
 
         # if necessary normalize
         return(switch(outputFormat,
-                      "DESeq"={
-                          cds <- newCountDataSet(countData=readCounts(obj,count,summarization,unique=TRUE),conditions=conditions)
-                          if(normalize){
-                              cds <- .normalizationDispatcher(cds,type="DESeq",silent=silent,plot=plot,...)
-                          }
-                          return(cds)
-                      },
                       "edgeR"={
                           dgeList <- DGEList(counts=readCounts(obj,count,summarization,unique=TRUE),group=conditions)
                           if(normalize){

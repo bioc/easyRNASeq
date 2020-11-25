@@ -3,13 +3,13 @@
 # roxygenize("../easyrnaseq-devel/",roclets=c('rd', 'collate', 'namespace'),clean=TRUE)
 
 # to update the package versions
-# pkg <- c("Biobase","BiocGenerics","BiocParallel","biomaRt","Biostrings",
-#          "DESeq","edgeR","GenomeInfoDb","genomeIntervals",
+# pkg <- c("Biobase","BiocFileCache","BiocGenerics","BiocParallel","biomaRt","Biostrings",
+#          "edgeR","GenomeInfoDb","genomeIntervals",
 #          "GenomicAlignments","GenomicRanges","SummarizedExperiment",
 #          "IRanges","LSD","Rsamtools","S4Vectors","ShortRead",
-#          "BiocStyle","rappdirs,
+#          "BiocStyle","rappdirs",
 #          "BSgenome",
-#          "BSgenome.Dmelanogaster.UCSC.dm3","GenomicFeatures",
+#          "BSgenome.Dmelanogaster.UCSC.dm3",
 #          "RUnit")
 # pkg[! pkg %in% rownames(installed.packages())]
 # installed.packages()[pkg,"Version"]
@@ -20,8 +20,7 @@
 #' Count summarization and normalization pipeline for Next Generation Sequencing data.
 #'
 #' Offers functionalities to summarize read counts per feature of interest, e.g. exons, transcripts, genes, etc.
-#' Offers functionalities to normalize the summarized counts using 3rd party packages like \code{\link[DESeq:newCountDataSet]{DESeq}}
-#' or \code{\link[edgeR:DGEList]{edgeR}}.
+#' Offers functionalities to normalize the summarized counts using a 3rd party package: \code{\link[edgeR:DGEList]{edgeR}}.
 #'
 #' @section Methods:
 #' The main function \code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq}} will summarize the counts per
@@ -29,11 +28,12 @@
 #' count matrix (N*M) where N are the features and M the samples.
 #' This data can be corrected to \pkg{RPKM} in which case
 #' a matrix of corrected value is returned instead, with the same dimensions.
+#' Using RPKM is only advisable for visualization purposes and should never be used for Differential Expression
+#' with edgeR or DESeq2.
 #' Alternatively a \code{\linkS4class{RangedSummarizedExperiment}} can be returned and this
 #' is expected to be the default in the upcoming version of easyRNASeq (as of 1.5.x).
 #' If the necessary sample
-#' information are provided, the data can be normalized using either \code{\link[DESeq:newCountDataSet]{DESeq}}
-#' or \code{\link[edgeR:DGEList]{edgeR}} and the corresponding package object returned.
+#' information are provided, the data can be normalized using \code{\link[edgeR:DGEList]{edgeR}} and the corresponding object returned.
 #' For more insider details, and step by step functions, see:
 #' \tabular{ll}{
 #' 	\code{\link[easyRNASeq:ShortRead-methods]{ShortRead methods}} for pre-processing the data.
@@ -42,7 +42,6 @@
 #' 	\code{\link[easyRNASeq:easyRNASeq-summarization-methods]{easyRNASeq summarization methods}} for summarizing the data.
 #' 	\code{\link[easyRNASeq:easyRNASeq-correction-methods]{easyRNASeq correction methods}} for correcting the data (i.e. generating RPKM).
 #' 	\code{\link[easyRNASeq:edgeR-methods]{edgeR methods}} for post-processing the data.
-#' 	\code{\link[easyRNASeq:DESeq-methods]{DESeq methods}} for post-processing the data.
 #' 	}
 #'
 #' @name easyRNASeq package
@@ -67,7 +66,6 @@
 #' 	\code{\link[genomeIntervals:Genome_intervals_stranded-class]{genomeIntervals}}
 #' 	\code{\link[Biostrings:XString-class]{Biostrings}}
 #' 	\code{\link[BSgenome:BSgenome-class]{BSgenome}}
-#' 	\code{\link[DESeq:newCountDataSet]{DESeq}}
 #' 	\code{\link[GenomicRanges:GRanges-class]{GenomicRanges}}
 #' 	\code{\link[IRanges:IRanges-constructor]{IRanges}}
 #' 	\code{\link[Rsamtools:scanBam]{Rsamtools}}
@@ -82,16 +80,12 @@
 #'   \itemize{
 #'     \item{Classes}{
 #'       \code{\link[Rsamtools:BamFile-class]{BamFileList-class}}
-#'       \code{\linkS4class{CountDataSet}}
 #'       \code{\linkS4class{RangedSummarizedExperiment}}
 #'     }
 #'     \item{Functions/Methods}{
-#'       \code{\link[DESeq:estimateDispersions]{DESeq estimate size factor and
-#'       estimate dispersion functions}}
 #'       \code{\link[SummarizedExperiment:RangedSummarizedExperiment-class]{
 #'         The RangedSummarizedExperiment assay accessor}
 #'       }
-#'       The locfit function \code{\link[locfit]{locfit}}
 #'       The BamFileList constructor \code{\link[Rsamtools:BamFile-class]{BamFileList-class}}
 #'       The IRanges constructor \code{\link[IRanges]{IRanges-constructor}}
 #'       For the SRFilterResult,
@@ -143,7 +137,6 @@ NULL
 # writeNamespaceImports("easyRNASeq")
 # import classes
 #' @importClassesFrom Biostrings DNAStringSet
-#' @importClassesFrom DESeq CountDataSet
 #' @importClassesFrom edgeR DGEList
 #' @importClassesFrom genomeIntervals Genome_intervals Genome_intervals_stranded
 #' @importClassesFrom GenomicAlignments GAlignments GAlignmentPairs
@@ -163,7 +156,6 @@ NULL
 #' eval fileName get intersect lapply match order path paste pmax rbind
 #' rownames sapply strand "strand<-" table unique
 #' @importMethodsFrom Biostrings type
-#' @importMethodsFrom DESeq estimateSizeFactors estimateDispersions
 #' @importMethodsFrom genomeIntervals readGff3 writeGff3
 #' @importMethodsFrom GenomeInfoDb seqinfo seqlengths "seqlengths<-"
 #' seqlevels "seqlevels<-" seqnames "seqnames<-"
@@ -172,13 +164,13 @@ NULL
 #' @importMethodsFrom IRanges as.list as.matrix
 #' "colnames<-" countOverlaps coverage end "end<-" findOverlaps
 #' gsub mean median narrow nchar ranges reduce "rownames<-" space
-#' start "start<-" sub  tolower unlist values which width
+#' start "start<-" sub  tolower unlist which width
 #' @importMethodsFrom methods coerce initialize show
 #' @importMethodsFrom Rsamtools asMates "asMates<-" countBam scanBam
 #' scanBamHeader ScanBamParam yieldSize "yieldSize<-"
 #' @importMethodsFrom S4Vectors "%in%" as.table elementMetadata
 #' "elementMetadata<-" elementNROWS levels mcols metadata
-#' "metadata<-" Rle runLength runsum runValue split substr
+#' "metadata<-" Rle runLength runsum runValue split substr values
 #' @importMethodsFrom ShortRead chromosome id position readAligned
 #' srdistance sread srFilter writeFastq
 #' @importMethodsFrom SummarizedExperiment assay assays "assays<-"
@@ -187,7 +179,6 @@ NULL
 #' @importFrom biomaRt getBM listDatasets useDataset useMart
 #' @importFrom BiocParallel MulticoreParam SerialParam
 #' @importFrom Biostrings DNAStringSet
-#' @importFrom DESeq fitInfo newCountDataSet
 #' @importFrom edgeR calcNormFactors DGEList estimateCommonDisp
 #' estimateTagwiseDisp maPlot plotMDS.DGEList plotMeanVar plotBCV
 #' @importFrom genomeIntervals getGffAttribute parseGffAttributes
@@ -197,7 +188,6 @@ NULL
 #' mtext par plot rect
 #' @importFrom IRanges IRanges IRangesList LogicalList
 #' SplitDataFrameList RleList
-#' @importFrom locfit locfit lp
 #' @importFrom LSD heatscatter
 #' @importFrom methods as extends is new
 #' @importFrom parallel makePSOCKcluster parLapply stopCluster
@@ -212,7 +202,7 @@ NULL
 # and export!
 #' @exportClass BamFileList GRanges RangedSummarizedExperiment
 #' @exportMethod assay assays colData estimateDispersions estimateSizeFactors fileName metadata rowRanges seqinfo seqlengths seqlevels "seqlevels<-" seqnames "seqnames<-" split srFilter width writeFastq writeGff3
-#' @export alignData basename chromosomeFilter compose BamFileList GRanges IRanges locfit lp newCountDataSet nFilter readAligned SRFilterResult SummarizedExperiment
+#' @export alignData basename chromosomeFilter compose BamFileList GRanges IRanges nFilter readAligned SRFilterResult SummarizedExperiment
 NULL
 
 ##==========================
@@ -229,13 +219,9 @@ NULL
 #' \item \code{\link[easyRNASeq:easyRNASeq-coverage-methods]{fetchCoverage}}
 #' \item \code{fetchAnnotation}
 #' \item \code{knownOrganisms}
-#' \item \code{plotDispersionEstimates,DGEList-method}
 #' }
 #'
 #' \itemize{
-#' \item The \code{plotDispersionEstimates,DGEList-method}
-#' function is superseded by the \code{\link[edgeR:plotBCV]{plotBCV}} function
-#' as the \pkg{edgeR} DGEList object structure changed
 #' \item The \code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq}} function is superseded by the
 #' \code{\link[easyRNASeq:easyRNASeq-simpleRNASeq]{simpleRNASeq}} function to consolidate and
 #' prune the overall package. The changes are based on user comments and on the
@@ -245,7 +231,7 @@ NULL
 #' function is not called directly anymore but through higher level functions (from the
 #' GenomicRanges package), the 'what' and 'isUnmappedQuery' parameters were obsolete.
 #' }
-#' @aliases plotDispersionEstimates,DGEList-method fetchAnnotation knownOrganisms
+#' @aliases fetchAnnotation knownOrganisms
 #' easyRNASeq easyRNASeq,RNAseq-method fetchCoverage,RNAseq-method fetchCoverage
 #' organismName<- organismName organismName,RNAseq-method organismName<-,RNAseq-method
 #' @name Defunct functions

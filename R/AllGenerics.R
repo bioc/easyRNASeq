@@ -258,7 +258,7 @@ setGeneric(
              annotationObject=GRangesList(),
              format=c("bam","aln"),gapped=FALSE,
              count=c('exons','features','genes','islands','transcripts'),
-             outputFormat=c("matrix","SummarizedExperiment","DESeq","edgeR","RNAseq"),
+             outputFormat=c("matrix","SummarizedExperiment","edgeR","RNAseq"),
              pattern=character(1),filenames=character(0),nbCore=1,
              filter=srFilter(),type="SolexaExport",
              chr.sel=c(),summarization=c("bestExons","geneModels"),
@@ -286,32 +286,6 @@ setGeneric(
              ){
              standardGeneric("plotNormalizationFactors")
            })
-
-###==========================
-## edgeR & DESeq extension
-###==========================
-#' @exportMethod plotDispersionEstimates
-setGeneric(
-           name="plotDispersionEstimates",
-           def=function(obj,cond=NULL,log="xy",...){
-             standardGeneric("plotDispersionEstimates")
-           })
-
-#' @exportMethod multivariateConditions
-setGeneric(
-           name="multivariateConditions",
-           def=function(obj){
-             standardGeneric("multivariateConditions")
-           })
-
-#' @exportMethod plotDispLSD
-setGeneric(
-    name="plotDispLSD",
-    def=function(obj, name = NULL, ymin,
-        linecol = "#00000080", xlab = "mean of normalized counts",
-        ylab = "dispersion", log = "xy", cex = 0.45,...){
-        standardGeneric("plotDispLSD")
-    })
 
 ###==========================
 ## parallel extension

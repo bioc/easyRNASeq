@@ -20,8 +20,7 @@
 \title{Count summarization and normalization pipeline for Next Generation Sequencing data.}
 \description{
 Offers functionalities to summarize read counts per feature of interest, e.g. exons, transcripts, genes, etc.
-Offers functionalities to normalize the summarized counts using 3rd party packages like \code{\link[DESeq:newCountDataSet]{DESeq}}
-or \code{\link[edgeR:DGEList]{edgeR}}.
+Offers functionalities to normalize the summarized counts using a 3rd party package: \code{\link[edgeR:DGEList]{edgeR}}.
 }
 \section{Methods}{
 
@@ -30,11 +29,12 @@ feature of interest, for as many samples as provided and will return a
 count matrix (N*M) where N are the features and M the samples.
 This data can be corrected to \pkg{RPKM} in which case
 a matrix of corrected value is returned instead, with the same dimensions.
+Using RPKM is only advisable for visualization purposes and should never be used for Differential Expression
+with edgeR or DESeq2.
 Alternatively a \code{\linkS4class{RangedSummarizedExperiment}} can be returned and this
 is expected to be the default in the upcoming version of easyRNASeq (as of 1.5.x).
 If the necessary sample
-information are provided, the data can be normalized using either \code{\link[DESeq:newCountDataSet]{DESeq}}
-or \code{\link[edgeR:DGEList]{edgeR}} and the corresponding package object returned.
+information are provided, the data can be normalized using \code{\link[edgeR:DGEList]{edgeR}} and the corresponding object returned.
 For more insider details, and step by step functions, see:
 \tabular{ll}{
 	\code{\link[easyRNASeq:ShortRead-methods]{ShortRead methods}} for pre-processing the data.
@@ -43,7 +43,6 @@ For more insider details, and step by step functions, see:
 	\code{\link[easyRNASeq:easyRNASeq-summarization-methods]{easyRNASeq summarization methods}} for summarizing the data.
 	\code{\link[easyRNASeq:easyRNASeq-correction-methods]{easyRNASeq correction methods}} for correcting the data (i.e. generating RPKM).
 	\code{\link[easyRNASeq:edgeR-methods]{edgeR methods}} for post-processing the data.
-	\code{\link[easyRNASeq:DESeq-methods]{DESeq methods}} for post-processing the data.
 	}
 }
 
@@ -96,7 +95,6 @@ The class RNAseq specification:
 	\code{\link[genomeIntervals:Genome_intervals_stranded-class]{genomeIntervals}}
 	\code{\link[Biostrings:XString-class]{Biostrings}}
 	\code{\link[BSgenome:BSgenome-class]{BSgenome}}
-	\code{\link[DESeq:newCountDataSet]{DESeq}}
 	\code{\link[GenomicRanges:GRanges-class]{GenomicRanges}}
 	\code{\link[IRanges:IRanges-constructor]{IRanges}}
 	\code{\link[Rsamtools:scanBam]{Rsamtools}}
@@ -111,16 +109,12 @@ The class RNAseq specification:
   \itemize{
     \item{Classes}{
       \code{\link[Rsamtools:BamFile-class]{BamFileList-class}}
-      \code{\linkS4class{CountDataSet}}
       \code{\linkS4class{RangedSummarizedExperiment}}
     }
     \item{Functions/Methods}{
-      \code{\link[DESeq:estimateDispersions]{DESeq estimate size factor and
-      estimate dispersion functions}}
       \code{\link[SummarizedExperiment:RangedSummarizedExperiment-class]{
         The RangedSummarizedExperiment assay accessor}
       }
-      The locfit function \code{\link[locfit]{locfit}}
       The BamFileList constructor \code{\link[Rsamtools:BamFile-class]{BamFileList-class}}
       The IRanges constructor \code{\link[IRanges]{IRanges-constructor}}
       For the SRFilterResult,

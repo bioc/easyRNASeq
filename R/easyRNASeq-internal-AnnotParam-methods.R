@@ -144,7 +144,7 @@
           # check if there is connectivity
           # check the datasource
           if(length(datasource(obj))==0){
-            stop(paste("To use the biomaRt functionnalities, we need a datasource name. Set it using the datasource() function."))
+            stop(paste("To use the biomaRt functionalities, we need a datasource name. Set it using the datasource() function."))
           }
 
           dataset<-paste(tolower(datasource(obj)),"gene_ensembl",sep="_")

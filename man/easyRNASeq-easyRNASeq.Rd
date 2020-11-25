@@ -16,7 +16,7 @@
   format = c("bam", "aln"),
   gapped = FALSE,
   count = c("exons", "features", "genes", "islands", "transcripts"),
-  outputFormat = c("matrix", "SummarizedExperiment", "DESeq", "edgeR", "RNAseq"),
+  outputFormat = c("matrix", "SummarizedExperiment", "edgeR", "RNAseq"),
   pattern = character(1),
   filenames = character(0),
   nbCore = 1,
@@ -68,7 +68,7 @@ As of version 1.3.5, it defaults to bam.}
 'exons','features','genes','islands' or 'transcripts'. See details.}
 
 \item{outputFormat}{By default, easyRNASeq returns a matrix.
-If one of \code{DESeq},\code{edgeR},\code{RNAseq},
+If one of \code{edgeR}, \code{RNAseq} or
 \code{SummarizedExperiment} is provided then
 the respective object is returned.}
 
@@ -92,8 +92,8 @@ summarizing reads by genes. So far, only "geneModels" is available.}
 
 \item{normalize}{A boolean to convert the returned counts in RPKM. Valid
 when the \code{outputFormat} is left undefined (i.e. when a matrix is
-returned) and when it is \code{DESeq} or \code{edgeR}. Note that it is not
-advised to normalize the data prior DESeq or edgeR usage!}
+returned) and when it is \code{edgeR}. Note that you should not
+normalize the data prior to using edgeR!}
 
 \item{max.gap}{When computing read islands, the maximal gap size allowed
 between two islands to merge them}
@@ -106,7 +106,7 @@ into account for calling an island}
 \item{plot}{Whether or not to plot assessment graphs.}
 
 \item{conditions}{A vector of descriptor, each sample must have a
-descriptor if you use outputFormat DESeq or edgeR. The size of this list
+descriptor if you use outputFormat edgeR. The size of this list
 must be equal to the number of sample. In addition the vector should be
 named with the filename of the corresponding samples.}
 
@@ -129,7 +129,6 @@ there) if you do not want warning messages.}
 Returns a count table (a matrix of m features x n samples). If the
 \code{outputFormat} option has been set, a corresponding object is returned:
 a \code{\linkS4class{RangedSummarizedExperiment}}, a
-\code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}}, a
 \code{\link[edgeR:DGEList]{edgeR:DGEList}} or \code{\linkS4class{RNAseq}}.
 }
 \description{
@@ -147,10 +146,7 @@ reads}} according to the selected summarization features}
 \item{\code{\link[easyRNASeq:easyRNASeq-correction-methods]{optionally
 apply}} a data correction (i.e. generating RPKM).}
 \item{\code{\link[easyRNASeq:edgeR-methods]{use edgeR methods}} for
-post-processing the data or}
-\item{\code{\link[easyRNASeq:DESeq-methods]{use
-DESeq methods}} for post-processing the data (either of them being
-recommended over RPKM).}  }
+post-processing the data, this being strongly recommended over RPKM).}  }
 }
 \details{
 \itemize{ \item{\dots{} Additional arguments for different functions:
@@ -159,8 +155,6 @@ recommended over RPKM).}  }
 \item{For the \code{\link[easyRNASeq:easyRNASeq-annotation-internal-methods]{readGffGtf}}
 internal function that takes an optional arguments: annotation.type that
 default to "exon" (used to select the proper rows of the gff or gtf file)}
-\item{ For the \code{\link[DESeq:estimateDispersions]{DESeq
-estimateDispersions}} method}
 \item{For to the \code{\link[base:list.files]{list.files}}
 function used to locate the read files.}
 }}
@@ -233,7 +227,6 @@ case the chromosome names and size are extracted from the BAM header}
 \code{\linkS4class{RNAseq}}
 \code{\linkS4class{RangedSummarizedExperiment}}
 \code{\link[edgeR:DGEList]{edgeR:DGEList}}
-\code{\link[DESeq:newCountDataSet]{DESeq:newCountDataset}}
 \code{\link[ShortRead:readAligned]{ShortRead:readAligned}}
 }
 \author{

@@ -2,7 +2,6 @@
 % Please edit documentation in R/easyRNASeq-package.R
 \name{Defunct functions}
 \alias{Defunct functions}
-\alias{plotDispersionEstimates,DGEList-method}
 \alias{fetchAnnotation}
 \alias{knownOrganisms}
 \alias{easyRNASeq}
@@ -19,13 +18,9 @@
 \item \code{\link[easyRNASeq:easyRNASeq-coverage-methods]{fetchCoverage}}
 \item \code{fetchAnnotation}
 \item \code{knownOrganisms}
-\item \code{plotDispersionEstimates,DGEList-method}
 }}
 \description{
 \itemize{
-\item The \code{plotDispersionEstimates,DGEList-method}
-function is superseded by the \code{\link[edgeR:plotBCV]{plotBCV}} function
-as the \pkg{edgeR} DGEList object structure changed
 \item The \code{\link[easyRNASeq:easyRNASeq-easyRNASeq]{easyRNASeq}} function is superseded by the
 \code{\link[easyRNASeq:easyRNASeq-simpleRNASeq]{simpleRNASeq}} function to consolidate and
 prune the overall package. The changes are based on user comments and on the
