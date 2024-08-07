@@ -46,7 +46,7 @@
   stopifnot(is(obj,"AnnotParam"))
 
   ## connect
-  ensembl <- useMart(
+  ensembl <- useEnsembl(
     biomart="ensembl",
     dataset=paste(tolower(datasource(obj)),"gene_ensembl",sep="_"))
 

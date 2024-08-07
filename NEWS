@@ -1,16 +1,30 @@
+CHANGES IN VERSION 2.41.1
+-------------------------
+
+  o Ported changes from 2.40.1
+
+CHANGES IN VERSION 2.40.1
+-------------------------
+
+  o Fixed broken dependencies (Biostrings::type is now BiocGenerics::type and BiocGenerics::clusterApply is now parallel::clusterApply).
+  
+  o Adapted to changes for Roxygen
+  
+  o Changed from using biomaRt::useMart to biomaRt::useEnsembl
+
 CHANGES IN VERSION 2.27.1
 -------------------------
 
-    o DESeq dependency removal
+  o DESeq dependency removal
 
-    o Added extra warning about RPKM usage
+  o Added extra warning about RPKM usage
 
-    o Removed Defunct functions
+  o Removed Defunct functions
 
 CHANGES IN VERSION 2.26.0
 -------------------------
 
-    o Bioconductor release 3.12
+  o Bioconductor release 3.12
 
 CHANGES IN VERSION 2.25.1
 -------------------------

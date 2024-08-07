@@ -9,7 +9,7 @@
 \alias{parallelize,BamFileList,function-method}
 \title{parallel additional methods}
 \usage{
-\S4method{parallelize}{list,`function`}(obj = list(), fun = NULL, nnodes = 1, ...)
+\S4method{parallelize}{list,function}(obj = list(), fun = NULL, nnodes = 1, ...)
 }
 \arguments{
 \item{obj}{the object which processing has to be parallelizes}

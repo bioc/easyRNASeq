@@ -49,7 +49,8 @@
 #' @aliases easyRNASeq-package assay type BamFileList BamFileList-class IRanges
 #' GRanges-class GRanges SRFilterResult SummarizedExperiment RangedSummarizedExperiment-class
 #' chromosomeFilter compose nFilter
-#' @docType package
+#' @keywords internal 
+#' "_PACKAGE"
 #' @author Nicolas Delhomme, Bastian Schiffthaler, Ismael Padioleau
 #' @keywords package
 #' @seealso
@@ -60,7 +61,7 @@
 #'   \code{\linkS4class{RangedSummarizedExperiment}}
 #'
 #' 	The imported packages:
-#' 	\code{\link[biomaRt:useMart]{biomaRt}}
+#' 	\code{\link[biomaRt:useEnsembl]{biomaRt}}
 #'   \code{\link[BiocParallel:BiocParallel-package]{BiocParallel}}
 #' 	\code{\link[edgeR:DGEList]{edgeR}}
 #' 	\code{\link[genomeIntervals:Genome_intervals_stranded-class]{genomeIntervals}}
@@ -151,11 +152,10 @@ NULL
 # import S4 methods
 #' @importMethodsFrom Biobase fData varMetadata
 #' @importFrom BiocFileCache bfcadd bfcdownload bfcneedsupdate bfcquery bfcrpath
-#' @importMethodsFrom BiocGenerics annotation cbind clusterApply
+#' @importMethodsFrom BiocGenerics annotation cbind 
 #' colnames counts duplicated estimateDispersions estimateSizeFactors
 #' eval fileName get intersect lapply match order path paste pmax rbind
-#' rownames sapply strand "strand<-" table unique
-#' @importMethodsFrom Biostrings type
+#' rownames sapply strand "strand<-" table type unique
 #' @importMethodsFrom genomeIntervals readGff3 writeGff3
 #' @importMethodsFrom GenomeInfoDb seqinfo seqlengths "seqlengths<-"
 #' seqlevels "seqlevels<-" seqnames "seqnames<-"
@@ -176,7 +176,7 @@ NULL
 #' @importMethodsFrom SummarizedExperiment assay assays "assays<-"
 #' colData "colData<-" rowRanges "rowRanges<-"
 # import methods
-#' @importFrom biomaRt getBM listDatasets useDataset useMart
+#' @importFrom biomaRt getBM listDatasets useDataset useEnsembl
 #' @importFrom BiocParallel MulticoreParam SerialParam
 #' @importFrom Biostrings DNAStringSet
 #' @importFrom edgeR calcNormFactors DGEList estimateCommonDisp
@@ -190,7 +190,7 @@ NULL
 #' SplitDataFrameList RleList
 #' @importFrom LSD heatscatter
 #' @importFrom methods as extends is new
-#' @importFrom parallel makePSOCKcluster parLapply stopCluster
+#' @importFrom parallel clusterApply makePSOCKcluster parLapply stopCluster
 #' @importFrom rappdirs user_cache_dir
 #' @importFrom Rsamtools BamFileList bamFlagTest index scanBamFlag
 #' @importFrom S4Vectors endoapply DataFrame queryHits SimpleList

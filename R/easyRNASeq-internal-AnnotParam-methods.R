@@ -148,7 +148,7 @@
           }
 
           dataset<-paste(tolower(datasource(obj)),"gene_ensembl",sep="_")
-          if(! dataset %in% listDatasets(useMart(biomart="ensembl"))$dataset){
+          if(! dataset %in% listDatasets(useEnsembl(biomart="ensembl"))$dataset){
             stop(paste("The datasource",datasource,"is not supported by the ensembl biomaRt."))
           }
           if(verbose){
