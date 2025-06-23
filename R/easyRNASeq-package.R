@@ -4,7 +4,7 @@
 
 # to update the package versions
 # pkg <- c("Biobase","BiocFileCache","BiocGenerics","BiocParallel","biomaRt","Biostrings",
-#          "edgeR","GenomeInfoDb","genomeIntervals",
+#          "edgeR","Seqinfo","genomeIntervals",
 #          "GenomicAlignments","GenomicRanges","SummarizedExperiment",
 #          "IRanges","LSD","Rsamtools","S4Vectors","ShortRead",
 #          "BiocStyle","rappdirs",
@@ -157,7 +157,7 @@ NULL
 #' eval fileName get intersect lapply match order path paste pmax rbind
 #' rownames sapply strand "strand<-" table type unique
 #' @importMethodsFrom genomeIntervals readGff3 writeGff3
-#' @importMethodsFrom GenomeInfoDb seqinfo seqlengths "seqlengths<-"
+#' @importMethodsFrom Seqinfo seqinfo seqlengths "seqlengths<-"
 #' seqlevels "seqlevels<-" seqnames "seqnames<-"
 #' @importMethodsFrom GenomicAlignments cigar summarizeOverlaps
 #' @importMethodsFrom GenomicRanges grglist
